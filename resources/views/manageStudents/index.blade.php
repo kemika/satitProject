@@ -18,10 +18,10 @@
 
 
 <h1> Manage Students</h1>
-<div class="row">
-  <div class="col-1"></div>
-  <div class="col-8">
-    <table class="table table-hover" id="table">
+<div class="row" style="width: 120rem; margin-left: 100px;">
+  <!-- <div class="col-1"></div> -->
+  <!-- <div class="col-8"> -->
+    <table class="table table-hover" id="table" style="width: 120rem;">
       <thead>
         <tr>
           <th scope="col">No.</th>
@@ -56,7 +56,7 @@
 
       </tbody>
     </table>
-  </div>
+  <!-- </div> -->
 </div>
 
 
