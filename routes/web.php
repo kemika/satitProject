@@ -20,6 +20,12 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/main', 'MainController@index');
+
+
 Route::get('/manageStudents', 'ManageStudentsController@index');
+Route::put('/manageStudents/update', 'ManageStudentsController@update');
+
+
+
 Route::get('/manageTeachers', 'ManageTeachersController@index');
 Route::get('/manageAcademic', 'ManageAcademicController@index');
