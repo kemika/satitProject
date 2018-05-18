@@ -16,11 +16,11 @@ class ManageStudentsController extends Controller
   public function update(Request $request)
   {
       //
-      
+
       $student  = Student::all()->where('id', $request->input('id'))->first();
       $student->firstname=$request->input('firstname');
-
-
+      $student->lastname=$request->input('lastname');
+      // $student->status=$request->input('status');
 
       $student->save();
 

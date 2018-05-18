@@ -70,11 +70,35 @@
                   @csrf
                   @method('PUT')
                 <input hidden type="text" name="id" value='{{ $student->id }}'>
-                ID:  <input  type="text" name="firstname" value='{{ $student->number }}' disabled>
+                ID:  <input  type="text" name="number" value='{{ $student->number }}' disabled>
                 <br><br>
                 firstname: <input  type="text" name="firstname" value='{{ $student->firstname }}'>
                 <br><br>
                 lastname: <input  type="text" name="lastname" value='{{ $student->lastname }}'>
+                <br><br>
+                birthdate:  <input  type="text" name="birthdate" value='{{ $student->birthdate }}' disabled>
+                <br><br>
+                status: <input id="boom"  type="text" name="status" value='{{ $student->status }}'>
+                <div class="btn-group dropright">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Dropright
+                </button>
+                <div class="dropdown-menu">
+                  <!-- Dropdown menu links -->
+                </div>
+
+
+                <select class="form-control" name="projid" >
+
+                            <option value="Active" selected>Active</option>
+                            <option value="Inactive" >Inactive</option>
+                            <option value="Graduated" >Graduated</option>
+
+
+
+
+                  </select>
+              </div>
 
               </div>
               <div class="modal-footer">
@@ -115,6 +139,10 @@
   $(document).ready(function() {
     $('#table').DataTable();
 } );
+
+
+
+
 
 
 
