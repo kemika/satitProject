@@ -16,7 +16,7 @@ class ManageStudentsController extends Controller
   public function update(Request $request)
   {
       //
-
+      
       $student  = Student::all()->where('id', $request->input('id'))->first();
       $student->firstname=$request->input('firstname');
 
@@ -25,6 +25,6 @@ class ManageStudentsController extends Controller
       $student->save();
 
       $students  = Student::all();
-        return view('manageStudents.index' , ['students' => $students]);
+      return view('manageStudents.index' , ['students' => $students]);
   }
 }

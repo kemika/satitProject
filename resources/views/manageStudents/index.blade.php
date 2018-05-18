@@ -45,25 +45,23 @@
           <?php $c+=1 ?>
         <tr>
           <td>{{ $loop->iteration }}</td>
-          <td>{{ $student->std_number }}</td>
+          <td>{{ $student->number }}</td>
           <td>{{ $student->firstname }}</td>
           <td>{{ $student->lastname }}</td>
           <td>{{ $student->birthdate }}</td>
           <td>{{ $student->status }}</td>
-          <td><button type="button" class="btn btn-primary" data-toggle='modal' data-target='#{{$c}}'>
-    Open modal
+          <td><button type="button" class="btn btn-primary" data-toggle='modal' data-target='#{{$c}}'>Edit
   </button>
       </td>
 
         </tr>
         <!-- Modal -->
-        <?php echo $c ?>
         <div class="modal fade" id={{$c}} role="dialog">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div class="modal-header">
+                <h4 class="modal-title" style="margin-left:10px;">Edit</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
               </div>
               <div class="modal-body">
                 <p>This is a large modal.</p>
@@ -71,13 +69,16 @@
                 <form class="" action="/manageStudents/update" method="post">
                   @csrf
                   @method('PUT')
-                <input hidden type="text" name="id" value='{{ $student->id_std }}'>
+                <input hidden type="text" name="id" value='{{ $student->id }}'>
+                ID:  <input  type="text" name="firstname" value='{{ $student->number }}' disabled>
+                <br><br>
                 firstname: <input  type="text" name="firstname" value='{{ $student->firstname }}'>
+                <br><br>
                 lastname: <input  type="text" name="lastname" value='{{ $student->lastname }}'>
 
               </div>
               <div class="modal-footer">
-                    <button type="submit" >update</button>
+                    <button type="submit"  class="btn btn-default" >update</button>
                 </form>
 
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
