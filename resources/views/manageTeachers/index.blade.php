@@ -23,10 +23,11 @@
 
 
 <h1> Manage Teachers</h1>
-<div class="row" style="width: 120rem; margin-left: 100px;">
+<center>
+<div class="row" style="width: 120rem;">
   <!-- <div class="col-1"></div> -->
   <!-- <div class="col-8"> -->
-    <table class="table table-hover" id="table" style="width: 110rem;">
+    <table class="table table-hover" id="table" style="width: 120rem;">
       <thead>
         <tr>
           <th scope="col">No.</th>
@@ -150,9 +151,9 @@
   <!-- </div> -->
 </div>
 
+</center>
 
-
-<div class="row">
+<div class="row" style="margin-top: 30px; margin-bottom: 30px;">
   <div class="col-5">
   </div>
   <div class="col col-xl-2">
