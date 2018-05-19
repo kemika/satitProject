@@ -28,4 +28,7 @@ Route::put('/manageStudents/update', 'ManageStudentsController@update');
 
 
 Route::get('/manageTeachers', 'ManageTeachersController@index');
+Route::put('/manageTeachers/update', 'ManageTeachersController@update');
+
+
 Route::get('/manageAcademic', 'ManageAcademicController@index');
