@@ -20,7 +20,7 @@ class ManageStudentsController extends Controller
       $student  = Student::all()->where('id', $request->input('id'))->first();
       $student->firstname=$request->input('firstname');
       $student->lastname=$request->input('lastname');
-      $student->status=$request->select('status');
+      $student->status=$request->input('status');
 
       $student->save();
 

@@ -65,48 +65,67 @@
               </div>
               <div class="modal-body">
                 <p>{{$c}}</p>
-                <form class="" action="/manageStudents/update" method="post">
+                <form class="form-inline" action="/manageStudents/update" method="post">
                   @csrf
                   @method('PUT')
-                <input hidden type="text" name="id" value='{{ $student->id }}'>
-                ID:  <input  type="text" name="number" value='{{ $student->number }}' disabled>
-                <br><br>
-                firstname: <input  type="text" name="firstname" value='{{ $student->firstname }}'>
-                <br><br>
-                lastname: <input  type="text" name="lastname" value='{{ $student->lastname }}'>
-                <br><br>
-                birthdate:  <input  type="text" name="birthdate" value='{{ $student->birthdate }}' disabled>
-                <br><br>
-                status:
+                  <input hidden type="text" name="id" value='{{ $student->id }}'>
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">ID:</label>
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control"  name="number" value='{{ $student->number }}' disabled>
+                    </div>
+                  </div>
 
-                <?php $status="$student->status"; ?>
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">firstname: </label>
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control" name="firstname" value='{{ $student->firstname }}'>
+                    </div>
+                  </div>
 
-                <?php if ("$status"=='Active'): ?>
-                  <select class="form-control" name="status" style="width: 15rem; margin-left: 50px; margin-top: -20px;">
-                    <option value="Active" selected>Active</option>
-                    <option value="Inactive">Inactive</option>
-                    <option value="Graduated" >Graduated</option>
-                  </select>
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">lastname: </label>
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control" name="lastname" value='{{ $student->lastname }}'>
+                    </div>
+                  </div>
 
-                <?php endif; ?>
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">birthdate:</label>
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control" name="birthdate" value='{{ $student->birthdate }}' disabled>
+                    </div>
+                  </div>
 
-                <?php if ("$status"=='Inactive'): ?>
-                  <select class="form-control" name="projid" style="width: 15rem; margin-left: 50px; margin-top: -20px;">
-                    <option value="Active" >Active</option>
-                    <option value="Inactive" selected>Inactive</option>
-                    <option value="Graduated" >Graduated</option>
-                  </select>
 
-                <?php endif; ?>
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">status:</label>
+                    <div class="col-sm-5">
+                      <select name="status" class="form-control" style="height: 35px">
+                        <?php if ("$student->status"=="Active"): ?>
+                          <option value="Active" selected>Active</option>
+                          <option value="Inactive">Inactive</option>
+                          <option value="Graduated">Graduated</option>
+                        <?php endif; ?>
 
-                <?php if ("$status"=='Graduated'): ?>
-                  <select class="form-control" name="projid" style="width: 15rem; margin-left: 50px; margin-top: -20px;">
-                    <option value="Active" >Active</option>
-                    <option value="Inactive">Inactive</option>
-                    <option value="Graduated" selected>Graduated</option>
-                  </select>
+                        <?php if ("$student->status"=="Inactive"): ?>
+                          <option value="Active">Active</option>
+                          <option value="Inactive" selected>Inactive</option>
+                          <option value="Graduated">Graduated</option>
+                        <?php endif; ?>
 
-                <?php endif; ?>
+                        <?php if ("$student->status"=="Graduated"): ?>
+                          <option value="Active">Active</option>
+                          <option value="Inactive">Inactive</option>
+                          <option value="Graduated" selected>Graduated</option>
+                        <?php endif; ?>
+
+                      </select>
+                    </div>
+                  </div>
+
+
+
 
 
                 <!-- <select class="form-control" name="projid" >
@@ -139,13 +158,10 @@
 
 
 <div class="row">
-  <div class="col-1">
-  </div>
-  <div class="col col-xl-8">
-    <button class="btn btn-danger">Exit</button>
+  <div class="col-5">
   </div>
   <div class="col col-xl-2">
-    <button class="btn btn-primary" >Save</button>
+    <button class="btn btn-danger" onclick="window.location.href='/main'">Back to main</button>
   </div>
 </div>
 
@@ -157,13 +173,5 @@
   $(document).ready(function() {
     $('#table').DataTable();
 } );
-
-
-
-
-
-
-
-
 
  </script>
