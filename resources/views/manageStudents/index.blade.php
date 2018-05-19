@@ -64,7 +64,6 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
               <div class="modal-body">
-                <p>This is a large modal.</p>
                 <p>{{$c}}</p>
                 <form class="" action="/manageStudents/update" method="post">
                   @csrf
@@ -78,29 +77,48 @@
                 <br><br>
                 birthdate:  <input  type="text" name="birthdate" value='{{ $student->birthdate }}' disabled>
                 <br><br>
-                status: <input id="boom"  type="text" name="status" value='{{ $student->status }}'>
-                <div class="btn-group dropright">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Dropright
-                </button>
-                <div class="dropdown-menu">
-                  <!-- Dropdown menu links -->
-                </div>
+                status:
+
+                <?php $status="$student->status"; ?>
+
+                <?php if ("$status"=='Active'): ?>
+                  <select class="form-control" name="status" style="width: 15rem; margin-left: 50px; margin-top: -20px;">
+                    <option value="Active" selected>Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Graduated" >Graduated</option>
+                  </select>
+
+                <?php endif; ?>
+
+                <?php if ("$status"=='Inactive'): ?>
+                  <select class="form-control" name="projid" style="width: 15rem; margin-left: 50px; margin-top: -20px;">
+                    <option value="Active" >Active</option>
+                    <option value="Inactive" selected>Inactive</option>
+                    <option value="Graduated" >Graduated</option>
+                  </select>
+
+                <?php endif; ?>
+
+                <?php if ("$status"=='Graduated'): ?>
+                  <select class="form-control" name="projid" style="width: 15rem; margin-left: 50px; margin-top: -20px;">
+                    <option value="Active" >Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Graduated" selected>Graduated</option>
+                  </select>
+
+                <?php endif; ?>
 
 
-                <select class="form-control" name="projid" >
+                <!-- <select class="form-control" name="projid" >
 
-                            <option value="Active" selected>Active</option>
+                            <option value="Active">Active</option>
                             <option value="Inactive" >Inactive</option>
                             <option value="Graduated" >Graduated</option>
 
 
 
 
-                  </select>
-              </div>
-
-              </div>
+                  </select> -->
               <div class="modal-footer">
                     <button type="submit"  class="btn btn-default" >update</button>
                 </form>
