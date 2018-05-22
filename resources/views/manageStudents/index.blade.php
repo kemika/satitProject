@@ -129,14 +129,9 @@
 
 
                 <!-- <select class="form-control" name="projid" >
-
                             <option value="Active">Active</option>
                             <option value="Inactive" >Inactive</option>
                             <option value="Graduated" >Graduated</option>
-
-
-
-
                   </select> -->
               <div class="modal-footer">
                     <button type="submit"  class="btn btn-default" >update</button>
@@ -173,5 +168,4 @@
   $(document).ready(function() {
     $('#table').DataTable();
 } );
-
  </script>
