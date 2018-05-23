@@ -32,3 +32,7 @@ Route::put('/manageTeachers/update', 'ManageTeachersController@update');
 
 
 Route::get('/manageAcademic', 'ManageAcademicController@index');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
