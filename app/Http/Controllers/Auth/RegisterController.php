@@ -54,6 +54,7 @@ class RegisterController extends Controller
             'role' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+
         ]);
     }
 
@@ -65,14 +66,36 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
+
+
+        // $user = new User;
+        // $user->email = $data['email'];
+        // $user->password = $data['password'];
+        // $user->firstname = $data['firstname'];
+        // $user->lastname = $data['lastname'];
+        // $user->role = $data['role'];
+        // $user->token = str_random(100);
+        //
+        // $user->remember_token = str_random(12);
+        //   $user->save();
+
+
+
+
+
         return User::create([
 
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'firstname' => $data['firstname'],
-            'lastname' => 'my eiei',
-            'role' => 'manager',
-            'remember_token' =>  str_random(10),
+            'lastname' => $data['lastname'],
+            'role' => $data['role'],
+
+
+
+
+            'remember_token' =>  str_random(30),
         ]);
     }
 }
