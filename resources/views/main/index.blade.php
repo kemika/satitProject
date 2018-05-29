@@ -1,3 +1,7 @@
+@extends('layouts.web')
+
+
+@section('content')
 <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -40,7 +44,7 @@
       <button class="btn btn-outline-secondary" onclick="window.location.href='/manageTeachers'">Manage Teachers</button>
     </div>
     <div class="col col-lg-2">
-      <button class="btn btn-outline-secondary" type="submit">View Grades</button>
+      <button class="btn btn-outline-secondary" onclick="window.location.href='/grade'"  type="submit">View Grades</button>
     </div>
   </div>
 
@@ -67,3 +71,19 @@
 
 
 </div>
+
+@endsection
+
+
+
+
+@push('script')
+<script type="text/javascript">
+
+document.getElementById('home').classList.add('active')
+
+</script>
+
+
+
+@endpush

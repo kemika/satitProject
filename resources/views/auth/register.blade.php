@@ -53,7 +53,7 @@
                               <select name="role" class="form-control" style="height: 35px">
 
                                   <option value="Teacher" selected>Teacher</option>
-                                  <option value="Student">Student</option>
+                                  <option value="Registra">Registra</option>
                                   <option value="Manager">Manager</option>
 
                                 </select>

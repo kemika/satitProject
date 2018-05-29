@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use App\Student;
 class ManageStudentsController extends Controller
 {
+
+  public function __construct() {
+    $this->middleware('auth');
+  }
+
   public function index(){
     $students  = Student::all();
 
@@ -26,5 +31,10 @@ class ManageStudentsController extends Controller
 
       $students  = Student::all();
       return view('manageStudents.index' , ['students' => $students]);
+  }
+
+
+  public function grade(){
+    return view('grade.index');
   }
 }
