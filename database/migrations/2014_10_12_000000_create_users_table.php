@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('firstname');
             $table->string('lastname');
             $table->string('role');
+            $table->string('teacher_number')->nullable()->unique();
             $table->rememberToken();
             $table->timestamps();
         });

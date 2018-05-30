@@ -18,6 +18,7 @@ class UsersTablesSeeder extends Seeder
           'firstname'     =>  'Admin',
           'lastname'      =>  'Adminn',
           'role'          =>  'superadmin',
+          'teacher_number'      =>  '112211',
           'password'      =>  Hash::make('1234'),
           'remember_token' =>  str_random(30),
 
