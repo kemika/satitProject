@@ -68,7 +68,7 @@
           <?php $c+=1 ?>
         <tr>
           <td>{{ $loop->iteration }}</td>
-          <td>{{ $student->number }}</td>
+          <td>{{ $student->std_id }}</td>
           <td>{{ $student->firstname }}</td>
           <td>{{ $student->lastname }}</td>
           <td>{{ $student->birthdate }}</td>
