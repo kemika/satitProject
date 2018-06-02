@@ -4,7 +4,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Teacher::class, function (Faker $faker) {
     return [
-      'number' => $faker->ean8,
+      'teacher_id' => $faker->regexify('[0-9]{6}'),
       'firstname' => $faker->firstName,
       'lastname' => $faker->lastName,
       'nid' => $faker->isbn13,

@@ -1,3 +1,7 @@
+@extends('layouts.web')
+
+
+@section('content')
 <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -15,10 +19,10 @@
 <div class="container">
   <div class="row justify-content-md-center">
     <div class="col col-lg-3">
-      <button class="btn btn-outline-secondary" type="submit">Manage Curriculum</button>
+      <button class="btn btn-outline-secondary" type="submit" onclick="window.location.href='/manageCurriculum'">Manage Curriculum</button>
     </div>
     <div class="col col-lg-2">
-      <button class="btn btn-outline-secondary" type="submit">Upload Grades</button>
+      <button class="btn btn-outline-secondary" type="submit" onclick="window.location.href='/uploadGrade'">Upload Grades</button>
     </div>
   </div>
 
@@ -40,7 +44,7 @@
       <button class="btn btn-outline-secondary" onclick="window.location.href='/manageTeachers'">Manage Teachers</button>
     </div>
     <div class="col col-lg-2">
-      <button class="btn btn-outline-secondary" type="submit">View Grades</button>
+      <button class="btn btn-outline-secondary" onclick="window.location.href='/viewGrade'"  type="submit">View Grades</button>
     </div>
   </div>
 
@@ -67,3 +71,19 @@
 
 
 </div>
+
+@endsection
+
+
+
+
+@push('script')
+<script type="text/javascript">
+
+document.getElementById('home').classList.add('active')
+
+</script>
+
+
+
+@endpush

@@ -45,6 +45,23 @@
 
 
 
+                        <div class="form-group row">
+                            <label for="teacher_number" class="col-md-4 col-form-label text-md-right">{{ __('Teacher_Number') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="teacher_number" type="text" class="form-control{{ $errors->has('teacher_number') ? ' is-invalid' : '' }}" name="teacher_number" value="{{ old('teacher_number') }}" required autofocus>
+
+                                @if ($errors->has('teacher_number'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('teacher_number') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+
+
+
 
                         <div class="form-group row">
                             <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Role') }}</label>
@@ -53,7 +70,7 @@
                               <select name="role" class="form-control" style="height: 35px">
 
                                   <option value="Teacher" selected>Teacher</option>
-                                  <option value="Student">Student</option>
+                                  <option value="Registra">Registra</option>
                                   <option value="Manager">Manager</option>
 
                                 </select>
