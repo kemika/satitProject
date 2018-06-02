@@ -25,7 +25,13 @@ Route::get('/main', 'MainController@index');
 Route::get('/manageStudents', 'ManageStudentsController@index');
 Route::put('/manageStudents/update', 'ManageStudentsController@update');
 
+Route::get('/manageCurriculum', 'ManageCurriculumController@index');
+Route::post('/manageCurriculum/editSubject', 'ManageCurriculumController@editSubject');
+Route::post('/manageCurriculum/createNewYear', 'ManageCurriculumController@createNewYear');
+Route::post('/manageCurriculum/createNewSubject', 'ManageCurriculumController@createNewSubject');
 
+//Route::post('/manageCurriculum/edit', 'ManageCurriculumController@edit');
+Route::get('/manageCurriculum/{year}', 'ManageCurriculumController@editWithYear');
 
 Route::get('/manageTeachers', 'ManageTeachersController@index');
 Route::put('/manageTeachers/update', 'ManageTeachersController@update');
