@@ -29,7 +29,7 @@
     <ul>
        <li id="home"><a href='/main'>SatitKaset</a></li>
        <li><a href='/manageStudents'>Manage Student</a></li>
-       <li id="grade"><a href='/grade'>Grade</a></li>
+       <li id="grade"><a href='/viewGrade'>Grade</a></li>
        <li><a href='#'>About</a></li>
        <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
                   onclick="event.preventDefault();
@@ -40,7 +40,7 @@
                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                    @csrf
                </form></li>
-               
+
                 <li style="float:right"><a href='#'>{{ auth::user()->firstname.' '.auth::user()->lastname}}</a></li>
     </ul>
 

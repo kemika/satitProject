@@ -15,10 +15,8 @@ class CreateTeachingsTable extends Migration
     {
         Schema::create('teachings', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('teacher_number');
-            $table->string('subj_number');
-            $table->string('semester');
-            $table->string('year');
+            $table->string('teacher_id');
+            $table->string('subj_id');
             $table->timestamps();
         });
     }
