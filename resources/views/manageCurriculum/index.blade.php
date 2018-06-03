@@ -31,7 +31,6 @@
         <tr>
           <th scope="col">No.</th>
           <th scope="col">Year</th>
-          <th scope="col">Total Subject</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
@@ -41,9 +40,16 @@
           <?php $c+=1 ?>
         <tr>
           <td>{{ $loop->iteration }}</td>
-          <td>{{ $curriculum->year }}</td>
-          <td>{{ $curriculum->total }}</td>
-          <?php $url = url("manageCurriculum/$curriculum->year");?>
+          <td>@if($curriculum->adjust == 1)
+              ปรับปรุง
+            @endif
+            {{ $curriculum->year }}</td>
+          <?php if($curriculum->adjust == 0){
+            $url = url("manageCurriculum/$curriculum->year");
+          }
+          else{
+            $url = url("manageCurriculum/ปรับปรุง$curriculum->year");
+          }?>
           <td><button type="button" class="btn btn-primary" onclick='location.href="{{ $url }}"'>Edit
   </button>
 </td>

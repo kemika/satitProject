@@ -14,7 +14,7 @@ class UploadGradeController extends Controller
     $gpas  = GPA::all();
     $teacher_number = Auth::user()->teacher_number;
 
-    subject_details = Subject::where('teacher_number')
+    //subject_details = Subject::where('teacher_number')
 
     return view('uploadGrade.index');
   }

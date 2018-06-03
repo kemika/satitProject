@@ -20,7 +20,7 @@
 <link href="{{ asset('bootstrap/css/studentCSS.css') }}" rel="stylesheet">
 
 
-<h1> Manage Curriculum Year <?php echo $curricula->first()->year ?></h1>
+<h1> Manage Curriculum Year <?php if($curricula->first()->adjust === 1){echo "ปรับปรุง ";} echo $curricula->first()->year; ?></h1>
 
 <center>
 <div class="row" style="width: 120rem;">
@@ -41,7 +41,7 @@
       <tbody>
         <?php $c=0; ?>
         @foreach ($curricula as $curriculum)
-          @if ($curriculum->code !== "Z000")
+          @if (isset($curriculum->code))
           <?php $c+=1 ?>
         <tr>
 
@@ -49,7 +49,6 @@
           <td>{{ $curriculum->name }}</td>
           <td>{{ $curriculum->min }}</td>
           <td>{{ $curriculum->max}}</td>
-
           @if ($curriculum->status === 1)
           <td>Enable</td>
           @else
@@ -60,7 +59,6 @@
       </td>
 
         </tr>
-        @endif
         <!-- Modal -->
 
         <div class="modal fade" id={{$c}} role="dialog">
@@ -89,28 +87,28 @@
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label text-right">Code :</label>
                     <div class="col-sm-5">
-                      <input type="text" class="form-control"  name="code" value='{{ $curriculum->code }}' >
+                      <input type="text" class="form-control"  name="code" value='{{ $curriculum->code }}' required>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label text-right">Name :</label>
                     <div class="col-sm-5">
-                      <input type="text" class="form-control" name="name" value='{{ $curriculum->name }}'>
+                      <input type="text" class="form-control" name="name" value='{{ $curriculum->name }}' required>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label text-right">Min grade level :</label>
                     <div class="col-sm-5">
-                      <input type="text" class="form-control" name="min" value='{{ $curriculum->min }}'>
+                      <input type="text" class="form-control" name="min" value='{{ $curriculum->min }}' required>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label text-right">Max grade level :</label>
                     <div class="col-sm-5">
-                      <input type="text" class="form-control" name="max" value='{{ $curriculum->max }}' >
+                      <input type="text" class="form-control" name="max" value='{{ $curriculum->max }}' required>
                     </div>
                   </div>
 
@@ -132,7 +130,7 @@
 
 
               <div class="modal-footer">
-                    <button type="submit"  class="btn btn-success" >update</button>
+                    <button type="submit"  class="btn btn-success" >Edit</button>
                 </form>
 
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -141,6 +139,8 @@
           </div>
         </div>
         </div>
+        @endif
+
         @endforeach
 
 
@@ -155,11 +155,14 @@
 
 
   <div class="col">
-    <button class="btn btn-success" data-toggle='modal' data-target='#AddCur'>Add Subject</button>
+    <button class="btn btn-success" data-toggle='modal' data-target='#AddSub'>Add Subject</button>
   </div>
-
   <div class="col ">
-    <button class="btn btn-info" onclick="window.location.href='manageCurriculum'">Import from previous curriculum</button>
+    <form class="form-inline" action="/manageCurriculum/importFromPrevious" method="post">
+      @csrf
+      <input hidden type="text" name="year" value='{{ $curricula->first()->year }}'>
+      <button type="submit"  class="btn btn-info">Import from previous curriculum</button>
+    </form>
   </div>
 
   <div class="col ">
@@ -179,39 +182,89 @@
 
 
 <center>
-<div class="modal fade" id="AddCur" role="dialog">
+<div class="modal fade" id="AddSub" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" style="margin-left:10px;">Create New Curriculum</h4>
+        <h4 class="modal-title" style="margin-left:10px;">Add Subject</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
       <div class="modal-body">
-        <p>WTF</p>
+
         <form action="/manageCurriculum/createNewSubject" class="form-inline"  method="post">
           @csrf
           <div class="container">
+            <input hidden type="text" name="cur_id" value='{{ $curricula->first()->curriculum_id}}'>
           <div class="row">
           <div class="form-group">
-            <label class="col-sm-5 col-form-label text-right">Year :</label>
-            <div class="col-sm-5">
+            <label class="col-sm-6 col-form-label text-right">Year :</label>
+            <div class="col-sm-6">
               <input type="text" class="form-control"  name="year"  value='{{$curricula->first()->year}}' readonly>
             </div>
           </div>
         </div>
-      <div class="row">
-        &nbsp
-      </div>
+        <div class="row">
+          &nbsp
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-6 col-form-label text-righ">Code :</label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" name="code" placeholder="Enter Subject Code" required>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          &nbsp
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-6 col-form-label text-righ">Name :</label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" name="name" placeholder="Enter Subject Name" required>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          &nbsp
+        </div>
         <div class="row">
           <div class="form-group">
             <label class="col-sm-5 col-form-label text-righ">Min grade level :</label>
             <div class="col-sm-5">
-              <input type="text" class="form-control" name="min" placeholder="Enter Min grade level">
+              <input type="text" class="form-control" name="min" placeholder="Enter Min grade level" required>
             </div>
           </div>
+        </div>
+        <div class="row">
+          &nbsp
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-5 col-form-label text-righ">Max grade level :</label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" name="max" placeholder="Enter Max grade level" required>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          &nbsp
+        </div>
+        <div class="row">
+          <div class="form-group">
+            v  <label class="col-sm-6 col-form-label text-righ">Status :</label>
+            <div class="col-sm-5">
+              <select name="status" class="form-control" style="height: 35px">
+                <option value="1" selected>Enable</option>
+                <option value="0">Disable</option>
 
-  </div></div>
+              </select>
+            </div>
+          </div>
+        </div>
+
+</div>
 
 
 
@@ -227,7 +280,7 @@
             <div class="form-group">
               <label class="col-sm-6 col-form-label text-right">Year :</label>
               <div class="col-sm-5">
-                <input type="text" class="form-control"  name="year"  value='{{$curricula->first()->year}}' readonly>
+                <input type="text" class="form-control"  name="year"  value='$curricula->first()->year' readonly>
               </div>
             </div>
             </div>
@@ -286,7 +339,7 @@
 
           </div> -->
 
-          <!-- <input hidden type="text" name="id" value='{{ $curriculum->id }}'> -->
+          <!-- <input hidden type="text" name="id" value=' $curriculum->id '> -->
 <!--
           <div class="form-group row">
             <label class="col-sm-3 col-form-label">Year :</label>
@@ -346,7 +399,7 @@
                     <option value="Graduated" >Graduated</option>
           </select> -->
       <div class="modal-footer">
-            <button type="submit"  class="btn btn-success" >Add New Curriculum</button>
+            <button type="submit"  class="btn btn-success" >Add Subject</button>
         </form>
 
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
