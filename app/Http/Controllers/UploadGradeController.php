@@ -16,22 +16,33 @@ use App\Student;
 class UploadGradeController extends Controller
 {
   public function index(){
-    $subjects = Subject::all();
+    // $subjects = Subject::all();
+    // $gpas  = GPA::all();
+    // $teachings = Teaching::where('teacher_number','=',$teacher_number)
+    // ->join('subjects','subjects.subj_number','=','teachings.subj_number')
+    // ->select('teachings.*','subjects.name')->orderBy('year','semester', 'desc')
+    // ->get();
+    // $teacher = Teacher::where('number',$teacher_number)->select('teachers.*')->get();
 
-    $gpas  = GPA::all();
+
+
     $teacher_number = Auth::user()->teacher_number;
 
-    $teachings = Teaching::where('teacher_number','=',$teacher_number)
-    ->join('subjects','subjects.subj_number','=','teachings.subj_number')
-    ->select('teachings.*','subjects.name')->orderBy('year','semester', 'desc')
 
+    $teachings = Teaching::where('teachings.teacher_id',$teacher_number )
+    ->join('subjects','subjects.id','=','teachings.subj_id')
+    ->select('subjects.*')
+    ->join('curriculums','curriculums.id','=','subjects.curriculum_id')
+    ->select('subjects.*','curriculums.year','curriculums.adjust')
+    // ->join('gpas','gpas.subj_id','=','subjects.id')
     ->get();
-    $teacher = Teacher::where('number',$teacher_number)->select('teachers.*')->get();
+
+    // ->select('subjects.*','curriculums.year','curriculums.adjust')
 
 
 
 
-    return view('uploadGrade.index',['teachings' => $teachings,'teacher' => $teacher]);
+    return view('uploadGrade.index',['teachings' => $teachings]);
   }
 
   public function exportExcel($type)
@@ -86,26 +97,43 @@ class UploadGradeController extends Controller
   }
 
 
-  public function show(Teaching $teaching){
+  public function show(Subject $subject){
+    //
+    //
+    // $gpas = Teaching::where('teachings.id','=',$teaching->id)
+    // ->join('subjects','subjects.subj_number','=','teachings.subj_number')
+    // ->select('teachings.*','subjects.name')
+    // ->join('gpas', function($j) {
+    // $j->on('gpas.subj_number', '=', 'teachings.subj_number');
+    // $j->on('gpas.semester','=','teachings.semester');
+    // $j->on('gpas.year','=','teachings.year');
+    // })
+    // ->select('teachings.*','subjects.name','gpas.std_number','gpas.score')
+    // ->join('students','students.number','=','gpas.std_number')
+    // ->select('teachings.*','subjects.name','gpas.std_number','gpas.score','students.firstname','students.lastname')
+    // ->get();
+    // $students = Student::all();
 
 
-    $gpas = Teaching::where('teachings.id','=',$teaching->id)
-    ->join('subjects','subjects.subj_number','=','teachings.subj_number')
-    ->select('teachings.*','subjects.name')
 
-    ->join('gpas', function($j) {
-    $j->on('gpas.subj_number', '=', 'teachings.subj_number');
-    $j->on('gpas.semester','=','teachings.semester');
-    $j->on('gpas.year','=','teachings.year');
-    })
-    ->select('teachings.*','subjects.name','gpas.std_number','gpas.score')
-    ->join('students','students.number','=','gpas.std_number')
-    ->select('teachings.*','subjects.name','gpas.std_number','gpas.score','students.firstname','students.lastname')
-
+    $gpas = Subject::where('subjects.id', $subject->id)
+    ->select('subjects.*')
+    ->join('gpas','gpas.subj_id','=','subjects.id')
+    ->select('subjects.*','gpas.std_id','gpas.gpa')
+    ->join('rooms','rooms.std_id','=','gpas.std_id')
+    ->select('subjects.*','gpas.std_id','gpas.gpa','rooms.grade','rooms.room')
+    ->join('students','students.std_id','=','gpas.std_id')
+    ->select('subjects.*','gpas.std_id','gpas.gpa','rooms.grade','rooms.room','students.firstname','students.lastname','gpas.std_id')
+    ->join('curriculums','curriculums.id','=','subjects.curriculum_id')
+    ->select('subjects.*','gpas.std_id','gpas.gpa','rooms.grade','rooms.room','students.firstname','students.lastname','gpas.std_id','curriculums.year','curriculums.adjust')
     ->get();
 
-    $students = Student::all();
-    return view('uploadGrade.show',['students' => $students,'gpas' => $gpas]);
+
+
+
+
+
+    return view('uploadGrade.show',['gpas' => $gpas]);
   }
 
 

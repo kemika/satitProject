@@ -75,13 +75,13 @@
 
         <tr>
           <td>{{ $loop->iteration }}</td>
-          <td>{{ $gpa->subj_number   }}</td>
+          <td>{{ $gpa->code   }}</td>
           <td>{{ $gpa->name   }}</td>
           <td>{{ $gpa->semester   }}</td>
           <td>{{ $gpa->year   }}</td>
-          <td>{{ $gpa->std_number }}</td>
+          <td>{{ $gpa->std_id }}</td>
           <td>{{ $gpa->firstname.' '.$gpa->lastname  }}</td>
-          <td>{{ $gpa->score }}</td>
+          <td>{{ $gpa->gpa }}</td>
       </td>
 
         </tr>

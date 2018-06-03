@@ -74,11 +74,11 @@
 
         <tr>
           <td>{{ $loop->iteration }}</td>
-          <td>{{ $teaching->subj_number   }}</td>
+          <td>{{ $teaching->code   }}</td>
           <td>{{ $teaching->name   }}</td>
           <td>{{ $teaching->semester   }}</td>
           <td>{{ $teaching->year   }}</td>
-          <td>{{ $teaching->id }}</td>
+          <td>{{ $teaching->status }}</td>
           <td><a href="{{ url('/uploadGrade/'.$teaching->id) }}"><button class="form-control">Export</button></a></td>
       </td>
 
