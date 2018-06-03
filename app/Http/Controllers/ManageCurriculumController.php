@@ -17,7 +17,7 @@ class ManageCurriculumController extends Controller
 
 
 
-
+/*
   public function editSubject(Request $request) // edit subject
   {
       //
@@ -33,6 +33,69 @@ class ManageCurriculumController extends Controller
       $subject->max = $request->input('max');
       $subject->status = $request->input('status');
       $subject->save();
+      return redirect($redi);
+  }
+  */
+
+  public function editSubject(Request $request) // edit subject
+  {
+      //
+      $subject  = Subject::where('id', $request->input('id'))->first();
+      $redi  = "manageCurriculum/".$request->input('year');
+      $cur  = Curriculum::where('id', $request->input('cur_id'))->first();
+      if($cur->adjust === 0){ // if is not adjust page, it will create adjust year and import subject from not adjust
+        $checkExistAdjsut = Curriculum::where('year', $cur->year)->where('adjust',1)->first();
+        if($checkExistAdjsut === null){ // create adjust year and import data
+          $newAdjustYear = new Curriculum;
+          $newAdjustYear->year = $request->input('year');
+          $newAdjustYear->adjust = 1;
+          $newAdjustYear->save();
+
+          $subs = Subject::where('curriculum_id',$cur->id)->get();
+          foreach ($subs as $sub){
+            $addSub = new Subject;
+            if($sub->id === $subject->id){
+              $addSub->code = $request->input('code');
+              $addSub->name = $request->input('name');
+              $addSub->min = $request->input('min');
+              $addSub->max = $request->input('max');
+              $addSub->status = $request->input('status');
+
+              $addSub->credit = $sub->credit;
+              $addSub->elective = $sub->elective;
+              $addSub->semester = $sub->semester;
+              $addSub->curriculum_id = $newAdjustYear->id;
+            }
+            else{
+              $addSub->code = $sub->code;
+              $addSub->name = $sub->name;
+              $addSub->min = $sub->min;
+              $addSub->max = $sub->max;
+              $addSub->credit = $sub->credit;
+              $addSub->status = $sub->status;
+              $addSub->elective = $sub->elective;
+              $addSub->semester = $sub->semester;
+              $addSub->curriculum_id = $newAdjustYear->id;
+            }
+            $addSub->save();
+          }
+          $redi  = "manageCurriculum/ปรับปรุง".$request->input('year');
+          return redirect($redi);
+        }
+      }
+
+      if($subject === null){
+        return redirect($redi);
+      }
+      $subject->code = $request->input('code');
+      $subject->name = $request->input('name');
+      $subject->min = $request->input('min');
+      $subject->max = $request->input('max');
+      $subject->status = $request->input('status');
+      $subject->save();
+      if($cur->adjust === 1){
+        $redi  = "manageCurriculum/ปรับปรุง".$request->input('year');
+      }
       return redirect($redi);
   }
 

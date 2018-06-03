@@ -76,7 +76,7 @@
 
 
                   <input hidden type="text" name="id" value='{{ $curriculum->id }}'>
-
+                  <input hidden type="text" name="cur_id" value='{{ $curriculum->curriculum_id }}'>
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label text-right">Year :</label>
                     <div class="col-sm-5">
