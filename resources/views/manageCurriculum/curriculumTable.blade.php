@@ -20,7 +20,7 @@
 <link href="{{ asset('bootstrap/css/studentCSS.css') }}" rel="stylesheet">
 
 
-<h1> Manage Curriculum Year <?php if($curricula->first()->adjust === 1){echo "ปรับปรุง ";} echo $curricula->first()->year; ?></h1>
+<h1> Manage Curriculum Year <?php echo $curricula->first()->year; ?></h1>
 
 <center>
 <div class="row" style="width: 120rem;">
@@ -44,7 +44,6 @@
           @if (isset($curriculum->code))
           <?php $c+=1 ?>
         <tr>
-
           <td>{{ $curriculum->code }}</td>
           <td>{{ $curriculum->name }}</td>
           <td>{{ $curriculum->min }}</td>

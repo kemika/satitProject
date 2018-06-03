@@ -15,8 +15,8 @@ class CreateCurriculumsTable extends Migration
     {
         Schema::create('curriculums', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('year');
-            $table->tinyInteger('adjust');
+            $table->integer('year')->unique();
+            $table->tinyInteger('adjust')->default(0);
             $table->timestamps();
         });
     }

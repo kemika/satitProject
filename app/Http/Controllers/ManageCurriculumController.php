@@ -17,7 +17,7 @@ class ManageCurriculumController extends Controller
 
 
 
-/*
+
   public function editSubject(Request $request) // edit subject
   {
       //
@@ -35,8 +35,8 @@ class ManageCurriculumController extends Controller
       $subject->save();
       return redirect($redi);
   }
-  */
 
+/*
   public function editSubject(Request $request) // edit subject
   {
       //
@@ -98,6 +98,7 @@ class ManageCurriculumController extends Controller
       }
       return redirect($redi);
   }
+  */
 
   public function createNewYear(Request $request)
   {
@@ -116,6 +117,7 @@ class ManageCurriculumController extends Controller
   public function importFromPrevious(Request $request)
   {
       //
+      /*
       $year_pre = ($request->input('year'))-1;
       $previous  = Curriculum::where('year',$year_pre)
                       ->where('adjust',1)
@@ -128,6 +130,15 @@ class ManageCurriculumController extends Controller
           $redi  = "manageCurriculum/";
           return redirect($redi);
         }
+      }
+      */
+
+      $year_pre = ($request->input('year'))-1;
+      $previous  = Curriculum::where('year',$year_pre)
+                      ->first();
+      if($previous === null){
+          $redi  = "manageCurriculum/";
+          return redirect($redi);
       }
 
       $subs = Subject::where('curriculum_id',$previous->id)->get();
@@ -179,7 +190,7 @@ class ManageCurriculumController extends Controller
   {
       //
 
-
+/*
       if(strrpos($year,'ปรับปรุง') !== false ){
         $year = substr($year,-4);
         $curriculum  = Curriculum::where('year', $year)->where('adjust',1)->first();
@@ -197,14 +208,10 @@ class ManageCurriculumController extends Controller
           $curricula[0]->curriculum_id = $curricula[0]->id;
           return view('manageCurriculum.curriculumTable' , ['curricula' => $curricula]);
         }
-        /*
-        $curricula  = Curriculum::where('year', $year)->where('adjust',1)
-                      ->join('subjects','curriculums.id','=','subjects.curriculum_id')
-                      ->select('curriculums.year','subjects.id','curriculums.adjust','subjects.curriculum_id','subjects.code','subjects.name','subjects.min'
-                      ,'subjects.max','subjects.status')
-                      ->get();*/
+
         return view('manageCurriculum.curriculumTable' , ['curricula' => $curricula]);
       }
+
       $curriculum  = Curriculum::where('year', $year)->where('adjust',0)->first();
       if($curriculum === null) {
         return redirect('manageCurriculum');
@@ -219,12 +226,24 @@ class ManageCurriculumController extends Controller
         $curricula  = Curriculum::where('year', $year)->where('adjust',0)->get();
         $curricula[0]->curriculum_id = $curricula[0]->id;
         return view('manageCurriculum.curriculumTable' , ['curricula' => $curricula]);
-      }/*
-      $curricula  = Curriculum::where('year', $year)->where('adjust',0)
-                    ->join('subjects','curriculums.id','=','subjects.curriculum_id')
-                    ->select('curriculums.year','subjects.id','curriculums.adjust','subjects.curriculum_id','subjects.code','subjects.name','subjects.min'
-                    ,'subjects.max','subjects.status')
-                    ->get();*/
+      }
       return view('manageCurriculum.curriculumTable' , ['curricula' => $curricula]);
   }
+  */
+  $curriculum  = Curriculum::where('year', $year)->first();
+  if($curriculum === null) {
+    return redirect('manageCurriculum');
+  }
+  $curricula  = Curriculum::where('year', $year)
+                ->join('subjects','curriculums.id','=','subjects.curriculum_id')
+                ->select('curriculums.year','subjects.id','curriculums.adjust','subjects.curriculum_id','subjects.code','subjects.name','subjects.min'
+                ,'subjects.max','subjects.status')
+                ->get();
+  if(isset($curricula[0]) === false) {
+    $curricula  = Curriculum::where('year', $year)->get();
+    $curricula[0]->curriculum_id = $curricula[0]->id;
+    return view('manageCurriculum.curriculumTable' , ['curricula' => $curricula]);
+  }
+  return view('manageCurriculum.curriculumTable' , ['curricula' => $curricula]);
+}
 }
