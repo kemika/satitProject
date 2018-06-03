@@ -15,11 +15,9 @@ class CreateGpasTable extends Migration
     {
         Schema::create('gpas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('subj_number');
-            $table->string('std_number');
-            $table->string('score');
-            $table->string('year');
-            $table->string('semester');
+            $table->integer('subj_id');
+            $table->integer('std_id');
+            $table->string('gpa');
             $table->timestamps();
         });
     }

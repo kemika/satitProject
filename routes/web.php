@@ -42,3 +42,5 @@ Auth::routes();
 Route::get('/uploadGrade', 'UploadGradeController@index');
 Route::get('/uploadGrade/{teaching}', 'UploadGradeController@show');
 Route::get('export-file/{type}', 'UploadGradeController@exportExcel')->name('export.file');
+
+Route::get('/viewGrade', 'ViewGradeController@index');

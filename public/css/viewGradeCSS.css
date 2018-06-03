@@ -1,0 +1,19 @@
+h1 {
+    margin: 25px 50px 75px 100px;
+
+}
+
+.modal-dialog,
+.modal-content {
+    /* 80% of window height */
+    width: 240%;
+    margin-left: 8%;
+}
+
+#tagSubj{
+  margin-left: 8%;
+}
+
+#tagStd{
+  margin-left: 8%;
+}
