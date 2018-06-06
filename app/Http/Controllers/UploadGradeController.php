@@ -116,6 +116,17 @@ class UploadGradeController extends Controller
 
 
 
+    $rooms = Subject::where('subjects.id', $subject->id)
+    ->select('subjects.*')
+    ->join('gpas','gpas.subj_id','=','subjects.id')
+    ->select('subjects.*','gpas.std_id','gpas.gpa')
+    ->join('rooms','rooms.std_id','=','gpas.std_id')
+    ->select('rooms.grade')
+    ->distinct()
+    ->get();
+
+
+
     $gpas = Subject::where('subjects.id', $subject->id)
     ->select('subjects.*')
     ->join('gpas','gpas.subj_id','=','subjects.id')
@@ -133,8 +144,55 @@ class UploadGradeController extends Controller
 
 
 
-    return view('uploadGrade.show',['gpas' => $gpas]);
+    return view('uploadGrade.show',['gpas' => $gpas,'rooms' => $rooms]);
   }
+
+
+
+
+
+
+
+    public function showClass(Subject $subject){
+
+
+
+      $rooms = Subject::where('subjects.id', $subject->id)
+      ->select('subjects.*')
+      ->join('gpas','gpas.subj_id','=','subjects.id')
+      ->select('subjects.*','gpas.std_id','gpas.gpa')
+      ->join('rooms','rooms.std_id','=','gpas.std_id')
+      ->select('rooms.grade','rooms.room')
+      ->distinct('rooms.grade','rooms.room')
+      ->get();
+      // dd(count($rooms),$rooms[0]->grade,$rooms[1]->grade,$rooms[2]->grade,$rooms[3]->grade,$rooms[4]->grade);
+
+
+
+      $gpas = Subject::where('subjects.id', $subject->id)
+      ->select('subjects.*')
+      ->join('gpas','gpas.subj_id','=','subjects.id')
+      ->select('subjects.*','gpas.std_id','gpas.gpa')
+      ->join('rooms','rooms.std_id','=','gpas.std_id')
+      ->select('subjects.*','gpas.std_id','gpas.gpa','rooms.grade','rooms.room')
+      ->join('students','students.std_id','=','gpas.std_id')
+      ->select('subjects.*','gpas.std_id','gpas.gpa','rooms.grade','rooms.room','students.firstname','students.lastname','gpas.std_id')
+      ->join('curriculums','curriculums.id','=','subjects.curriculum_id')
+      ->select('subjects.*','gpas.std_id','gpas.gpa','rooms.grade','rooms.room','students.firstname','students.lastname','gpas.std_id','curriculums.year','curriculums.adjust')
+      ->get();
+
+
+
+
+
+
+      return view('uploadGrade.boom',['gpas' => $gpas,'rooms' => $rooms]);
+
+    }
+
+
+
+
 
 
 
