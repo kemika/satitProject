@@ -40,106 +40,39 @@
 <script>
   $(document).ready(function() {
     $('#table').DataTable();
-    $("#dataSubj").hide();
-   $("#dataStd").hide();
   } );
 
-  $(document).ready(function(){
-    $("#tagSubj").click(function(){
-        $("#dataSubj").show('1000');
-       $("#dataStd").hide('1000');
 
-    });
-
-  });
-
-  $(document).ready(function(){
-    $("#tagStd").click(function(){
-        $("#dataStd").show('1000');
-       $("#dataSubj").hide('1000');
-
-    });
-
-  });
 
 </script>
 
 
 <h1> View Grades</h1>
-<a href="#" id="tagSubj">Subjects</a>
-<br><br>
-<a href="#" id="tagStd">Students</a>
+<div class="form-group row">
+  <label class="col-form-label" style="margin-left: 150px;">Year</label>
+  <select name="status" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
+    <option value="chooseYear" selected>-</option>
+    @foreach ($curriculums as $curriculum)
+      <option value="{{$curriculum->year}}">{{$curriculum->year}}</option>
+    @endforeach
+  </select>
 
-<center>
-  <div id="dataSubj" style="display">
-    <div class="row" style="width: 100rem; margin-top: -50px;">
+  <label class="col-form-label" style="margin-left: 100px;">Grade</label>
+  <select name="status" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
+    <option value="chooseGrade" selected>-</option>
+    @foreach ($rooms as $room)
+      <option value="{{$room->grade}}">{{$room->grade}}</option>
+    @endforeach
+  </select>
 
-      <table class="table table-hover" id="table" style="width: 100rem;">
-        <thead>
-          <tr>
-            <th scope="col">No.</th>
-            <th scope="col">Subject ID</th>
-            <th scope="col">Subject name</th>
-            <th scope="col">Action</th>
+  <label class="col-form-label" style="margin-left: 100px;">Room</label>
+  <select name="status" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
+    <option value="chooseRoom" selected>-</option>
+    @foreach ($rooms as $room)
+      <option value="{{$room->room}}">{{$room->room}}</option>
+    @endforeach
+  </select>
 
-          </tr>
-        </thead>
+  <button type="submit"  class="btn btn-primary" style="margin-left: 100px;">Go!</button>
 
-        <tbody>
-          <?php $c=0; ?>
-          @foreach ($subjects as $subject)
-          <?php $c+=1 ?>
-          <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $subject->code }}</td>
-            <td>{{ $subject->name }}</td>
-            <td><button type="button" class="btn btn-primary" data-toggle='modal' data-target='#myModal'>View</button></td>
-          </tr>
-
-          <!-- Modal -->
-          <div class="modal fade" id="myModal" role="dialog">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title"></h4>
-                </div>
-                <div class="modal-body">
-                  <p>This is a large modal.</p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          @endforeach
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-
-  <div id="dataStd">
-    <div class="row" style="width: 100rem; margin-top: -50px;">
-
-      <table class="table table-hover" id="table" style="width: 100rem;">
-        <thead>
-          <tr>
-            <th scope="col">No.</th>
-            <th scope="col">Student ID</th>
-            <th scope="col">Student name</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-</center>
+</div>
