@@ -22,7 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/main', 'MainController@index');
 Route::get('/grade', 'ManageStudentsController@grade');
 
-Route::get('/uploadGrade', 'UploadGradeController@index');
+
 
 
 Route::get('/manageStudents', 'ManageStudentsController@index');
@@ -39,6 +39,7 @@ Route::get('/manageAcademic', 'ManageAcademicController@index');
 Auth::routes();
 
 Route::get('/uploadGrade', 'UploadGradeController@index');
+Route::get('/uploadGrade/{subject}', 'UploadGradeController@showClass');
 Route::get('export-file/{type}', 'UploadGradeController@exportExcel')->name('export.file');
 
 Route::get('/viewGrade', 'ViewGradeController@index');

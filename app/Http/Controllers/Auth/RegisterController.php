@@ -90,7 +90,6 @@ class RegisterController extends Controller
 
 
 
-
         return User::create([
 
 
@@ -100,6 +99,7 @@ class RegisterController extends Controller
             'lastname' => $data['lastname'],
             'role' => $data['role'],
             'teacher_number' => $data['teacher_number'],
+
 
 
 
