@@ -43,6 +43,7 @@ Route::get('/uploadGrade/{subject}', 'UploadGradeController@showClass');
 Route::get('export-file/{type}', 'UploadGradeController@exportExcel')->name('export.file');
 
 Route::get('/viewGrade', 'ViewGradeController@index');
+Route::get('/viewGrade/view', 'ViewGradeController@view');
 
 
 Route::get('/reportCard', 'ReportCardController@index');
