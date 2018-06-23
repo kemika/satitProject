@@ -19,7 +19,7 @@
 
 
 
-<link href="{{ asset('bootstrap/css/studentCSS.css') }}" rel="stylesheet">
+<link href="{{ asset('css/studentCSS.css') }}" rel="stylesheet">
 
 
 <h1> Manage Teachers</h1>

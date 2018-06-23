@@ -55,7 +55,7 @@
       <button class="btn btn-outline-secondary" onclick="window.location.href='/manageAcademic'">Manage Academic Year</button>
     </div>
     <div class="col col-lg-2">
-      <button class="btn btn-outline-secondary" type="submit">Report Cards</button>
+      <button class="btn btn-outline-secondary"  onclick="window.location.href='/reportCard'">Report Cards</button>
     </div>
   </div>
 

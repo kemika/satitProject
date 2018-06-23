@@ -4,7 +4,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Subject::class, function (Faker $faker) {
     return [
-      'curriculumn_id' => $faker->numberBetween($min = 1, $max = 20),
+      'curriculum_id' => $faker->numberBetween($min = 1, $max = 20),
       'code' => $faker->randomElement(['01418111','01418112','01418113', '01418114', '01418115']),
       'name' => $faker->randomElement(['Automata','Drawing','Alogorithm', 'Network', 'Unix']),
       'min' => $faker->numberBetween($min = 1, $max = 5),

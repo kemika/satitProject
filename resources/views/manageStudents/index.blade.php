@@ -7,7 +7,7 @@
 <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
-<link href="{{ asset('bootstrap/css/studentCSS.css') }}" rel="stylesheet">
+<link href="{{ asset('css/studentCSS.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="/css/nav.css">
 
 
@@ -19,7 +19,7 @@
   <ul>
      <li ><a href='/main'>SatitKaset</a></li>
      <li class='active'><a href='#'>Manage Student</a></li>
-     <li><a href='/grade'>Grade</a></li>
+     <li><a href='/viewGrade'>Grade</a></li>
      <li><a href='#'>About</a></li>
      <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
                 onclick="event.preventDefault();
@@ -65,10 +65,10 @@
       <tbody>
         <?php $c=0; ?>
         @foreach ($students as $student)
-          <?php $c+=1 ?>
+        <?php $c+=1 ?>
         <tr>
           <td>{{ $loop->iteration }}</td>
-          <td>{{ $student->number }}</td>
+          <td>{{ $student->std_id }}</td>
           <td>{{ $student->firstname }}</td>
           <td>{{ $student->lastname }}</td>
           <td>{{ $student->birthdate }}</td>

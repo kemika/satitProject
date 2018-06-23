@@ -1,47 +1,78 @@
-@extends('layouts.web')
+<link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.3.js"></script>
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
+<link href="{{ asset('css/viewGradeCSS.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="/css/nav.css">
 
 
-@push('script')
-<script type="text/javascript">
-document.getElementById('grade').classList.add('active')
+
+
+
+<head>
+  <div id='cssmenu'>
+  <ul>
+     <li ><a href='/main'>SatitKaset</a></li>
+     <li><a href='/manageStudents'>Manage Student</a></li>
+     <li class='active'><a href='/viewGrade'>Grade</a></li>
+     <li><a href='#'>About</a></li>
+     <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
+                onclick="event.preventDefault();
+                              document.getElementById('logout-form').submit();">
+                 {{ __('Logout') }}
+             </a>
+
+             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                 @csrf
+             </form></li>
+
+             <li style="float:right"><a href='#'>{{ auth::user()->firstname.' '.auth::user()->lastname}}</a></li>
+  </ul>
+
+  </div>
+
+</head>
+
+<script>
+  $(document).ready(function() {
+    $('#table').DataTable();
+  } );
+
+
 
 </script>
 
 
-
-@endpush
-
-
-@section('content')
-<h1>View Grade</h1>
-<a href="#table" onclick="document.getElementById('my').style= 'block'">Subjects</a>
-<br><br>
-<a href="#">Students</a>
-
-
-<div id="my" style="display: none">
-
-<table class="table table-hover" id="table" style="width: 120rem;">
-  <thead>
-    <tr>
-      <th scope="col">No.</th>
-      <th scope="col">Subject ID</th>
-      <th scope="col">Subject name</th>
-
-    </tr>
-  </thead>
-
-  <tbody>
-
-    @foreach ($subjects as $subject)
-    <tr>
-      <td>{{ $loop->iteration }}</td>
-      <td>{{ $subject->subj_number }}</td>
-      <td>{{ $subject->name }}</td>
-    </tr>
+<h1> View Grades</h1>
+<div class="form-group row">
+  <label class="col-form-label" style="margin-left: 150px;">Year</label>
+  <select name="status" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
+    <option value="chooseYear" selected>-</option>
+    @foreach ($curriculums as $curriculum)
+      <option value="{{$curriculum->year}}">{{$curriculum->year}}</option>
     @endforeach
-  </tbody>
-</table>
-</div>
+  </select>
 
-@endsection
+  <label class="col-form-label" style="margin-left: 100px;">Grade</label>
+  <select name="status" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
+    <option value="chooseGrade" selected>-</option>
+    @foreach ($rooms as $room)
+      <option value="{{$room->grade}}">{{$room->grade}}</option>
+    @endforeach
+  </select>
+
+  <label class="col-form-label" style="margin-left: 100px;">Room</label>
+  <select name="status" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
+    <option value="chooseRoom" selected>-</option>
+    @foreach ($rooms as $room)
+      <option value="{{$room->room}}">{{$room->room}}</option>
+    @endforeach
+  </select>
+
+  <button type="submit"  class="btn btn-primary" style="margin-left: 100px;">Go!</button>
+
+</div>
