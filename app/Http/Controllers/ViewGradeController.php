@@ -11,48 +11,22 @@ use App\Http\Controllers\DB;
 class ViewGradeController extends Controller
 {
   public function index(){
-
-
-
-    $curriculums = Curriculum::orderBy('year')->get();
-
-
-    $a = '!=';
-    $b = '!=';
-    $c = '!=';
-    $d = '!=' ;
-
-
-    // if($year != 0 ){
-    //   $a = '=';
-    // }
-    // if($semester != 0 ){
-    //   $b = '=';
-    // }
-    // if($grade != 0 ){
-    //   $c = '=';
-    // }
-    // if($room != 0 ){
-    //   $d = '=';
-    // }
-
+    $curriculums = Curriculum::orderBy('year', 'desc')->get();
     $rooms = Room::all();
-
-
-
-
-    return view('grade.index' , ['curriculums' => $curriculums, 'rooms' => $rooms ]);
+    
+    return view('grade.index' , ['curriculums' => $curriculums, 'rooms' => $rooms]);
 
   }
 
-  public function view(Request $request){
-    $year = Curriculum::orderBy('year')->get();
-    $year = $request->input('year');
-    // dd($year);
-    // if ($year != 'chooseRoom') {
-    //   $year2  = Curriculum::all()->where('year', $request->input('year'));
-    // }
 
-    return view('grade.index');
+
+  public function result(Request $request)
+  {
+      dd($request);
+      if($request->input('year') == "chooseYear"){
+        $curriculums = Curriculum::all();
+      }
+
+      return view('grade.index' , ['curriculums' => $curriculums]);
   }
 }
