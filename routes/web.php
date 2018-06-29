@@ -53,4 +53,5 @@ Route::get('/viewGrade', 'ViewGradeController@index');
 Route::put('/viewGrade/result', 'ViewGradeController@result');
 
 
+
 Route::get('/reportCard', 'ReportCardController@index');

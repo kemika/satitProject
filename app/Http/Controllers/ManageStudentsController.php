@@ -34,7 +34,7 @@ class ManageStudentsController extends Controller
   }
 
 
-  public function grade(){
-    return view('grade.index');
-  }
+  // public function grade(){
+  //   return view('grade.index');
+  // }
 }

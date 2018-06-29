@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Curriculum;
 use App\Room;
+use App\Http\Controllers\DB;
 
 class ViewGradeController extends Controller
 {
@@ -16,6 +17,8 @@ class ViewGradeController extends Controller
     return view('grade.index' , ['curriculums' => $curriculums, 'rooms' => $rooms]);
 
   }
+
+
 
   public function result(Request $request)
   {
