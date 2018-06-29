@@ -11,6 +11,7 @@ return array(
     'App\\Curriculum' => $baseDir . '/app/Curriculum.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\GPA' => $baseDir . '/app/GPA.php',
+    'App\\Http\\Controllers\\API\\ManageCurriculumController' => $baseDir . '/app/Http/Controllers/API/ManageCurriculumController.php',
     'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
     'App\\Http\\Controllers\\Auth\\LoginController' => $baseDir . '/app/Http/Controllers/Auth/LoginController.php',
     'App\\Http\\Controllers\\Auth\\RegisterController' => $baseDir . '/app/Http/Controllers/Auth/RegisterController.php',
