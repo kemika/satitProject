@@ -48,31 +48,75 @@
 
 
 <h1> View Grades</h1>
-<div class="form-group row">
-  <label class="col-form-label" style="margin-left: 150px;">Year</label>
-  <select name="status" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
-    <option value="chooseYear" selected>-</option>
-    @foreach ($curriculums as $curriculum)
-      <option value="{{$curriculum->year}}">{{$curriculum->year}}</option>
-    @endforeach
-  </select>
+<form action="/viewGrade/result" method="post">
+  @csrf
+  @method('PUT')
 
-  <label class="col-form-label" style="margin-left: 100px;">Grade</label>
-  <select name="status" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
-    <option value="chooseGrade" selected>-</option>
-    @foreach ($rooms as $room)
-      <option value="{{$room->grade}}">{{$room->grade}}</option>
-    @endforeach
-  </select>
+  <div class="form-group row">
+    <label class="col-form-label" style="margin-left: 150px;">Year</label>
+    <select name="year" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
+      <option value="chooseYear" selected>-</option>
+      @foreach ($curriculums as $curriculum)
+        <option value="{{$curriculum->year}}">{{$curriculum->year}}</option>
+      @endforeach
+    </select>
 
-  <label class="col-form-label" style="margin-left: 100px;">Room</label>
-  <select name="status" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
-    <option value="chooseRoom" selected>-</option>
-    @foreach ($rooms as $room)
-      <option value="{{$room->room}}">{{$room->room}}</option>
-    @endforeach
-  </select>
+    <label class="col-form-label" style="margin-left: 100px;">Semester</label>
+    <select name="semester" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
+      <option value="chooseSemester<" selected>-</option>
+    </select>
 
-  <button type="submit"  class="btn btn-primary" style="margin-left: 100px;">Go!</button>
+    <label class="col-form-label" style="margin-left: 100px;">Subject</label>
+    <select name="subject" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
+      <option value="chooseSubject<" selected>-</option>
+    </select>
 
-</div>
+    <label class="col-form-label" style="margin-left: 100px;">Grade Label</label>
+    <select name="grade" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
+      <option value="chooseGrade" selected>-</option>
+      @foreach ($rooms as $room)
+        <option value="{{$room->grade}}">{{$room->grade}}</option>
+      @endforeach
+    </select>
+
+    <label class="col-form-label" style="margin-left: 100px;">Room</label>
+    <select name="room" class="form-control" style="height: 35px; width: 100px; margin-left: 10px;">
+      <option value="chooseRoom" selected>-</option>
+      @foreach ($rooms as $room)
+        <option value="{{$room->room}}">{{$room->room}}</option>
+      @endforeach
+    </select>
+
+    <button type="submit"  class="btn btn-primary" style="margin-left: 100px;">Go!</button>
+
+  </div>
+
+</form>
+
+<table class="table table-hover"  style="width: 120rem; margin-left: 150px; margin-top: 50px;">
+  <thead>
+    <tr>
+      <th scope="col">No.</th>
+      <th scope="col">Year</th>
+      <th scope="col">Semester</th>
+      <th scope="col">Subject</th>
+      <th scope="col">Firstname</th>
+      <th scope="col">Lastname</th>
+      <th scope="col">Grade Label</th>
+      <th scope="col">Room</th>
+      <th scope="col">Grade</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+</table>

@@ -20,7 +20,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/main', 'MainController@index');
-Route::get('/grade', 'ManageStudentsController@grade');
+
 
 
 
@@ -50,6 +50,7 @@ Route::get('/uploadGrade/{subject}', 'UploadGradeController@showClass');
 Route::get('export-file/{type}', 'UploadGradeController@exportExcel')->name('export.file');
 
 Route::get('/viewGrade', 'ViewGradeController@index');
+Route::put('/viewGrade/result', 'ViewGradeController@result');
 
 
 Route::get('/reportCard', 'ReportCardController@index');
