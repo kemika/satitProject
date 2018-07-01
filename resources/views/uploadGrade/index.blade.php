@@ -189,7 +189,7 @@
           </form> -->
 
 
-          <a href="{{ route('export.file',['type'=>'xlsx']) }}">Download Excel xlsx</a>
+          <a href="{{ route('export.file',['type'=>'xlsx','semester' => '1','year' => '2012','grade' => '6' ,'room' => '3']) }}">Download Excel xlsx</a>
 
         </div>
         <div class="modal-footer">
