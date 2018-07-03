@@ -7,7 +7,7 @@
   @foreach($rooms as $room)
 
     <div class="row" id="{{ 'A'.$index }}">
-      <div class="card col-5 mt-3" style="height:300px">
+      <div class="card col-5 mt-3" style="height:330px">
         <h2>{{ 'Room: '.$room->grade.'/'.$room->room}}</h2>
           <h4>{{$gpas[0]->name}}</h4>
         <p>{{'Subject ID: '.$gpas[0]->code}}</p>
@@ -15,6 +15,11 @@
         <p>{{'Year: '.$gpas[0]->year}}</p>
 
         <button class="form-control" type="button" name="button">Export Excel</button>
+
+        <br>
+        <button type="button" class="form-control" name="button">  <a href="{{ route('export.file',['type'=>'xlsx','semester' => $gpas[0]->semester,'year' => $gpas[0]->year,'grade' => $room->grade,'room' => $room->room]) }}">Download Excel xlsx</a>
+  </button>
+      <br>
 
       </div>
 
@@ -67,6 +72,8 @@
       </div>
       <button type="button" class="form-control" id="{{'close'.$index}}" name="button">x</button>
 
+
+
     </div>
 
 
@@ -79,6 +86,8 @@
 
 
   @endforeach
+
+
 @endsection
 
 

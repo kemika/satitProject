@@ -11,6 +11,7 @@ use App\GPA;
 use Auth;
 use App\Teacher;
 use App\Student;
+use App\Room;
 
 
 class UploadGradeController extends Controller
@@ -45,51 +46,118 @@ class UploadGradeController extends Controller
     return view('uploadGrade.index',['teachings' => $teachings]);
   }
 
-  public function exportExcel($type)
+  public function exportExcel($type,$semester,$year,$grade,$room)
   {
-    Excel::create('Laravel Excel', function($excel) {
+    $subjects = Room::where('grade',$grade)
+    ->where('room',$room)
+    ->select('rooms.*')
+    ->join('gpas','gpas.std_id','=','rooms.std_id')
+    ->select('rooms.*','gpas.subj_id')
+    ->join('subjects','subjects.id','=','gpas.subj_id')
+    ->select('rooms.*','gpas.subj_id','subjects.*')
+    ->join('curriculums','curriculums.id','=','subjects.curriculum_id')
+    ->select('rooms.*','gpas.subj_id','subjects.*','curriculums.year')
+    ->distinct('name')
+    ->get();
 
-      $excel->sheet('Excel sheet', function($sheet) {
+    $students = Room::where('grade',$grade)
+    ->where('room',$room)
+    ->select('rooms.*')
+    ->join('students','students.std_id','=','rooms.std_id')
+    ->select('rooms.*','students.*')
+    ->get();
+
+
+
+
+
+
+    Excel::create('Laravel Excel', function($excel) use($subjects,$students) {
+
+      $excel->sheet('Excel sheet', function($sheet) use($subjects,$students)  {
 
       $sheet->setOrientation('landscape');
-      $teacher_number = Auth::user()->teacher_number;
+      $sheet->cells('A1:A5', function($cells) {
+      $cells->setValignment('center');
+    // manipulate the range of cells
+
+  });
 
 
-      $teachings = Teaching::where('teacher_number','=',$teacher_number)
-      ->join('subjects','subjects.subj_number','=','teachings.subj_number')
-      ->select('teachings.*','subjects.name')
-      ->join('gpas', function($j) {
-      $j->on('gpas.subj_number', '=', 'teachings.subj_number');
-      $j->on('gpas.semester','=','teachings.semester');
-      $j->on('gpas.year','=','teachings.year');
-      })
-      ->select('teachings.*','subjects.name','gpas.std_number','gpas.score')
-      ->get();
-      $teacher = Teacher::where('number',$teacher_number)->select('teachers.*')->get();
+      // $teacher_number = Auth::user()->teacher_number;
 
 
-      $sheet->cell('A1', function($cell) {$cell->setValue('Teacher Number');   });
-      $sheet->cell('B1', function($cell) {$cell->setValue('Teacher Name');   });
-      $sheet->cell('C1', function($cell) {$cell->setValue('Subject Number');   });
-      $sheet->cell('D1', function($cell) {$cell->setValue('Subject Name');   });
-      $sheet->cell('E1', function($cell) {$cell->setValue('Semester');   });
-      $sheet->cell('F1', function($cell) {$cell->setValue('Year');   });
-      $sheet->cell('G1', function($cell) {$cell->setValue('Grade');   });
+      // $teachings = Teaching::where('teacher_number','=',$teacher_number)
+      // ->join('subjects','subjects.subj_number','=','teachings.subj_number')
+      // ->select('teachings.*','subjects.name')
+      // ->join('gpas', function($j) {
+      // $j->on('gpas.subj_number', '=', 'teachings.subj_number');
+      // $j->on('gpas.semester','=','teachings.semester');
+      // $j->on('gpas.year','=','teachings.year');
+      // })
+      // ->select('teachings.*','subjects.name','gpas.std_number','gpas.score')
+      // ->get();
+      // $teacher = Teacher::where('number',$teacher_number)->select('teachers.*')->get();
+      //
+       // $sheet->getStyle("A1")->getAlignment()->setTextRotation(90);
+       // $sheet->setSize('B2', 50, 50);
+      $sheet->cell('A1', function($cell) {$cell->setValue('Quarter1');   });
+      $sheet->cell('A2', function($cell) {$cell->setValue('Student ID');   });
+      $sheet->cells('B2:Z2', function($cells) {
+          $cells->setAlignment('center');
+          $cells->setValignment('center');
+        });
+      $i = 0;
+      foreach($students as $student){
+        $sheet->cell(chr(66+$i)."2", function($cell) use($student) {$cell->setValue($student->std_id);   });
+        $i+=1;
+      }
+      $sheet->cell(chr(66+$i)."2", function($cell) use($student) {$cell->setValue('     ');   });
+
+      $sheet->cell('A3', function($cell) {$cell->setValue('Name');   });
+      $i = 0;
+      foreach($students as $student){
+        $sheet->getStyle(chr(66+$i)."3")->getAlignment()->setTextRotation(90);
+        $sheet->cell(chr(66+$i)."3", function($cell) use($student) {$cell->setValue($student->firstname." ".$student->lastname);   });
+
+
+        $i+=1;
+
+      }
+      $sheet->getStyle(chr(66+$i)."3")->getAlignment()->setTextRotation(90);
+      $sheet->cell(chr(66+$i)."3", function($cell) use($student) {$cell->setValue('Credit');   });
+      $arrsubj = array();
+
+      $i=4;
+
+      foreach ($subjects as $subject) {
+        if (!in_array($subject->name,$arrsubj)){
+          array_push($arrsubj,$subject->name);
+
+          $sheet->cell('A'.$i, function($cell) use($subject) {$cell->setValue($subject->name);   });
+          $i+=1;
+
+        }
+      }
+
+      // $sheet->cell('B3', function($cell) {$cell->setValue('อนพัทย์ อินทร์สุวรรณ');   });
+      // $sheet->cell('C3', function($cell) {$cell->setValue('เขมิกา ธิติธันธวัฒ');   });
+      // $sheet->cell('D3', function($cell) {$cell->setValue('ธิติ ตันติยานุกูลชัย');   });
 
       $i = 1;
-         if (!empty($teachings)) {
-
-             foreach ($teachings as $teaching) {
-                 $i+=1;
-                 $sheet->cell('A'.$i, $teaching->teacher_number);
-                 $sheet->cell('B'.$i, $teacher[0]->firstname.' '.$teacher[0]->lastname);
-                 $sheet->cell('C'.$i, $teaching->subj_number);
-                 $sheet->cell('D'.$i, $teaching->name);
-                 $sheet->cell('E'.$i, $teaching->semester);
-                 $sheet->cell('F'.$i, $teaching->year);
-                 $sheet->cell('G'.$i, $teaching->score);
-             }
-         }
+         // if (!empty($teachings)) {
+         //
+         //     foreach ($teachings as $teaching) {
+         //         $i+=1;
+         //         $sheet->cell('A'.$i, "ajsdkljalksd");
+                 // $sheet->cell('B'.$i, $teacher[0]->firstname.' '.$teacher[0]->lastname);
+                 // $sheet->cell('C'.$i, $teaching->subj_number);
+                 // $sheet->cell('D'.$i, $teaching->name);
+                 // $sheet->cell('E'.$i, $teaching->semester);
+                 // $sheet->cell('F'.$i, $teaching->year);
+                 // $sheet->cell('G'.$i, $teaching->score);
+         //     }
+         // }
 
       });
 
