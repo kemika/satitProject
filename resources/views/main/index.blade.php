@@ -66,7 +66,7 @@
       <div class="col col-lg-3">
       </div>
       <div class="col col-lg-2">
-        <button class="btn btn-outline-secondary" type="submit">Transcripts</button>
+        <button class="btn btn-outline-secondary" onclick="window.location.href='/transcript'">Transcripts</button>
       </div>
     </div>
 

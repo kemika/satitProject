@@ -13,16 +13,15 @@ class CreateTeachersTable extends Migration
      */
     public function up()
     {
-        Schema::create('teachers', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('teacher_id')->unique();
-            $table->string('firstname');
-            $table->string('lastname');
-            $table->string('nid');
-            $table->string('passport');
-            $table->string('nationality');
-            $table->string('status');
-            $table->timestamps();
+        Schema::create('Teachers', function (Blueprint $table) {
+            $table->string('teacher_id',100);
+            $table->string('firstname',100);
+            $table->string('lastname',100);
+            $table->unsignedTinyInteger('teacher_status');
+            $table->primary('teacher_id');
+            $table->foreign('teacher_status')
+                  ->references('teacher_status')
+                  ->on('Teacher_Status');
         });
     }
 
@@ -33,6 +32,6 @@ class CreateTeachersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('teachers');
+        Schema::dropIfExists('Teachers');
     }
 }

@@ -202,6 +202,10 @@
 
 </div>
 
+<div class="row" style="margin-top: 30px;">
+  <button class="btn btn-primary" onclick="window.location.href='/upload'">Upload Grade</button>
+</div>
+
 <div class="row" style="margin-top: 30px; margin-bottom: 30px;">
   <div class="col-5">
   </div>

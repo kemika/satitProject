@@ -13,14 +13,15 @@ class CreateStudentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('students', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('std_id')->unique();
-            $table->string('firstname');
-            $table->string('lastname');
-            $table->string('birthdate');
-            $table->string('status');
-            $table->timestamps();
+        Schema::create('Students', function (Blueprint $table) {
+            $table->string('student_id',50);
+            $table->string('firstname',100);
+            $table->string('lastname',100);
+            $table->unsignedTinyInteger('student_status');
+            $table->primary('student_id');
+            $table->foreign('student_status')
+                  ->references('student_status')
+                  ->on('Student_Status');
         });
     }
 
@@ -31,6 +32,6 @@ class CreateStudentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('Students');
     }
 }

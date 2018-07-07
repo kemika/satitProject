@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Controller;
 use Excel;
 use App\Subject;
@@ -12,7 +13,8 @@ use Auth;
 use App\Teacher;
 use App\Student;
 use App\Room;
-
+use App\WaitApprove;
+use Illuminate\Support\Facades\Input;
 
 class UploadGradeController extends Controller
 {
@@ -258,10 +260,73 @@ class UploadGradeController extends Controller
 
     }
 
+    public function upload()
+    {
+        return view('uploadGrade.upload');
+    }
+
+
+    // public function import(Request $request)
+    // {
+    //   if($request->hasfFile('file')){
+    //     $path = $request->file('file')->getRealpath();
+    //     $data = Excel::load($path, function($reader){})->get();
+    //       if (!empty($data) && $data->count()) {
+    //         foreach($variable as $key => $value){
+    //           $waitApprove = new WaitApprove();
+    //           $waitApprove->name = $value->name;
+    //           $waitApprove->email = $value->email;
+    //           $waitApprove->save();
+    //         }
+    //       }
+    //   }
+    //   return back();
+    //
+    // }
+
+    public function getUpload()
+    {
+      $file = Input::file('file');
+      $file_name = $file->getClientOriginalName();
+      $file->move('files/', $file_name);
+
+      // $results = Excel::load('files/'.$file_name,function($reader){
+      //   $reader->setHeaderRow(5);
+      //   $reader->all();
+      // })->get();
+
+      $results = Excel::load('files/'.$file_name,function($reader){
+      $reader->get(array('Course'));
+    })->get();
+
+      dd($results);
+      // dd($results[0]->name);
+      // echo count($results);
+      // echo "<br>";
+      // if(count($results)==0){
+      //   echo "This file is empty";
+      // }
+      // else{
+      //   for ($i = 0; $i < count($results); $i++) {
+      //     echo "Name: ".$results[$i]->student_name;
+      //     echo "<br>";
+      //     echo "E-mail: ".$results[$i]->q1;
+      //     echo "<br>";
+      //   }
+      // }
 
 
 
+    // $name = sizeof($results[0]);//number of row in the Rooms sheet //example 2
+    // $email = sizeof($results[1]);//number of row in the Room Equipment sheet //example 3
+    // if($name == 0 && $email == 0){
+    //     echo 'There are no data to input';
+    //     self::$valid = false;
+    // }
 
+
+      return view('uploadGrade.getUpload', compact('results'));
+    }
 
 
 
