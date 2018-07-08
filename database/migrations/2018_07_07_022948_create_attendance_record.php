@@ -15,29 +15,17 @@ class CreateAttendanceRecord extends Migration
     {
         Schema::create('Attendace_Records', function (Blueprint $table) {
            $table->string('student_id',50);
-<<<<<<< HEAD
            $table->unsignedTinyInteger('semester');
            $table->unsignedSmallInteger('academic_year');
            $table->dateTimeTz('datetime');
                       
-=======
-           $table->unsignedTinyInteger('quater');
-           $table->unsignedSmallInteger('academic_year');
-           $table->dateTimeTz('datetime');
-
->>>>>>> 9f61ae220877e00c2f6b824dd710572c9d62a85d
            $table->unsignedTinyInteger('late');
            $table->unsignedTinyInteger('absent');
            $table->unsignedTinyInteger('leave');
            $table->unsignedTinyInteger('sick');
            $table->unsignedTinyInteger('data_status');
-<<<<<<< HEAD
                       
            $table->primary(['student_id','semester','academic_year','datetime'],'attendance_record_primary');
-=======
-
-           $table->primary(['student_id','semester','academic_year','datetime']);
->>>>>>> 9f61ae220877e00c2f6b824dd710572c9d62a85d
                       $table->foreign('student_id')
                       ->references('student_id')
                       ->on('Students');

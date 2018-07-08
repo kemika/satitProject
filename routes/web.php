@@ -59,3 +59,9 @@ Route::put('/viewGrade/result', 'ViewGradeController@result');
 Route::get('/reportCard', 'ReportCardController@index');
 
 Route::get('/transcript', 'TranscriptController@index');
+
+
+
+
+
+Route::get('/bbb','GradeController@boom');
