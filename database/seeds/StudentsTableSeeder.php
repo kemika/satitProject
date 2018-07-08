@@ -11,6 +11,11 @@ class StudentsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Student::class, 15)->create();
+        $admin = new App\Student;
+        $admin->student_id ='1111111111';
+        $admin->firstname = 'Anaphat';
+        $admin->lastname = 'Insuwan';
+        $admin->student_status = '1';
+        $admin->save();
     }
 }

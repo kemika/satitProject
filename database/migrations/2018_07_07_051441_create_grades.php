@@ -24,6 +24,7 @@ class CreateGrades extends Migration
                       $table->float('grade');
                       $table->unsignedTinyInteger('grade_status');
                       $table->unsignedTinyInteger('data_status');
+                       $table->timestamps();
 
                       $table->primary(['student_id','open_course_id','quater','semester','datetime'],'grades_primary');
 

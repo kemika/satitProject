@@ -17,6 +17,7 @@ class CreateGradeStatus extends Migration
                       $table->unsignedTinyInteger('grade_status');
                       $table->string('grade_status_text',20);
                       $table->primary('grade_status');
+                       $table->timestamps();
         });
     }
 

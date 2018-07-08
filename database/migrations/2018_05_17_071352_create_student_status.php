@@ -17,6 +17,7 @@ class CreateStudentStatus extends Migration
            $table->unsignedTinyInteger('student_status');
            $table->string('student_status_text',20);
            $table->primary('student_status');
+            $table->timestamps();
         });
     }
 

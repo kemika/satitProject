@@ -19,6 +19,7 @@ class CreateTeachersTable extends Migration
             $table->string('lastname',100);
             $table->unsignedTinyInteger('teacher_status');
             $table->primary('teacher_id');
+             $table->timestamps();
             $table->foreign('teacher_status')
                   ->references('teacher_status')
                   ->on('Teacher_Status');
