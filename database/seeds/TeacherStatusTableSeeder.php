@@ -11,6 +11,14 @@ class TeacherStatusTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Teacher_Status::class, 10)->create();
+      $admin = new App\Teacher_Status;
+      $admin->teacher_status = '0';
+      $admin->teacher_status_text = 'Active';
+      $admin->save();
+
+      $admin = new App\Teacher_Status;
+      $admin->teacher_status = '1';
+      $admin->teacher_status_text = 'Inactive';
+      $admin->save();
     }
 }
