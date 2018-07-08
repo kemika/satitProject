@@ -19,6 +19,7 @@ class CreateTeacherCommentss extends Migration
            $table->unsignedTinyInteger('semester');
            $table->unsignedSmallInteger('academic_year');
            $table->dateTimeTz('datetime');
+<<<<<<< HEAD
                       
            $table->text('comment');
            
@@ -33,6 +34,21 @@ class CreateTeacherCommentss extends Migration
                        ->on('Students');
                       });
 
+=======
+
+           $table->text('comment');
+
+           $table->unsignedTinyInteger('data_status');
+
+           $table->primary(['student_id','quater','semester','academic_year','datetime']);
+           $table->foreign('data_status')
+                      ->references('data_status')
+                      ->on('Data_Status');
+                      });
+        $table->foreign('student_id')
+        ->references('student_id')
+        ->on('Students');
+>>>>>>> 9f61ae220877e00c2f6b824dd710572c9d62a85d
     }
 
     /**
