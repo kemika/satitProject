@@ -18,13 +18,14 @@ class CreateAttendanceRecord extends Migration
            $table->unsignedTinyInteger('semester');
            $table->unsignedSmallInteger('academic_year');
            $table->dateTimeTz('datetime');
-                      
+            $table->timestamps();
+
            $table->unsignedTinyInteger('late');
            $table->unsignedTinyInteger('absent');
            $table->unsignedTinyInteger('leave');
            $table->unsignedTinyInteger('sick');
            $table->unsignedTinyInteger('data_status');
-                      
+
            $table->primary(['student_id','semester','academic_year','datetime'],'attendance_record_primary');
                       $table->foreign('student_id')
                       ->references('student_id')

@@ -17,6 +17,7 @@ class CreateBehaviorTypes extends Migration
                       $table->unsignedTinyInteger('behavior_type');
                       $table->string('behavior_type_text',100);
                       $table->primary('behavior_type');
+                       $table->timestamps();
         });
     }
 

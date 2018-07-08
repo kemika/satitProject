@@ -415,6 +415,10 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
         'App\\Teacher_Comment' => __DIR__ . '/../..' . '/app/Teacher_Comment.php',
         'App\\Teacher_Status' => __DIR__ . '/../..' . '/app/Teacher_Status.php',
         'App\\Teachers' => __DIR__ . '/../..' . '/app/Teachers.php',
+<<<<<<< HEAD
+=======
+        'AssingnGradesTableSeeder' => __DIR__ . '/../..' . '/database/seeds/AssingnGradesTableSeeder.php',
+>>>>>>> cd511a565faf90c450711d7184fea20bbf270216
         'Barryvdh\\DomPDF\\Facade' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/Facade.php',
         'Barryvdh\\DomPDF\\PDF' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/PDF.php',
         'Barryvdh\\DomPDF\\ServiceProvider' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/ServiceProvider.php',
@@ -1080,6 +1084,11 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
         'FontLib\\WOFF\\File' => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib/WOFF/File.php',
         'FontLib\\WOFF\\Header' => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib/WOFF/Header.php',
         'FontLib\\WOFF\\TableDirectoryEntry' => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib/WOFF/TableDirectoryEntry.php',
+<<<<<<< HEAD
+=======
+        'GPAsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/GPAsTableSeeder.php',
+        'GradesTableSeeder' => __DIR__ . '/../..' . '/database/seeds/GradesTableSeeder.php',
+>>>>>>> cd511a565faf90c450711d7184fea20bbf270216
         'HTML5_Data' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/Data.php',
         'HTML5_InputStream' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/InputStream.php',
         'HTML5_Parser' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/Parser.php',
@@ -3418,6 +3427,12 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
         'SebastianBergmann\\Timer\\RuntimeException' => __DIR__ . '/..' . '/phpunit/php-timer/src/RuntimeException.php',
         'SebastianBergmann\\Timer\\Timer' => __DIR__ . '/..' . '/phpunit/php-timer/src/Timer.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+<<<<<<< HEAD
+=======
+        'Student_StatusTableSeeder' => __DIR__ . '/../..' . '/database/seeds/Student_StatusTableSeeder.php',
+        'StudentsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/StudentsTableSeeder.php',
+        'SubjectsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/SubjectsTableSeeder.php',
+>>>>>>> cd511a565faf90c450711d7184fea20bbf270216
         'SuperClosure\\Analyzer\\AstAnalyzer' => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src/Analyzer/AstAnalyzer.php',
         'SuperClosure\\Analyzer\\ClosureAnalyzer' => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src/Analyzer/ClosureAnalyzer.php',
         'SuperClosure\\Analyzer\\Token' => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src/Analyzer/Token.php',

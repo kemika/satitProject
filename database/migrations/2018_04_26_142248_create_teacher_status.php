@@ -17,6 +17,7 @@ class CreateTeacherStatus extends Migration
            $table->unsignedTinyInteger('teacher_status');
            $table->string('teacher_status_text',20);
            $table->primary('teacher_status');
+           $table->timestamps();
         });
     }
 

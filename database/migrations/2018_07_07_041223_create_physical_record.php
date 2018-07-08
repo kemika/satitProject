@@ -18,11 +18,12 @@ class CreatePhysicalRecord extends Migration
                       $table->unsignedTinyInteger('semester');
                       $table->unsignedSmallInteger('academic_year');
                       $table->dateTimeTz('datetime');
-                      
+
                       $table->float('weight');
                       $table->float('height');
                       $table->unsignedTinyInteger('data_status');
-                      
+                       $table->timestamps();
+
                       $table->primary(['student_id','semester','academic_year','datetime'],'physical_record_primary');
                       $table->foreign('student_id')
                       ->references('student_id')
