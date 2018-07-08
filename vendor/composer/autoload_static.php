@@ -415,7 +415,10 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
         'App\\Teacher_Comment' => __DIR__ . '/../..' . '/app/Teacher_Comment.php',
         'App\\Teacher_Status' => __DIR__ . '/../..' . '/app/Teacher_Status.php',
         'App\\Teachers' => __DIR__ . '/../..' . '/app/Teachers.php',
+<<<<<<< HEAD
+=======
         'AssingnGradesTableSeeder' => __DIR__ . '/../..' . '/database/seeds/AssingnGradesTableSeeder.php',
+>>>>>>> cd511a565faf90c450711d7184fea20bbf270216
         'Barryvdh\\DomPDF\\Facade' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/Facade.php',
         'Barryvdh\\DomPDF\\PDF' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/PDF.php',
         'Barryvdh\\DomPDF\\ServiceProvider' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/ServiceProvider.php',
@@ -433,7 +436,6 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
         'Cron\\HoursField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/HoursField.php',
         'Cron\\MinutesField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MinutesField.php',
         'Cron\\MonthField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MonthField.php',
-        'CurriculumsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/CurriculumsTableSeeder.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
         'DeepCopy\\Exception\\CloneException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/CloneException.php',
@@ -1082,8 +1084,11 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
         'FontLib\\WOFF\\File' => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib/WOFF/File.php',
         'FontLib\\WOFF\\Header' => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib/WOFF/Header.php',
         'FontLib\\WOFF\\TableDirectoryEntry' => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib/WOFF/TableDirectoryEntry.php',
+<<<<<<< HEAD
+=======
         'GPAsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/GPAsTableSeeder.php',
         'GradesTableSeeder' => __DIR__ . '/../..' . '/database/seeds/GradesTableSeeder.php',
+>>>>>>> cd511a565faf90c450711d7184fea20bbf270216
         'HTML5_Data' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/Data.php',
         'HTML5_InputStream' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/InputStream.php',
         'HTML5_Parser' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/Parser.php',
@@ -3293,7 +3298,6 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
         'Ramsey\\Uuid\\UuidFactory' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidFactory.php',
         'Ramsey\\Uuid\\UuidFactoryInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidFactoryInterface.php',
         'Ramsey\\Uuid\\UuidInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidInterface.php',
-        'RoomsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/RoomsTableSeeder.php',
         'Sabberworm\\CSS\\CSSList\\AtRuleBlockList' => __DIR__ . '/..' . '/sabberworm/php-css-parser/lib/Sabberworm/CSS/CSSList/AtRuleBlockList.php',
         'Sabberworm\\CSS\\CSSList\\CSSBlockList' => __DIR__ . '/..' . '/sabberworm/php-css-parser/lib/Sabberworm/CSS/CSSList/CSSBlockList.php',
         'Sabberworm\\CSS\\CSSList\\CSSList' => __DIR__ . '/..' . '/sabberworm/php-css-parser/lib/Sabberworm/CSS/CSSList/CSSList.php',
@@ -3423,9 +3427,12 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
         'SebastianBergmann\\Timer\\RuntimeException' => __DIR__ . '/..' . '/phpunit/php-timer/src/RuntimeException.php',
         'SebastianBergmann\\Timer\\Timer' => __DIR__ . '/..' . '/phpunit/php-timer/src/Timer.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+<<<<<<< HEAD
+=======
         'Student_StatusTableSeeder' => __DIR__ . '/../..' . '/database/seeds/Student_StatusTableSeeder.php',
         'StudentsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/StudentsTableSeeder.php',
         'SubjectsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/SubjectsTableSeeder.php',
+>>>>>>> cd511a565faf90c450711d7184fea20bbf270216
         'SuperClosure\\Analyzer\\AstAnalyzer' => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src/Analyzer/AstAnalyzer.php',
         'SuperClosure\\Analyzer\\ClosureAnalyzer' => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src/Analyzer/ClosureAnalyzer.php',
         'SuperClosure\\Analyzer\\Token' => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src/Analyzer/Token.php',
@@ -4018,8 +4025,7 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
         'Symfony\\Polyfill\\Util\\LegacyTestListener' => __DIR__ . '/..' . '/symfony/polyfill-util/LegacyTestListener.php',
         'Symfony\\Polyfill\\Util\\TestListener' => __DIR__ . '/..' . '/symfony/polyfill-util/TestListener.php',
         'Symfony\\Polyfill\\Util\\TestListenerTrait' => __DIR__ . '/..' . '/symfony/polyfill-util/TestListenerTrait.php',
-        'TeachersTableSeeder' => __DIR__ . '/../..' . '/database/seeds/TeachersTableSeeder.php',
-        'TeachingsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/TeachingsTableSeeder.php',
+        'TeacherStatusTableSeeder' => __DIR__ . '/../..' . '/database/seeds/TeacherStatusTableSeeder.php',
         'Tests\\CreatesApplication' => __DIR__ . '/../..' . '/tests/CreatesApplication.php',
         'Tests\\Feature\\ExampleTest' => __DIR__ . '/../..' . '/tests/Feature/ExampleTest.php',
         'Tests\\TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
@@ -4039,7 +4045,6 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Property\\Property' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Property/Property.php',
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Processor' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Processor.php',
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Rule' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Rule.php',
-        'UsersTablesSeeder' => __DIR__ . '/../..' . '/database/seeds/UsersTablesSeeder.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'Whoops\\Exception\\ErrorException' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/ErrorException.php',
         'Whoops\\Exception\\Formatter' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/Formatter.php',

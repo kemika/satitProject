@@ -54,7 +54,10 @@ return array(
     'App\\Teacher_Comment' => $baseDir . '/app/Teacher_Comment.php',
     'App\\Teacher_Status' => $baseDir . '/app/Teacher_Status.php',
     'App\\Teachers' => $baseDir . '/app/Teachers.php',
+<<<<<<< HEAD
+=======
     'AssingnGradesTableSeeder' => $baseDir . '/database/seeds/AssingnGradesTableSeeder.php',
+>>>>>>> cd511a565faf90c450711d7184fea20bbf270216
     'Barryvdh\\DomPDF\\Facade' => $vendorDir . '/barryvdh/laravel-dompdf/src/Facade.php',
     'Barryvdh\\DomPDF\\PDF' => $vendorDir . '/barryvdh/laravel-dompdf/src/PDF.php',
     'Barryvdh\\DomPDF\\ServiceProvider' => $vendorDir . '/barryvdh/laravel-dompdf/src/ServiceProvider.php',
@@ -72,7 +75,6 @@ return array(
     'Cron\\HoursField' => $vendorDir . '/dragonmantank/cron-expression/src/Cron/HoursField.php',
     'Cron\\MinutesField' => $vendorDir . '/dragonmantank/cron-expression/src/Cron/MinutesField.php',
     'Cron\\MonthField' => $vendorDir . '/dragonmantank/cron-expression/src/Cron/MonthField.php',
-    'CurriculumsTableSeeder' => $baseDir . '/database/seeds/CurriculumsTableSeeder.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'DeepCopy\\DeepCopy' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
     'DeepCopy\\Exception\\CloneException' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/Exception/CloneException.php',
@@ -721,8 +723,11 @@ return array(
     'FontLib\\WOFF\\File' => $vendorDir . '/phenx/php-font-lib/src/FontLib/WOFF/File.php',
     'FontLib\\WOFF\\Header' => $vendorDir . '/phenx/php-font-lib/src/FontLib/WOFF/Header.php',
     'FontLib\\WOFF\\TableDirectoryEntry' => $vendorDir . '/phenx/php-font-lib/src/FontLib/WOFF/TableDirectoryEntry.php',
+<<<<<<< HEAD
+=======
     'GPAsTableSeeder' => $baseDir . '/database/seeds/GPAsTableSeeder.php',
     'GradesTableSeeder' => $baseDir . '/database/seeds/GradesTableSeeder.php',
+>>>>>>> cd511a565faf90c450711d7184fea20bbf270216
     'HTML5_Data' => $vendorDir . '/dompdf/dompdf/lib/html5lib/Data.php',
     'HTML5_InputStream' => $vendorDir . '/dompdf/dompdf/lib/html5lib/InputStream.php',
     'HTML5_Parser' => $vendorDir . '/dompdf/dompdf/lib/html5lib/Parser.php',
@@ -2932,7 +2937,6 @@ return array(
     'Ramsey\\Uuid\\UuidFactory' => $vendorDir . '/ramsey/uuid/src/UuidFactory.php',
     'Ramsey\\Uuid\\UuidFactoryInterface' => $vendorDir . '/ramsey/uuid/src/UuidFactoryInterface.php',
     'Ramsey\\Uuid\\UuidInterface' => $vendorDir . '/ramsey/uuid/src/UuidInterface.php',
-    'RoomsTableSeeder' => $baseDir . '/database/seeds/RoomsTableSeeder.php',
     'Sabberworm\\CSS\\CSSList\\AtRuleBlockList' => $vendorDir . '/sabberworm/php-css-parser/lib/Sabberworm/CSS/CSSList/AtRuleBlockList.php',
     'Sabberworm\\CSS\\CSSList\\CSSBlockList' => $vendorDir . '/sabberworm/php-css-parser/lib/Sabberworm/CSS/CSSList/CSSBlockList.php',
     'Sabberworm\\CSS\\CSSList\\CSSList' => $vendorDir . '/sabberworm/php-css-parser/lib/Sabberworm/CSS/CSSList/CSSList.php',
@@ -3062,9 +3066,12 @@ return array(
     'SebastianBergmann\\Timer\\RuntimeException' => $vendorDir . '/phpunit/php-timer/src/RuntimeException.php',
     'SebastianBergmann\\Timer\\Timer' => $vendorDir . '/phpunit/php-timer/src/Timer.php',
     'SebastianBergmann\\Version' => $vendorDir . '/sebastian/version/src/Version.php',
+<<<<<<< HEAD
+=======
     'Student_StatusTableSeeder' => $baseDir . '/database/seeds/Student_StatusTableSeeder.php',
     'StudentsTableSeeder' => $baseDir . '/database/seeds/StudentsTableSeeder.php',
     'SubjectsTableSeeder' => $baseDir . '/database/seeds/SubjectsTableSeeder.php',
+>>>>>>> cd511a565faf90c450711d7184fea20bbf270216
     'SuperClosure\\Analyzer\\AstAnalyzer' => $vendorDir . '/jeremeamia/SuperClosure/src/Analyzer/AstAnalyzer.php',
     'SuperClosure\\Analyzer\\ClosureAnalyzer' => $vendorDir . '/jeremeamia/SuperClosure/src/Analyzer/ClosureAnalyzer.php',
     'SuperClosure\\Analyzer\\Token' => $vendorDir . '/jeremeamia/SuperClosure/src/Analyzer/Token.php',
@@ -3657,8 +3664,7 @@ return array(
     'Symfony\\Polyfill\\Util\\LegacyTestListener' => $vendorDir . '/symfony/polyfill-util/LegacyTestListener.php',
     'Symfony\\Polyfill\\Util\\TestListener' => $vendorDir . '/symfony/polyfill-util/TestListener.php',
     'Symfony\\Polyfill\\Util\\TestListenerTrait' => $vendorDir . '/symfony/polyfill-util/TestListenerTrait.php',
-    'TeachersTableSeeder' => $baseDir . '/database/seeds/TeachersTableSeeder.php',
-    'TeachingsTableSeeder' => $baseDir . '/database/seeds/TeachingsTableSeeder.php',
+    'TeacherStatusTableSeeder' => $baseDir . '/database/seeds/TeacherStatusTableSeeder.php',
     'Tests\\CreatesApplication' => $baseDir . '/tests/CreatesApplication.php',
     'Tests\\Feature\\ExampleTest' => $baseDir . '/tests/Feature/ExampleTest.php',
     'Tests\\TestCase' => $baseDir . '/tests/TestCase.php',
@@ -3678,7 +3684,6 @@ return array(
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Property\\Property' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Property/Property.php',
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Processor' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Processor.php',
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Rule' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Rule.php',
-    'UsersTablesSeeder' => $baseDir . '/database/seeds/UsersTablesSeeder.php',
     'Webmozart\\Assert\\Assert' => $vendorDir . '/webmozart/assert/src/Assert.php',
     'Whoops\\Exception\\ErrorException' => $vendorDir . '/filp/whoops/src/Whoops/Exception/ErrorException.php',
     'Whoops\\Exception\\Formatter' => $vendorDir . '/filp/whoops/src/Whoops/Exception/Formatter.php',
