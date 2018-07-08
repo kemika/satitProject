@@ -65,8 +65,6 @@
     </table>
 
 </div>
-<a href="{{ route('export.file',['type'=>'xlsx','semester' => '1','year' => '2012','grade' => '6' ,'room' => '3']) }}">Download Excel xlsx</a>
-
 </center>
 
 <div class="row" style="margin-top: 30px; margin-bottom: 30px;">
