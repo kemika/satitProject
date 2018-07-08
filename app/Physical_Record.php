@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Curriculum extends Model
+class Physical_Record extends Model
 {
     //
 }

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class GPA extends Model
+class Teacher_Comment extends Model
 {
-    public $table = "gpas";
+    //
 }

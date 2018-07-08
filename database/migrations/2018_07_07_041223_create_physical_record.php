@@ -15,7 +15,6 @@ class CreatePhysicalRecord extends Migration
     {
         Schema::create('Physical_Records', function (Blueprint $table) {
                       $table->string('student_id',50);
-<<<<<<< HEAD
                       $table->unsignedTinyInteger('semester');
                       $table->unsignedSmallInteger('academic_year');
                       $table->dateTimeTz('datetime');
@@ -25,17 +24,6 @@ class CreatePhysicalRecord extends Migration
                       $table->unsignedTinyInteger('data_status');
                       
                       $table->primary(['student_id','semester','academic_year','datetime'],'physical_record_primary');
-=======
-                      $table->unsignedTinyInteger('quater');
-                      $table->unsignedSmallInteger('academic_year');
-                      $table->dateTimeTz('datetime');
-
-                      $table->float('weight');
-                      $table->float('height');
-                      $table->unsignedTinyInteger('data_status');
-
-                      $table->primary(['student_id','semester','academic_year','datetime']);
->>>>>>> 9f61ae220877e00c2f6b824dd710572c9d62a85d
                       $table->foreign('student_id')
                       ->references('student_id')
                       ->on('Students');

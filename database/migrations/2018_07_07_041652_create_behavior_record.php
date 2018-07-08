@@ -20,19 +20,11 @@ class CreateBehaviorRecord extends Migration
                       $table->unsignedTinyInteger('semester');
                       $table->unsignedSmallInteger('academic_year');
                       $table->dateTimeTz('datetime');
-<<<<<<< HEAD
                       
                       $table->float('grade');
                       $table->unsignedTinyInteger('data_status');
                       
                       $table->primary(['student_id','behavior_type','quater','semester','academic_year','datetime'],'bahivior_records_primary');
-=======
-
-                      $table->float('grade');
-                      $table->unsignedTinyInteger('data_status');
-
-                      $table->primary(['student_id','behavior_type','quater','semester','academic_year','datetime']);
->>>>>>> 9f61ae220877e00c2f6b824dd710572c9d62a85d
                       $table->foreign('student_id')
                       ->references('student_id')
                       ->on('Students');
