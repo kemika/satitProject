@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
     //     $this->call(AssingnGradesTableSeeder::class);
     //     $this->call(RoomsTableSeeder::class);
     //     $this->call(CurriculumsTableSeeder::class);
-    $this->call(Student_StatusTableSeeder::class);
+    // $this->call(Student_StatusTableSeeder::class);
     $this->call(StudentsTableSeeder::class);
     }
 
