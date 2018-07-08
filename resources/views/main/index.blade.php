@@ -44,7 +44,8 @@
       <button class="btn btn-outline-secondary" onclick="window.location.href='/manageTeachers'">Manage Teachers</button>
     </div>
     <div class="col col-lg-2">
-      <button class="btn btn-outline-secondary" onclick="window.location.href='/viewGrade'"  type="submit">View Grades</button>
+
+      <button class="btn btn-outline-secondary" onclick="window.location.href='/viewGrade/0/0/0/0'"  type="submit">View Grades</button>
     </div>
   </div>
 
@@ -65,7 +66,7 @@
       <div class="col col-lg-3">
       </div>
       <div class="col col-lg-2">
-        <button class="btn btn-outline-secondary" type="submit">Transcripts</button>
+        <button class="btn btn-outline-secondary" onclick="window.location.href='/transcript'">Transcripts</button>
       </div>
     </div>
 

@@ -13,11 +13,14 @@ class CreateCurriculumsTable extends Migration
      */
     public function up()
     {
-        Schema::create('curriculums', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('year')->unique();
-            $table->tinyInteger('adjust')->default(0);
-            $table->timestamps();
+        Schema::create('Curriculums', function (Blueprint $table) {
+            $table->unsignedSmallInteger('curriculum_year');
+            $table->string('course_id',20);
+            $table->string('course_name',100);
+            $table->unsignedTinyInteger('min_grade_level');
+            $table->unsignedTinyInteger('max_grade_level');
+            $table->boolean('is_activity');
+            $table->primary(['curriculum_year','course_id']);
         });
     }
 
@@ -28,6 +31,6 @@ class CreateCurriculumsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('curriculums');
+        Schema::dropIfExists('Curriculums');
     }
 }
