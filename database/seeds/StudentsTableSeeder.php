@@ -12,9 +12,18 @@ class StudentsTableSeeder extends Seeder
     public function run()
     {
         $admin = new App\Student;
-        $admin->student_id ='1111111114';
+        $admin->student_id ='1111111111';
         $admin->firstname = 'Boom';
         $admin->lastname = 'Anaphat';
+        $admin->student_status = '0';
+        $admin->save();
+
+
+
+        $admin = new App\Student;
+        $admin->student_id ='1111111114';
+        $admin->firstname = 'Fluke';
+        $admin->lastname = 'Surat';
         $admin->student_status = '0';
         $admin->save();
 
