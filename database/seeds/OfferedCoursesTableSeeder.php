@@ -11,7 +11,7 @@ class OfferedCoursesTableSeeder extends Seeder
      */
     public function run()
     {
-      $admin = new App\Grade_Status;
+      $admin = new App\Offered_Courses;
       $admin->classroom_id = '1';
       $admin->curriculum_year = '2558';
       $admin->course_id = '01418111';
@@ -23,7 +23,7 @@ class OfferedCoursesTableSeeder extends Seeder
 
 
 
-      $admin = new App\Grade_Status;
+      $admin = new App\Offered_Courses;
       $admin->classroom_id = '2';
       $admin->curriculum_year = '2559';
       $admin->course_id = '01418112';
@@ -35,7 +35,7 @@ class OfferedCoursesTableSeeder extends Seeder
 
 
 
-      $admin = new App\Grade_Status;
+      $admin = new App\Offered_Courses;
       $admin->classroom_id = '3';
       $admin->curriculum_year = '2560';
       $admin->course_id = '01418113';
@@ -47,8 +47,8 @@ class OfferedCoursesTableSeeder extends Seeder
 
 
 
-      $admin = new App\Grade_Status;
-      $admin->classroom_id = '1';
+      $admin = new App\Offered_Courses;
+      $admin->classroom_id = '4';
       $admin->curriculum_year = '2561';
       $admin->course_id = '01418114';
       $admin->open_course_id = '441288';
