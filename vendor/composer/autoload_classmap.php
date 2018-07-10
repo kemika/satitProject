@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AcademicYearTableSeeder' => $baseDir . '/database/seeds/AcademicYearTableSeeder.php',
+    'ActivityRecordsTableSeeder' => $baseDir . '/database/seeds/ActivityRecordsTableSeeder.php',
     'App\\Academic_Year' => $baseDir . '/app/Academic_Year.php',
     'App\\Activity_Record' => $baseDir . '/app/Activity_Record.php',
     'App\\Attendace_Record' => $baseDir . '/app/Attendace_Record.php',
@@ -726,6 +727,8 @@ return array(
     'FontLib\\WOFF\\File' => $vendorDir . '/phenx/php-font-lib/src/FontLib/WOFF/File.php',
     'FontLib\\WOFF\\Header' => $vendorDir . '/phenx/php-font-lib/src/FontLib/WOFF/Header.php',
     'FontLib\\WOFF\\TableDirectoryEntry' => $vendorDir . '/phenx/php-font-lib/src/FontLib/WOFF/TableDirectoryEntry.php',
+    'GradeStatusTableSeeder' => $baseDir . '/database/seeds/GradeStatusTableSeeder.php',
+    'GradeTableSeeder' => $baseDir . '/database/seeds/GradeTableSeeder.php',
     'HTML5_Data' => $vendorDir . '/dompdf/dompdf/lib/html5lib/Data.php',
     'HTML5_InputStream' => $vendorDir . '/dompdf/dompdf/lib/html5lib/InputStream.php',
     'HTML5_Parser' => $vendorDir . '/dompdf/dompdf/lib/html5lib/Parser.php',
@@ -1579,6 +1582,7 @@ return array(
     'Illuminate\\View\\ViewFinderInterface' => $vendorDir . '/laravel/framework/src/Illuminate/View/ViewFinderInterface.php',
     'Illuminate\\View\\ViewName' => $vendorDir . '/laravel/framework/src/Illuminate/View/ViewName.php',
     'Illuminate\\View\\ViewServiceProvider' => $vendorDir . '/laravel/framework/src/Illuminate/View/ViewServiceProvider.php',
+    'InformationTableSeeder' => $baseDir . '/database/seeds/InformationTableSeeder.php',
     'JakubOnderka\\PhpConsoleColor\\ConsoleColor' => $vendorDir . '/jakub-onderka/php-console-color/src/JakubOnderka/PhpConsoleColor/ConsoleColor.php',
     'JakubOnderka\\PhpConsoleColor\\InvalidStyleException' => $vendorDir . '/jakub-onderka/php-console-color/src/JakubOnderka/PhpConsoleColor/InvalidStyleException.php',
     'JakubOnderka\\PhpConsoleHighlighter\\Highlighter' => $vendorDir . '/jakub-onderka/php-console-highlighter/src/JakubOnderka/PhpConsoleHighlighter/Highlighter.php',
@@ -1840,6 +1844,7 @@ return array(
     'NunoMaduro\\Collision\\Highlighter' => $vendorDir . '/nunomaduro/collision/src/Highlighter.php',
     'NunoMaduro\\Collision\\Provider' => $vendorDir . '/nunomaduro/collision/src/Provider.php',
     'NunoMaduro\\Collision\\Writer' => $vendorDir . '/nunomaduro/collision/src/Writer.php',
+    'OfferedCoursesTableSeeder' => $baseDir . '/database/seeds/OfferedCoursesTableSeeder.php',
     'PHPExcel' => $vendorDir . '/phpoffice/phpexcel/Classes/PHPExcel.php',
     'PHPExcel_Autoloader' => $vendorDir . '/phpoffice/phpexcel/Classes/PHPExcel/Autoloader.php',
     'PHPExcel_Best_Fit' => $vendorDir . '/phpoffice/phpexcel/Classes/PHPExcel/Shared/trend/bestFitClass.php',

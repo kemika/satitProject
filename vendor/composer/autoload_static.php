@@ -368,6 +368,7 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
 
     public static $classMap = array (
         'AcademicYearTableSeeder' => __DIR__ . '/../..' . '/database/seeds/AcademicYearTableSeeder.php',
+        'ActivityRecordsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/ActivityRecordsTableSeeder.php',
         'App\\Academic_Year' => __DIR__ . '/../..' . '/app/Academic_Year.php',
         'App\\Activity_Record' => __DIR__ . '/../..' . '/app/Activity_Record.php',
         'App\\Attendace_Record' => __DIR__ . '/../..' . '/app/Attendace_Record.php',
@@ -1087,6 +1088,8 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
         'FontLib\\WOFF\\File' => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib/WOFF/File.php',
         'FontLib\\WOFF\\Header' => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib/WOFF/Header.php',
         'FontLib\\WOFF\\TableDirectoryEntry' => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib/WOFF/TableDirectoryEntry.php',
+        'GradeStatusTableSeeder' => __DIR__ . '/../..' . '/database/seeds/GradeStatusTableSeeder.php',
+        'GradeTableSeeder' => __DIR__ . '/../..' . '/database/seeds/GradeTableSeeder.php',
         'HTML5_Data' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/Data.php',
         'HTML5_InputStream' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/InputStream.php',
         'HTML5_Parser' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/Parser.php',
@@ -1940,6 +1943,7 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
         'Illuminate\\View\\ViewFinderInterface' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewFinderInterface.php',
         'Illuminate\\View\\ViewName' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewName.php',
         'Illuminate\\View\\ViewServiceProvider' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewServiceProvider.php',
+        'InformationTableSeeder' => __DIR__ . '/../..' . '/database/seeds/InformationTableSeeder.php',
         'JakubOnderka\\PhpConsoleColor\\ConsoleColor' => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src/JakubOnderka/PhpConsoleColor/ConsoleColor.php',
         'JakubOnderka\\PhpConsoleColor\\InvalidStyleException' => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src/JakubOnderka/PhpConsoleColor/InvalidStyleException.php',
         'JakubOnderka\\PhpConsoleHighlighter\\Highlighter' => __DIR__ . '/..' . '/jakub-onderka/php-console-highlighter/src/JakubOnderka/PhpConsoleHighlighter/Highlighter.php',
@@ -2201,6 +2205,7 @@ class ComposerStaticInit9666c3cc036910bf61ada12e18555f14
         'NunoMaduro\\Collision\\Highlighter' => __DIR__ . '/..' . '/nunomaduro/collision/src/Highlighter.php',
         'NunoMaduro\\Collision\\Provider' => __DIR__ . '/..' . '/nunomaduro/collision/src/Provider.php',
         'NunoMaduro\\Collision\\Writer' => __DIR__ . '/..' . '/nunomaduro/collision/src/Writer.php',
+        'OfferedCoursesTableSeeder' => __DIR__ . '/../..' . '/database/seeds/OfferedCoursesTableSeeder.php',
         'PHPExcel' => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes/PHPExcel.php',
         'PHPExcel_Autoloader' => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes/PHPExcel/Autoloader.php',
         'PHPExcel_Best_Fit' => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes/PHPExcel/Shared/trend/bestFitClass.php',
