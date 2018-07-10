@@ -51,10 +51,10 @@ class UploadGradeController extends Controller
 
     public function getUpload(Request $request)
     {
-
+      $arrayValidates = array();
 
       if ($request->hasFile('file')) {
-        $arrayValidate = array();
+
         $fact = true;
         $factGrade = true;
         $factValidate = true;
@@ -72,12 +72,14 @@ class UploadGradeController extends Controller
             $factEmpty = true;
           }
           if($factGrade){
-            echo "Field '$fied' is incorrect format at row '$column".($row+6)."'<br>";
-            $text = "Field '$fied' is incorrect format at row '$column".($row+6)."'<br>";
+            // echo "Field '$fied' is incorrect format at row '$column".($row+6)."'<br>";
+            $text = "Field '$fied' is incorrect format at row '$column".($row+6)."'";
+            // $arrayValidates[] = $text;
             $factGrade = true;
             $factValidate = false;
             $factEmpty = true;
-            $arrayValidate[] = $text;
+            return $text;
+
           }
         }
 
@@ -107,10 +109,10 @@ class UploadGradeController extends Controller
           // dd($results[0]->name);
 
 
-          echo $file_type;
-          echo "<br>";
-          echo $importRow;
-          echo "<br>";
+          // echo $file_type;
+          // echo "<br>";
+          // echo $importRow;
+          // echo "<br>";
 
 
           if($file_type == "xlsx" || $file_type == "xls"){
@@ -121,157 +123,184 @@ class UploadGradeController extends Controller
             else {
               if($fact){
                 for ($i = 0; $i < count($results); $i++) {
-                  echo "Student Name: ".$results[$i]->student_name;
-                  echo "<br>";
-                  echo "Q1: ".$results[$i]->q1;
-                  echo "<br>";
-                  echo "Q2: ".$results[$i]->q2;
-                  echo "<br>";
-                  echo "sum_1: ".$results[$i]->sum_1;
-                  echo "<br>";
-                  echo "sem_1: ".$results[$i]->sem_1;
-                  echo "<br>";
-                  echo "Q3: ".$results[$i]->q3;
-                  echo "<br>";
-                  echo "Q4: ".$results[$i]->q4;
-                  echo "<br>";
-                  echo "sum_2: ".$results[$i]->sum_2;
-                  echo "<br>";
-                  echo "sem_2: ".$results[$i]->sem_2;
-                  echo "<br>";
-                  echo "average: ".$results[$i]->average;
-                  echo "<br>";
-                  echo "grade: ".$results[$i]->grade;
-                  echo "<br>";
-                  echo "=======================================================";
-                  echo "<br>";
+                  // echo "Student Name: ".$results[$i]->student_name;
+                  // echo "<br>";
+                  // echo "Q1: ".$results[$i]->q1;
+                  // echo "<br>";
+                  // echo "Q2: ".$results[$i]->q2;
+                  // echo "<br>";
+                  // echo "sum_1: ".$results[$i]->sum_1;
+                  // echo "<br>";
+                  // echo "sem_1: ".$results[$i]->sem_1;
+                  // echo "<br>";
+                  // echo "Q3: ".$results[$i]->q3;
+                  // echo "<br>";
+                  // echo "Q4: ".$results[$i]->q4;
+                  // echo "<br>";
+                  // echo "sum_2: ".$results[$i]->sum_2;
+                  // echo "<br>";
+                  // echo "sem_2: ".$results[$i]->sem_2;
+                  // echo "<br>";
+                  // echo "average: ".$results[$i]->average;
+                  // echo "<br>";
+                  // echo "grade: ".$results[$i]->grade;
+                  // echo "<br>";
+                  // echo "Year: ".$results[$i]->year;
+                  // echo "<br>";
+                  // echo "Level: ".$results[$i]->level;
+                  // echo "<br>";
+                  // echo "=======================================================";
+                  // echo "<br>";
 
 
                     //----- Validate Student Name -------//
                     if($results[$i]->student_name == ""){
-                      echo "Field 'Student name' is empty at row 'B".($i+6)."'<br>";
+                      // echo "Field 'Student name' is empty at row 'B".($i+6)."'<br>";
                       $factValidate = false;
                       $factEmpty = false;
                     }
                     if (!preg_match("/^[a-zA-Z ]*$/",$results[$i]->student_name)) {
-                      echo "Field 'Student name' is incorrect format at row 'B".($i+6)."'<br>";
+                      // echo "Field 'Student name' is incorrect format at row 'B".($i+6)."'<br>";
+                      $text = "Field 'Student name' is incorrect format at row 'B".($i+6)."'";
                       $factValidate = false;
+                      $arrayValidates[] = $text;
                     }
 
                     //----- Validate Q1 -------//
                     if($results[$i]->q1 == ""){
-                      echo "Field 'Q1' is empty at row 'C".($i+6)."'<br>";
+                      // echo "Field 'Q1' is empty at row 'C".($i+6)."'<br>";
+                      $text = "Field 'Q1' is empty at row 'C".($i+6)."'";
+                      $arrayValidates[] = $text;
                       $factEmpty = false;
                       $factValidate = false;
                     }
                     if($factEmpty){
-                      validateGrade($results[$i]->q1, "Q1", "C", $factGrade, $i);
+                      $arrayValidates[] = validateGrade($results[$i]->q1, "Q1", "C", $factGrade, $i);
                     }
 
                     //----- Validate Q2 -------//
                     if($results[$i]->q2 == ""){
-                      echo "Field 'Q2' is empty at row 'D".($i+6)."'<br>";
+                      // echo "Field 'Q2' is empty at row 'D".($i+6)."'<br>";
+                      $text = "Field 'Q2' is empty at row 'D".($i+6)."'";
+                      $arrayValidates[] = $text;
                       $factEmpty = false;
                       $factValidate = false;
                     }
                     if($factEmpty){
-                      validateGrade($results[$i]->q2, "Q2", "D", $factGrade, $i);
+                      $arrayValidates[] = validateGrade($results[$i]->q2, "Q2", "D", $factGrade, $i);
                     }
 
 
                     //----- Validate Sum 1 -------//
-                    if($results[$i]->sum_1 == ""){
-                      echo "Field 'Sum 1' is empty at row 'E".($i+6)."'<br>";
-                      $factEmpty = false;
-                      $factValidate = false;
-                    }
-                    if($factEmpty){
-                      validateGrade($results[$i]->sum_1, "Sum 1", "E", $factGrade, $i);
-                    }
+                    // if($results[$i]->sum_1 == ""){
+                    //   echo "Field 'Sum 1' is empty at row 'E".($i+6)."'<br>";
+                    //   $text = "Field 'Sum 1' is empty at row 'E".($i+6)."'<br>";
+                    //   $arrayValidates[] = $text;
+                    //   $factEmpty = false;
+                    //   $factValidate = false;
+                    // }
+                    // if($factEmpty){
+                    //   $arrayValidates[] = validateGrade($results[$i]->sum_1, "Sum 1", "E", $factGrade, $i);
+                    // }
 
 
                     //----- Validate Sem 1 -------//
-                    if($results[$i]->sem_1 == ""){
-                      echo "Field 'Sem 1' name is empty at row 'F".($i+6)."'<br>";
-                      $factEmpty = false;
-                      $factValidate = false;
-                    }
-                    if($factEmpty){
-                      validateGrade($results[$i]->sem_1, "Sem 1", "F", $factGrade, $i);
-                    }
+                    // if($results[$i]->sem_1 == ""){
+                    //   echo "Field 'Sem 1' name is empty at row 'F".($i+6)."'<br>";
+                    //   $text = "Field 'Sem 1' name is empty at row 'F".($i+6)."'<br>";
+                    //   $arrayValidates[] = $text;
+                    //   $factEmpty = false;
+                    //   $factValidate = false;
+                    // }
+                    // if($factEmpty){
+                    //   $arrayValidates[] = $arrayValidates[] = validateGrade($results[$i]->sem_1, "Sem 1", "F", $factGrade, $i);
+                    // }
 
 
                     //----- Validate Q3 -------//
                     if($results[$i]->q3 == ""){
-                      echo "Field 'Q3' is empty at row 'G".($i+6)."'<br>";
+                      // echo "Field 'Q3' is empty at row 'G".($i+6)."'<br>";
+                      $text = "Field 'Q3' is empty at row 'G".($i+6)."'";
+                      $arrayValidates[] = $text;
                       $factEmpty = false;
                       $factValidate = false;
                     }
                     if($factEmpty){
-                      validateGrade($results[$i]->q3, "Q3", "G", $factGrade, $i);
+                      $arrayValidates[] = validateGrade($results[$i]->q3, "Q3", "G", $factGrade, $i);
                     }
 
 
                     //----- Validate Q4 -------//
                     if($results[$i]->q4 == ""){
-                      echo "Field 'Q4' is empty at row 'H".($i+6)."'<br>";
+                      // echo "Field 'Q4' is empty at row 'H".($i+6)."'<br>";
+                      $text = "Field 'Q4' is empty at row 'H".($i+6)."'";
+                      $arrayValidates[] = $text;
                       $factEmpty = false;
                       $factValidate = false;
                     }
                     if($factEmpty){
-                      validateGrade($results[$i]->q4, "Q4", "H", $factGrade, $i);
+                      $arrayValidates[] = validateGrade($results[$i]->q4, "Q4", "H", $factGrade, $i);
                     }
 
 
                     //----- Validate Sum  -------//
-                    if($results[$i]->sum_2 == ""){
-                      echo "Field 'Sum 2' is empty at row 'I".($i+6)."'<br>";
-                      $factEmpty = false;
-                      $factValidate = false;
-                    }
-                    if($factEmpty){
-                      validateGrade($results[$i]->sum_2, "Sum 2", "I", $factGrade, $i);
-                    }
+                    // if($results[$i]->sum_2 == ""){
+                    //   echo "Field 'Sum 2' is empty at row 'I".($i+6)."'<br>";
+                    //   $text = "Field 'Sum 2' is empty at row 'I".($i+6)."'<br>";
+                    //   $arrayValidates[] = $text;
+                    //   $factEmpty = false;
+                    //   $factValidate = false;
+                    // }
+                    // if($factEmpty){
+                    //   $arrayValidates[] = validateGrade($results[$i]->sum_2, "Sum 2", "I", $factGrade, $i);
+                    // }
 
 
                     //----- Validate Sem 2 -------//
-                    if($results[$i]->sem_2 == ""){
-                      echo "Field 'Sem 2' is empty at row 'J".($i+6)."'<br>";
-                      $factEmpty = false;
-                      $factValidate = false;
-                    }
-                    if($factEmpty){
-                      validateGrade($results[$i]->sem_2, "Sem 2", "J", $factGrade, $i);
-                    }
+                    // if($results[$i]->sem_2 == ""){
+                    //   echo "Field 'Sem 2' is empty at row 'J".($i+6)."'<br>";
+                    //   $text = "Field 'Sem 2' is empty at row 'J".($i+6)."'<br>";
+                    //   $arrayValidates[] = $text;
+                    //   $factEmpty = false;
+                    //   $factValidate = false;
+                    // }
+                    // if($factEmpty){
+                    //   $arrayValidates[] = validateGrade($results[$i]->sem_2, "Sem 2", "J", $factGrade, $i);
+                    // }
 
 
                     //----- Validate Grade Average -------//
-                    if($results[$i]->average == ""){
-                      echo "Field 'Grade Average' is empty at row 'K".($i+6)."'<br>";
-                      $factEmpty = false;
-                      $factValidate = false;
-                    }
-                    if($factEmpty){
-                      validateGrade($results[$i]->average, "Grade Average", "K", $factGrade, $i);
-                    }
+                    // if($results[$i]->average == ""){
+                    //   echo "Field 'Grade Average' is empty at row 'K".($i+6)."'<br>";
+                    //   $text = "Field 'Grade Average' is empty at row 'K".($i+6)."'<br>";
+                    //   $arrayValidates[] = $text;
+                    //   $factEmpty = false;
+                    //   $factValidate = false;
+                    // }
+                    // if($factEmpty){
+                    //   $arrayValidates[] = validateGrade($results[$i]->average, "Grade Average", "K", $factGrade, $i);
+                    // }
 
 
                     //----- Validate Year Grade -------//
-                    if($results[$i]->grade == ""){
-                      echo "Field 'Year Grade' is empty at row 'L".($i+6)."'<br>";
-                      $factEmpty = false;
-                      $factValidate = false;
-                    }
-                    if($factEmpty){
-                      validateGrade($results[$i]->grade, "Year Grade", "L", $factGrade, $i);
-                    }
+                    // if($results[$i]->grade == ""){
+                    //   echo "Field 'Year Grade' is empty at row 'L".($i+6)."'<br>";
+                    //   $text = "Field 'Year Grade' is empty at row 'L".($i+6)."'<br>";
+                    //   $arrayValidates[] = $text;
+                    //   $factEmpty = false;
+                    //   $factValidate = false;
+                    // }
+                    // if($factEmpty){
+                    //   $arrayValidates[] = validateGrade($results[$i]->grade, "Year Grade", "L", $factGrade, $i);
+                    // }
 
                   }
                   if ($factValidate==TRUE) {
                     return view('uploadGrade.getUpload', compact('results'));
                   }
                   elseif ($factValidate==FALSE) {
-                    var_dump($arrayValidate);
+                    // var_dump($arrayValidates);
+                    return view('uploadGrade.validate', compact('arrayValidates'));
                   }
 
 
