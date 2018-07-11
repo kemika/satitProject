@@ -319,8 +319,83 @@ class UploadGradeController extends Controller
        elseif ($request->hasFile('file')==FALSE) {
          dd("Please Select File");
        }
+    }
 
+    public function exportExcel($type)
+    {
+      Excel::create('template_elective', function($excel) {
 
+        $excel->sheet('Excel sheet', function($sheet) {
+
+          $sheet->setOrientation('landscape');
+
+          $sheet->setCellValue('A1', 'Teacher');
+          $sheet->setCellValue('A2', 'Course');
+          $sheet->setCellValue('A3', 'Grade');
+          $sheet->setCellValue('A5', 'Student_ID');
+          $sheet->setCellValue('B4', 'If you split a class…');
+          $sheet->setCellValue('B5', 'Student Name');
+          $sheet->setCellValue('C4', '1st Semester');
+          $sheet->setCellValue('C5', 'Q1');
+          $sheet->setCellValue('D1', 'Do not worry about any calculations. The report cards will do them');
+          $sheet->setCellValue('D2', 'automatically. You are only required to fill in the highlighted sections.');
+          $sheet->setCellValue('D3', 'High school teachers, hover here for a special note');
+          $sheet->setCellValue('D5', 'Q2');
+          $sheet->setCellValue('E5', 'Sum 1');
+          $sheet->setCellValue('F5', 'Sem 1');
+          $sheet->setCellValue('G4', '2nd Semester');
+          $sheet->setCellValue('G5', 'Q3');
+          $sheet->setCellValue('H5', 'Q4');
+          $sheet->setCellValue('I5', 'Sum 2');
+          $sheet->setCellValue('J5', 'Sem 2');
+          $sheet->setCellValue('K4', 'Grade');
+          $sheet->setCellValue('K5', 'Average');
+          $sheet->setCellValue('L4', 'Year');
+          $sheet->setCellValue('L5', 'Grade');
+          $sheet->setCellValue('M4', 'Academic');
+          $sheet->setCellValue('M5', 'Year');
+          $sheet->setCellValue('N4', 'Grade');
+          $sheet->setCellValue('N5', 'Level');
+
+          $sheet->setWidth(array(
+              'A' => 11,
+              'B' => 19,
+              'M' => 9
+          ));
+
+          $sheet->setStyle(array(
+              'font' => array(
+                  'name'      =>  'Tw Cen MT',
+                  'size'      =>  12,
+                  'bold'      =>  false
+              )
+          ));
+
+          $sheet->cell('B1', function($cell) {
+              $cell->setBackground('#FFC300');
+          });
+
+          $sheet->cell('B4', function($cell) {
+              $cell->setBackground('#FF9F68');
+          });
+
+          $sheet->cell('D3:H3', function($cell) {
+              $cell->setBackground('#FF9F68');
+          });
+
+          $sheet->cell('C6:E44', function($cell) {
+              $cell->setBackground('#FFC300');
+          });
+
+          $sheet->cell('G6:I44', function($cell) {
+              $cell->setBackground('#FFC300');
+          });
+
+          $sheet->setBorder('C4:L44', 'thin');
+
+        });
+
+      })->export($type);
     }
 
 
