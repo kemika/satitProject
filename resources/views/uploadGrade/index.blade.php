@@ -45,6 +45,7 @@
 </head>
 
 
+<a href="{{ route('export.file',['type'=>'xlsx']) }}">Download Excel xlsx</a>
 
 <div class="row" style="margin-top: 30px;">
   <button class="btn btn-primary" onclick="window.location.href='/upload'">Upload Grade</button>

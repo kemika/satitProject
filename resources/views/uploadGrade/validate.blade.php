@@ -27,7 +27,7 @@
         @foreach($arrayValidates as $arrayValidate)
         <tr>
           <td>{{ $loop->iteration }}</td>
-          <td>{{$arrayValidate}}</td>
+          <td>{{ $arrayValidate }}</td>
         </tr>
         @endforeach
 
