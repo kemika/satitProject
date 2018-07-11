@@ -62,6 +62,4 @@ Route::get('/transcript', 'TranscriptController@index');
 
 
 
-
-
-Route::get('/bbb','GradeController@boom');
+Route::geT('/export','ExportController@index');
