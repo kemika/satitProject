@@ -331,34 +331,31 @@ class UploadGradeController extends Controller
 
           $sheet->setCellValue('A1', 'Teacher');
           $sheet->setCellValue('A2', 'Course');
-          $sheet->setCellValue('A3', 'Grade');
-          $sheet->setCellValue('A5', 'Student_ID');
-          $sheet->setCellValue('B4', 'If you split a class…');
-          $sheet->setCellValue('B5', 'Student Name');
-          $sheet->setCellValue('C4', '1st Semester');
-          $sheet->setCellValue('C5', 'Q1');
+          $sheet->setCellValue('A3', 'Grade level');
+          $sheet->setCellValue('A4', 'Academic Year');
+          $sheet->setCellValue('A6', 'Student_ID');
+          $sheet->setCellValue('B5', 'If you split a class…');
+          $sheet->setCellValue('B6', 'Student Name');
+          $sheet->setCellValue('C5', '1st Semester');
+          $sheet->setCellValue('C6', 'Q1');
           $sheet->setCellValue('D1', 'Do not worry about any calculations. The report cards will do them');
           $sheet->setCellValue('D2', 'automatically. You are only required to fill in the highlighted sections.');
           $sheet->setCellValue('D3', 'High school teachers, hover here for a special note');
-          $sheet->setCellValue('D5', 'Q2');
-          $sheet->setCellValue('E5', 'Sum 1');
-          $sheet->setCellValue('F5', 'Sem 1');
-          $sheet->setCellValue('G4', '2nd Semester');
-          $sheet->setCellValue('G5', 'Q3');
-          $sheet->setCellValue('H5', 'Q4');
-          $sheet->setCellValue('I5', 'Sum 2');
-          $sheet->setCellValue('J5', 'Sem 2');
-          $sheet->setCellValue('K4', 'Grade');
-          $sheet->setCellValue('K5', 'Average');
-          $sheet->setCellValue('L4', 'Year');
-          $sheet->setCellValue('L5', 'Grade');
-          $sheet->setCellValue('M4', 'Academic');
-          $sheet->setCellValue('M5', 'Year');
-          $sheet->setCellValue('N4', 'Grade');
-          $sheet->setCellValue('N5', 'Level');
+          $sheet->setCellValue('D6', 'Q2');
+          $sheet->setCellValue('E6', 'Sum 1');
+          $sheet->setCellValue('F6', 'Sem 1');
+          $sheet->setCellValue('G5', '2nd Semester');
+          $sheet->setCellValue('G6', 'Q3');
+          $sheet->setCellValue('H6', 'Q4');
+          $sheet->setCellValue('I6', 'Sum 2');
+          $sheet->setCellValue('J6', 'Sem 2');
+          $sheet->setCellValue('K5', 'Grade');
+          $sheet->setCellValue('K6', 'Average');
+          $sheet->setCellValue('L5', 'Year');
+          $sheet->setCellValue('L6', 'Grade');
 
           $sheet->setWidth(array(
-              'A' => 11,
+              'A' => 12,
               'B' => 19,
               'M' => 9
           ));
@@ -375,7 +372,7 @@ class UploadGradeController extends Controller
               $cell->setBackground('#FFC300');
           });
 
-          $sheet->cell('B4', function($cell) {
+          $sheet->cell('B5', function($cell) {
               $cell->setBackground('#FF9F68');
           });
 
@@ -383,15 +380,15 @@ class UploadGradeController extends Controller
               $cell->setBackground('#FF9F68');
           });
 
-          $sheet->cell('C6:E44', function($cell) {
+          $sheet->cell('C7:E45', function($cell) {
               $cell->setBackground('#FFC300');
           });
 
-          $sheet->cell('G6:I44', function($cell) {
+          $sheet->cell('G7:I45', function($cell) {
               $cell->setBackground('#FFC300');
           });
 
-          $sheet->setBorder('C4:L44', 'thin');
+          $sheet->setBorder('C5:L45', 'thin');
 
         });
 
