@@ -22,7 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/main', 'MainController@index');
 
 
-
+Route::get('/approveGrade', 'ManageCurriculumController@index');
 
 
 Route::get('/manageStudents', 'ManageStudentsController@index');

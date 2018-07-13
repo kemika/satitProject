@@ -11,7 +11,7 @@ class ManageCurriculumController extends Controller
   public function index(){
   //  $curricula  = Curriculum::all();
   //  $curricula  = DB::table('Curricula')->select('year',DB::raw('count(*) as total'))->groupBy('year')->get();
-    $curricula  = Curriculum::orderBy('year', 'asc')->get();
+    $curricula  = Curriculum::orderBy('curriculum_year', 'asc')->get();
     return view('manageCurriculum.index' , ['curricula' => $curricula]);
   }
 
