@@ -73,7 +73,7 @@ class UploadGradeController extends Controller
           }
           if($factGrade){
             // echo "Field '$fied' is incorrect format at row '$column".($row+6)."'<br>";
-            $text = "Field '$fied' is incorrect format at row '$column".($row+6)."'";
+            $text = "Field '$fied' is incorrect format at row '$column".($row+7)."'";
             // $arrayValidates[] = $text;
             $factGrade = true;
             $factValidate = false;
@@ -85,13 +85,15 @@ class UploadGradeController extends Controller
 
 
         $importRow = count(\Excel::load('files/'.$file_name, function($reader) {})->get());
-        if ($importRow < 4) {
+        if ($importRow < 44) {
           $fact = false;
-          echo "This file is not correct format. Please select another file!";
+          $text = "This file is not correct format. Please select another file!";
+          $arrayValidates[] = $text;
+          return view('uploadGrade.validate', compact('arrayValidates'));
         }
         else {
           $results = Excel::load('files/'.$file_name,function($reader){
-            $reader->setHeaderRow(5);
+            $reader->setHeaderRow(6);
             $reader->all();
 
           })->get();
@@ -113,12 +115,15 @@ class UploadGradeController extends Controller
           // echo "<br>";
           // echo $importRow;
           // echo "<br>";
+          // dd(count($results));
 
 
           if($file_type == "xlsx" || $file_type == "xls"){
-            if(count($results)==0){
+            if(count($results)==39){
               $fact = false;
-              echo "This file is empty";
+              $text = "This file is empty";
+              $arrayValidates[] = $text;
+              return view('uploadGrade.validate', compact('arrayValidates'));
             }
             else {
               if($fact){
@@ -161,7 +166,7 @@ class UploadGradeController extends Controller
                     }
                     if (!preg_match("/^[a-zA-Z ]*$/",$results[$i]->student_name)) {
                       // echo "Field 'Student name' is incorrect format at row 'B".($i+6)."'<br>";
-                      $text = "Field 'Student name' is incorrect format at row 'B".($i+6)."'";
+                      $text = "Field 'Student name' is incorrect format at row 'B".($i+7)."'";
                       $factValidate = false;
                       $arrayValidates[] = $text;
                     }
@@ -169,7 +174,7 @@ class UploadGradeController extends Controller
                     //----- Validate Q1 -------//
                     if($results[$i]->q1 == ""){
                       // echo "Field 'Q1' is empty at row 'C".($i+6)."'<br>";
-                      $text = "Field 'Q1' is empty at row 'C".($i+6)."'";
+                      $text = "Field 'Q1' is empty at row 'C".($i+7)."'";
                       $arrayValidates[] = $text;
                       $factEmpty = false;
                       $factValidate = false;
@@ -181,7 +186,7 @@ class UploadGradeController extends Controller
                     //----- Validate Q2 -------//
                     if($results[$i]->q2 == ""){
                       // echo "Field 'Q2' is empty at row 'D".($i+6)."'<br>";
-                      $text = "Field 'Q2' is empty at row 'D".($i+6)."'";
+                      $text = "Field 'Q2' is empty at row 'D".($i+7)."'";
                       $arrayValidates[] = $text;
                       $factEmpty = false;
                       $factValidate = false;
@@ -220,7 +225,7 @@ class UploadGradeController extends Controller
                     //----- Validate Q3 -------//
                     if($results[$i]->q3 == ""){
                       // echo "Field 'Q3' is empty at row 'G".($i+6)."'<br>";
-                      $text = "Field 'Q3' is empty at row 'G".($i+6)."'";
+                      $text = "Field 'Q3' is empty at row 'G".($i+7)."'";
                       $arrayValidates[] = $text;
                       $factEmpty = false;
                       $factValidate = false;
@@ -233,7 +238,7 @@ class UploadGradeController extends Controller
                     //----- Validate Q4 -------//
                     if($results[$i]->q4 == ""){
                       // echo "Field 'Q4' is empty at row 'H".($i+6)."'<br>";
-                      $text = "Field 'Q4' is empty at row 'H".($i+6)."'";
+                      $text = "Field 'Q4' is empty at row 'H".($i+7)."'";
                       $arrayValidates[] = $text;
                       $factEmpty = false;
                       $factValidate = false;
