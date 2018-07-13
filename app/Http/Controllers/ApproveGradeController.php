@@ -52,8 +52,8 @@ class ApproveGradeController extends Controller
     return view('approveGrade.index' , ['courses' => $courses]);
   }
   public function test(Request $request){
-      $courses = [];
-      return view('approveGrade.index' , ['courses' => $courses]);;
+      $yearInfo  = Offered_Courses::select('curriculum_year')->get();
+      return view('approveGrade.index' , ['courses' => $courses,'yearInfo' => yearInfo]);;
   }
   public function testPost(Request $request){
     $courses  = Offered_Courses::join('academic_year','academic_year.curriculum_year','=','offered_courses.curriculum_year')

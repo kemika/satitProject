@@ -24,6 +24,31 @@
 
 <center>
 <h1> Approval Status </h1>
+<?php $cc=0; ?>
+<label class="col-sm-3 col-form-label text-right">Year :</label>
+<select name="status" class="form-control" style="height: 35px">
+@foreach ($yearInfo as $yearIn)
+  @if($cc === 0)
+    <option value="$yearSem->year" selected>{{$yearIn->year}}</option>
+    <?php $cc=1; ?>
+  @else
+    <option value="$yearSem->year">{{$yearIn->year}}</option>
+  @endif
+@endforeach
+</select>
+
+<?php $cc=0; ?>
+<label class="col-sm-3 col-form-label text-right">Semester :</label>
+<select name="status" class="form-control" style="height: 35px">
+@foreach ($semInfo as $semIn)
+  @if($cc === 0)
+    <option value="$yearSem->year" selected>{{$semIn->sem}}</option>
+    <?php $cc=1; ?>
+  @else
+    <option value="$yearSem->year">{{$semIn->sem}}</option>
+  @endif
+@endforeach
+</select>
 <div class="row" style="width: 120rem;">
   <!-- <div class="col-1"></div> -->
   <!-- <div class="col-8"> -->

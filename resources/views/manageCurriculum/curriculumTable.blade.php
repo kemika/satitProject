@@ -252,7 +252,7 @@
         </div>
         <div class="row">
           <div class="form-group">
-            v  <label class="col-sm-6 col-form-label text-righ">Status :</label>
+              <label class="col-sm-6 col-form-label text-righ">Status :</label>
             <div class="col-sm-5">
               <select name="status" class="form-control" style="height: 35px">
                 <option value="1" selected>Enable</option>
