@@ -24,8 +24,8 @@
   <div id='cssmenu'>
   <ul>
      <li ><a href='/main'>SatitKaset</a></li>
-     <li class='active'><a href='#'>Manage Student</a></li>
-     <li><a href='/grade'>Grade</a></li>
+     <li><a href='/manageStudent'>Manage Student</a></li>
+     <li class='active'><a href='#'>Grade</a></li>
      <li><a href='#'>About</a></li>
      <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
                 onclick="event.preventDefault();
@@ -44,163 +44,8 @@
 
 </head>
 
-<script>
-  $(document).ready(function() {
-    $('#table').DataTable();
-} );
- </script>
 
-
-<h1> Manage Students</h1>
-<center>
-<div class="row" style="width: 120rem;">
-
-    <table class="table table-hover" id="table" style="width: 120rem;">
-      <thead>
-        <tr>
-          <th scope="col">No.</th>
-          <th scope="col">Subject_Number</th>
-          <th scope="col">Subject Name</th>
-          <th scope="col">Semester</th>
-          <th scope="col">Year</th>
-          <th scope="col">Status</th>
-          <th scope="col">Excel</th>
-
-        </tr>
-      </thead>
-      <tbody>
-
-        @foreach($teachings as $teaching)
-
-        <tr>
-          <td>{{ $loop->iteration }}</td>
-          <td>{{ $teaching->code   }}</td>
-          <td>{{ $teaching->name   }}</td>
-          <td>{{ $teaching->semester   }}</td>
-          <td>{{ $teaching->year   }}</td>
-          <td>{{ $teaching->status }}</td>
-          <td><a href="{{ url('/uploadGrade/'.$teaching->id) }}"><button class="form-control">Export</button></a></td>
-      </td>
-
-        </tr>
-
-        @endforeach
-
-
-      </tbody>
-    </table>
-  <!-- </div> -->
-</div>
-
-</center>
-
-<div class="row" style="margin-top: 30px; margin-bottom: 30px;">
-  <div class="col-5">
-  </div>
-  <div class="col col-xl-2">
-    <button class="btn btn-danger" onclick="window.location.href='/main'">Back to main</button>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h1>Upload Grade</h1>
-<div class="container">
-  <!-- Trigger the modal with a button -->
-  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Export/Import Grade</button>
-
-  <table class="table" id="table">
-                    <thead>
-                        <tr>
-
-                          <th>Subject Number</th>
-                          <th>Subject Name</th>
-                          <th>Semester</th>
-                          <th>Year</th>
-                          <th>Status</th>
-                          <th>Excel</th>
-
-
-
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    @foreach($teachings as $teaching)
-
-                    <tr>
-
-                      <td>{{ $teaching->subj_number   }}</td>
-                      <td>{{ $teaching->name   }}</td>
-                      <td>{{ $teaching->semester   }}</td>
-                      <td>{{ $teaching->year   }}</td>
-                      <td>comfirmed</td>
-                      <td><a href="/main">jojoj</a></td>
-
-
-
-
-
-
-
-                    </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
-        </div>
-        <div class="modal-body">
-          <!-- <form class="" action="/uploadGrade/export" method="post">
-            @csrf
-            @method('PUT')
-            <div class="form-group">
-              <label>Export</label>
-              <button type="submit"  class="btn btn-default">Export</button>
-            </div>
-
-            <div class="form-group">
-              <label>Import</label>
-              <input type="file" class="form-control-file" id="import" name="import">
-            </div>
-
-          </form> -->
-
-
-          <a href="{{ route('export.file',['type'=>'xlsx','semester' => '1','year' => '2012','grade' => '6' ,'room' => '3']) }}">Download Excel xlsx</a>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-</div>
+<a href="{{ route('export.file',['type'=>'xlsx']) }}">Download Excel xlsx</a>
 
 <div class="row" style="margin-top: 30px;">
   <button class="btn btn-primary" onclick="window.location.href='/upload'">Upload Grade</button>

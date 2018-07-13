@@ -17,6 +17,7 @@ class CreateDataStatus extends Migration
                       $table->unsignedTinyInteger('data_status');
                       $table->string('data_status_text',20);
                       $table->primary('data_status');
+                       $table->timestamps();
         });
     }
 

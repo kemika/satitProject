@@ -20,17 +20,18 @@ class CreateOfferedCourse extends Migration
                       $table->unsignedInteger('open_course_id')->unique()->autoIncrement();
                       $table->boolean('is_elective');
                       $table->float('credits');
-                      
+                       $table->timestamps();
+
                       $table->foreign('classroom_id')
                       ->references('classroom_id')
                       ->on('Academic_Year');
-                      
+
                       $table->foreign(['curriculum_year','course_id'])
                       ->references(['curriculum_year','course_id'])
                       ->on('Curriculums');
-                       
+
                         $table->unique(['classroom_id','curriculum_year','course_id']);
-                      
+
         });
     }
 

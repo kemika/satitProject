@@ -21,6 +21,7 @@ class CreateCurriculumsTable extends Migration
             $table->unsignedTinyInteger('max_grade_level');
             $table->boolean('is_activity');
             $table->primary(['curriculum_year','course_id']);
+             $table->timestamps();
         });
     }
 

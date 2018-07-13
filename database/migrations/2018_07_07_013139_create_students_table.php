@@ -19,6 +19,7 @@ class CreateStudentsTable extends Migration
             $table->string('lastname',100);
             $table->unsignedTinyInteger('student_status');
             $table->primary('student_id');
+             $table->timestamps();
             $table->foreign('student_status')
                   ->references('student_status')
                   ->on('Student_Status');

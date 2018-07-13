@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Information extends Model
 {
+  public $table  = 'Information';
     //
 }

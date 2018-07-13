@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class RoomsTableSeeder extends Seeder
+class PhysicalRecordsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +11,6 @@ class RoomsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Room::class, 15)->create();
+        factory(App\Physical_Record::class, 10)->create();
     }
 }

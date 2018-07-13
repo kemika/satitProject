@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class GPAsTableSeeder extends Seeder
+class BehaviorRecordsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +11,7 @@ class GPAsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\GPA::class, 15)->create();
+      factory(App\Behavior_Record::class, 5)->create();
+        //
     }
 }

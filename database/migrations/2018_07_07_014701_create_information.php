@@ -15,6 +15,7 @@ class CreateInformation extends Migration
     {
         Schema::create('Information', function (Blueprint $table) {
             $table->string('director_full_name',200);
+             $table->timestamps();
         });
     }
 

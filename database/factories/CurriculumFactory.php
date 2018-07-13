@@ -4,8 +4,11 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Curriculum::class, function (Faker $faker) {
     return [
-      'year' => $faker->randomElement(['2559','2560','2561', '2562', '2558']),
-      'adjust' => $faker->numberBetween($min = 0, $max = 1)
-
+      'curriculum_year' => $faker->unique()->regexify('[2][5][5-6][0-9]'),
+      'course_id' => $faker->unique()->regexify('[0-9]{8}'),
+      'course_name' => $faker->unique()->cityPrefix,
+      'min_grade_level' => '1',
+      'max_grade_level' => $faker->randomElement(['10','12','6']),
+      'is_activity' => $faker->randomElement(['0','1'])
     ];
 });

@@ -19,9 +19,10 @@ class CreateTeacherCommentss extends Migration
            $table->unsignedTinyInteger('semester');
            $table->unsignedSmallInteger('academic_year');
            $table->dateTimeTz('datetime');
-                      
+            $table->timestamps();
+
            $table->text('comment');
-           
+
            $table->unsignedTinyInteger('data_status');
 
            $table->primary(['student_id','quater','semester','academic_year','datetime'],'teacher_comment_primary');

@@ -69,6 +69,19 @@
         <button class="btn btn-outline-secondary" onclick="window.location.href='/transcript'">Transcripts</button>
       </div>
     </div>
+    <div class="mx-auto" style="height: 50px;"></div>
+
+
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-3">
+      </div>
+      <div class="col col-lg-2">
+        <button class="btn btn-outline-secondary" onclick="window.location.href='/export'">Export</button>
+      </div>
+    </div>
+
+
+
 
 
 </div>
