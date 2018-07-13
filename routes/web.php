@@ -22,7 +22,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/main', 'MainController@index');
 
 
-Route::get('/approveGrade', 'ManageCurriculumController@index');
+Route::get('/approveGrade/{year}/{semester}', 'ApproveGradeController@index');
+Route::get('/approveGrade', 'ApproveGradeController@test');
+Route::post('/approveGrade', 'ApproveGradeController@testPost');
 
 
 Route::get('/manageStudents', 'ManageStudentsController@index');
