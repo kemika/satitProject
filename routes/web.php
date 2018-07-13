@@ -62,4 +62,6 @@ Route::get('/transcript', 'TranscriptController@index');
 
 
 
-Route::geT('/export','ExportController@index');
+Route::get('/export','ExportController@index');
+
+Route::get('/export_grade/{classroom_id}/{course_id}/{curriculum_year}','ExportController@exportExcel');
