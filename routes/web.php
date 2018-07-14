@@ -56,10 +56,13 @@ Route::get('/viewGrade', 'ViewGradeController@index');
 Route::put('/viewGrade/result', 'ViewGradeController@result');
 
 
-Route::get('/reportCard', 'ReportCardController@index');
+
 
 Route::get('/transcript', 'TranscriptController@index');
 
 
 
-Route::geT('/export','ExportController@index');
+Route::get('/export','ExportController@index');
+
+Route::get('/reportCard', 'ReportCardController@index');
+Route::get('/exportReportCard', 'ReportCardController@exportPDF')->name('export.pdf');
