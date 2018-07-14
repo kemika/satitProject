@@ -102,7 +102,7 @@
 
 <div class="page-break"></div>
 
-<center><h2 class="heading">FIRST SEMESTER REPORT</h2></center>
+<center><h2 class="heading">SEOND SEMESTER REPORT</h2></center>
 <table class="nameStyle">
     <tr>
       <th scope="col">Student Name</th>
@@ -118,7 +118,7 @@
       <th scope="col" rowspan="2">Course</th>
       <th scope="col" rowspan="2">Code</th>
       <th scope="col" rowspan="2">Credit</th>
-      <th scope="col" colspan="4" align="center">1st Semester Grade</th>
+      <th scope="col" colspan="4" align="center">2nd Semester Grade</th>
     </tr>
     <tr>
       <th>1</th>
@@ -193,8 +193,8 @@
 <p class="classroomStyle">Classroom signature……………..…..…….…………</p>
 
 </center>
-
 <div class="page-break"></div>
+
 
 <center><h2 class="heading">SECOND SEMESTER REPORT</h2></center>
 <table class="nameStyle">
@@ -212,7 +212,7 @@
       <th scope="col" rowspan="2">Course</th>
       <th scope="col" rowspan="2">Code</th>
       <th scope="col" rowspan="2">Credit</th>
-      <th scope="col" colspan="4" align="center">2st Semester Grade</th>
+      <th scope="col" colspan="4" align="center">2nd Semester Grade</th>
     </tr>
     <tr>
       <th>1</th>
