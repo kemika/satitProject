@@ -23,6 +23,8 @@ Route::get('/main', 'MainController@index');
 
 
 Route::get('/approveGrade/{year}/{semester}', 'ApproveGradeController@index');
+
+
 Route::get('/approveGrade', 'ApproveGradeController@test');
 Route::post('/approveGrade', 'ApproveGradeController@testPost');
 

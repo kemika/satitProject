@@ -30,15 +30,11 @@ class ApproveGradeController extends Controller
 */
 
 
-  $courses  = Offered_Courses::join('academic_year','academic_year.curriculum_year','=','offered_courses.curriculum_year')
-            ->join('curriculums','curriculums.curriculum_year','=','offered_courses.curriculum_year')
-            ->join('grades','offered_courses.open_course_id','=','grades.open_course_id')
-            ->join('data_status','data_status.data_status','=','grades.data_status')
-            ->where('offered_courses.curriculum_year', $year)
-            ->where('grades.semester', $semester)
-            ->where('data_status.data_status_text','!=','canceled')
-            ->select('offered_courses.open_course_id','offered_courses.course_id','academic_year.grade_level','grades.grade','grades.quater'
-                    ,'curriculums.course_name','data_status.data_status_text','grades.datetime','offered_courses.is_elective')
+  $courses  = Offered_Courses::leftJoin('grades','offered_courses.open_course_id','=','grades.open_course_id')
+            ->leftJoin('curriculums','offered_courses.curriculum_year','=','curriculums.curriculum_year')
+            ->leftJoin('grades','offered_courses.open_course_id','=','grades.open_course_id')
+            ->leftJoin('academic_year','offered_courses.curriculum_year','=','academic_year.curriculum_year')
+            ->join('data_status','grades.data_status','=','data_status.data_status')
             ->get();
 
   foreach ($courses as $course){
@@ -48,19 +44,25 @@ class ApproveGradeController extends Controller
   }
 
 
-
-    return view('approveGrade.index' , ['courses' => $courses]);
+        $yearInfo  = Offered_Courses::select('curriculum_year')
+      ->get();
+  return view('approveGrade.index' , ['courses' => $courses,'yearInfo' => $yearInfo]);
   }
   public function test(Request $request){
-      $yearInfo  = Offered_Courses::select('curriculum_year')->get();
-      return view('approveGrade.index' , ['courses' => $courses,'yearInfo' => yearInfo]);;
+      $yearInfo  = Offered_Courses::select('curriculum_year')
+                ->get();
+      $courses = [];
+      return view('approveGrade.index' , ['courses' => $courses,'yearInfo' => $yearInfo]);
   }
+
   public function testPost(Request $request){
+
     $courses  = Offered_Courses::join('academic_year','academic_year.curriculum_year','=','offered_courses.curriculum_year')
               ->join('curriculums','curriculums.curriculum_year','=','offered_courses.curriculum_year')
               ->join('grades','offered_courses.open_course_id','=','grades.open_course_id')
               ->join('data_status','data_status.data_status','=','grades.data_status')
               ->where('offered_courses.curriculum_year', $request->input('year'))
+              ->where('grades.semester',  $request->input('semester'))
               ->where('data_status.data_status_text','!=','canceled')
               ->select('offered_courses.open_course_id','offered_courses.course_id','academic_year.grade_level','grades.grade','grades.quater'
                       ,'curriculums.course_name','data_status.data_status_text','grades.datetime','offered_courses.is_elective')
@@ -73,7 +75,8 @@ class ApproveGradeController extends Controller
     }
 
 
-
-      return view('approveGrade.index' , ['courses' => $courses]);
+      $yearInfo  = Offered_Courses::select('curriculum_year')
+          ->get();
+      return view('approveGrade.index' , ['courses' => $courses,'yearInfo' => $yearInfo]);
   }
 }
