@@ -159,37 +159,11 @@
       <th scope="col" colspan="2">Total</th>
       <th scope="col">0.00</th>
       <th scope="col" colspan="3">GPA</th>
-      <th scope="col">#DIV/0!</th>
+      <th scope="col">0.00</th>
     </tr>
 </table>
 
-<table class="table table-bordered tableStyle2">
-    <tr>
-      <th scope="col">Activity</th>
-      <th scope="col">S/U</th>
-    </tr>
-    <tr>
-      <td>Homeroom 3</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>Extra Curricular Activities 3</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>Guidance and Developmental Skills 3</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>@Social Spirit 3</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>Shadowing</td>
-      <td></td>
-    </tr>
 
-</table>
 <p class="classroomStyle">Classroom signature……………..…..…….…………</p>
 
 </center>
