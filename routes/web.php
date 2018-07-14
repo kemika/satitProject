@@ -64,5 +64,7 @@ Route::get('/transcript', 'TranscriptController@index');
 
 Route::get('/export','ExportController@index');
 
+
 Route::get('/reportCard', 'ReportCardController@index');
 Route::get('/exportReportCard', 'ReportCardController@exportPDF')->name('export.pdf');
+Route::get('/export_grade/{classroom_id}/{course_id}/{curriculum_year}','ExportController@exportExcel');
