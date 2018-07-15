@@ -27,8 +27,6 @@
 
 
 
-
-
 <?php $cc=0; ?>
 
 
@@ -42,11 +40,29 @@
         <?php $cc=0; ?>
         <select name="year" class="form-control" style="height: 35px">
         @foreach ($yearInfo as $yearIn)
-          @if($cc === 0)
-            <option value="{{$yearIn->curriculum_year}}" >{{$yearIn->curriculum_year}}</option>
-            <?php $cc=1; ?>
+          @if(isset($courses[0]))
+            @if($cc === 0)
+
+              @if($yearIn->curriculum_year === (int)$courses[0]['curriculum_year'])
+                <option value="{{$yearIn['curriculum_year']}}" selected>{{$yearIn['curriculum_year']}}</option>
+              @else
+                <option value="{{$yearIn['curriculum_year']}}" >{{$yearIn['curriculum_year']}}</option>
+              @endif
+              <?php $cc=1; ?>
+            @else
+              @if($yearIn->curriculum_year === (int)$courses[0]['curriculum_year'])
+                <option value="{{$yearIn['curriculum_year']}}" selected>{{$yearIn['curriculum_year']}}</option>
+              @else
+                <option value="{{$yearIn['curriculum_year']}}" >{{$yearIn['curriculum_year']}}</option>
+              @endif
+            @endif
           @else
-            <option value="{{$yearIn->curriculum_year}}">{{$yearIn->curriculum_year}}</option>
+            @if($cc === 0)
+                <option value="{{$yearIn['curriculum_year']}}" >{{$yearIn['curriculum_year']}}</option>
+              <?php $cc=1; ?>
+            @else
+                <option value="{{$yearIn['curriculum_year']}}" >{{$yearIn['curriculum_year']}}</option>
+            @endif
           @endif
         @endforeach
         </select>
@@ -57,9 +73,10 @@
       <label class="col-sm-2 col-form-label">Semester : </label>
       <div class="col-sm-5">
         <select name="semester" class="form-control" style="height: 35px">
+
           @if(isset($courses[0]))
             @for ($i = 1; $i <= 3; $i++)
-                @if($i === $courses[0]->semester)
+                @if($i == $courses[0]['semester'])
                   <option value="{{$i}}" selected>{{$i}}</option>
                 @else
                   <option value="{{$i}}" >{{$i}}</option>
@@ -79,9 +96,11 @@
 
 
 
-      <button type="submit"  class="btn btn-success" >Search</button>
+      <button type="submit"  class="btn btn-info" >Search</button>
 
   </form>
+<?php $c=0 ?>
+
   <!-- <div class="col-1"></div> -->
   <!-- <div class="col-8"> -->
     <table class="table table-hover" id="table" style="width: 120rem;">
@@ -97,6 +116,7 @@
           <th scope="col">Form</th>
         </tr>
       </thead>
+      @if(isset($courses[0]['course_id']))
       <tbody>
         <?php $c=0; ?>
         @foreach ($courses as $course)
@@ -110,12 +130,26 @@
           <td>{{ $course->datetime}}</td>
           @if ($course->data_status_text === "Waiting Approval")
             <td>
-                <button type="button" class="btn btn-success">Approve</button>
-                <button type="button" class="btn btn-danger">Cancel</button>
+              <form  action="/approveGradeAccept" method="post">
+                @csrf
+                  <input hidden type="text" name="open_course_id" value='{{ $course["open_course_id"] }}'>
+                  <input hidden type="text" name="quater" value='{{ $course["quater"] }}'>
+                  <input hidden type="text" name="datetime" value='{{ $course["datetime"] }}'>
+                <button type="submit"  class="btn btn-success">Approve</button>
+              </form>
+
+              <form  action="/approveGradeCancel" method="post">
+                @csrf
+                  <input hidden type="text" name="open_course_id" value='{{ $course["open_course_id"] }}'>
+                  <input hidden type="text" name="quater" value='{{ $course["quater"] }}'>
+                  <input hidden type="text" name="datetime" value='{{ $course["datetime"] }}'>
+                <button type="submit"  class="btn btn-danger">Cancel</button>
+              </form>
             </td>
           @else
-          <td>
-          </td>
+            <td>
+
+            </td>
           @endif
           <td><button type="button" class="btn btn-primary">Download
   </button>
@@ -123,28 +157,38 @@
 
         </tr>
         <!-- Modal -->
-
-
-
-
         @endforeach
 
 
       </tbody>
+      @endif
     </table>
   <!-- </div> -->
 </div>
 
 <div class="row" style="margin-top: 30px; margin-bottom: 30px; width: 120rem;">
-
+@if(isset($courses[0]['course_id']))
 
   <div class="col">
-    <button class="btn btn-success">Approve All</button>
+
+    <form class="form-inline" action="/approveGradeAcceptAll" method="post">
+      @csrf
+      <input hidden type="text" name="year" value='{{ $courses[0]["curriculum_year"] }}'>
+      <input hidden type="text" name="semester" value='{{ $courses[0]["semester"] }}'>
+      <button type="submit"  class="btn btn-success">Approve All</button>
+    </form>
   </div>
   <div class="col">
-    <button class="btn btn-success">Cancel All</button>
-  </div>
+    <form class="form-inline" action="/approveGradeCancelAll" method="post">
+      @csrf
 
+      <input hidden type="text" name="year" value='{{ $courses[0]["curriculum_year"] }}'>
+      <input hidden type="text" name="semester" value='{{ $courses[0]["semester"] }}'>
+
+      <button type="submit"  class="btn btn-danger">Cancel All</button>
+    </form>
+  </div>
+@endif
 
 
   <div class="col ">
