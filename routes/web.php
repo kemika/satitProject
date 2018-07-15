@@ -25,7 +25,6 @@ Route::get('/main', 'MainController@index');
 Route::get('/approveGrade/{year}/{semester}', 'ApproveGradeController@index');
 
 
-Route::get('/approveGradeTest', 'ApproveGradeController@testPage');
 
 Route::get('/approveGrade', 'ApproveGradeController@getApprovePage');
 Route::post('/approveGrade', 'ApproveGradeController@postApprovePage');

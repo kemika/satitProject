@@ -23,7 +23,18 @@
 
 <center>
 <h1> Approval Status </h1>
-
+@if (session('status'))
+    @if (session('status') === "Approve!")
+    <div class="alert alert-success alert-dismissible fade show" role="alert" style="width: 120rem;">
+    @elseif((session('status') === "Cancel!"))
+    <div class="alert alert-warning alert-dismissible fade show" role="alert" style="width: 120rem;">
+    @endif
+   {{ session('status') }}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+@endif
 
 
 
@@ -31,47 +42,50 @@
 
 
 <div class="row" style="width: 120rem;">
+
   <form class="form-inline" action="/approveGrade" method="POST">
     @csrf
-
+   <div class="col">
     <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Year : </label>
-      <div class="col-sm-5">
+      <label class="col-sm-4 col-form-label">Year : </label>
+      <div class="col-sm-8">
         <?php $cc=0; ?>
         <select name="year" class="form-control" style="height: 35px">
         @foreach ($yearInfo as $yearIn)
           @if(isset($courses[0]))
             @if($cc === 0)
 
-              @if($yearIn->curriculum_year === (int)$courses[0]['curriculum_year'])
-                <option value="{{$yearIn['curriculum_year']}}" selected>{{$yearIn['curriculum_year']}}</option>
+              @if($yearIn->academic_year === (int)$courses[0]['academic_year'])
+                <option value="{{$yearIn['academic_year']}}" selected>{{$yearIn['academic_year']}}</option>
               @else
-                <option value="{{$yearIn['curriculum_year']}}" >{{$yearIn['curriculum_year']}}</option>
+                <option value="{{$yearIn['academic_year']}}" >{{$yearIn['academic_year']}}</option>
               @endif
               <?php $cc=1; ?>
             @else
-              @if($yearIn->curriculum_year === (int)$courses[0]['curriculum_year'])
-                <option value="{{$yearIn['curriculum_year']}}" selected>{{$yearIn['curriculum_year']}}</option>
+              @if($yearIn->academic_year === (int)$courses[0]['academic_year'])
+                <option value="{{$yearIn['academic_year']}}" selected>{{$yearIn['academic_year']}}</option>
               @else
-                <option value="{{$yearIn['curriculum_year']}}" >{{$yearIn['curriculum_year']}}</option>
+                <option value="{{$yearIn['academic_year']}}" >{{$yearIn['academic_year']}}</option>
               @endif
             @endif
           @else
             @if($cc === 0)
-                <option value="{{$yearIn['curriculum_year']}}" >{{$yearIn['curriculum_year']}}</option>
+                <option value="{{$yearIn['academic_year']}}" >{{$yearIn['academic_year']}}</option>
               <?php $cc=1; ?>
             @else
-                <option value="{{$yearIn['curriculum_year']}}" >{{$yearIn['curriculum_year']}}</option>
+                <option value="{{$yearIn['academic_year']}}" >{{$yearIn['academic_year']}}</option>
             @endif
           @endif
         @endforeach
         </select>
       </div>
     </div>
+    </div>
 
+<div class="col">
     <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Semester : </label>
-      <div class="col-sm-5">
+      <label class="col-sm-4 col-form-label">Semester : </label>
+      <div class="col-sm-8">
         <select name="semester" class="form-control" style="height: 35px">
 
           @if(isset($courses[0]))
@@ -94,6 +108,7 @@
       </div>
     </div>
 
+  </div>
 
 
       <button type="submit"  class="btn btn-info" >Search</button>
@@ -122,7 +137,7 @@
         @foreach ($courses as $course)
           <?php $c+=1 ?>
         <tr>
-          <td>{{ $course->course_id }}</td>
+          <td>{{ $course->open_course_id }}</td>
           <td>{{ $course->course_name }}</td>
           <td>{{ $course->grade_level }}</td>
           <td>{{ $course->quater }}</td>
@@ -135,7 +150,9 @@
                   <input hidden type="text" name="open_course_id" value='{{ $course["open_course_id"] }}'>
                   <input hidden type="text" name="quater" value='{{ $course["quater"] }}'>
                   <input hidden type="text" name="datetime" value='{{ $course["datetime"] }}'>
-                <button type="submit"  class="btn btn-success">Approve</button>
+                  <input hidden type="text" name="year" value='{{ $course["academic_year"] }}'>
+                  <input hidden type="text" name="semester" value='{{ $course["semester"] }}'>
+                <button type="submit"  onclick="return confirm('Are you sure you would like to approve this course?');" class="btn btn-success">Approve</button>
               </form>
 
               <form  action="/approveGradeCancel" method="post">
@@ -143,7 +160,9 @@
                   <input hidden type="text" name="open_course_id" value='{{ $course["open_course_id"] }}'>
                   <input hidden type="text" name="quater" value='{{ $course["quater"] }}'>
                   <input hidden type="text" name="datetime" value='{{ $course["datetime"] }}'>
-                <button type="submit"  class="btn btn-danger">Cancel</button>
+                  <input hidden type="text" name="year" value='{{ $course["academic_year"] }}'>
+                  <input hidden type="text" name="semester" value='{{ $course["semester"] }}'>
+                <button type="submit" onclick="return confirm('Are you sure you would like to cancel this course?');"  class="btn btn-danger">Cancel</button>
               </form>
             </td>
           @else
@@ -173,19 +192,19 @@
 
     <form class="form-inline" action="/approveGradeAcceptAll" method="post">
       @csrf
-      <input hidden type="text" name="year" value='{{ $courses[0]["curriculum_year"] }}'>
+      <input hidden type="text" name="year" value='{{ $courses[0]["academic_year"] }}'>
       <input hidden type="text" name="semester" value='{{ $courses[0]["semester"] }}'>
-      <button type="submit"  class="btn btn-success">Approve All</button>
+      <button type="submit"  onclick="return confirm('Are you sure you would like to approve all waiting approval courses?');"class="btn btn-success">Approve All</button>
     </form>
   </div>
   <div class="col">
     <form class="form-inline" action="/approveGradeCancelAll" method="post">
       @csrf
 
-      <input hidden type="text" name="year" value='{{ $courses[0]["curriculum_year"] }}'>
+      <input hidden type="text" name="year" value='{{ $courses[0]["academic_year"] }}'>
       <input hidden type="text" name="semester" value='{{ $courses[0]["semester"] }}'>
 
-      <button type="submit"  class="btn btn-danger">Cancel All</button>
+      <button type="submit"  onclick="return confirm('Are you sure you would like to cancel all waiting approval courses?');" class="btn btn-danger">Cancel All</button>
     </form>
   </div>
 @endif
