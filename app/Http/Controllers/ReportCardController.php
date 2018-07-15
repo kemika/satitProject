@@ -11,7 +11,7 @@ class ReportCardController extends Controller
 {
   public function index(){
     $data = ['name' => 'My'];
-    return view('reportCard.form', compact('data'));
+    return view('reportCard.master', compact('data'));
 
   }
 
