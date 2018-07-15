@@ -53,7 +53,7 @@ class GradeTableSeeder extends Seeder
 
       $admin = new App\Grade;
       $admin->student_id ='1111111114';
-      $admin->open_course_id = '441288';
+      $admin->open_course_id = '411288';
       $admin->quater = '4';
       $admin->semester = '4';
       $admin->academic_year = '2560';
@@ -62,5 +62,34 @@ class GradeTableSeeder extends Seeder
       $admin->data_status = '2';
       $admin->datetime = '2017-01-03';
       $admin->save();
+
+
+
+      $admin = new App\Grade;
+      $admin->student_id ='1111111114';
+      $admin->open_course_id = '481289';
+      $admin->quater = '4';
+      $admin->semester = '4';
+      $admin->academic_year = '2560';
+      $admin->grade = '4.00';
+      $admin->grade_status = '3';
+      $admin->data_status = '2';
+      $admin->datetime = '2017-01-03';
+      $admin->save();
+
+
+      $admin = new App\Grade;
+      $admin->student_id ='1111111114';
+      $admin->open_course_id = '451323';
+      $admin->quater = '4';
+      $admin->semester = '4';
+      $admin->academic_year = '2560';
+      $admin->grade = '4.00';
+      $admin->grade_status = '3';
+      $admin->data_status = '2';
+      $admin->datetime = '2017-01-03';
+      $admin->save();
+
+
     }
 }

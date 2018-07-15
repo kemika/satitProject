@@ -45,12 +45,42 @@ class ActivityRecordsTableSeeder extends Seeder
 
       $admin = new App\Activity_Record;
       $admin->student_id ='1111111114';
-      $admin->open_course_id = '441288';
+      $admin->open_course_id = '411288';
       $admin->semester = '4';
       $admin->academic_year = '2560';
       $admin->grade_status = '3';
       $admin->data_status = '2';
       $admin->datetime = '2017-01-03';
       $admin->save();
+
+
+
+
+      $admin = new App\Activity_Record;
+      $admin->student_id ='1111111114';
+      $admin->open_course_id = '481289';
+      $admin->semester = '4';
+      $admin->academic_year = '2560';
+      $admin->grade_status = '3';
+      $admin->data_status = '2';
+      $admin->datetime = '2017-01-03';
+      $admin->save();
+
+
+
+
+      $admin = new App\Activity_Record;
+      $admin->student_id ='1111111114';
+      $admin->open_course_id = '451323';
+      $admin->semester = '4';
+      $admin->academic_year = '2560';
+      $admin->grade_status = '3';
+      $admin->data_status = '2';
+      $admin->datetime = '2017-01-03';
+      $admin->save();
+
+
+
+
     }
 }
