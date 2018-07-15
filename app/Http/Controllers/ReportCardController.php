@@ -11,13 +11,13 @@ class ReportCardController extends Controller
 {
   public function index(){
     $data = ['name' => 'My'];
-    return view('reportCard.master', compact('data'));
+    return view('reportCard.form2', compact('data'));
 
   }
 
   public function exportPDF(){
     $data = ['name' => 'My'];
-    $pdf = PDF::loadView('reportCard.form', compact('data'));
+    $pdf = PDF::loadView('reportCard.form2', compact('data'));
     $pdf->setPaper('a4', 'potrait');
     return $pdf->stream();
     // return $pdf->download('reportCard.pdf');

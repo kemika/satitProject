@@ -462,13 +462,323 @@
 </div>
 <div class="page-break"></div>
 
-<center><h4 class="heading">FIRST SEMESTER COMMENT</h4></center> <br>
-<h5>First Comment</h5> <br>
-<h6>Classroom Teacher : ……………..…..…….………………………..…..…….………………………..…..…….………………………..…..…….…………</h6>
+<div class="board">
+  <div class="dotBottom">
+    <center><h4 class="heading">FIRST SEMESTER COMMENT</h4></center> <br>
+    <h5>First Comment</h5> <br>
+    <h6>Classroom Teacher : ……………..…..…….………………………..…..…….………………………..………………………</h6>
+  </div>
 
+  <div style="margin-left: 59%;">
+    <table style="margin-top:20px;">
+      <tr>
+        <th>Signature</th>
+        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
+      </tr>
+      <tr>
+        <td></td>
+        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
+        <span style="color:white">---------------</span>/
+        <span style="color:white">------</span>/ 2018
+      </td>
+      </tr>
+    </table>
+  </div>
+  <br>
+  <h6>Guardian : ……………..…..…….………………………..…..…….………………………..…………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
 
+  <div style="margin-left: 59%;">
+    <table style="margin-top:20px;">
+      <tr>
+        <th>Signature</th>
+        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
+      </tr>
+      <tr>
+        <td></td>
+        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
+        <span style="color:white">---------------</span>/
+        <span style="color:white">------</span>/ 2018
+      </td>
+      </tr>
+    </table>
+  </div>
+</div>
 
 <div class="page-break"></div>
+
+<div class="board">
+  <div class="dotBottom">
+    <center><h4 class="heading">FIRST SEMESTER COMMENT</h4></center> <br>
+    <h5>Second Comment</h5> <br>
+    <h6>Classroom Teacher : ……………..…..…….………………………..…..…….………………………..………………………</h6>
+  </div>
+
+  <div style="margin-left: 59%;">
+    <table style="margin-top:20px;">
+      <tr>
+        <th>Signature</th>
+        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
+      </tr>
+      <tr>
+        <td></td>
+        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
+        <span style="color:white">---------------</span>/
+        <span style="color:white">------</span>/ 2018
+      </td>
+      </tr>
+    </table>
+  </div>
+  <br>
+  <h6>Guardian : ……………..…..…….………………………..…..…….………………………..…………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+
+  <div style="margin-left: 59%;">
+    <table style="margin-top:20px;">
+      <tr>
+        <th>Signature</th>
+        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
+      </tr>
+      <tr>
+        <td></td>
+        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
+        <span style="color:white">---------------</span>/
+        <span style="color:white">------</span>/ 2018
+      </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="page-break"></div>
+
+<div class="board">
+  <div class="dotBottom">
+    <center><h4 class="heading">SECOND SEMESTER COMMENT</h4></center> <br>
+    <h5>First Comment</h5> <br>
+    <h6>Classroom Teacher : ……………..…..…….………………………..…..…….………………………..………………………</h6>
+  </div>
+
+  <div style="margin-left: 59%;">
+    <table style="margin-top:20px;">
+      <tr>
+        <th>Signature</th>
+        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
+      </tr>
+      <tr>
+        <td></td>
+        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
+        <span style="color:white">---------------</span>/
+        <span style="color:white">------</span>/ 2018
+      </td>
+      </tr>
+    </table>
+  </div>
+  <br>
+  <h6>Guardian : ……………..…..…….………………………..…..…….………………………..…………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+
+  <div style="margin-left: 59%;">
+    <table style="margin-top:20px;">
+      <tr>
+        <th>Signature</th>
+        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
+      </tr>
+      <tr>
+        <td></td>
+        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
+        <span style="color:white">---------------</span>/
+        <span style="color:white">------</span>/ 2018
+      </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="board">
+  <div class="dotBottom">
+    <center><h4 class="heading">SECOND SEMESTER COMMENT</h4></center> <br>
+    <h5>Second Comment</h5> <br>
+    <h6>Classroom Teacher : ……………..…..…….………………………..…..…….………………………..………………………</h6>
+  </div>
+
+  <div style="margin-left: 59%;">
+    <table style="margin-top:20px;">
+      <tr>
+        <th>Signature</th>
+        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
+      </tr>
+      <tr>
+        <td></td>
+        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
+        <span style="color:white">---------------</span>/
+        <span style="color:white">------</span>/ 2018
+      </td>
+      </tr>
+    </table>
+  </div>
+  <br>
+  <h6>Guardian : ……………..…..…….………………………..…..…….………………………..…………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+
+  <div style="margin-left: 59%;">
+    <table style="margin-top:20px;">
+      <tr>
+        <th>Signature</th>
+        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
+      </tr>
+      <tr>
+        <td></td>
+        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
+        <span style="color:white">---------------</span>/
+        <span style="color:white">------</span>/ 2018
+      </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="page-break"></div>
+
+<h6>Final  Report</h6>
+<table style="margin-top:20px; margin-left:40px;" class="finalReport">
+  <tr>
+    <th><span style="color:white">First Semester : ------</span></th>
+    <th><span style="color:white">----------</span></th>
+    <th><span style="color:white">----------</span></th>
+    <th><span style="color:white">----------</span></th>
+    <th><span style="color:white">----------</span></th>
+    <th><span style="color:white">----------</span></th>
+    <th><span style="color:white">-------------</span></th>
+    <th><span style="color:white">----------</span></th>
+    <th><span style="color:white">-------------</span></th>
+  </tr>
+  <tr>
+    <td style="text-align:left;">First Semester : </td>
+    <td>CR</td>
+    <td class="dotBottom2">0.00</td>
+    <td>CE</td>
+    <td class="dotBottom2">0.00</td>
+    <td>Sum</td>
+    <td class="dotBottom2">#DIV/0!</td>
+    <td>GPA</td>
+    <td class="dotBottom2">#DIV/0!</td>
+  </tr>
+
+  <tr>
+    <td style="text-align:left;">Second Semester : </td>
+    <td>CR</td>
+    <td class="dotBottom2">0.00</td>
+    <td>CE</td>
+    <td class="dotBottom2">0.00</td>
+    <td>Sum</td>
+    <td class="dotBottom2">#DIV/0!</td>
+    <td>GPA</td>
+    <td class="dotBottom2">#DIV/0!</td>
+  </tr>
+
+  <tr>
+    <th style="text-align:left;">Cumulative :</th>
+    <th>CR</th>
+    <th class="dotBottom2">0.00</th>
+    <th>CE</td>
+    <th class="dotBottom2">0.00</th>
+    <th>Sum</td>
+    <th class="dotBottom2">#DIV/0!</th>
+    <th>GPA</td>
+    <th class="dotBottom2">#DIV/0!</th>
+  </tr>
+</table>
+
+<br>
+<div class="boxHeader"><h6>Evaluation  :</h6>
+<div class="box"></div>
+<div class="boxTail"><p>to be permitted to graduate in academic year 2018</p>
+</div>
+
+<div class="boxHeader">
+<div class="box"></div>
+<div class="boxTail"><p>to be considered.…….………………………..…..…….………………………..….…….……………………</p>
+</div>
+<br>
+<p></p>
+<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
+<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
+<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
+
+<div>
+  <table style="margin-top:20px;">
+    <tr>
+      <td>.…….………………………..…..…….…………………</td>
+      <td style="color:white">-----------------------</td>
+      <td>.…….………………………..…..…….……………</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">Asst.Prof. Acharapan Corvanich</td>
+      <td style="color:white">------------------</td>
+      <td style="text-align: center;" rowspan="2">Classroom teacher</td>
+    </tr>
+
+    <tr>
+      <td style="text-align: center;">IP Chair</td>
+      <td style="color:white">------------------</td>
+    </tr>
+
+    <tr>
+      <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
+      /<span style="color:white">------</span>/ 2018
+      </td>
+      <td></td>
+      <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
+      /<span style="color:white">------</span>/ 2018
+      </td>
+    </tr>
+
+  </table>
+</div>
+<br><br>
+<p>Guardian's Acknowledgement : .…..…….……………………….…….………………………..…..……………………………………….</p>
+<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
+<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
+<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
+<div style="margin-left: 59%;">
+  <table style="margin-top:20px;">
+    <tr>
+      <th>Signature</th>
+      <th style="width:200px; border-bottom: 1px solid black;"></th>
+    </tr>
+    <tr>
+      <td></td>
+      <td style="width:200px; height: 30px; border-bottom: 1px dotted black;">
+      <span style="color:white">---------------</span>/
+      <span style="color:white">------</span>/ 2018
+    </td>
+    </tr>
+  </table>
+</div>
+
+<br><br>
+<p>Remark: .…..…….……………………….…….………………………..…..……………………………………………………………….…</p>
+<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
+<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
+<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
+
 
 <style>
 .heading{
@@ -584,6 +894,10 @@ tr {
   font-size: 10px;
 }
 
+.finalReport td{
+  text-align: center;
+}
+
 p{
   font-size: 12px;
 }
@@ -610,7 +924,7 @@ div.relative2 {
 
 div.conduct {
     position: absolute;
-    top: 90px;
+    top: 50px;
     right: 5;
     width: 150px;
 }
@@ -621,5 +935,45 @@ div.attendance {
     right: 0;
     width: 250px;
 }
+
+.board{
+  width: 100%;
+  height: 97%;
+  border-right: 1px solid black;
+}
+
+.dotBottom{
+  height: 40%;
+  border-bottom: 1.5px dotted black;
+}
+
+.dotBottom2{
+  border-bottom: 1.5px dotted black;
+}
+
+div.boxHeader {
+    position: relative;
+    width: 100%;
+    height: 30px;
+}
+
+div.box {
+    position: absolute;
+    top: 0px;
+    left: 100px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+}
+div.boxTail {
+    position: absolute;
+    top: 0px;
+    left: 130px;
+    width: 80%;
+}
+
+
+
+
 
 </style>
