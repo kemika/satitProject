@@ -170,7 +170,17 @@
 
             </td>
           @endif
-          <td><button type="button" class="btn btn-primary">Download
+          <td><form  action="/approveGradeDownload" method="post">
+            @csrf
+              <input hidden type="text" name="open_course_id" value='{{ $course["open_course_id"] }}'>
+              <input hidden type="text" name="quater" value='{{ $course["quater"] }}'>
+              <input hidden type="text" name="datetime" value='{{ $course["datetime"] }}'>
+              <input hidden type="text" name="year" value='{{ $course["academic_year"] }}'>
+              <input hidden type="text" name="semester" value='{{ $course["semester"] }}'>
+              <input hidden type="text" name="course_id" value='{{ $course["course_id"] }}'>
+              <input hidden type="text" name="grade_level" value='{{ $course["grade_level"] }}'>
+            <button type="submit"  onclick="return confirm('Are you sure you would like to Download this course?');" class="btn btn-primary">Download</button>
+          </form>
   </button>
       </td>
 

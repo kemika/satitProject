@@ -32,6 +32,7 @@ Route::post('/approveGradeAcceptAll', 'ApproveGradeController@acceptAll');
 Route::post('/approveGradeAccept', 'ApproveGradeController@accept');
 Route::post('/approveGradeCancelAll', 'ApproveGradeController@cancelAll');
 Route::post('/approveGradeCancel', 'ApproveGradeController@cancel');
+Route::post('/approveGradeDownload', 'ApproveGradeController@Download');
 
 
 Route::get('/manageStudents', 'ManageStudentsController@index');

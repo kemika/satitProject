@@ -23,7 +23,7 @@ class ApproveGradeController extends Controller
                          })
             ->leftJoin('grades','grades.open_course_id','=','offered_courses.open_course_id')
             ->leftJoin('data_status','grades.data_status','=','data_status.data_status')
-            ->where('offered_courses.curriculum_year', $year)
+            ->where('academic_year.academic_year', $year)
             ->where('offered_courses.semester',$semester)
             ->groupBy('grades.datetime','grades.open_course_id','grades.quater')
             ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quater'
@@ -585,12 +585,67 @@ $yearInfo  = Academic_Year::select('academic_year')
 
   public function Download(Request $request)
   {
-    Excel::create('template_elective', function($excel) {
+
+    $courses  = Academic_Year::Join('offered_courses','offered_courses.classroom_id','=','academic_year.classroom_id')
+            ->Join('curriculums', function($join)
+                         {
+                             $join->on('curriculums.course_id', '=', 'offered_courses.course_id');
+                             $join->on('curriculums.curriculum_year','=', 'offered_courses.curriculum_year');
+                         })
+            ->leftJoin('grades','grades.open_course_id','=','offered_courses.open_course_id')
+            ->leftJoin('data_status','grades.data_status','=','data_status.data_status')
+            ->Join('students','grades.student_id','=','students.student_id')
+            ->where('academic_year.academic_year', $request->input('year'))
+            ->where('offered_courses.semester',$request->input('semester'))
+            ->where('offered_courses.semester',$request->input('datetime'))
+            ->where('offered_courses.semester',$request->input('quater'))
+            ->select('grades.student_id','grades.grade','students.firstname','students.lastname')
+            ->orderBy('students.firstname','asc')
+            ->orderBy('students.lastname','asc')
+            ->get();
+
+
+    Excel::create('Grade'.$request->course_name, function($excel) {
 
       $excel->sheet('Excel sheet', function($sheet) {
 
         $sheet->setOrientation('landscape');
 
+        // Set header
+        $sheet->setCellValue('A1', 'Course ID');
+        $sheet->setCellValue('A2', 'Course Name');
+        $sheet->setCellValue('A3', 'Grade level');
+
+        $sheet->setCellValue('B1', $request->course_id);
+        $sheet->setCellValue('B2', $request->course_name);
+        $sheet->setCellValue('B3', $request->grade_level);
+
+        $sheet->setCellValue('C1', 'Academic Year');
+        $sheet->setCellValue('C2', 'Semester');
+        $sheet->setCellValue('C3', 'Quater');
+
+        $sheet->setCellValue('D1', $request->academic_year);
+        $sheet->setCellValue('D2', $request->semester);
+        $sheet->setCellValue('D3', $request->quater);
+
+        // Set table Student
+        $sheet->setCellValue('A5', '#');
+        $sheet->setCellValue('B5', 'Student Name');
+        $sheet->setCellValue('C5', 'Grade');
+
+        $countRow = 6;
+        foreach($courses as $student){
+
+        }
+
+        // Set Style
+        $sheet->setWidth(array(
+            'A' => 14,
+            'B' => 19,
+            'C' => 14
+        ));
+
+        /*
         $sheet->setCellValue('A1', 'Teacher');
         $sheet->setCellValue('A2', 'Course');
         $sheet->setCellValue('A3', 'Grade level');
@@ -655,7 +710,7 @@ $yearInfo  = Academic_Year::select('academic_year')
             $cell->setAlignment('center');
         });
 
-
+*/
 
       });
 
