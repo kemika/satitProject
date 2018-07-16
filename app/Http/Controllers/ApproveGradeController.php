@@ -585,7 +585,7 @@ $yearInfo  = Academic_Year::select('academic_year')
 
   public function Download(Request $request)
   {
-
+    $type = 'xlsx';
     $courses  = Academic_Year::Join('offered_courses','offered_courses.classroom_id','=','academic_year.classroom_id')
             ->Join('curriculums', function($join)
                          {
@@ -597,17 +597,18 @@ $yearInfo  = Academic_Year::select('academic_year')
             ->Join('students','grades.student_id','=','students.student_id')
             ->where('academic_year.academic_year', $request->input('year'))
             ->where('offered_courses.semester',$request->input('semester'))
-            ->where('offered_courses.semester',$request->input('datetime'))
-            ->where('offered_courses.semester',$request->input('quater'))
+            ->where('grades.datetime',$request->input('datetime'))
+            ->where('grades.quater',$request->input('quater'))
             ->select('grades.student_id','grades.grade','students.firstname','students.lastname')
             ->orderBy('students.firstname','asc')
             ->orderBy('students.lastname','asc')
             ->get();
 
 
-    Excel::create('Grade'.$request->course_name, function($excel) {
+    Excel::create('Grade'.$request->course_name, function($excel) use($request,$courses){
 
-      $excel->sheet('Excel sheet', function($sheet) {
+      $excel->sheet('Excel sheet', function($sheet) use($request,$courses) {
+
 
         $sheet->setOrientation('landscape');
 
@@ -624,7 +625,7 @@ $yearInfo  = Academic_Year::select('academic_year')
         $sheet->setCellValue('C2', 'Semester');
         $sheet->setCellValue('C3', 'Quater');
 
-        $sheet->setCellValue('D1', $request->academic_year);
+        $sheet->setCellValue('D1', $request->year);
         $sheet->setCellValue('D2', $request->semester);
         $sheet->setCellValue('D3', $request->quater);
 
@@ -634,16 +635,52 @@ $yearInfo  = Academic_Year::select('academic_year')
         $sheet->setCellValue('C5', 'Grade');
 
         $countRow = 6;
+        $countStudent = 1;
         foreach($courses as $student){
-
+          $sheet->setCellValue('A'.$countRow,$countStudent);
+          $sheet->setCellValue('B'.$countRow,$student->firstname." ".$student->lastname);
+          $sheet->setCellValue('C'.$countRow,$student->grade);
+          $countRow += 1;
+          $countStudent += 1;
         }
 
         // Set Style
         $sheet->setWidth(array(
             'A' => 14,
-            'B' => 19,
-            'C' => 14
+            'B' => 21,
+            'C' => 16
         ));
+
+        $sheet->setBorder('A1:D3', 'thin');
+        $sheet->setBorder('A5:C5', 'thin');
+        $sheet->setBorder('A5:C'.($countRow-1), 'thin');
+        /*
+        $sheet->cell('D3:H3', function($cell) {
+            $cell->setBackground('#FF9F68');
+        });*/
+
+        $sheet->cell('B1:B5', function($cell) {
+            $cell->setAlignment('center');
+        });
+
+        $sheet->cell('D1:D3', function($cell) {
+            $cell->setAlignment('center');
+        });
+
+        $sheet->cell('A5:C5', function($cell) {
+            $cell->setAlignment('center');
+        });
+
+        $sheet->cell('A5:C5', function($cell) {
+            $cell->setBackground('#7DCEA0');
+        });
+
+        $sheet->cell('A1:A3', function($cell) {
+            $cell->setBackground('#85C1E9');
+        });
+        $sheet->cell('C1:C3', function($cell) {
+            $cell->setBackground('#85C1E9');
+        });
 
         /*
         $sheet->setCellValue('A1', 'Teacher');

@@ -178,6 +178,7 @@
               <input hidden type="text" name="year" value='{{ $course["academic_year"] }}'>
               <input hidden type="text" name="semester" value='{{ $course["semester"] }}'>
               <input hidden type="text" name="course_id" value='{{ $course["course_id"] }}'>
+              <input hidden type="text" name="course_name" value='{{ $course["course_id"] }}'>
               <input hidden type="text" name="grade_level" value='{{ $course["grade_level"] }}'>
             <button type="submit"  onclick="return confirm('Are you sure you would like to Download this course?');" class="btn btn-primary">Download</button>
           </form>
