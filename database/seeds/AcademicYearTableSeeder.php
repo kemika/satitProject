@@ -41,16 +41,16 @@ class AcademicYearTableSeeder extends Seeder
       $admin->academic_year ='2561';
       $admin->grade_level = '10';
       $admin->room = '4';
-      $admin->curriculum_year = '2561';
+      $admin->curriculum_year = '2560';
       $admin->total_days = '0';
       $admin->save();
 
 
       $admin = new App\Academic_Year;
-      $admin->academic_year ='2562';
+      $admin->academic_year ='2561';
       $admin->grade_level = '11';
       $admin->room = '5';
-      $admin->curriculum_year = '2562';
+      $admin->curriculum_year = '2561';
       $admin->total_days = '0';
       $admin->save();
     }

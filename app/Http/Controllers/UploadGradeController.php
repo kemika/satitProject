@@ -85,7 +85,8 @@ class UploadGradeController extends Controller
 
 
         $importRow = count(\Excel::load('files/'.$file_name, function($reader) {})->get());
-        if ($importRow < 44) {
+          // dd($importRow);
+        if ($importRow < 5) {
           $fact = false;
           $text = "This file is not correct format. Please select another file!";
           $arrayValidates[] = $text;
@@ -119,7 +120,7 @@ class UploadGradeController extends Controller
 
 
           if($file_type == "xlsx" || $file_type == "xls"){
-            if(count($results)==39){
+            if(count($results)==0){
               $fact = false;
               $text = "This file is empty";
               $arrayValidates[] = $text;
@@ -385,15 +386,20 @@ class UploadGradeController extends Controller
               $cell->setBackground('#FF9F68');
           });
 
-          $sheet->cell('C7:E45', function($cell) {
-              $cell->setBackground('#FFC300');
+
+          $sheet->setBorder('C5:L6', 'thin');
+
+          $sheet->mergeCells('C5:E5');
+          $sheet->cell('C5:E5', function($cell) {
+              $cell->setAlignment('center');
           });
 
-          $sheet->cell('G7:I45', function($cell) {
-              $cell->setBackground('#FFC300');
+          $sheet->mergeCells('G5:I5');
+          $sheet->cell('G5:I5', function($cell) {
+              $cell->setAlignment('center');
           });
 
-          $sheet->setBorder('C5:L45', 'thin');
+
 
         });
 

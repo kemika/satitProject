@@ -32,6 +32,9 @@ class ExportController extends Controller
       ->get()[0];
 
 
+
+
+
       // Assian Artibute
 
       $classroom_id = $academicYear->classroom_id;
@@ -60,10 +63,31 @@ class ExportController extends Controller
 
 
 
+      $subjectElecs = Offered_Courses::where('classroom_id', $classroom_id)
+      ->where('Offered_Courses.is_elective',  '0')
+      ->select('Offered_Courses.*')
+      ->where('Offered_Courses.curriculum_year',$academicYear->curriculum_year)
+      ->select('Offered_Courses.*')
+      ->join('Curriculums', function($j) {
+      $j->on('Curriculums.course_id', '=', 'Offered_Courses.course_id');
+      $j->on('Curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
+      })
+      ->select('Offered_Courses.*','Curriculums.*')
+      ->get();
 
 
 
-      return view('export.index',['teacher' => $teacher,'subjects' => $subjects]);
+
+
+
+
+
+
+
+
+
+
+      return view('export.index',['teacher' => $teacher,'subjects' => $subjects,'subjectElecs'=> $subjectElecs]);
 
 
 
@@ -82,7 +106,6 @@ class ExportController extends Controller
     return 'Permission Denine';
 
 
-    return auth::user()->teacher_number;
   }
 
 
@@ -131,7 +154,7 @@ class ExportController extends Controller
 
 
   $type='xlsx';
-  Excel::create('template_elective', function($excel) use($subject,$students,$room,$academic_year) {
+  Excel::create($subject->course_name."-".$academic_year->academic_year, function($excel) use($subject,$students,$room,$academic_year) {
 
     $excel->sheet('Excel sheet', function($sheet) use($subject,$students,$room,$academic_year) {
 
@@ -196,16 +219,18 @@ class ExportController extends Controller
           $cell->setBackground('#FF9F68');
       });
 
-      $sheet->cell('C7:E45', function($cell) {
-          $cell->setBackground('#FFC300');
+
+      $sheet->setBorder('C5:L6', 'thin');
+
+      $sheet->mergeCells('C5:E5');
+      $sheet->cell('C5:E5', function($cell) {
+          $cell->setAlignment('center');
       });
 
-      $sheet->cell('G7:I45', function($cell) {
-          $cell->setBackground('#FFC300');
+      $sheet->mergeCells('G5:I5');
+      $sheet->cell('G5:I5', function($cell) {
+          $cell->setAlignment('center');
       });
-
-      $sheet->setBorder('C5:L45', 'thin');
-
       ////////////////////////////Student/////////////////////////////
 
       $i=7;
@@ -239,6 +264,10 @@ class ExportController extends Controller
   })->export($type);
 
 }
+
+
+
+
 
     //
 }
