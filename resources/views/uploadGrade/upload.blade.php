@@ -1,16 +1,46 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    <h1> Upload </h1>
-    <form action="/getUpload" method="post" enctype="multipart/form-data">
-      {{csrf_field()}}
-      <input type="file" name="file">
-      <input type="hidden" name="_token" value="{{csrf_token()}}">
-      <input type="submit" value="upload">
-    </form>
-  </body>
-</html>
+<link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+
+
+<link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.3.js"></script>
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
+<link href="{{ asset('bootstrap/css/studentCSS.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="/css/nav.css">
+
+<head>
+  <div id='cssmenu'>
+  <ul>
+     <li ><a href='/main'>SatitKaset</a></li>
+     <li><a href='/manageStudents'>Manage Student</a></li>
+     <li class='active'><a href='#'>Grade</a></li>
+     <li><a href='#'>About</a></li>
+     <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
+                onclick="event.preventDefault();
+                              document.getElementById('logout-form').submit();">
+                 {{ __('Logout') }}
+             </a>
+
+             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                 @csrf
+             </form></li>
+
+             <li style="float:right"><a href='#'>{{ auth::user()->firstname.' '.auth::user()->lastname}}</a></li>
+  </ul>
+
+  </div>
+
+</head>
+    <h1 style="margin: 25px 50px 75px 100px;"> Upload </h1>
+    <div style="margin-left:150px">
+      <form action="/getUpload" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+        <input type="file" name="file">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-primary mb-2" value="upload">
+      </form>
+    </div>
