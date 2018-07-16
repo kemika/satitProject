@@ -196,6 +196,18 @@ class UploadGradeController extends Controller
                       $factEmpty = false;
                       $arrayValidates[] = $text;
                     }
+                      if($courseID == ""){
+                        $text = "Field 'Course' is empty at row 'B2'";
+                        $factValidate = false;
+                        $factEmpty = false;
+                        $arrayValidates[] = $text;
+                      }
+                      if($year == ""){
+                        $text = "Field 'Academic Year' is empty at row 'B4'";
+                        $factValidate = false;
+                        $factEmpty = false;
+                        $arrayValidates[] = $text;
+                      }
                 }
               }
               else {
@@ -231,6 +243,19 @@ class UploadGradeController extends Controller
                         // echo "Field 'Student name' is incorrect format at row 'B".($i+6)."'<br>";
                         $text = "Field 'Student name' is incorrect format at row 'B".($i+7)."'";
                         $factValidate = false;
+                        $arrayValidates[] = $text;
+                      }
+
+                      if($courseID == ""){
+                        $text = "Field 'Course' is empty at row 'B2'";
+                        $factValidate = false;
+                        $factEmpty = false;
+                        $arrayValidates[] = $text;
+                      }
+                      if($year == ""){
+                        $text = "Field 'Academic Year' is empty at row 'B4'";
+                        $factValidate = false;
+                        $factEmpty = false;
                         $arrayValidates[] = $text;
                       }
 
@@ -292,10 +317,63 @@ class UploadGradeController extends Controller
               if ($factValidate==TRUE) {
                 // dd($results);
                 if ($checkFileName == "template") {
+                  for ($i = 0; $i < count($results); $i++) {
+                    //-------------------- add Q1 -----------------
+                    $grade = new Grade;
+                		$grade->student_id = $results[$i]->student_id;
+                		$grade->open_course_id = $courseID;
+                		$grade->quater = '1';
+                    $grade->semester = '1';
+                    $grade->academic_year = $year;
+                    $grade->datetime = $datetime;
+                    $grade->grade = '0';
+                    $grade->grade_status = '0';
+                    $grade->data_status = '0';
+                		$grade->save();
 
+                    //-------------------- add Q2 -----------------
+                    $grade = new Grade;
+                		$grade->student_id = $results[$i]->student_id;
+                		$grade->open_course_id = $courseID;
+                		$grade->quater = '2';
+                    $grade->semester = '1';
+                    $grade->academic_year = $year;
+                    $grade->datetime = $datetime;
+                    $grade->grade = '0';
+                    $grade->grade_status = '0';
+                    $grade->data_status = '0';
+                		$grade->save();
+
+                    //-------------------- add Q3 -----------------
+                    $grade = new Grade;
+                		$grade->student_id = $results[$i]->student_id;
+                		$grade->open_course_id = $courseID;
+                		$grade->quater = '1';
+                    $grade->semester = '2';
+                    $grade->academic_year = $year;
+                    $grade->datetime = $datetime;
+                    $grade->grade = '0';
+                    $grade->grade_status = '0';
+                    $grade->data_status = '0';
+                		$grade->save();
+
+                    //-------------------- add Q4 -----------------
+                    $grade = new Grade;
+                		$grade->student_id = $results[$i]->student_id;
+                		$grade->open_course_id = $courseID;
+                		$grade->quater = '2';
+                    $grade->semester = '2';
+                    $grade->academic_year = $year;
+                    $grade->datetime = $datetime;
+                    $grade->grade = '0';
+                    $grade->grade_status = '0';
+                    $grade->data_status = '0';
+                		$grade->save();
+
+
+                  }
                 }
                 else {
-                  $count = 0;
                   for ($i = 0; $i < count($results); $i++) {
                     //-------------------- add Q1 -----------------
                     $grade = new Grade;
