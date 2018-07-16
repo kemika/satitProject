@@ -24,7 +24,7 @@
   <div id='cssmenu'>
   <ul>
      <li ><a href='/main'>SatitKaset</a></li>
-     <li><a href='/manageStudent'>Manage Student</a></li>
+     <li><a href='/manageStudents'>Manage Student</a></li>
      <li class='active'><a href='#'>Grade</a></li>
      <li><a href='#'>About</a></li>
      <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"

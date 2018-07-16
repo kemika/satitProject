@@ -19,7 +19,7 @@
   <ul>
      <li ><a href='/main'>SatitKaset</a></li>
      <li class='active'><a href='#'>Manage Student</a></li>
-     <li><a href='/viewGrade'>Grade</a></li>
+     <li><a href='/upload'>Grade</a></li>
      <li><a href='#'>About</a></li>
      <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
                 onclick="event.preventDefault();

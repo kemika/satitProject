@@ -22,7 +22,7 @@
       <button class="btn btn-outline-secondary" type="submit" onclick="window.location.href='/manageCurriculum'">Manage Curriculum</button>
     </div>
     <div class="col col-lg-2">
-      <button class="btn btn-outline-secondary" type="submit" onclick="window.location.href='/uploadGrade'">Upload Grades</button>
+      <button class="btn btn-outline-secondary" type="submit" onclick="window.location.href='/upload'">Upload Grades</button>
     </div>
   </div>
 
