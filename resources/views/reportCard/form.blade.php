@@ -144,9 +144,9 @@
 
     <tr>
       <th scope="col" colspan="2">Total</th>
-      <th scope="col">0.00</th>
+      <th scope="col">{{$total_credit}}</th>
       <th scope="col" colspan="3" class="setRight">GPA</th>
-      <th scope="col">#DIV/0!</th>
+      <th scope="col">{{$avg2}}</th>
     </tr>
 </table>
 

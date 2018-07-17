@@ -133,7 +133,7 @@ class ReportCardController extends Controller
     $pdf = PDF::loadView('reportCard.form',['grade_semester1' => $grade_semester1,'grade_semester2' => $grade_semester2,'student' => $student,'avg1' => $grade_avg_sem1,'avg2' => $grade_avg_sem2,'grade_elec_semester1' => $grade_elec_semester1,'grade_elec_semester2' => $grade_elec_semester2]);
     $pdf->setPaper('a4', 'potrait');
     return $pdf->stream();
-    // return $pdf->download('reportCard.pdf');
+    return $pdf->download('reportCard.pdf');
 
   }
 
