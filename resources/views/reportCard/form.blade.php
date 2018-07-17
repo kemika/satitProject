@@ -94,7 +94,7 @@
 <table class="nameStyle">
     <tr>
       <th scope="col">Student Name</th>
-      <th scope="col" colspan="5" class="setCenter">Kemika Titithantawatch</th>
+      <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
       <th scope="col" class="setLeft">Grade</th>
     </tr>
 </table>
@@ -172,7 +172,7 @@
 <table class="nameStyle">
     <tr>
       <th scope="col">Student Name</th>
-      <th scope="col" colspan="5" class="setCenter">Kemika Titithantawatch</th>
+      <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
       <th scope="col" class="setLeft">Grade</th>
     </tr>
 </table>
@@ -192,40 +192,37 @@
       <th>3</th>
       <th>Semester Grade</th>
     </tr>
+    <?php $i = 1 ;
+          $total_credit =0;
+    ?>
+    @foreach($grade_semester2 as $key => $grade )
+
+
     <tr>
-      <td>Mark</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <td>{{$grade['course_name']}}</td>
+      <td>{{strtoupper(substr($grade['course_name'], 0, 3))." ".$grade['course_id']}}</td>
+      <td>{{ $grade['credits']}}</td>
+      <td>{{ $grade['quater1']}}</td>
+      <td>{{ $grade['quater2']}}</td>
+      <td>{{ $grade['quater3']}}</td>
+      <?php
+      $grade_total  = $grade['total_point']/3;
+      $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
+       ?>
+      <td>{{  $grade_total }}</td>
+      <?php $total_credit +=  $grade['credits'] ?>
+
+      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
     </tr>
-    <tr>
-      <td>Mark</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <td>Mark</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
+
+    @endforeach
 
 
     <tr>
       <th scope="col" colspan="2">Total</th>
-      <th scope="col">0.00</th>
+      <th scope="col">{{  $total_credit }}</th>
       <th scope="col" colspan="3" class="setRight">GPA</th>
-      <th scope="col">0.00</th>
+      <th scope="col">{{$avg2}}</th>
     </tr>
 </table>
 
@@ -239,7 +236,7 @@
 <table class="nameStyle">
     <tr>
       <th scope="col">Student Name</th>
-      <th scope="col" colspan="5" class="setCenter">Kemika Titithantawatch</th>
+      <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
       <th scope="col" class="setLeft">Grade</th>
     </tr>
 </table>
@@ -266,21 +263,21 @@
         <td></td>
       </tr>
       <tr>
-        <td>2	Attentive in class</td>
+        <td>2	Responsible for assiged work</td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
       </tr>
       <tr>
-        <td>3	Attentive in class</td>
+        <td>3	Respectful</td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
       </tr>
       <tr>
-        <td>4	Attentive in class</td>
+        <td>4	Helpful</td>
         <td></td>
         <td></td>
         <td></td>
@@ -288,7 +285,52 @@
       </tr>
 
       <tr>
-        <td>5	Attentive in class</td>
+        <td>5	Honest</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>6	Able to work well with others</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>7	Polite and proper in words</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+
+
+
+      <tr>
+        <td>8	Punctual</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+
+
+
+      <tr>
+        <td>9	Dressed properly</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+
+
+      <tr>
+        <td>10	Not prolematic to  himself or  others</td>
         <td></td>
         <td></td>
         <td></td>
