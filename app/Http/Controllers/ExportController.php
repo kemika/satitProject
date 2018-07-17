@@ -18,6 +18,11 @@ use App\Student_Grade_Level;
 
 class ExportController extends Controller
 {
+  public function __construct() {
+    $this->middleware('auth');
+  }
+
+  
   public function index(){
     $id =  auth::user()->teacher_number;
     $teacher = Teacher::where('teacher_id',$id)->select('teachers.*')->get()[0];
@@ -25,13 +30,14 @@ class ExportController extends Controller
 
 
     if($teacher->teacher_status == 0){
+
+
+
       $academicYear = Homeroom::where('teacher_id',$teacher->teacher_id)
-      ->select('homeroom.*')
-      ->join('academic_year','academic_year.classroom_id','=','homeroom.classroom_id')
-      ->select('homeroom.*','academic_year.*')
-      ->get()[0];
-
-
+     ->select('homeroom.*')
+     ->join('academic_year','academic_year.classroom_id','=','homeroom.classroom_id')
+     ->select('homeroom.*','academic_year.*')
+     ->get()[0];
 
 
 
@@ -49,6 +55,8 @@ class ExportController extends Controller
 
 
 
+
+
       $subjects = Offered_Courses::where('classroom_id', $classroom_id)
       ->where('Offered_Courses.is_elective',  '1')
       ->select('Offered_Courses.*')
@@ -60,6 +68,12 @@ class ExportController extends Controller
       })
       ->select('Offered_Courses.*','Curriculums.*')
       ->get();
+
+
+
+
+
+
 
 
 

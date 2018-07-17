@@ -8,20 +8,17 @@
 
 <div class="" style="background-color:lightgreen;padding:30px">
   <div class="row card" style="padding:10px" >
+    <h2>Room: {{ $room->grade_level.'/'.$room->room}}</h2>
+    <h3>{{"Academicyear: ".$room->academic_year}}</h3>
+    <h3>{{"Semester: "}}</h3>
+    <p>Studentlist :</p>
     <div class="",id="Room Menu">
-
-
-      @foreach($rooms as $room)
-
+      @foreach($students as $student)
       <div class="card">
         <center>
-        <p class="mt-2"><a href="/report_card/room/{{ $room->classroom_id}}">{{$room->grade_level. "/". $room->room}}</a></p>
+        <p class="mt-2"><a href='/exportReportCard/{{$student->student_id}}/{{$room->academic_year}}'>{{$student->student_id." ".$student->firstname." ".$student->lastname }}</a></p>
       </center>
       </div>
-
-
-
-
 
       @endforeach
 
@@ -29,27 +26,10 @@
 
     </div>
 
-
-
-
-
   </div>
 
-</div>
-
-<div class="mt-5">
 
 
-
-
-
-
-<h1 class="heading">this is Jarvis</h1>
-
-
-
-
-</div>
 
     @endsection
 
