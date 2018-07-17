@@ -22,7 +22,7 @@ class ExportController extends Controller
     $this->middleware('auth');
   }
 
-  
+
   public function index(){
     $id =  auth::user()->teacher_number;
     $teacher = Teacher::where('teacher_id',$id)->select('teachers.*')->get()[0];
@@ -264,6 +264,125 @@ class ExportController extends Controller
 
 
         $sheet->setCellValue('B3', $room->grade_level.'/'.$room->room);
+        $sheet->setCellValue('B2', strtoupper(substr($subject->course_name, 0, 3))." ".$subject->course_id);
+        $sheet->setCellValue('C2', $subject->course_name);
+        $sheet->setCellValue('B4', $academic_year->academic_year);
+
+
+
+
+
+
+    });
+
+  })->export($type);
+
+}
+
+
+public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_year){
+
+  $subject = Offered_Courses::where('classroom_id', $classroom_id)
+  ->where('Offered_Courses.course_id',  $course_id)
+  ->select('Offered_Courses.*')
+  ->where('Offered_Courses.curriculum_year',$curriculum_year)
+  ->select('Offered_Courses.*')
+  ->join('Curriculums', function($j) {
+  $j->on('Curriculums.course_id', '=', 'Offered_Courses.course_id');
+  $j->on('Curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
+  })
+  ->select('Offered_Courses.*','Curriculums.*')
+  ->get()[0];
+
+
+
+    $academic_year = Academic_Year::where('classroom_id',$classroom_id)->where('curriculum_year',$curriculum_year)->select('Academic_Year.*')->get()[0];
+
+
+
+  $type='xlsx';
+  Excel::create('template', function($excel) use($subject,$academic_year) {
+
+    $excel->sheet('Excel sheet', function($sheet) use($subject,$academic_year) {
+
+      $sheet->setOrientation('landscape');
+
+      $sheet->setCellValue('A1', 'Teacher');
+      $sheet->setCellValue('A2', 'Course ID');
+      $sheet->setCellValue('A3', 'Grade level');
+      $sheet->setCellValue('A4', 'Academic Year');
+      $sheet->setCellValue('A6', 'Student_ID');
+      $sheet->setCellValue('B5', 'If you split a class…');
+      $sheet->setCellValue('B6', 'Student Name');
+      $sheet->setCellValue('C5', '1st Semester');
+      $sheet->setCellValue('C6', 'Q1');
+      $sheet->setCellValue('D1', 'Do not worry about any calculations. The report cards will do them');
+      $sheet->setCellValue('D2', 'automatically. You are only required to fill in the highlighted sections.');
+      $sheet->setCellValue('D3', 'High school teachers, hover here for a special note');
+      $sheet->setCellValue('D6', 'Q2');
+      $sheet->setCellValue('E6', 'Sum 1');
+      $sheet->setCellValue('F6', 'Sem 1');
+      $sheet->setCellValue('G5', '2nd Semester');
+      $sheet->setCellValue('G6', 'Q3');
+      $sheet->setCellValue('H6', 'Q4');
+      $sheet->setCellValue('I6', 'Sum 2');
+      $sheet->setCellValue('J6', 'Sem 2');
+      $sheet->setCellValue('K5', 'Grade');
+      $sheet->setCellValue('K6', 'Average');
+      $sheet->setCellValue('L5', 'Year');
+      $sheet->setCellValue('L6', 'Grade');
+
+      $sheet->setWidth(array(
+          'A' => 12,
+          'B' => 19,
+          'M' => 9,
+          'C' => 12,
+          'D' => 12,
+          'E' => 12,
+          'G' => 12,
+          'H' => 12,
+          'I' => 12
+
+
+      ));
+
+      $sheet->setStyle(array(
+          'font' => array(
+              'name'      =>  'Tw Cen MT',
+              'size'      =>  12,
+              'bold'      =>  false
+          )
+      ));
+
+      $sheet->cell('B1', function($cell) {
+          $cell->setBackground('#FFC300');
+      });
+
+      $sheet->cell('B5', function($cell) {
+          $cell->setBackground('#FF9F68');
+      });
+
+      $sheet->cell('D3:H3', function($cell) {
+          $cell->setBackground('#FF9F68');
+      });
+
+
+      $sheet->setBorder('C5:L6', 'thin');
+
+      $sheet->mergeCells('C5:E5');
+      $sheet->cell('C5:E5', function($cell) {
+          $cell->setAlignment('center');
+      });
+
+      $sheet->mergeCells('G5:I5');
+      $sheet->cell('G5:I5', function($cell) {
+          $cell->setAlignment('center');
+      });
+
+      ///////////////////////Subject////////////////////////
+
+
+        $sheet->setCellValue('B3', '');
         $sheet->setCellValue('B2', strtoupper(substr($subject->course_name, 0, 3))." ".$subject->course_id);
         $sheet->setCellValue('C2', $subject->course_name);
         $sheet->setCellValue('B4', $academic_year->academic_year);

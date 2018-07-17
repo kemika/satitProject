@@ -36,7 +36,7 @@
 
                 @else
                 @foreach($subjectElecs as $subject)
-                  <button class="form-control" ><a href='/export_grade/{{$subject->classroom_id}}/{{$subject->course_id}}/{{$subject->curriculum_year}}'>{{ $subject->course_name}}</a></button>
+                  <button class="form-control" ><a href='/export_elective_course/{{$subject->classroom_id}}/{{$subject->course_id}}/{{$subject->curriculum_year}}'>{{ $subject->course_name}}</a></button>
                   <br>
                 @endforeach
 
