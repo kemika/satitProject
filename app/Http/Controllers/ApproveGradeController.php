@@ -678,16 +678,16 @@ $yearInfo  = Academic_Year::select('academic_year')
 
         $colGrade = '';
         if($request->input('quater') === '1'){
-          $colGrade = 'C7';
+          $colGrade = 'C';
         }
         else if($request->input('quater') === '2'){
-          $colGrade = 'D7';
+          $colGrade = 'D';
         }
         else if($request->input('quater') === '3'){
-          $colGrade = 'G7';
+          $colGrade = 'G';
         }
         else if($request->input('quater') === '4'){
-          $colGrade = 'H7';
+          $colGrade = 'H';
         }
 
 
@@ -700,7 +700,7 @@ $yearInfo  = Academic_Year::select('academic_year')
         foreach($courses as $student){
           $sheet->setCellValue('A'.$countRow,$student->student_id);
           $sheet->setCellValue('B'.$countRow,$student->firstname." ".$student->lastname);
-          $sheet->setCellValue($colGrade,$student->grade);
+          $sheet->setCellValue($colGrade.$countRow,$student->grade);
           $countRow += 1;
           $countStudent += 1;
         }
