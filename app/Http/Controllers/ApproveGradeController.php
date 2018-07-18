@@ -612,6 +612,105 @@ $yearInfo  = Academic_Year::select('academic_year')
 
         $sheet->setOrientation('landscape');
 
+        $sheet->setCellValue('A1', 'Teacher');
+        $sheet->setCellValue('A2', 'Course');
+        $sheet->setCellValue('A3', 'Grade level');
+        $sheet->setCellValue('A4', 'Academic Year');
+        $sheet->setCellValue('A6', 'Student_ID');
+        $sheet->setCellValue('B5', 'If you split a class…');
+        $sheet->setCellValue('B6', 'Student Name');
+        $sheet->setCellValue('C5', '1st Semester');
+        $sheet->setCellValue('C6', 'Q1');
+        $sheet->setCellValue('D1', 'Do not worry about any calculations. The report cards will do them');
+        $sheet->setCellValue('D2', 'automatically. You are only required to fill in the highlighted sections.');
+        $sheet->setCellValue('D3', 'High school teachers, hover here for a special note');
+        $sheet->setCellValue('D6', 'Q2');
+        $sheet->setCellValue('E6', 'Sum 1');
+        $sheet->setCellValue('F6', 'Sem 1');
+        $sheet->setCellValue('G5', '2nd Semester');
+        $sheet->setCellValue('G6', 'Q3');
+        $sheet->setCellValue('H6', 'Q4');
+        $sheet->setCellValue('I6', 'Sum 2');
+        $sheet->setCellValue('J6', 'Sem 2');
+        $sheet->setCellValue('K5', 'Grade');
+        $sheet->setCellValue('K6', 'Average');
+        $sheet->setCellValue('L5', 'Year');
+        $sheet->setCellValue('L6', 'Grade');
+
+        $sheet->setWidth(array(
+            'A' => 12,
+            'B' => 19,
+            'M' => 9
+        ));
+
+        $sheet->setStyle(array(
+            'font' => array(
+                'name'      =>  'Tw Cen MT',
+                'size'      =>  12,
+                'bold'      =>  false
+            )
+        ));
+
+        $sheet->cell('B1', function($cell) {
+            $cell->setBackground('#FFC300');
+        });
+
+        $sheet->cell('B5', function($cell) {
+            $cell->setBackground('#FF9F68');
+        });
+
+        $sheet->cell('D3:H3', function($cell) {
+            $cell->setBackground('#FF9F68');
+        });
+
+
+        $sheet->setBorder('C5:L6', 'thin');
+
+        $sheet->mergeCells('C5:E5');
+        $sheet->cell('C5:E5', function($cell) {
+            $cell->setAlignment('center');
+        });
+
+        $sheet->mergeCells('G5:I5');
+        $sheet->cell('G5:I5', function($cell) {
+            $cell->setAlignment('center');
+        });
+
+        $colGrade = '';
+        if($request->input('quater') === '1'){
+          $colGrade = 'C7';
+        }
+        else if($request->input('quater') === '2'){
+          $colGrade = 'D7';
+        }
+        else if($request->input('quater') === '3'){
+          $colGrade = 'G7';
+        }
+        else if($request->input('quater') === '4'){
+          $colGrade = 'H7';
+        }
+
+
+        $sheet->setCellValue('B2', $request->course_name);
+        $sheet->setCellValue('B3', $request->grade_level);
+        $sheet->setCellValue('B4', $request->year);
+
+        $countRow = 7;
+        $countStudent = 1;
+        foreach($courses as $student){
+          $sheet->setCellValue('A'.$countRow,$student->student_id);
+          $sheet->setCellValue('B'.$countRow,$student->firstname." ".$student->lastname);
+          $sheet->setCellValue($colGrade,$student->grade);
+          $countRow += 1;
+          $countStudent += 1;
+        }
+
+
+
+/*
+
+        $sheet->setOrientation('landscape');
+
         // Set header
         $sheet->setCellValue('A1', 'Course ID');
         $sheet->setCellValue('A2', 'Course Name');
@@ -654,10 +753,7 @@ $yearInfo  = Academic_Year::select('academic_year')
         $sheet->setBorder('A1:D3', 'thin');
         $sheet->setBorder('A5:C5', 'thin');
         $sheet->setBorder('A5:C'.($countRow-1), 'thin');
-        /*
-        $sheet->cell('D3:H3', function($cell) {
-            $cell->setBackground('#FF9F68');
-        });*/
+
 
         $sheet->cell('B1:B5', function($cell) {
             $cell->setAlignment('center');
@@ -681,6 +777,7 @@ $yearInfo  = Academic_Year::select('academic_year')
         $sheet->cell('C1:C3', function($cell) {
             $cell->setBackground('#85C1E9');
         });
+        */
 
         /*
         $sheet->setCellValue('A1', 'Teacher');
