@@ -14,6 +14,10 @@ use Excel;
 
 class ApproveGradeController extends Controller
 {
+  public function __construct() {
+    $this->middleware('auth');
+  }
+  
   public function index($year,$semester,Request $request){
     $courses  = Academic_Year::Join('offered_courses','offered_courses.classroom_id','=','academic_year.classroom_id')
             ->Join('curriculums', function($join)

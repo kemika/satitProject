@@ -30,6 +30,7 @@
        <li id="home"><a href='/main'>SatitKaset</a></li>
        <li><a href='/manageStudents'>Manage Student</a></li>
        <li id="grade"><a href='/upload'>Grade</a></li>
+       <li><a href='/approveGrade'>Approve Grade</a></li>
        <li><a href='#'>About</a></li>
        <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
                   onclick="event.preventDefault();
@@ -41,7 +42,7 @@
                    @csrf
                </form></li>
 
-              
+
 
     </div>
 

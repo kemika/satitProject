@@ -33,7 +33,7 @@
       <button class="btn btn-outline-secondary" onclick="window.location.href='/manageStudents'">Manage Students</button>
     </div>
     <div class="col col-lg-2">
-      <button class="btn btn-outline-secondary" type="submit">Approve Grades</button>
+      <button class="btn btn-outline-secondary" onclick="window.location.href='/approveGrade'">Approve Grades</button>
     </div>
   </div>
 
