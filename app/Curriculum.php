@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Curriculum extends Model
 {
-    public $table = "curriculums";
+  protected $table = 'curriculums';
+    //
 }

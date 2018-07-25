@@ -22,7 +22,17 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/main', 'MainController@index');
 
 
+Route::get('/approveGrade/{year}/{semester}', 'ApproveGradeController@index');
 
+
+
+Route::get('/approveGrade', 'ApproveGradeController@getApprovePage');
+Route::post('/approveGrade', 'ApproveGradeController@postApprovePage');
+Route::post('/approveGradeAcceptAll', 'ApproveGradeController@acceptAll');
+Route::post('/approveGradeAccept', 'ApproveGradeController@accept');
+Route::post('/approveGradeCancelAll', 'ApproveGradeController@cancelAll');
+Route::post('/approveGradeCancel', 'ApproveGradeController@cancel');
+Route::post('/approveGradeDownload', 'ApproveGradeController@Download');
 
 
 Route::get('/manageStudents', 'ManageStudentsController@index');

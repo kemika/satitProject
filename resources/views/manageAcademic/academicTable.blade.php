@@ -21,7 +21,7 @@
 <link href="{{ asset('bootstrap/css/studentCSS.css') }}" rel="stylesheet">
 
 
-<h1> Manage Curricula</h1>
+<h1> Manage Academic</h1>
 <center>
 <div class="row" style="width: 120rem;">
   <!-- <div class="col-1"></div> -->
