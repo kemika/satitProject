@@ -19,6 +19,7 @@ class ApproveGradeController extends Controller
   }
 
   public function index($year,$semester,Request $request){
+    /*
     $courses  = Academic_Year::Join('offered_courses','offered_courses.classroom_id','=','academic_year.classroom_id')
             ->Join('curriculums', function($join)
                          {
@@ -34,7 +35,25 @@ class ApproveGradeController extends Controller
                     ,'curriculums.course_name','data_status.data_status_text','grades.datetime','offered_courses.semester','offered_courses.is_elective')
             ->orderBy('course_id','asc')
             ->orderBy('datetime','desc')
-            ->get();
+            ->get();*/
+
+   ;
+   $courses  = Academic_Year::Join('offered_courses','offered_courses.classroom_id','=','academic_year.classroom_id')
+           ->Join('curriculums', function($join)
+                        {
+                            $join->on('curriculums.course_id', '=', 'offered_courses.course_id');
+                            $join->on('curriculums.curriculum_year','=', 'offered_courses.curriculum_year');
+                        })
+           ->leftJoin('grades','grades.open_course_id','=','offered_courses.open_course_id')
+           ->leftJoin('data_status','grades.data_status','=','data_status.data_status')
+           ->where('academic_year.academic_year', $year)
+           ->where('offered_courses.semester',$semester)
+           ->groupBy('grades.datetime','offered_courses.open_course_id','grades.quater')
+           ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quater'
+                   ,'curriculums.course_name','data_status.data_status_text','grades.datetime','offered_courses.semester','offered_courses.is_elective')
+           ->orderBy('course_id','asc')
+           ->orderBy('datetime','desc')
+           ->get();
 
 
 
@@ -595,22 +614,22 @@ $yearInfo  = Academic_Year::select('academic_year')
         });
 
         $colGrade = '';
-        if($request->input('quater') === '1' && $request->input('$semseter') === '1'){
+        if($request->input('quater') === '1' && $request->input('semester') === '1'){
           $colGrade = 'C';
         }
-        else if($request->input('quater') === '2' $request->input('$semseter') === '1'){
+        else if($request->input('quater') === '2' && $request->input('semester') === '1'){
           $colGrade = 'D';
         }
-        else if($request->input('quater') === '3' $request->input('$semseter') === '1'){
+        else if($request->input('quater') === '3' && $request->input('semester') === '1'){
           $colGrade = 'E';
         }
-        else if($request->input('quater') === '1' $request->input('$semseter') === '2'){
+        else if($request->input('quater') === '1' && $request->input('semester') === '2'){
           $colGrade = 'G';
         }
-        else if($request->input('quater') === '2' $request->input('$semseter') === '2'){
+        else if($request->input('quater') === '2' && $request->input('semester') === '2'){
           $colGrade = 'H';
         }
-        else if($request->input('quater') === '3' $request->input('$semseter') === '2'){
+        else if($request->input('quater') === '3' && $request->input('semester') === '2'){
           $colGrade = 'I';
         }
 
