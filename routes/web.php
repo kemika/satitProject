@@ -72,7 +72,14 @@ Route::get('/transcript', 'TranscriptController@index');
 
 
 
+Route::get('porbar','ReportCardController@index2');
+
+
+
 Route::get('/export','ExportController@index');
+Route::get('/export/room/{academic_year}/{semester}/{grade_level}/{room}','ExportController@show');
+// Route::get('/export2/{academic_year}/{semester}//','ExportController@show');
+Route::get('/export_menu','ExportController@index2');
 
 
 Route::get('/reportCard', 'ReportCardController@index');

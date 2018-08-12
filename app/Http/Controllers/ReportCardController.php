@@ -21,6 +21,15 @@ class ReportCardController extends Controller
   public function __construct() {
     $this->middleware('auth');
   }
+
+  public function index2(){
+    $academic_years = Academic_Year::groupBy('academic_year')->distinct('academic_year')->orderBy('academic_year')->get();
+    $rooms = Academic_Year::orderBy('grade_level')->get();
+
+
+    return view('reportCard.index2',['academic_years' => $academic_years,'rooms' => $rooms]);
+
+  }
   public function index(){
     $id =  auth::user()->teacher_number;
     $teacher = Teacher::where('teacher_id',$id)->select('teachers.*')->get()[0];

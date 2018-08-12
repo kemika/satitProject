@@ -24,26 +24,24 @@ class ExportController extends Controller
 
 
   public function index(){
-    $id =  auth::user()->teacher_number;
-    $teacher = Teacher::where('teacher_id',$id)->select('teachers.*')->get()[0];
+    $academicYear = Academic_Year::groupBy('academic_year')->distinct('academic_year')->orderBy('academic_year')->get();
+    $gradeLevel = Academic_Year::groupBy('grade_level')->distinct('grade_level')->orderBy('grade_level')->get();
+    // dd(count($academicYear),count($gradeLevel));
+
+    return view('export.index',['academicYear' => $academicYear,'gradeLevel' => $gradeLevel]);
 
 
+  }
 
-    if($teacher->teacher_status == 0){
+  public function show($academic_year,$semester,$grade_level,$room){
 
+      $academic_year = Academic_Year::where('academic_year',$academic_year)
+      // ->where('semester',$semester)
+      ->where('grade_level',$grade_level)
+      ->where('room',$room)
+      ->first();
 
-
-      $academicYear = Homeroom::where('teacher_id',$teacher->teacher_id)
-     ->select('homeroom.*')
-     ->join('academic_year','academic_year.classroom_id','=','homeroom.classroom_id')
-     ->select('homeroom.*','academic_year.*')
-     ->get()[0];
-
-
-
-      // Assian Artibute
-
-      $classroom_id = $academicYear->classroom_id;
+      $classroom_id = $academic_year->classroom_id;
 
       $students = Student_Grade_Level::where('student_grade_levels.classroom_id',$classroom_id)
       ->select('student_grade_levels.*')
@@ -51,16 +49,10 @@ class ExportController extends Controller
       ->select('student_grade_levels.*','students.*')
       ->get();
 
-
-
-
-
-
-
       $subjects = Offered_Courses::where('classroom_id', $classroom_id)
       ->where('Offered_Courses.is_elective',  '1')
       ->select('Offered_Courses.*')
-      ->where('Offered_Courses.curriculum_year',$academicYear->curriculum_year)
+      ->where('Offered_Courses.curriculum_year',$academic_year->curriculum_year)
       ->select('Offered_Courses.*')
       ->join('Curriculums', function($j) {
       $j->on('Curriculums.course_id', '=', 'Offered_Courses.course_id');
@@ -68,19 +60,12 @@ class ExportController extends Controller
       })
       ->select('Offered_Courses.*','Curriculums.*')
       ->get();
-
-
-
-
-
-
-
 
 
       $subjectElecs = Offered_Courses::where('classroom_id', $classroom_id)
       ->where('Offered_Courses.is_elective',  '0')
       ->select('Offered_Courses.*')
-      ->where('Offered_Courses.curriculum_year',$academicYear->curriculum_year)
+      ->where('Offered_Courses.curriculum_year',$academic_year->curriculum_year)
       ->select('Offered_Courses.*')
       ->join('Curriculums', function($j) {
       $j->on('Curriculums.course_id', '=', 'Offered_Courses.course_id');
@@ -90,37 +75,13 @@ class ExportController extends Controller
       ->get();
 
 
-
-
-
-
-
-
-
-
-
-
-
-      return view('export.index',['teacher' => $teacher,'subjects' => $subjects,'subjectElecs'=> $subjectElecs]);
-
-
-
-
-
-
-
-
-
-
-
-      // dd("CLASS ROOM ID : ".$academicYear->classroom_id,"GRADE LEVEL : ".$academicYear->grade_level,"ROOM : ".$academicYear->room);
-
-    }
-
-    return 'Permission Denine';
+      return view('export.show',['academic_year' => $academic_year,'subjects' => $subjects,'subjectElecs'=> $subjectElecs]);
 
 
   }
+
+
+
 
 
   public function exportExcel($classroom_id,$course_id,$curriculum_year)
@@ -151,8 +112,6 @@ class ExportController extends Controller
   ->join('students','students.student_id','student_grade_levels.student_id')
   ->select('student_grade_levels.*','students.*')
   ->get();
-
-
 
 
   $room = Academic_Year::where('classroom_id',$classroom_id)

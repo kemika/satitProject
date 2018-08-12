@@ -60,6 +60,18 @@
 
     @endforeach
 
+    @for ($i = count($grade_semester1); $i < 24; $i++)
+    <tr>
+      <td></td>
+      <td>  </td>
+      <td>  </td>
+      <td>  </td>
+      <td>  </td>
+      <td>  </td>
+      <td>  </td>
+    </tr>
+    @endfor
+
 
 
     <tr>
@@ -81,6 +93,13 @@
       <td>{{ $grade->grade_status_text }}</td>
     </tr>
     @endforeach
+    @for ($i = count($grade_elec_semester1); $i < 5; $i++)
+    <tr>
+      <td> </td>
+      <td> </td>
+
+    </tr>
+    @endfor
 
 
 </table>
@@ -140,6 +159,19 @@
     @endforeach
 
 
+    @for ($i = count($grade_semester2); $i < 24; $i++)
+    <tr>
+      <td>{{" "." "}}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    @endfor
+
+
 
 
     <tr>
@@ -161,6 +193,13 @@
       <td>{{ $grade->grade_status_text }}</td>
     </tr>
     @endforeach
+    @for ($i = count($grade_elec_semester2); $i < 5; $i++)
+    <tr>
+      <td>  </td>
+      <td>  </td>
+
+    </tr>
+    @endfor
 
 </table>
 <p class="classroomStyle">Classroom signature……………..…..…….…………</p>
