@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student_Status extends Model
 {
-  public $table  = 'Student_Status';
+  public $table  = 'student_status';
     //
 }
