@@ -30,36 +30,37 @@ class ReportCardController extends Controller
     return view('reportCard.index2',['academic_years' => $academic_years,'rooms' => $rooms]);
 
   }
-  public function index(){
-    $id =  auth::user()->teacher_number;
-    $teacher = Teacher::where('teacher_id',$id)->select('teachers.*')->get()[0];
+  // public function index(){
+  //   $id =  auth::user()->teacher_number;
+  //   $teacher = Teacher::where('teacher_id',$id)->select('teachers.*')->get()[0];
+  //
+  //   $academic_year = Homeroom::where('teacher_id',$teacher->teacher_id)
+  //   ->select('homeroom.*')
+  //   ->join('academic_year','academic_year.classroom_id','=','homeroom.classroom_id')
+  //   ->select('homeroom.*','academic_year.*')
+  //   ->get()[0];
+  //
+  //   $rooms = Academic_Year::where('academic_year',$academic_year->academic_year)
+  //   ->select('academic_year.*')
+  //   ->get();
+  //
+  //   // ->join('student_grade_levels','student_grade_levels.classroom_id','academic_year.classroom_id')
+  //   // ->select('academic_year.*','student_grade_levels.*')
+  //   // ->distinct('student_grade_levels.classroom_id')
+  //   // ->get('student_grade_levels.classroom_id');
+  //
+  //   // $rooms = self::getDistinct($rooms,'classroom_id');
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //   return view('reportCard.master', ['rooms' => $rooms]);
+  //
+  // }
 
-    $academic_year = Homeroom::where('teacher_id',$teacher->teacher_id)
-    ->select('homeroom.*')
-    ->join('academic_year','academic_year.classroom_id','=','homeroom.classroom_id')
-    ->select('homeroom.*','academic_year.*')
-    ->get()[0];
-
-    $rooms = Academic_Year::where('academic_year',$academic_year->academic_year)
-    ->select('academic_year.*')
-    ->get();
-
-    // ->join('student_grade_levels','student_grade_levels.classroom_id','academic_year.classroom_id')
-    // ->select('academic_year.*','student_grade_levels.*')
-    // ->distinct('student_grade_levels.classroom_id')
-    // ->get('student_grade_levels.classroom_id');
-
-    // $rooms = self::getDistinct($rooms,'classroom_id');
-
-
-
-
-
-
-
-    return view('reportCard.master', ['rooms' => $rooms]);
-
-  }
 
   public function exportPDF($student_id,$academic_year){
     $grade_semester1 = Grade::where('grades.student_id',$student_id)
@@ -142,7 +143,7 @@ class ReportCardController extends Controller
     $pdf = PDF::loadView('reportCard.form',['grade_semester1' => $grade_semester1,'grade_semester2' => $grade_semester2,'student' => $student,'avg1' => $grade_avg_sem1,'avg2' => $grade_avg_sem2,'grade_elec_semester1' => $grade_elec_semester1,'grade_elec_semester2' => $grade_elec_semester2]);
     $pdf->setPaper('a4', 'potrait');
     return $pdf->stream();
-    return $pdf->download('reportCard.pdf');
+    // return $pdf->download('reportCard.pdf');
 
   }
 
@@ -240,9 +241,35 @@ class ReportCardController extends Controller
     $avg = $total_score/$total_credit;
 
     return substr($avg,0,strpos($avg,'.')+3);
+  }
 
 
+  public function index(){
+    return view('reportCard.master2');
+  }
 
+  public function exportForm(){
+    $pdf = PDF::loadView('reportCard.form2');
+    $pdf->setPaper('a4', 'potrait');
+    return $pdf->stream();
+  }
+
+  public function exportGrade1(){
+    $pdf = PDF::loadView('reportCard.formGrade1-6');
+    $pdf->setPaper('a4', 'potrait');
+    return $pdf->stream();
+  }
+
+  public function exportGrade2(){
+    $pdf = PDF::loadView('reportCard.formGrade7-8');
+    $pdf->setPaper('a4', 'potrait');
+    return $pdf->stream();
+  }
+
+  public function exportGrade3(){
+    $pdf = PDF::loadView('reportCard.formGrade9-12');
+    $pdf->setPaper('a4', 'potrait');
+    return $pdf->stream();
   }
 
 

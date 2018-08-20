@@ -260,51 +260,23 @@ class UploadGradeController extends Controller
                       }
 
                       //----- Validate Q1 -------//
-                      if($results[$i]->q1 == ""){
-                        // echo "Field 'Q1' is empty at row 'C".($i+6)."'<br>";
-                        $text = "Field 'Q1' is empty at row 'C".($i+7)."'";
-                        $arrayValidates[] = $text;
-                        $factEmpty = false;
-                        $factValidate = false;
-                      }
                       if($factEmpty){
                         $arrayValidates[] = validateGrade($results[$i]->q1, "Q1", "C", $factGrade, $i);
                       }
 
                       //----- Validate Q2 -------//
-                      if($results[$i]->q2 == ""){
-                        // echo "Field 'Q2' is empty at row 'D".($i+6)."'<br>";
-                        $text = "Field 'Q2' is empty at row 'D".($i+7)."'";
-                        $arrayValidates[] = $text;
-                        $factEmpty = false;
-                        $factValidate = false;
-                      }
                       if($factEmpty){
                         $arrayValidates[] = validateGrade($results[$i]->q2, "Q2", "D", $factGrade, $i);
                       }
 
 
                       //----- Validate Q3 -------//
-                      if($results[$i]->q3 == ""){
-                        // echo "Field 'Q3' is empty at row 'G".($i+6)."'<br>";
-                        $text = "Field 'Q3' is empty at row 'G".($i+7)."'";
-                        $arrayValidates[] = $text;
-                        $factEmpty = false;
-                        $factValidate = false;
-                      }
                       if($factEmpty){
                         $arrayValidates[] = validateGrade($results[$i]->q3, "Q3", "G", $factGrade, $i);
                       }
 
 
                       //----- Validate Q4 -------//
-                      if($results[$i]->q4 == ""){
-                        // echo "Field 'Q4' is empty at row 'H".($i+6)."'<br>";
-                        $text = "Field 'Q4' is empty at row 'H".($i+7)."'";
-                        $arrayValidates[] = $text;
-                        $factEmpty = false;
-                        $factValidate = false;
-                      }
                       if($factEmpty){
                         $arrayValidates[] = validateGrade($results[$i]->q4, "Q4", "H", $factGrade, $i);
                       }
