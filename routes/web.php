@@ -62,6 +62,12 @@ Route::post('/uploadGrade/import', 'UploadGradeController@import');
 Route::get('/upload', 'UploadGradeController@upload');
 Route::post('/getUpload', 'UploadGradeController@getUpload');
 
+Route::get('export-height/{type}', 'UploadGradeController@exportHeight')->name('export.height');
+Route::get('export-comments/{type}', 'UploadGradeController@exportComments')->name('export.comments');
+Route::get('export-behavior/{type}', 'UploadGradeController@exportBehavior')->name('export.behavior');
+Route::get('export-attandance/{type}', 'UploadGradeController@exportAttandance')->name('export.attandance');
+Route::get('export-activities/{type}', 'UploadGradeController@exportActivities')->name('export.activities');
+
 Route::get('/viewGrade', 'ViewGradeController@index');
 Route::put('/viewGrade/result', 'ViewGradeController@result');
 

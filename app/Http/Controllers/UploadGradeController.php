@@ -604,5 +604,211 @@ class UploadGradeController extends Controller
       })->export($type);
     }
 
+    public function exportHeight($type)
+    {
+      Excel::create('HeightandWeight', function($excel) {
+
+        $excel->sheet('Excel sheet', function($sheet) {
+
+          $sheet->setOrientation('landscape');
+
+          $sheet->setCellValue('A1', 'No.');
+          $sheet->setCellValue('B1', 'Students ID');
+          $sheet->setCellValue('C1', 'Students Name');
+          $sheet->setCellValue('D1', 'S1 Height');
+          $sheet->setCellValue('E1', 'S1 Weight');
+          $sheet->setCellValue('F1', 'S2 Height');
+          $sheet->setCellValue('G1', 'S2 Weight');
+
+
+          $sheet->setWidth(array(
+              'B' => 12,
+              'C' => 19
+          ));
+
+          $sheet->setStyle(array(
+              'font' => array(
+                  'name'      =>  'Tw Cen MT',
+                  'size'      =>  12,
+                  'bold'      =>  false
+              )
+          ));
+
+          $sheet->setBorder('A1:G1', 'thin');
+
+          $sheet->cells('D1:G1', function($cells) {
+              $cells->setAlignment('center');
+              $cells->setValignment('center');
+              $cells->setTextRotation(90);
+            });
+
+        });
+
+      })->export($type);
+    }
+
+    public function exportComments($type)
+    {
+      Excel::create('Comments', function($excel) {
+
+        $excel->sheet('Excel sheet', function($sheet) {
+
+          $sheet->setOrientation('landscape');
+
+          $sheet->setCellValue('A1', 'No.');
+          $sheet->setCellValue('B1', 'Students ID');
+          $sheet->setCellValue('C1', 'Students Name');
+          $sheet->setCellValue('D1', 'Quarter 1');
+          $sheet->setCellValue('E1', 'Quarter 2');
+          $sheet->setCellValue('F1', 'Quarter 3');
+          $sheet->setCellValue('G1', 'Quarter 4');
+
+
+          $sheet->setWidth(array(
+              'B' => 12,
+              'C' => 19,
+              'D' => 50,
+              'E' => 50,
+              'F' => 50,
+              'G' => 50
+          ));
+
+          $sheet->setStyle(array(
+              'font' => array(
+                  'name'      =>  'Tw Cen MT',
+                  'size'      =>  12,
+                  'bold'      =>  false
+              ),
+              'borders' => [
+                  'allborders' => [
+                      'color' => [
+                          'rgb' => 'DBDBDB'
+                      ]
+                  ]
+              ]
+          ));
+
+
+        });
+
+      })->export($type);
+    }
+
+    public function exportBehavior($type)
+    {
+      Excel::create('Behavior', function($excel) {
+
+        $excel->sheet('Excel sheet', function($sheet) {
+
+          $sheet->setOrientation('landscape');
+
+          $sheet->setCellValue('A1', 'No.');
+          $sheet->setCellValue('A2', 'Behavior');
+          $sheet->setCellValue('A3', 'Students ID');
+          $sheet->setCellValue('B3', 'Students Name');
+          //-------- From Behavior table--------------------//
+          $sheet->setCellValue('C1', '1');
+          $sheet->setCellValue('C2', 'Attentive in class');
+          $sheet->setCellValue('C3', 'Q1');
+          $sheet->setCellValue('D3', 'Q2');
+          $sheet->setCellValue('E3', 'Q3');
+          $sheet->setCellValue('F3', 'Q4');
+
+
+          $sheet->setWidth(array(
+              'A' => 12,
+              'B' => 12
+          ));
+
+          $sheet->setStyle(array(
+              'font' => array(
+                  'name'      =>  'Tw Cen MT',
+                  'size'      =>  12,
+                  'bold'      =>  false
+              )
+          ));
+
+
+          $sheet->mergeCells('C1:F1');
+          $sheet->cell('C1:F1', function($cell) {
+              $cell->setAlignment('center');
+          });
+
+          $sheet->mergeCells('C2:F2');
+          $sheet->cell('C2:F2', function($cell) {
+              $cell->setAlignment('center');
+          });
+
+          $sheet->setBorder('A1:F20', 'thin');
+
+
+        });
+
+      })->export($type);
+    }
+
+    public function exportAttandance($type)
+    {
+      Excel::create('Attandance', function($excel) {
+
+        $excel->sheet('Excel sheet', function($sheet) {
+
+          $sheet->setOrientation('landscape');
+
+          $sheet->setCellValue('A2', 'No.');
+          $sheet->setCellValue('B2', 'Students ID');
+          $sheet->setCellValue('C2', 'Students Name');
+          $sheet->setCellValue('D2', '1st Semester');
+          $sheet->setCellValue('H2', '2nd Semester');
+          //------------- From Attentance table ----------//
+          $sheet->setCellValue('C1', 'Days Present');
+          $sheet->setCellValue('D1', 'Late');
+          $sheet->setCellValue('E1', 'Sick');
+          $sheet->setCellValue('F1', 'Leave');
+          $sheet->setCellValue('G1', 'Absent');
+          $sheet->setCellValue('H1', 'Days Present S2');
+          $sheet->setCellValue('I1', 'Late S2');
+          $sheet->setCellValue('J1', 'Sick S2');
+          $sheet->setCellValue('K1', 'Leave S2');
+          $sheet->setCellValue('L1', 'Absent S2');
+
+
+          $sheet->setWidth(array(
+              'B' => 12,
+              'C' => 19
+          ));
+
+          $sheet->setStyle(array(
+              'font' => array(
+                  'name'      =>  'Tw Cen MT',
+                  'size'      =>  12,
+                  'bold'      =>  false
+              )
+          ));
+
+          $sheet->setBorder('A1:L2', 'thin');
+
+          $sheet->cells('C1:L1', function($cells) {
+              $cells->setAlignment('center');
+              $cells->setValignment('center');
+              $cells->setTextRotation(90);
+            });
+
+          $sheet->mergeCells('D2:G2');
+          $sheet->cell('D2:D2', function($cell) {
+              $cell->setAlignment('center');
+          });
+
+          $sheet->mergeCells('H2:L2');
+          $sheet->cell('H2:L2', function($cell) {
+              $cell->setAlignment('center');
+          });
+
+
+        });
+
+      })->export($type);
+    }
+
 
 }
