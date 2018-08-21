@@ -753,29 +753,106 @@ class UploadGradeController extends Controller
 
         $excel->sheet('Excel sheet', function($sheet) {
 
+            $sheet->setOrientation('landscape');
+
+            $sheet->setCellValue('A2', 'No.');
+            $sheet->setCellValue('B2', 'Students ID');
+            $sheet->setCellValue('C2', 'Students Name');
+            $sheet->setCellValue('D2', '1st Semester');
+            $sheet->setCellValue('I2', '2nd Semester');
+            $sheet->setCellValue('C1', 'Attandance');
+            //------------- From Attentance table ----------//
+            $sheet->setCellValue('D1', 'Days Present');
+            $sheet->setCellValue('E1', 'Late');
+            $sheet->setCellValue('F1', 'Sick');
+            $sheet->setCellValue('G1', 'Leave');
+            $sheet->setCellValue('H1', 'Absent');
+            $sheet->setCellValue('I1', 'Days Present S2');
+            $sheet->setCellValue('J1', 'Late S2');
+            $sheet->setCellValue('K1', 'Sick S2');
+            $sheet->setCellValue('L1', 'Leave S2');
+            $sheet->setCellValue('M1', 'Absent S2');
+
+
+            $sheet->setWidth(array(
+                'B' => 12,
+                'C' => 19
+            ));
+
+            $sheet->setStyle(array(
+                'font' => array(
+                    'name'      =>  'Tw Cen MT',
+                    'size'      =>  12,
+                    'bold'      =>  false
+                )
+            ));
+
+            $sheet->setBorder('A1:M2', 'thin');
+
+            $sheet->cells('A1:AN1', function($cells) {
+                $cells->setAlignment('center');
+                $cells->setValignment('center');
+                $cells->setTextRotation(90);
+              });
+
+            $sheet->mergeCells('D2:H2');
+            $sheet->cell('D2:H2', function($cell) {
+                $cell->setAlignment('center');
+            });
+
+            $sheet->mergeCells('I2:M2');
+            $sheet->cell('I2:M2', function($cell) {
+                $cell->setAlignment('center');
+            });
+
+            $sheet->cell('C1', function($cell) {
+                $cell->setBackground('#FFC300');
+            });
+
+
+          });
+
+      })->export($type);
+    }
+
+    public function exportActivities($type)
+    {
+      Excel::create('Activities', function($excel) {
+
+        $excel->sheet('Excel sheet', function($sheet) {
+
           $sheet->setOrientation('landscape');
 
-          $sheet->setCellValue('A2', 'No.');
-          $sheet->setCellValue('B2', 'Students ID');
-          $sheet->setCellValue('C2', 'Students Name');
-          $sheet->setCellValue('D2', '1st Semester');
-          $sheet->setCellValue('H2', '2nd Semester');
+          $sheet->setCellValue('A1', 'Fill these cells in with S, U, or leave blank');
+          $sheet->setCellValue('A3', 'No.');
+          $sheet->setCellValue('B3', 'Students ID');
+          $sheet->setCellValue('C3', 'Students Name');
+          $sheet->setCellValue('D3', '1st Semester');
+          $sheet->setCellValue('K3', '2nd Semester');
+          $sheet->setCellValue('C2', 'Activities');
           //------------- From Attentance table ----------//
-          $sheet->setCellValue('C1', 'Days Present');
-          $sheet->setCellValue('D1', 'Late');
-          $sheet->setCellValue('E1', 'Sick');
-          $sheet->setCellValue('F1', 'Leave');
-          $sheet->setCellValue('G1', 'Absent');
-          $sheet->setCellValue('H1', 'Days Present S2');
-          $sheet->setCellValue('I1', 'Late S2');
-          $sheet->setCellValue('J1', 'Sick S2');
-          $sheet->setCellValue('K1', 'Leave S2');
-          $sheet->setCellValue('L1', 'Absent S2');
-
+          $sheet->setCellValue('D2', 'Homeroom 5');
+          $sheet->setCellValue('E2', 'Extra Curricular Activities 5');
+          $sheet->setCellValue('F2', 'Guidance and Developmental Skills 5');
+          $sheet->setCellValue('G2', 'Social Spirit 5');
+          $sheet->setCellValue('H2', 'Shadowing');
+          $sheet->setCellValue('I2', 'Newspaper');
+          $sheet->setCellValue('J2', 'Yearbook');
+          $sheet->setCellValue('K2', 'Homeroom 6');
+          $sheet->setCellValue('L2', 'Extra Curricular Activities 6');
+          $sheet->setCellValue('M2', 'Guidance and Developmental Skills 6');
+          $sheet->setCellValue('N2', 'Social Spirit 6');
+          $sheet->setCellValue('O2', 'Shadowing');
+          $sheet->setCellValue('P2', 'Newspaper');
+          $sheet->setCellValue('Q2', 'Yearbook');
 
           $sheet->setWidth(array(
               'B' => 12,
               'C' => 19
+          ));
+
+          $sheet->setHeight(array(
+              'B' => 100
           ));
 
           $sheet->setStyle(array(
@@ -786,22 +863,37 @@ class UploadGradeController extends Controller
               )
           ));
 
-          $sheet->setBorder('A1:L2', 'thin');
+          $sheet->getStyle('A2:Z2')->getAlignment()->setWrapText(true);
 
-          $sheet->cells('C1:L1', function($cells) {
+          $sheet->setBorder('A2:Q3', 'thin');
+
+          $sheet->cells('A2:AN2', function($cells) {
               $cells->setAlignment('center');
               $cells->setValignment('center');
               $cells->setTextRotation(90);
             });
 
-          $sheet->mergeCells('D2:G2');
-          $sheet->cell('D2:D2', function($cell) {
+          $sheet->mergeCells('D3:J3');
+          $sheet->cell('D3:J3', function($cell) {
               $cell->setAlignment('center');
           });
 
-          $sheet->mergeCells('H2:L2');
-          $sheet->cell('H2:L2', function($cell) {
+          $sheet->mergeCells('K3:Q3');
+          $sheet->cell('K3:Q3', function($cell) {
               $cell->setAlignment('center');
+          });
+
+          $sheet->mergeCells('A1:D1');
+          $sheet->cell('A1:D1', function($cell) {
+              $cell->setAlignment('center');
+          });
+
+          $sheet->cell('C2', function($cell) {
+              $cell->setBackground('#FFC300');
+          });
+
+          $sheet->cell('A1', function($cell) {
+              $cell->setBackground('#95B3D7');
           });
 
 
@@ -809,6 +901,9 @@ class UploadGradeController extends Controller
 
       })->export($type);
     }
+
+
+
 
 
 }
