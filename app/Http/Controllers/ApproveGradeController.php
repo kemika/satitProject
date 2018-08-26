@@ -36,8 +36,8 @@ class ApproveGradeController extends Controller
             ->orderBy('course_id','asc')
             ->orderBy('datetime','desc')
             ->get();*/
-
    ;
+            
    $courses  = Academic_Year::Join('offered_courses','offered_courses.classroom_id','=','academic_year.classroom_id')
            ->Join('curriculums', function($join)
                         {
@@ -48,6 +48,7 @@ class ApproveGradeController extends Controller
            ->leftJoin('data_status','grades.data_status','=','data_status.data_status')
            ->where('academic_year.academic_year', $year)
            ->where('offered_courses.semester',$semester)
+           ->where('curriculums.is_activity',false)
            ->groupBy('grades.datetime','offered_courses.open_course_id','grades.quater')
            ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quater'
                    ,'curriculums.course_name','data_status.data_status_text','grades.datetime','offered_courses.semester','offered_courses.is_elective')
