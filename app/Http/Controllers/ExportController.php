@@ -50,7 +50,7 @@ class ExportController extends Controller
       ->get();
 
       $subjects = Offered_Courses::where('classroom_id', $classroom_id)
-      ->where('Offered_Courses.is_elective',  '1')
+      ->where('Offered_Courses.is_elective',  '0')
       ->select('Offered_Courses.*')
       ->where('Offered_Courses.curriculum_year',$academic_year->curriculum_year)
       ->select('Offered_Courses.*')
@@ -63,7 +63,7 @@ class ExportController extends Controller
 
 
       $subjectElecs = Offered_Courses::where('classroom_id', $classroom_id)
-      ->where('Offered_Courses.is_elective',  '0')
+      ->where('Offered_Courses.is_elective',  '1')
       ->select('Offered_Courses.*')
       ->where('Offered_Courses.curriculum_year',$academic_year->curriculum_year)
       ->select('Offered_Courses.*')

@@ -88,7 +88,7 @@ Route::get('/export/room/{academic_year}/{semester}/{grade_level}/{room}','Expor
 Route::get('/export_menu','ExportController@index2');
 
 
-Route::get('/reportCard', 'ReportCardController@index');
+Route::get('/reportCard', 'ReportCardController@index2');
 Route::get('/report_card/room/{classroom_id}','ReportCardController@Room');
 Route::get('/exportReportCard/{student_id}/{academic_year}', 'ReportCardController@exportPDF')->name('export.pdf');
 Route::get('/export_grade/{classroom_id}/{course_id}/{curriculum_year}','ExportController@exportExcel');

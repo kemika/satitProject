@@ -31,7 +31,7 @@ class CreateOfferedCourse extends Migration
                       ->references(['curriculum_year','course_id'])
                       ->on('Curriculums');
 
-                        $table->unique(['classroom_id','semester','curriculum_year','course_id']);
+                        $table->unique(['classroom_id','semester','curriculum_year','course_id'],'classtoom_id_unique');
 
         });
     }
