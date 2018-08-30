@@ -231,7 +231,7 @@ class ReportCardController extends Controller
 
     if($grade_level->grade_level <= 6){
         //ยังต้องเปลี่ยนเป็นฟอร์ม 1-6 ถ้าอาจารจะทดสอบให้ทดสอบที่อันนี้ก่อนครับ ผมมีตารางใน seeder แล้วนะครับ ลองseedได้ครับ
-      $pdf = PDF::loadView('reportCard.form',['academic_year' => $academic_year,
+      $pdf = PDF::loadView('reportCard.formGrade9-12',['academic_year' => $academic_year,
       'grade_semester1' => $grade_semester1,
       'grade_semester2' => $grade_semester2,
       'student' => $student,

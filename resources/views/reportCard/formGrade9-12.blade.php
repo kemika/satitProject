@@ -12,8 +12,9 @@
 <table class="nameStyle">
     <tr>
       <th scope="col">Student Name</th>
-      <th scope="col" colspan="5" class="setCenter">\\\Kemika Titithantawatch</th>
-      <th scope="col" class="setLeft">Grade</th>
+      <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
+      <th scope="col" class="setLeft">Grade {{ $student->grade_level."/".$student->room}}</th>
+
     </tr>
 </table>
 
@@ -32,40 +33,52 @@
       <th>3</th>
       <th>Semester Grade</th>
     </tr>
+    <?php $i = 1 ;
+          $total_credit =0;
+    ?>
+    @foreach($grade_semester1 as $key => $grade )
+
+
     <tr>
-      <td>Mark</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <td>{{$grade['course_name']}}</td>
+      <td>{{strtoupper(substr($grade['course_name'], 0, 3))." ".$grade['course_id']}}</td>
+      <td>{{ $grade['credits']}}</td>
+      <td>{{ $grade['quater1']}}</td>
+      <td>{{ $grade['quater2']}}</td>
+      <td>{{ $grade['quater3']}}</td>
+      <?php
+      $grade_total  = $grade['total_point']/3;
+
+      $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
+
+       ?>
+      <td>{{  $grade_total }}</td>
+      <?php $total_credit +=  $grade['credits'] ?>
+
+      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
     </tr>
+
+    @endforeach
+
+    @for ($i = count($grade_semester1); $i < 24; $i++)
     <tr>
-      <td>Mark</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <td></td>
+      <td>  </td>
+      <td>  </td>
+      <td>  </td>
+      <td>  </td>
+      <td>  </td>
+      <td>  </td>
     </tr>
-    <tr>
-      <td>Mark</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
+    @endfor
+
 
 
     <tr>
       <th scope="col" colspan="2">Total</th>
-      <th scope="col">0.00</th>
+      <th scope="col">{{$total_credit}}</th>
       <th scope="col" colspan="3" class="setRight">GPA</th>
-      <th scope="col">#DIV/0!</th>
+      <th scope="col">{{ $avg1 }}</th>
     </tr>
 </table>
 
@@ -74,26 +87,20 @@
       <th scope="col">Activity</th>
       <th scope="col">S/U</th>
     </tr>
+    @foreach($activity_semester1 as $grade)
     <tr>
-      <td>Homeroom 3</td>
-      <td></td>
+      <td>{{ $grade->course_name }}</td>
+      <td>{{ $grade->grade_status_text }}</td>
     </tr>
+    @endforeach
+    @for ($i = count($activity_semester1); $i < 5; $i++)
     <tr>
-      <td>Extra Curricular Activities 3</td>
-      <td></td>
+      <td> </td>
+      <td> </td>
+
     </tr>
-    <tr>
-      <td>Guidance and Developmental Skills 3</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>@Social Spirit 3</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>Shadowing</td>
-      <td></td>
-    </tr>
+    @endfor
+
 
 </table>
 <p class="classroomStyle">Classroom signature……………..…..…….…………</p>
@@ -106,7 +113,7 @@
 <table class="nameStyle">
     <tr>
       <th scope="col">Student Name</th>
-      <th scope="col" colspan="5" class="setCenter">\\\Kemika Titithantawatch</th>
+      <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
       <th scope="col" class="setLeft">Grade</th>
     </tr>
 </table>
@@ -126,40 +133,52 @@
       <th>3</th>
       <th>Semester Grade</th>
     </tr>
+    <?php $i = 1 ;
+          $total_credit =0;
+    ?>
+    @foreach($grade_semester2 as $key => $grade )
+
+
     <tr>
-      <td>Mark</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <td>{{$grade['course_name']}}</td>
+      <td>{{strtoupper(substr($grade['course_name'], 0, 3))." ".$grade['course_id']}}</td>
+      <td>{{ $grade['credits']}}</td>
+      <td>{{ $grade['quater1']}}</td>
+      <td>{{ $grade['quater2']}}</td>
+      <td>{{ $grade['quater3']}}</td>
+      <?php
+      $grade_total  = $grade['total_point']/3;
+      $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
+       ?>
+      <td>{{  $grade_total }}</td>
+      <?php $total_credit +=  $grade['credits'] ?>
+
+      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
     </tr>
+
+    @endforeach
+
+
+    @for ($i = count($grade_semester2); $i < 24; $i++)
     <tr>
-      <td>Mark</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <td>{{" "." "}}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
     </tr>
-    <tr>
-      <td>Mark</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
+    @endfor
+
+
 
 
     <tr>
       <th scope="col" colspan="2">Total</th>
-      <th scope="col">0.00</th>
+      <th scope="col">{{$total_credit}}</th>
       <th scope="col" colspan="3" class="setRight">GPA</th>
-      <th scope="col">#DIV/0!</th>
+      <th scope="col">{{$avg2}}</th>
     </tr>
 </table>
 
@@ -168,26 +187,19 @@
       <th scope="col">Activity</th>
       <th scope="col">S/U</th>
     </tr>
+    @foreach($activity_semester2 as $grade)
     <tr>
-      <td>Homeroom 3</td>
-      <td></td>
+      <td>{{ $grade->course_name }}</td>
+      <td>{{ $grade->grade_status_text }}</td>
     </tr>
+    @endforeach
+    @for ($i = count($activity_semester2); $i < 5; $i++)
     <tr>
-      <td>Extra Curricular Activities 3</td>
-      <td></td>
+      <td>  </td>
+      <td>  </td>
+
     </tr>
-    <tr>
-      <td>Guidance and Developmental Skills 3</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>@Social Spirit 3</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>Shadowing</td>
-      <td></td>
-    </tr>
+    @endfor
 
 </table>
 <p class="classroomStyle">Classroom signature……………..…..…….…………</p>
@@ -195,12 +207,11 @@
 </center>
 <div class="page-break"></div>
 
-
 <center><h4 class="heading">SECOND SEMESTER REPORT</h4></center>
 <table class="nameStyle">
     <tr>
       <th scope="col">Student Name</th>
-      <th scope="col" colspan="5" class="setCenter">\\\Kemika Titithantawatch</th>
+      <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
       <th scope="col" class="setLeft">Grade</th>
     </tr>
 </table>
@@ -220,40 +231,52 @@
       <th>3</th>
       <th>Semester Grade</th>
     </tr>
+    <?php $i = 1 ;
+          $total_credit =0;
+    ?>
+    @foreach($elective_grades as $key => $elective_grade )
+
+
     <tr>
-      <td>Mark</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <td>{{$elective_grade['course_name']}}</td>
+      <td>{{strtoupper(substr($elective_grade['course_name'], 0, 3))." ".$elective_grade['course_id']}}</td>
+      <td>{{ $elective_grade['credits']}}</td>
+      <td>{{ $elective_grade['quater1']}}</td>
+      <td>{{ $elective_grade['quater2']}}</td>
+      <td>{{ $elective_grade['quater3']}}</td>
+      <?php
+      $grade_total  = $elective_grade['total_point']/3;
+
+      $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
+
+       ?>
+      <td>{{  $grade_total }}</td>
+      <?php $total_credit +=  $elective_grade['credits'] ?>
+
+      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
     </tr>
+
+    @endforeach
+
+    @for ($i = count($elective_grades); $i < 24; $i++)
     <tr>
-      <td>Mark</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <td></td>
+      <td>  </td>
+      <td>  </td>
+      <td>  </td>
+      <td>  </td>
+      <td>  </td>
+      <td>  </td>
     </tr>
-    <tr>
-      <td>Mark</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
+    @endfor
+
 
 
     <tr>
       <th scope="col" colspan="2">Total</th>
-      <th scope="col">0.00</th>
+      <th scope="col">{{$total_credit}}</th>
       <th scope="col" colspan="3" class="setRight">GPA</th>
-      <th scope="col">0.00</th>
+      <th scope="col">{{ $elective_grade_avg }}</th>
     </tr>
 </table>
 
@@ -267,7 +290,7 @@
 <table class="nameStyle">
     <tr>
       <th scope="col">Student Name</th>
-      <th scope="col" colspan="5" class="setCenter">\\\Kemika Titithantawatch</th>
+      <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
       <th scope="col" class="setLeft">Grade</th>
     </tr>
 </table>
@@ -280,48 +303,26 @@
         <th scope="col" colspan="2">1 Sem.</th>
         <th scope="col" colspan="2">2 Sem.</th>
       </tr>
-      <tr>
-        <th>1st</th>
-        <th>2nd</th>
-        <th>1st</th>
-        <th>2nd</th>
-      </tr>
-      <tr>
-        <td>1	Attentive in class</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>2	Attentive in class</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>3	Attentive in class</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>4	Attentive in class</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+
 
       <tr>
-        <td>5	Attentive in class</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <th>1st</th>
+        <th>2nd</th>
+        <th>1st</th>
+        <th>2nd</th>
       </tr>
+      @foreach ($behavior_records as $behavior_record)
+      <tr>
+        <td>{{ $behavior_record->behavior_type_text}}</td>
+        <td>{{$behavior_record->sem1_q1}}</td>
+        <td>{{$behavior_record->sem1_q2}}</td>
+        <td>{{$behavior_record->sem2_q1}}</td>
+        <td>{{$behavior_record->sem2_q2}}</td>
+      </tr>
+
+      @endforeach
+
+
 
   </table>
 
@@ -348,13 +349,33 @@
         <td scope="col">Leave</td>
         <td scope="col">Absent</td>
       </tr>
+      {{ $check = 0 }}
+      @foreach ($attendances as $attendance):
+        @if($attendance->semester == 1)
+        {{$check =1}}
+          <tr>
+            <!-- <td>$attendance->present</td> -->
+            <td></td>
+            <td>{{$attendance->late}}</td>
+            <td>{{$attendance->sick}}</td>
+            <td>{{$attendance->leave}}</td>
+            <td>{{$attendance->absent}}</td>
+          </tr>
+        @endif
+      @endforeach;
+
+      @if($check == 0)
       <tr>
+        <!-- <td>$attendance->present</td> -->
         <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
       </tr>
+
+      @endif
+
       <tr>
         <td scope="col" rowspan="2">2nd Sem Total School Days</td>
         <td scope="col">Present</td>
@@ -363,14 +384,32 @@
         <td scope="col">Leave</td>
         <td scope="col">Absent</td>
       </tr>
+      {{ $check = 0 }}
+      @foreach ($attendances as $attendance):
+        @if($attendance->semester == 2)
+        {{$check =1}}
+          <tr>
+            <!-- <td>$attendance->present</td> -->
+            <td></td>
+            <td>{{$attendance->late}}</td>
+            <td>{{$attendance->sick}}</td>
+            <td>{{$attendance->leave}}</td>
+            <td>{{$attendance->absent}}</td>
+          </tr>
+        @endif
+      @endforeach;
 
+      @if($check == 0)
       <tr>
+        <!-- <td>$attendance->present</td> -->
         <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
       </tr>
+
+      @endif
 
   </table>
 
@@ -383,13 +422,13 @@
       </tr>
       <tr>
         <td>1st Sem</td>
-        <td>……………..…..</td>
-        <td>……………..…..</td>
+        <td>{{$physical_record_semester1->height}}</td>
+        <td>{{$physical_record_semester1->weight}}</td>
       </tr>
       <tr>
         <td>2nd Sem</td>
-        <td>……………..…..</td>
-        <td>……………..…..</td>
+        <td>{{$physical_record_semester2->height}}</td>
+        <td>{{$physical_record_semester2->weight}}</td>
       </tr>
     </table>
 
@@ -479,7 +518,7 @@
         <td></td>
         <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
         <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ \\\2018
+        <span style="color:white">------</span>/ {{$academic_year}}
       </td>
       </tr>
     </table>
@@ -502,7 +541,7 @@
         <td></td>
         <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
         <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ \\\2018
+        <span style="color:white">------</span>/ {{$academic_year}}
       </td>
       </tr>
     </table>
@@ -528,7 +567,7 @@
         <td></td>
         <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
         <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ \\\2018
+        <span style="color:white">------</span>/ {{$academic_year}}
       </td>
       </tr>
     </table>
@@ -551,7 +590,7 @@
         <td></td>
         <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
         <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ \\\2018
+        <span style="color:white">------</span>/ {{$academic_year}}
       </td>
       </tr>
     </table>
@@ -576,7 +615,7 @@
         <td></td>
         <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
         <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ \\\2018
+        <span style="color:white">------</span>/ {{$academic_year}}
       </td>
       </tr>
     </table>
@@ -599,7 +638,7 @@
         <td></td>
         <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
         <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ \\\2018
+        <span style="color:white">------</span>/ {{$academic_year}}
       </td>
       </tr>
     </table>
@@ -625,7 +664,7 @@
         <td></td>
         <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
         <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ \\\2018
+        <span style="color:white">------</span>/ {{$academic_year}}
       </td>
       </tr>
     </table>
@@ -648,7 +687,7 @@
         <td></td>
         <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
         <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ \\\2018
+        <span style="color:white">------</span>/ {{$academic_year}}
       </td>
       </tr>
     </table>
@@ -709,7 +748,16 @@
 <br>
 <div class="boxHeader"><h6>Evaluation  :</h6>
 <div class="box"></div>
-<div class="boxTail"><p>to be permitted to \\\graduate in academic year \\\2018</p>
+
+@if($student->grade_level >= 12)
+  <div class="boxTail"><p>to be permitted to graduate in academic year {{$academic_year}}</p>
+
+@else
+  <div class="boxTail"><p>to be permitted to {{$student->grade_level + 1}} in academic year {{$academic_year}}</p>
+@endif
+
+
+
 </div>
 
 <div class="boxHeader">
@@ -742,11 +790,11 @@
 
     <tr>
       <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
-      /<span style="color:white">------</span>/ \\\2018
+      /<span style="color:white">------</span>/ {{$academic_year}}
       </td>
       <td></td>
       <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
-      /<span style="color:white">------</span>/ \\\2018
+      /<span style="color:white">------</span>/ {{$academic_year}}
       </td>
     </tr>
 
@@ -767,7 +815,7 @@
       <td></td>
       <td style="width:200px; height: 30px; border-bottom: 1px dotted black;">
       <span style="color:white">---------------</span>/
-      <span style="color:white">------</span>/ \\\2018
+      <span style="color:white">------</span>/ {{$academic_year}}
     </td>
     </tr>
   </table>
@@ -793,73 +841,58 @@
   margin-left: 10px;
   margin-right: 10px;
 }
-
 .setLeft{
   text-align: left;
 }
-
 .setRight{
   text-align: right;
 }
-
 .setPosition{
   margin-top: 10px;
   margin-left: 100px;
   font-size: 14px;
   font-weight: bold;
-
 }
-
 .nameStyle{
   width: 100%;
   margin-top: 30px;
 }
-
 .tableStyle{
   width: 100%;
   margin-top: 20px;
   border: 1px solid black;
 }
-
 .tableStyle2{
   width: 50%;
   margin-top: 20px;
   border: 1px solid black;
 }
-
 .tableStyle3{
   width: 70%;
   margin-top: 20px;
   border: 1px solid black;
 }
-
 .tableStyle4{
   width: 60%;
   margin-top: 5px;
   border: 1px solid black;
 }
-
 .tableStyle5{
   width:50%;
   margin-left:70px;
 }
-
-
 .classroomStyle{
-  font-size: 12px;
+  font-size: 14px;
   position: absolute;
   right: 1px;
   bottom: -50px;
 }
-
 .table thead th {
   border-bottom: 1px solid black;
 }
-
 .table-bordered th {
     border: 1px solid black;
 }
-
 th {
     text-align: center;
     font-size: 12px;
@@ -872,32 +905,25 @@ td {
 tr {
   height: -10px;
 }
-
 .table-bordered td, .table-bordered th {
     border: 1px solid black;
 }
-
 .page-break {
     page-break-after: always;
 }
-
 .table td, .table th {
     padding: .35rem;
     vertical-align: top;
 }
-
 .tableStyle5 th{
   text-align: left;
 }
-
 .noGrade p{
   font-size: 10px;
 }
-
 .finalReport td{
   text-align: center;
 }
-
 p{
   font-size: 12px;
 }
@@ -907,56 +933,47 @@ h6{
   margin-top: 10px;
   margin-bottom: 10px;
 }
-
 div.relative {
     position: relative;
     width: 100%;
     padding-top: 0%;
     margin-top: -50px;
 }
-
 div.relative2 {
     position: relative;
     width: 100%;
     padding-top: 0%;
     margin-top: 0px;
 }
-
 div.conduct {
     position: absolute;
     top: 50px;
     right: 5;
     width: 150px;
 }
-
 div.attendance {
     position: absolute;
     top: 10px;
     right: 0;
     width: 250px;
 }
-
 .board{
   width: 100%;
   height: 97%;
   border-right: 1px solid black;
 }
-
 .dotBottom{
   height: 40%;
   border-bottom: 1.5px dotted black;
 }
-
 .dotBottom2{
   border-bottom: 1.5px dotted black;
 }
-
 div.boxHeader {
     position: relative;
     width: 100%;
     height: 30px;
 }
-
 div.box {
     position: absolute;
     top: 0px;
@@ -971,9 +988,4 @@ div.boxTail {
     left: 130px;
     width: 80%;
 }
-
-
-
-
-
 </style>

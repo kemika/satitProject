@@ -748,7 +748,16 @@
 <br>
 <div class="boxHeader"><h6>Evaluation  :</h6>
 <div class="box"></div>
-<div class="boxTail"><p>to be permitted to graduate in academic year {{$academic_year}}</p>
+
+@if($student->grade_level >= 12)
+  <div class="boxTail"><p>to be permitted to graduate in academic year {{$academic_year}}</p>
+
+@else
+  <div class="boxTail"><p>to be permitted to {{$student->grade_level + 1}} in academic year {{$academic_year}}</p>
+@endif
+
+
+
 </div>
 
 <div class="boxHeader">
