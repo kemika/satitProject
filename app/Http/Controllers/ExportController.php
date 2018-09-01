@@ -54,11 +54,11 @@ class ExportController extends Controller
       ->select('Offered_Courses.*')
       ->where('Offered_Courses.curriculum_year',$academic_year->curriculum_year)
       ->select('Offered_Courses.*')
-      ->join('Curriculums', function($j) {
-      $j->on('Curriculums.course_id', '=', 'Offered_Courses.course_id');
-      $j->on('Curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
+      ->join('curriculums', function($j) {
+      $j->on('curriculums.course_id', '=', 'Offered_Courses.course_id');
+      $j->on('curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
       })
-      ->select('Offered_Courses.*','Curriculums.*')
+      ->select('Offered_Courses.*','curriculums.*')
       ->get();
 
 
@@ -67,11 +67,11 @@ class ExportController extends Controller
       ->select('Offered_Courses.*')
       ->where('Offered_Courses.curriculum_year',$academic_year->curriculum_year)
       ->select('Offered_Courses.*')
-      ->join('Curriculums', function($j) {
-      $j->on('Curriculums.course_id', '=', 'Offered_Courses.course_id');
-      $j->on('Curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
+      ->join('curriculums', function($j) {
+      $j->on('curriculums.course_id', '=', 'Offered_Courses.course_id');
+      $j->on('curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
       })
-      ->select('Offered_Courses.*','Curriculums.*')
+      ->select('Offered_Courses.*','curriculums.*')
       ->get();
 
 
@@ -93,11 +93,11 @@ class ExportController extends Controller
   ->select('Offered_Courses.*')
   ->where('Offered_Courses.curriculum_year',$curriculum_year)
   ->select('Offered_Courses.*')
-  ->join('Curriculums', function($j) {
-  $j->on('Curriculums.course_id', '=', 'Offered_Courses.course_id');
-  $j->on('Curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
+  ->join('curriculums', function($j) {
+  $j->on('curriculums.course_id', '=', 'Offered_Courses.course_id');
+  $j->on('curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
   })
-  ->select('Offered_Courses.*','Curriculums.*')
+  ->select('Offered_Courses.*','curriculums.*')
   ->get()[0];
 
 
@@ -246,11 +246,11 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
   ->select('Offered_Courses.*')
   ->where('Offered_Courses.curriculum_year',$curriculum_year)
   ->select('Offered_Courses.*')
-  ->join('Curriculums', function($j) {
-  $j->on('Curriculums.course_id', '=', 'Offered_Courses.course_id');
-  $j->on('Curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
+  ->join('curriculums', function($j) {
+  $j->on('curriculums.course_id', '=', 'Offered_Courses.course_id');
+  $j->on('curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
   })
-  ->select('Offered_Courses.*','Curriculums.*')
+  ->select('Offered_Courses.*','curriculums.*')
   ->get()[0];
 
 
