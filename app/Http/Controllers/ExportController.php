@@ -50,28 +50,28 @@ class ExportController extends Controller
       ->get();
 
       $subjects = Offered_Courses::where('classroom_id', $classroom_id)
-      ->where('Offered_Courses.is_elective',  '0')
-      ->select('Offered_Courses.*')
-      ->where('Offered_Courses.curriculum_year',$academic_year->curriculum_year)
-      ->select('Offered_Courses.*')
+      ->where('offered_courses.is_elective',  '0')
+      ->select('offered_courses.*')
+      ->where('offered_courses.curriculum_year',$academic_year->curriculum_year)
+      ->select('offered_courses.*')
       ->join('curriculums', function($j) {
-      $j->on('curriculums.course_id', '=', 'Offered_Courses.course_id');
-      $j->on('curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
+      $j->on('curriculums.course_id', '=', 'offered_courses.course_id');
+      $j->on('curriculums.curriculum_year','=','offered_courses.curriculum_year');
       })
-      ->select('Offered_Courses.*','curriculums.*')
+      ->select('offered_courses.*','curriculums.*')
       ->get();
 
 
       $subjectElecs = Offered_Courses::where('classroom_id', $classroom_id)
-      ->where('Offered_Courses.is_elective',  '1')
-      ->select('Offered_Courses.*')
-      ->where('Offered_Courses.curriculum_year',$academic_year->curriculum_year)
-      ->select('Offered_Courses.*')
+      ->where('offered_courses.is_elective',  '1')
+      ->select('offered_courses.*')
+      ->where('offered_courses.curriculum_year',$academic_year->curriculum_year)
+      ->select('offered_courses.*')
       ->join('curriculums', function($j) {
-      $j->on('curriculums.course_id', '=', 'Offered_Courses.course_id');
-      $j->on('curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
+      $j->on('curriculums.course_id', '=', 'offered_courses.course_id');
+      $j->on('curriculums.curriculum_year','=','offered_courses.curriculum_year');
       })
-      ->select('Offered_Courses.*','curriculums.*')
+      ->select('offered_courses.*','curriculums.*')
       ->get();
 
 
@@ -89,15 +89,15 @@ class ExportController extends Controller
 
 
   $subject = Offered_Courses::where('classroom_id', $classroom_id)
-  ->where('Offered_Courses.course_id',  $course_id)
-  ->select('Offered_Courses.*')
-  ->where('Offered_Courses.curriculum_year',$curriculum_year)
-  ->select('Offered_Courses.*')
+  ->where('offered_courses.course_id',  $course_id)
+  ->select('offered_courses.*')
+  ->where('offered_courses.curriculum_year',$curriculum_year)
+  ->select('offered_courses.*')
   ->join('curriculums', function($j) {
-  $j->on('curriculums.course_id', '=', 'Offered_Courses.course_id');
-  $j->on('curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
+  $j->on('curriculums.course_id', '=', 'offered_courses.course_id');
+  $j->on('curriculums.curriculum_year','=','offered_courses.curriculum_year');
   })
-  ->select('Offered_Courses.*','curriculums.*')
+  ->select('offered_courses.*','curriculums.*')
   ->get()[0];
 
 
@@ -242,15 +242,15 @@ class ExportController extends Controller
 public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_year){
 
   $subject = Offered_Courses::where('classroom_id', $classroom_id)
-  ->where('Offered_Courses.course_id',  $course_id)
-  ->select('Offered_Courses.*')
-  ->where('Offered_Courses.curriculum_year',$curriculum_year)
-  ->select('Offered_Courses.*')
+  ->where('offered_courses.course_id',  $course_id)
+  ->select('offered_courses.*')
+  ->where('offered_courses.curriculum_year',$curriculum_year)
+  ->select('offered_courses.*')
   ->join('curriculums', function($j) {
-  $j->on('curriculums.course_id', '=', 'Offered_Courses.course_id');
-  $j->on('curriculums.curriculum_year','=','Offered_Courses.curriculum_year');
+  $j->on('curriculums.course_id', '=', 'offered_courses.course_id');
+  $j->on('curriculums.curriculum_year','=','offered_courses.curriculum_year');
   })
-  ->select('Offered_Courses.*','curriculums.*')
+  ->select('offered_courses.*','curriculums.*')
   ->get()[0];
 
 
