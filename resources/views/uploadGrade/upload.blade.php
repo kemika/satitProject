@@ -29,6 +29,7 @@
                  @csrf
              </form></li>
 
+
              <li style="float:right"><a href='#'>{{ auth::user()->firstname.' '.auth::user()->lastname}}</a></li>
   </ul>
 
@@ -39,9 +40,33 @@
     <div style="margin-left:150px">
       <form action="/getUpload" method="post" enctype="multipart/form-data" class="form-inline">
         {{csrf_field()}}
+        <input type="file" name="file1">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-danger mb-2" value="upload">
+      </form>
+
+
+      <form action="/getUploadComments" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+
         <input type="file" name="file">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="submit" class="btn btn-primary mb-2" value="upload">
+        <input type="submit" class="btn btn-primary mb-2" value="upload Comments">
+
+      </form>
+
+      <form action="/getUpload" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+        <input type="file" name="file1">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-danger mb-2" value="upload">
+      </form>
+
+      <form action="/getUpload" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+        <input type="file" name="file1">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-danger mb-2" value="upload">
       </form>
     </div>
 

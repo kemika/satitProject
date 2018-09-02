@@ -12,6 +12,7 @@ use App\GPA;
 use Auth;
 use App\Teacher;
 use App\Student;
+use App\Teacher_Comment;
 use App\Room;
 use App\WaitApprove;
 use Illuminate\Support\Facades\Input;
@@ -49,6 +50,152 @@ class UploadGradeController extends Controller
     //   return back();
     //
     // }
+
+
+
+    public function getUploadActivities(Request $request)
+    {
+      $students = Student::all();
+      $studentsID = Student::select('student_id')->get();
+      $arr = array();
+
+      date_default_timezone_set('Asia/Bangkok');
+      $datetime = date("Y-m-d H:i:s");
+      // dd($datetime);
+      // dd($studentsID);
+      // var_dump($studentsID);
+      // print_r($studentsID);
+
+
+      /*
+      foreach ($studentsID as $studentID) {
+        $arr[] = $studentID->student_id;
+      }*/
+      $arr = $students->toArray();
+
+      // print_r($arr);
+      //
+      // if (in_array("1111111111", $arr)) {
+      //     echo "Got My";
+      // }
+
+      if ($request->hasFile('file')) {
+
+        $fact = true;
+        $factGrade = true;
+        $factValidate = true;
+        $factEmpty = true;
+        $file = Input::file('file');
+        $file_name = $file->getClientOriginalName();
+        $file_type = \File::extension('files/'.$file_name);
+        $file->move('files/', $file_name);
+        $checkFileName = substr("$file_name", 0, 8);
+      }
+
+      $results = Excel::load('files/'.$file_name,function($reader){
+        $reader->setHeaderRow(3);
+        $reader->all();
+      })->get();
+      $courseID = $resultsCourse->getHeading()[1];
+
+      $redi  = $courseID."/".$resultsCourse[0]->no;
+      return redirect($redi);
+
+    } // END upload Activities
+
+
+
+
+
+    public function getUploadComments(Request $request)
+    {
+      $students = Student::all();
+      $studentsID = Student::select('student_id')->get();
+      $stdArray = array();
+
+      date_default_timezone_set('Asia/Bangkok');
+      $datetime = date("Y-m-d H:i:s");
+      // dd($datetime);
+      // dd($studentsID);
+      // var_dump($studentsID);
+      // print_r($studentsID);
+
+
+
+      foreach ($studentsID as $studentID) {
+        $stdArray[] = $studentID->student_id;
+      }
+      //$stdArray = $tempsss->unwrap($studentsID);
+
+      // print_r($arr);
+      //
+      // if (in_array("1111111111", $arr)) {
+      //     echo "Got My";
+      // }
+
+      if ($request->hasFile('file')) {
+
+        $fact = true;
+        $factGrade = true;
+        $factValidate = true;
+        $factEmpty = true;
+        $file = Input::file('file');
+        $file_name = $file->getClientOriginalName();
+        $file_type = \File::extension('files/'.$file_name);
+        $file->move('files/', $file_name);
+        $checkFileName = substr("$file_name", 0, 8);
+      }
+
+
+
+      $getAcademicYear = Excel::load('files/'.$file_name,function($reader){
+        $reader->setHeaderRow(1);
+      })->get();
+
+      $getSemester = Excel::load('files/'.$file_name,function($reader){
+        $reader->setHeaderRow(2);
+      })->get();
+
+      $results = Excel::load('files/'.$file_name,function($reader){
+        $reader->setHeaderRow(3);
+        $reader->all();
+      })->get();
+
+      $year= $getAcademicYear->getHeading()[1];
+      $semester= $getSemester->getHeading()[1];
+
+
+      for ($i = 0; $i < count($results); $i++) {
+        if(in_array($results[$i]->students_id,$stdArray)){
+          for ($j = 1; $j <= 4; $j++) {
+            $qComment = "quater_".$j;
+            if($results[$i]->$qComment != ""){
+              $comment = new Teacher_Comment;
+              $comment->student_id = $results[$i]->students_id;
+              $comment->quater = $j;
+              $comment->comment = $results[$i]->$qComment;
+              $comment->semester = $semester;
+              $comment->academic_year = $year;
+              $comment->datetime = $datetime;
+              $comment->save();
+            }
+          }
+        }
+
+      }
+      $redi  = 'temp'.$stdArray[0];
+      return redirect($redi);
+
+    } // END upload Comment
+
+
+
+
+
+
+
+
+
 
     public function getUpload(Request $request)
     {
@@ -655,13 +802,19 @@ class UploadGradeController extends Controller
 
           $sheet->setOrientation('landscape');
 
-          $sheet->setCellValue('A1', 'No.');
-          $sheet->setCellValue('B1', 'Students ID');
-          $sheet->setCellValue('C1', 'Students Name');
-          $sheet->setCellValue('D1', 'Quarter 1');
-          $sheet->setCellValue('E1', 'Quarter 2');
-          $sheet->setCellValue('F1', 'Quarter 3');
-          $sheet->setCellValue('G1', 'Quarter 4');
+          $sheet->setCellValue('A1', 'Academic Year');
+          $sheet->setCellValue('B1', '');
+          $sheet->setCellValue('A2', 'Semester');
+          $sheet->setCellValue('B2', '');
+
+
+          $sheet->setCellValue('A3', 'No');
+          $sheet->setCellValue('B3', 'Students ID');
+          $sheet->setCellValue('C3', 'Students Name');
+          $sheet->setCellValue('D3', 'Quater 1');
+          $sheet->setCellValue('E3', 'Quater 2');
+          $sheet->setCellValue('F3', 'Quater 3');
+          $sheet->setCellValue('G3', 'Quater 4');
 
 
           $sheet->setWidth(array(
