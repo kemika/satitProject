@@ -34,9 +34,6 @@
           <th scope="col">ID</th>
           <th scope="col">First Name</th>
           <th scope="col">Last Name</th>
-          <th scope="col">National ID</th>
-          <th scope="col">Passport</th>
-          <th scope="col">Nationality</th>
           <th scope="col">Status</th>
           <th scope="col">Action</th>
 
@@ -48,13 +45,10 @@
           <?php $c+=1 ?>
         <tr>
           <td>{{ $loop->iteration }}</td>
-          <td>{{ $teacher->number }}</td>
+          <td>{{ $teacher->teacher_id }}</td>
           <td>{{ $teacher->firstname }}</td>
           <td>{{ $teacher->lastname }}</td>
-          <td>{{ $teacher->nid }}</td>
-          <td>{{ $teacher->passport }}</td>
-          <td>{{ $teacher->nationality }}</td>
-          <td>{{ $teacher->status }}</td>
+          <td>{{ $teacher->teacher_status_text }}</td>
           <td><button type="button" class="btn btn-primary" data-toggle='modal' data-target='#{{$c}}'>Edit</button>
       </td>
 
@@ -76,7 +70,7 @@
                   <div class="form-group row">
                     <label class="col-sm-2 col-form-label">ID:</label>
                     <div class="col-sm-5">
-                      <input type="text" class="form-control"  name="number" value='{{ $teacher->number }}' disabled>
+                      <input type="text" class="form-control"  name="teacher_id" value='{{ $teacher->teacher_id }}' disabled>
                     </div>
                   </div>
 
@@ -95,39 +89,17 @@
                   </div>
 
                   <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">National ID</label>
-                    <div class="col-sm-5">
-                      <input type="text" class="form-control" name="nid" value='{{ $teacher->nid }}' disabled>
-                    </div>
-                  </div>
-
-                  <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Passport</label>
-                    <div class="col-sm-5">
-                      <input type="text" class="form-control" name="passport" value='{{ $teacher->passport }}' disabled>
-                    </div>
-                  </div>
-
-                  <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Nationality</label>
-                    <div class="col-sm-5">
-                      <input type="text" class="form-control" name="nationality" value='{{ $teacher->nationality }}'>
-                    </div>
-                  </div>
-
-
-                  <div class="form-group row">
                     <label class="col-sm-2 col-form-label">status:</label>
                     <div class="col-sm-5">
                       <select name="status" class="form-control" style="height: 35px">
-                        <?php if ("$teacher->status"=="Active"): ?>
-                          <option value="Active" selected>Active</option>
-                          <option value="Inactive">Inactive</option>
+                        <?php if ("$teacher->teacher_status_text"=="Active"): ?>
+                          <option value="0" selected>Active</option>
+                          <option value="1">Inactive</option>
                         <?php endif; ?>
 
-                        <?php if ("$teacher->status"=="Inactive"): ?>
-                          <option value="Active">Active</option>
-                          <option value="Inactive" selected>Inactive</option>
+                        <?php if ("$teacher->teacher_status_text"=="Inactive"): ?>
+                          <option value="0">Active</option>
+                          <option value="1" selected>Inactive</option>
                         <?php endif; ?>
 
                       </select>
@@ -152,14 +124,6 @@
 </div>
 
 </center>
-
-<div class="row" style="margin-top: 30px; margin-bottom: 30px;">
-  <div class="col-5">
-  </div>
-  <div class="col col-xl-2">
-    <button class="btn btn-danger" onclick="window.location.href='/main'">Back to main</button>
-  </div>
-</div>
 
 
 

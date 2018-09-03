@@ -8,7 +8,10 @@ use App\Teacher;
 class ManageTeachersController extends Controller
 {
   public function index(){
-    $teachers  = Teacher::all();
+    $teachers  = Teacher::join('teacher_status','teachers.teacher_status','=','teacher_status.teacher_status')
+    ->select('teachers.teacher_id','teachers.firstname','teachers.lastname','teacher_status.teacher_status_text')
+    ->orderBy('teachers.teacher_id','asc')
+    ->get();
 
     return view('manageTeachers.index' , ['teachers' => $teachers]);
   }
