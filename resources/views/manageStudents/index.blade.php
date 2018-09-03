@@ -50,7 +50,7 @@
 <center>
 <div class="row" style="width: 120rem;">
 
-    <table class="table table-hover" id="table" style="width: 120rem;">
+    <table class="table table-hover" id="table" style="width: 120rem; padding-left: 20px">
       <thead>
         <tr>
           <th scope="col">No.</th>
@@ -86,7 +86,6 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
               <div class="modal-body">
-                <p>{{$c}}</p>
                 <form class="form-inline" action="/manageStudents/update" method="post">
                   @csrf
                   @method('PUT')
@@ -139,10 +138,10 @@
                   </div>
 
                   <div class="modal-footer">
-                    <button type="submit"  class="btn btn-default" >update</button>
+                    <button type="submit"  class="btn btn-primary" >Update</button>
                 </form>
 
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
               </div>
             </div>
           </div>
@@ -156,3 +155,6 @@
 </div>
 
 </center>
+
+<div class="col-md-12" style="height: 30px;">
+</div>

@@ -44,7 +44,7 @@
 <div class="row" style="width: 120rem;">
   <!-- <div class="col-1"></div> -->
   <!-- <div class="col-8"> -->
-    <table class="table table-hover" id="table" style="width: 120rem;">
+    <table class="table table-hover" id="table" style="width: 120rem; padding-left: 20px">
       <thead>
         <tr>
           <th scope="col">No.</th>
@@ -79,7 +79,6 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
               <div class="modal-body">
-                <p>{{$c}}</p>
                 <form class="form-inline" action="/manageTeachers/update" method="post">
                   @csrf
                   @method('PUT')
@@ -87,7 +86,8 @@
                   <div class="form-group row">
                     <label class="col-sm-2 col-form-label">ID:</label>
                     <div class="col-sm-5">
-                      <input type="text" class="form-control"  name="teacher_id" value='{{ $teacher->teacher_id }}' disabled>
+                      <input type="text" class="form-control"  name="teacher_id" value='{{ $teacher->teacher_id }}' readonly>
+                      <input hidden type="text" name="teacherID" value='{{ $teacher->teacher_id }}'>
                     </div>
                   </div>
 
@@ -124,10 +124,10 @@
                   </div>
 
               <div class="modal-footer">
-                    <button type="submit"  class="btn btn-default" >update</button>
+                    <button type="submit"  class="btn btn-primary" >Update</button>
                 </form>
 
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
               </div>
             </div>
           </div>
@@ -141,6 +141,9 @@
 </div>
 
 </center>
+
+<div class="col-md-12" style="height: 30px;">
+</div>
 
 
 
