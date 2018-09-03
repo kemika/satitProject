@@ -20,7 +20,7 @@
      <li ><a href='/main'>SatitKaset</a></li>
      <li class='active'><a href='#'>Manage Students</a></li>
      <li><a href='/manageTeachers'>Manage Teachers</a></li>
-     <li><a href='/upload'>Grade</a></li>
+     <li><a href='/upload'>Upload Grade</a></li>
      <li><a href='/approveGrade'>Approve Grade</a></li>
      <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
                 onclick="event.preventDefault();

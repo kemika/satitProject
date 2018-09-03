@@ -233,12 +233,6 @@ class UploadGradeController extends Controller
                     }
 
                       //----- Validate Student Name -------//
-                      if($results[$i]->student_name == ""){
-                        $text = "Field 'Student name' is empty at row 'B".($i+7)."'";
-                        $factValidate = false;
-                        $factEmpty = false;
-                        $arrayValidates[] = $text;
-                      }
                       if (!preg_match("/^[a-zA-Z ]*$/",$results[$i]->student_name)) {
                         // echo "Field 'Student name' is incorrect format at row 'B".($i+6)."'<br>";
                         $text = "Field 'Student name' is incorrect format at row 'B".($i+7)."'";
