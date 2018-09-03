@@ -21,8 +21,9 @@
     <div class="col col-lg-3">
       <button class="btn btn-outline-secondary" type="submit" onclick="window.location.href='/manageCurriculum'">Manage Curriculum</button>
     </div>
+
     <div class="col col-lg-2">
-      <button class="btn btn-outline-secondary" type="submit" onclick="window.location.href='/upload'">Upload Grades</button>
+      <button class="btn btn-outline-secondary" onclick="window.location.href='/export'">Export Form</button>
     </div>
   </div>
 
@@ -33,7 +34,7 @@
       <button class="btn btn-outline-secondary" onclick="window.location.href='/manageStudents'">Manage Students</button>
     </div>
     <div class="col col-lg-2">
-      <button class="btn btn-outline-secondary" onclick="window.location.href='/approveGrade'">Approve Grades</button>
+      <button class="btn btn-outline-secondary" onclick="window.location.href='/upload'">Upload Grades</button>
     </div>
   </div>
 
@@ -44,8 +45,7 @@
       <button class="btn btn-outline-secondary" onclick="window.location.href='/manageTeachers'">Manage Teachers</button>
     </div>
     <div class="col col-lg-2">
-
-      <button class="btn btn-outline-secondary" onclick="window.location.href='/viewGrade/0/0/0/0'"  type="submit">View Grades</button>
+      <button class="btn btn-outline-secondary" onclick="window.location.href='/approveGrade'">Approve Grades</button>
     </div>
   </div>
 
@@ -56,7 +56,7 @@
       <button class="btn btn-outline-secondary" onclick="window.location.href='/manageAcademic'">Manage Academic Year</button>
     </div>
     <div class="col col-lg-2">
-      <button class="btn btn-outline-secondary"  onclick="window.location.href='/reportCard'">Report Cards</button>
+      <button class="btn btn-outline-secondary" onclick="window.location.href='/viewGrade/0/0/0/0'"  type="submit">View Grades</button>
     </div>
   </div>
 
@@ -66,19 +66,23 @@
       <div class="col col-lg-3">
       </div>
       <div class="col col-lg-2">
-        <button class="btn btn-outline-secondary" onclick="window.location.href='/transcript'">Transcripts</button>
+        <button class="btn btn-outline-secondary"  onclick="window.location.href='/reportCard'">Report Cards</button>
       </div>
     </div>
     <div class="mx-auto" style="height: 50px;"></div>
-
 
     <div class="row justify-content-md-center">
       <div class="col col-lg-3">
       </div>
       <div class="col col-lg-2">
-        <button class="btn btn-outline-secondary" onclick="window.location.href='/export'">Export</button>
+        <button class="btn btn-outline-secondary" onclick="window.location.href='/transcript'">Transcripts</button>
       </div>
     </div>
+
+
+
+
+
 
 
 

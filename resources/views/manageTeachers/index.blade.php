@@ -15,12 +15,29 @@
 <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
-
-
-
-
 <link href="{{ asset('css/studentCSS.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="/css/nav.css">
 
+<head>
+  <div id='cssmenu'>
+  <ul>
+     <li ><a href='/main'>SatitKaset</a></li>
+     <li><a href='/manageStudents'>Manage Students</a></li>
+     <li class='active'><a href='#'>Manage Teachers</a></li>
+     <li><a href='/upload'>Upload Grade</a></li>
+     <li><a href='/approveGrade'>Approve Grade</a></li>
+     <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
+                onclick="event.preventDefault();
+                              document.getElementById('logout-form').submit();">
+                 {{ __('Logout') }}
+             </a>
+             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                 @csrf
+             </form></li>
+             <li style="float:right"><a href='#'>{{ auth::user()->firstname.' '.auth::user()->lastname}}</a></li>
+  </ul>
+  </div>
+</head>
 
 <h1> Manage Teachers</h1>
 <center>
