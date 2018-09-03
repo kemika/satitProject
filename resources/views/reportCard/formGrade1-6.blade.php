@@ -43,12 +43,58 @@
       <th>3</th>
       <th style="width:10px;">Sem. Grade</th>
     </tr>
+
+
+    <?php
+    $total_credit =0;
+    $GPA_sem1 = 0;
+    $GPA_sem2 = 0;
+    $GPA_total = 0;
+     ?>
+    @foreach($grade_semester1 as $key => $grade )
+
+
     <tr>
-      <td>Mark</td>
-      <td>Mark</td>
+      <td>{{$grade['course_name']}}</td>
+      <td>{{strtoupper(substr($grade['course_name'], 0, 3))." ".$grade['course_id']}}</td>
       <td>-</td>
       <td>-</td>
-      <td>3</td>
+      <td>{{ $grade['credits']}}</td>
+      <td>{{ $grade['quater1_sem1']}}</td>
+      <td>{{ $grade['quater2_sem1']}}</td>
+      <td>{{ $grade['quater3_sem1']}}</td>
+      <td>{{ $grade['total_point_sem1']}}</td>
+
+      <td>{{ $grade['quater1_sem2']}}</td>
+      <td>{{ $grade['quater2_sem2']}}</td>
+      <td>{{ $grade['quater3_sem2']}}</td>
+      <td>{{ $grade['total_point_sem2']}}</td>
+      <?php
+      $grade_total  = $grade['total_point']/6;
+      $GPA_sem1 += ($grade['credits']*$grade['total_point_sem1']);
+      $GPA_sem2 += ($grade['credits']*$grade['total_point_sem2']);
+      $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
+      $total_credit += $grade['credits'];
+
+       ?>
+      <td>{{ $grade_total }}</td>
+
+
+
+
+
+
+    </tr>
+
+    @endforeach
+
+    @for ($i = count($grade_semester1); $i < 14; $i++)
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td>-</td>
+      <td>-</td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -59,16 +105,30 @@
       <td>-</td>
       <td>-</td>
     </tr>
+    @endfor
+
+    <?php
+
+      $GPA_sem1 = substr($GPA_sem1/$total_credit,0,strpos($GPA_sem1/$total_credit,'.')+3);
+      $GPA_sem2 = substr($GPA_sem2/$total_credit,0,strpos($GPA_sem2/$total_credit,'.')+3);
+      $GPA_total = ($GPA_sem1 + $GPA_sem2) / $total_credit;
+      $GPA_total = substr($GPA_total,0,strpos($GPA_total,'.')+3);
+
+    ?>
+
+
+
+
 
 
     <tr>
       <th scope="col" colspan="4">Total</th>
-      <th scope="col">0.00</th>
+      <th scope="col">{{$total_credit}}</th>
       <th scope="col" colspan="3" style="font-weight: normal;">1st Semester GPA</th>
-      <th scope="col">null</th>
+      <th scope="col">{{$GPA_sem1}}</th>
       <th scope="col" colspan="3" style="font-weight: normal;">2nd Semester GPA</th>
-      <th scope="col">null</th>
-      <th scope="col">null</th>
+      <th scope="col">{{$GPA_sem2 }}</th>
+      <th scope="col">{{ $GPA_total }}</th>
     </tr>
 </table>
 
