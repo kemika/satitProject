@@ -108,10 +108,13 @@
     @endfor
 
     <?php
-
-      $GPA_sem1 = substr($GPA_sem1/$total_credit,0,strpos($GPA_sem1/$total_credit,'.')+3);
-      $GPA_sem2 = substr($GPA_sem2/$total_credit,0,strpos($GPA_sem2/$total_credit,'.')+3);
-      $GPA_total = ($GPA_sem1 + $GPA_sem2) / $total_credit;
+      $denominator = $total_credit;
+      if($denominator == 0){
+          $denominator = 1;
+      }
+      $GPA_sem1 = substr($GPA_sem1/$denominator,0,strpos($GPA_sem1/$denominator,'.')+3);
+      $GPA_sem2 = substr($GPA_sem2/$denominator,0,strpos($GPA_sem2/$denominator,'.')+3);
+      $GPA_total = ($GPA_sem1 + $GPA_sem2) / $denominator;
       $GPA_total = substr($GPA_total,0,strpos($GPA_total,'.')+3);
 
     ?>
