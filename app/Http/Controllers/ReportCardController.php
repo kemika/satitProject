@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Offered_Courses;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use PDF;
@@ -71,40 +72,36 @@ class ReportCardController extends Controller
 
   public function exportPDF($student_id,$academic_year){
 
-    $grade_level = Student_Grade_Level::where('student_id',$student_id)
-    ->select('student_grade_levels.*')
-    ->join('academic_year','academic_year.classroom_id','student_grade_levels.classroom_id')
-    ->select('student_grade_levels.*','academic_year.*')
-    ->first();
+      //SELECT academic_year.grade_level , student_grade_levels.classroom_id
+      //FROM student_grade_levels
+      //JOIN academic_year ON student_grade_levels.classroom_id = academic_year.classroom_id
+      //WHERE academic_year.academic_year = 2018 AND student_grade_levels.student_id="2540080850"
+      $grade_level = Student_Grade_Level::where('student_id',$student_id)
+        ->where('academic_year',$academic_year)
+        ->join('academic_year','academic_year.classroom_id','student_grade_levels.classroom_id')
+        ->select('academic_year.grade_level','student_grade_levels.classroom_id')
+        ->first();
 
+//SELECT * FROM offered_courses
+//JOIN curriculums ON curriculums.course_id = offered_courses.course_id
+//LEFT JOIN grades ON offered_courses.classroom_id = grades.open_course_id
+//WHERE offered_courses.classroom_id = 7
+//AND curriculums.is_activity = 0
+//AND offered_courses.is_elective = 0
+//AND ((grades.data_status = 1 AND grades.student_id='2540080850') OR grades.student_id IS NULL )
+      // Create template for all grade query
+      $grade = Offered_Courses::where('classroom_id',$grade_level->classroom_id)
+        ->join('curriculums','curriculums.course_id','offered_courses.course_id')
+        ->leftjoin('grades','offered_courses.open_course_id', 'grades.open_course_id')
+        ->where('curriculums.is_activity','0')
+        ->where('offered_courses.is_elective','0')
+        ->selectRaw('WHERE ((grades.data_status = 1 AND grades.student_id = \'{$student_id}\') OR grades.student_id IS NULL)')
+        ->select('grades.quater','grades.grade','grades.grade_status','offered_courses.*','curriculums.*')
+        ->orderby('curriculums.course_name');
 
-
-
-
-
-
-
-
-    $grade_semester1 = Grade::where('grades.student_id',$student_id)
-    ->where('grades.data_status','1')
-    ->distinct()
-    ->where('grades.semester','1')
-    ->where('grades.academic_year' , $academic_year)
-    ->join('offered_courses','offered_courses.open_course_id', 'grades.open_course_id')
-    // ->where('offered_courses','offered_courses.semester','grades.semester')
-    ->where('offered_courses.is_elective','0')
-    ->select('grades.*','offered_courses.*')
-    ->join('curriculums','curriculums.course_id','offered_courses.course_id')
-    ->select('grades.*','offered_courses.*','curriculums.*')
-    // ->where('curriculums.curriculum_year','offered_courses.curriculum_year')
-    // ->select('grades.*','offered_courses.*','curriculums.*')
-    ->get();
+      $grade_semester1 = (clone $grade )->where('offered_courses.semester','1')->get();
     $grade_semester1 = self::getGradeToFrom($grade_semester1);
     $grade_avg_sem1 = self::getAvg($grade_semester1);
-
-
-
-
 
     $grade_semester1_6_sem1 = Grade::where('grades.student_id',$student_id)
     ->where('grades.data_status','1')
