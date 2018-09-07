@@ -39,7 +39,7 @@
         <div class="col-5">
         </div>
         <div class="col col-xl-2">
-          <button class="btn btn-danger" onclick="window.location.href='/uploadGrade'">Back to Upload</button>
+          <button class="btn btn-danger" onclick="window.location.href='/upload'">Back to Upload</button>
         </div>
       </div>
   </body>

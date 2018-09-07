@@ -345,13 +345,23 @@
       </tr>
       <tr>
         <td>1st Sem</td>
-        <td>{{$physical_record_semester1->height}}</td>
-        <td>{{$physical_record_semester1->weight}}</td>
+        @if ($physical_record_semester1)
+          <td>{{$physical_record_semester1->height}}</td>
+          <td>{{$physical_record_semester1->weight}}</td>
+        @else
+        <td>0.00</td>
+        <td>0.00</td>
+        @endif
       </tr>
       <tr>
         <td>2nd Sem</td>
-        <td>{{$physical_record_semester2->height}}</td>
-        <td>{{$physical_record_semester2->weight}}</td>
+        @if ($physical_record_semester2)
+          <td>{{$physical_record_semester2->height}}</td>
+          <td>{{$physical_record_semester2->weight}}</td>
+        @else
+        <td>0.00</td>
+        <td>0.00</td>
+        @endif
       </tr>
     </table>
 

@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Offered_Courses;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use PDF;
@@ -71,21 +72,38 @@ class ReportCardController extends Controller
 
   public function exportPDF($student_id,$academic_year){
 
-    $grade_level = Student_Grade_Level::where('student_id',$student_id)
-    ->select('student_grade_levels.*')
-    ->join('academic_year','academic_year.classroom_id','student_grade_levels.classroom_id')
-    ->select('student_grade_levels.*','academic_year.*')
-    ->first();
+      //SELECT academic_year.grade_level , student_grade_levels.classroom_id
+      //FROM student_grade_levels
+      //JOIN academic_year ON student_grade_levels.classroom_id = academic_year.classroom_id
+      //WHERE academic_year.academic_year = 2018 AND student_grade_levels.student_id="2540080850"
+      $grade_level = Student_Grade_Level::where('student_id',$student_id)
+        ->where('academic_year',$academic_year)
+        ->join('academic_year','academic_year.classroom_id','student_grade_levels.classroom_id')
+        ->select('academic_year.grade_level','student_grade_levels.classroom_id')
+        ->first();
 
+//SELECT * FROM offered_courses
+//JOIN curriculums ON curriculums.course_id = offered_courses.course_id
+//LEFT JOIN grades ON offered_courses.classroom_id = grades.open_course_id
+//WHERE offered_courses.classroom_id = 7
+//AND curriculums.is_activity = 0
+//AND offered_courses.is_elective = 0
+//AND ((grades.data_status = 1 AND grades.student_id='2540080850') OR grades.student_id IS NULL )
+      // Create template for all grade query
+      $grade = Offered_Courses::where('classroom_id',$grade_level->classroom_id)
+        ->join('curriculums','curriculums.course_id','offered_courses.course_id')
+        ->leftjoin('grades','offered_courses.open_course_id', 'grades.open_course_id')
+        ->where('curriculums.is_activity','0')
+        ->where('offered_courses.is_elective','0')
+        ->selectRaw('WHERE ((grades.data_status = 1 AND grades.student_id = \'{$student_id}\') OR grades.student_id IS NULL)')
+        ->select('grades.quater','grades.grade','grades.grade_status','offered_courses.*','curriculums.*')
+        ->orderby('curriculums.course_name');
 
+      $grade_semester1 = (clone $grade )->where('offered_courses.semester','1')->get();
+    $grade_semester1 = self::getGradeToFrom($grade_semester1);
+    $grade_avg_sem1 = self::getAvg($grade_semester1);
 
-
-
-
-
-
-
-    $grade_semester1 = Grade::where('grades.student_id',$student_id)
+    $grade_semester1_6_sem1 = Grade::where('grades.student_id',$student_id)
     ->where('grades.data_status','1')
     ->distinct()
     ->where('grades.semester','1')
@@ -99,8 +117,27 @@ class ReportCardController extends Controller
     // ->where('curriculums.curriculum_year','offered_courses.curriculum_year')
     // ->select('grades.*','offered_courses.*','curriculums.*')
     ->get();
-    $grade_semester1 = self::getGradeToFrom($grade_semester1);
-    $grade_avg_sem1 = self::getAvg($grade_semester1);
+
+
+
+    $grade_semester1_6_sem2 = Grade::where('grades.student_id',$student_id)
+    ->where('grades.data_status','1')
+    ->distinct()
+    ->where('grades.semester','2')
+    ->where('grades.academic_year' , $academic_year)
+    ->join('offered_courses','offered_courses.open_course_id', 'grades.open_course_id')
+    // ->where('offered_courses','offered_courses.semester','grades.semester')
+    ->where('offered_courses.is_elective','0')
+    ->select('grades.*','offered_courses.*')
+    ->join('curriculums','curriculums.course_id','offered_courses.course_id')
+    ->select('grades.*','offered_courses.*','curriculums.*')
+    // ->where('curriculums.curriculum_year','offered_courses.curriculum_year')
+    // ->select('grades.*','offered_courses.*','curriculums.*')
+    ->get();
+
+
+    $grade_semester1_6 = self::getGradeToFrom1_6($grade_semester1_6_sem1,$grade_semester1_6_sem2);
+    // dd(count($grade_semester1_6));
 
 
 
@@ -126,6 +163,12 @@ class ReportCardController extends Controller
     ->where('physical_records.academic_year' , $academic_year)
     ->select('physical_records.*')
     ->first();
+
+
+
+
+
+
 
 
 
@@ -231,8 +274,8 @@ class ReportCardController extends Controller
 
     if($grade_level->grade_level <= 6){
         //ยังต้องเปลี่ยนเป็นฟอร์ม 1-6 ถ้าอาจารจะทดสอบให้ทดสอบที่อันนี้ก่อนครับ ผมมีตารางใน seeder แล้วนะครับ ลองseedได้ครับ
-      $pdf = PDF::loadView('reportCard.formGrade9-12',['academic_year' => $academic_year,
-      'grade_semester1' => $grade_semester1,
+      $pdf = PDF::loadView('reportCard.formGrade1-6',['academic_year' => $academic_year,
+      'grade_semester1' => $grade_semester1_6,
       'grade_semester2' => $grade_semester2,
       'student' => $student,
       'avg1' => $grade_avg_sem1,
@@ -403,6 +446,99 @@ class ReportCardController extends Controller
       }
 
     }
+
+
+    return $result;
+
+  }
+
+
+
+  public static function getGradeToFrom1_6($grade_sem1,$grade_sem2){
+    $check = array();
+    $result = array();
+
+    $boom = array();
+
+    foreach ($grade_sem1 as $x ) {
+      $b =$x->course_id." : ".$x->course_name."    :".('quater'.$x->quater.'_sem'.$x->semester.'  :'.$x->grade."  ".$x->open_course_id)  ;
+      array_push($boom,$b);
+
+      if (!in_array($x->course_id."",$check)){
+
+
+        $element = array('course_name'=> $x->course_name,
+                        'course_id'=> $x->course_id,
+                        'credits'=>$x->credits,
+                        'quater1_sem1' => 0,
+                        'quater2_sem1' => 0,
+                        'quater3_sem1' => 0,
+                        'quater1_sem2' => 0,
+                        'quater2_sem2' => 0,
+                        'quater3_sem2' => 0,
+                        'total_point' => 0,
+                        'total_point_sem1' => 0 ,
+                        'total_point_sem2' => 0);
+
+        $element['quater'.$x->quater.'_sem1'] = $x->grade;
+        $element['total_point'] +=+$x->grade;
+        $element['total_point_sem1'] +=+$x->grade;
+        $result[$x->course_id] = $element;
+        array_push($check,$x->course_id);
+
+
+
+      }else{
+
+        $result[$x->course_id]['quater'.$x->quater.'_sem1'] = $x->grade;
+        $result[$x->course_id]['total_point'] += $x->grade;
+        $result[$x->course_id]['total_point_sem1'] += $x->grade;
+
+      }
+
+    }
+
+    array_push($boom,'================================');
+
+    foreach ($grade_sem2 as $x ) {
+      $b =$x->course_id." : ".$x->course_name."    :".('quater'.$x->quater.'_sem'.$x->semester.'  :'.$x->grade."  ".$x->open_course_id)  ;
+      array_push($boom,$b);
+
+      if (!in_array($x->course_id."",$check)){
+
+
+        $element = array('course_name'=> $x->course_name,
+                'course_id'=> $x->course_id,
+                'credits'=>$x->credits,
+                'quater1_sem1' => 0,
+                'quater2_sem1' => 0,
+                'quater3_sem1' => 0,
+                'quater1_sem2' => 0,
+                'quater2_sem2' => 0,
+                'quater3_sem2' => 0,
+                'total_point' => 0,
+                'total_point_sem1' => 0 ,
+                'total_point_sem2' => 0);
+
+        $element['quater'.$x->quater.'_sem2'] = $x->grade;
+        $element['total_point'] += $x->grade;
+        $element['total_point_sem2'] +=  $x->grade;
+        $result[$x->course_id] = $element;
+        array_push($check,$x->course_id);
+
+
+
+      }else{
+
+        $result[$x->course_id]['quater'.$x->quater.'_sem2'] = $x->grade;
+        $result[$x->course_id]['total_point'] += $x->grade;
+        $result[$x->course_id]['total_point_sem2'] += $x->grade;
+
+      }
+
+    }
+
+    // dd($boom);
 
 
     return $result;

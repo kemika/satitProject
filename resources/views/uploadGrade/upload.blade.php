@@ -16,9 +16,10 @@
   <div id='cssmenu'>
   <ul>
      <li ><a href='/main'>SatitKaset</a></li>
-     <li><a href='/manageStudents'>Manage Student</a></li>
-     <li class='active'><a href='#'>Grade</a></li>
-     <li><a href='#'>About</a></li>
+     <li><a href='/manageStudents'>Manage Students</a></li>
+     <li><a href='/manageTeachers'>Manage Teachers</a></li>
+     <li class='active'><a href='#'>Upload Grade</a></li>
+     <li><a href='/approveGrade'>Approve Grade</a></li>
      <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
                 onclick="event.preventDefault();
                               document.getElementById('logout-form').submit();">
