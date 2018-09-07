@@ -55,18 +55,32 @@
 
       </form>
 
-      <form action="/getUpload" method="post" enctype="multipart/form-data" class="form-inline">
+      <form action="/getUploadHeightAndWeight" method="post" enctype="multipart/form-data" class="form-inline">
         {{csrf_field()}}
         <input type="file" name="file1">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="submit" class="btn btn-danger mb-2" value="upload">
+        <input type="submit" class="btn btn-danger mb-2" value="upload Height And Weight">
       </form>
 
-      <form action="/getUpload" method="post" enctype="multipart/form-data" class="form-inline">
+      <form action="/getUploadBehavior" method="post" enctype="multipart/form-data" class="form-inline">
         {{csrf_field()}}
         <input type="file" name="file1">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="submit" class="btn btn-danger mb-2" value="upload">
+        <input type="submit" class="btn btn-danger mb-2" value="upload Behavior">
+      </form>
+
+      <form action="/getUploadAttandance" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+        <input type="file" name="file1">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-danger mb-2" value="upload Attandance">
+      </form>
+
+      <form action="/getUploadActivities" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+        <input type="file" name="file1">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-danger mb-2" value="upload Activities">
       </form>
     </div>
 
