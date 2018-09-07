@@ -64,7 +64,7 @@ Route::post('/getUpload', 'UploadGradeController@getUpload');
 Route::post('/getUploadComments', 'UploadGradeController@getUploadComments');
 Route::post('/getUploadHeightAndWeight', 'UploadGradeController@getUploadHeightAndWeight');
 Route::post('/getUploadBehavior', 'UploadGradeController@getUploadBehavior');
-Route::post('/getUploadAttandance', 'UploadGradeController@getUploadAttandance');
+Route::post('/getUploadAttendance', 'UploadGradeController@getUploadAttendance');
 Route::post('/getUploadActivities', 'UploadGradeController@getUploadActivities');
 
 
