@@ -225,7 +225,7 @@
 <table class="nameStyle">
     <tr>
       <th scope="col">Student Name</th>
-      <th scope="col" colspan="5" class="setCenter">Kemika Titithantawatch</th>
+      <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
       <th scope="col" class="setLeft">Grade</th>
     </tr>
 </table>
@@ -238,48 +238,26 @@
         <th scope="col" colspan="2">1 Sem.</th>
         <th scope="col" colspan="2">2 Sem.</th>
       </tr>
-      <tr>
-        <th>1st</th>
-        <th>2nd</th>
-        <th>1st</th>
-        <th>2nd</th>
-      </tr>
-      <tr>
-        <td>1	Attentive in class</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>2	Attentive in class</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>3	Attentive in class</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>4	Attentive in class</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+
 
       <tr>
-        <td>5	Attentive in class</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <th>1st</th>
+        <th>2nd</th>
+        <th>1st</th>
+        <th>2nd</th>
       </tr>
+      @foreach ($behavior_records as $behavior_record)
+      <tr>
+        <td>{{ $behavior_record->behavior_type_text}}</td>
+        <td>{{$behavior_record->sem1_q1}}</td>
+        <td>{{$behavior_record->sem1_q2}}</td>
+        <td>{{$behavior_record->sem2_q1}}</td>
+        <td>{{$behavior_record->sem2_q2}}</td>
+      </tr>
+
+      @endforeach
+
+
 
   </table>
 
@@ -306,13 +284,33 @@
         <td scope="col">Leave</td>
         <td scope="col">Absent</td>
       </tr>
+      {{ $check = 0 }}
+      @foreach ($attendances as $attendance):
+        @if($attendance->semester == 1)
+        {{$check =1}}
+          <tr>
+            <!-- <td>$attendance->present</td> -->
+            <td></td>
+            <td>{{$attendance->late}}</td>
+            <td>{{$attendance->sick}}</td>
+            <td>{{$attendance->leave}}</td>
+            <td>{{$attendance->absent}}</td>
+          </tr>
+        @endif
+      @endforeach;
+
+      @if($check == 0)
       <tr>
+        <!-- <td>$attendance->present</td> -->
         <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
       </tr>
+
+      @endif
+
       <tr>
         <td scope="col" rowspan="2">2nd Sem Total School Days</td>
         <td scope="col">Present</td>
@@ -321,14 +319,32 @@
         <td scope="col">Leave</td>
         <td scope="col">Absent</td>
       </tr>
+      {{ $check = 0 }}
+      @foreach ($attendances as $attendance):
+        @if($attendance->semester == 2)
+        {{$check =1}}
+          <tr>
+            <!-- <td>$attendance->present</td> -->
+            <td></td>
+            <td>{{$attendance->late}}</td>
+            <td>{{$attendance->sick}}</td>
+            <td>{{$attendance->leave}}</td>
+            <td>{{$attendance->absent}}</td>
+          </tr>
+        @endif
+      @endforeach;
 
+      @if($check == 0)
       <tr>
+        <!-- <td>$attendance->present</td> -->
         <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
       </tr>
+
+      @endif
 
   </table>
 
@@ -341,13 +357,23 @@
       </tr>
       <tr>
         <td>1st Sem</td>
-        <td>……………..…..</td>
-        <td>……………..…..</td>
+        @if ($physical_record_semester1)
+          <td>{{$physical_record_semester1->height}}</td>
+          <td>{{$physical_record_semester1->weight}}</td>
+        @else
+        <td>0.00</td>
+        <td>0.00</td>
+        @endif
       </tr>
       <tr>
         <td>2nd Sem</td>
-        <td>……………..…..</td>
-        <td>……………..…..</td>
+        @if ($physical_record_semester2)
+          <td>{{$physical_record_semester2->height}}</td>
+          <td>{{$physical_record_semester2->weight}}</td>
+        @else
+        <td>0.00</td>
+        <td>0.00</td>
+        @endif
       </tr>
     </table>
 
