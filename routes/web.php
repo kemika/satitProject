@@ -90,6 +90,9 @@ Route::get('porbar','ReportCardController@index2');
 
 Route::get('/export','ExportController@index');
 Route::get('/export/room/{academic_year}/{semester}/{grade_level}/{room}','ExportController@show');
+Route::get('/exportHeight/{classroom_id}/{curriculum_year}','ExportController@exportHeight');
+Route::get('/exportComments/{classroom_id}/{curriculum_year}','ExportController@exportComments');
+Route::get('/exportBehavior/{classroom_id}/{curriculum_year}','ExportController@exportBehavior');
 // Route::get('/export2/{academic_year}/{semester}//','ExportController@show');
 Route::get('/export_menu','ExportController@index2');
 
