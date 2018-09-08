@@ -57,58 +57,6 @@ class UploadGradeController extends Controller
 
 
 
-    public function getUploadActivities(Request $request)
-    {
-      $students = Student::all();
-      $studentsID = Student::select('student_id')->get();
-      $arr = array();
-
-      date_default_timezone_set('Asia/Bangkok');
-      $datetime = date("Y-m-d H:i:s");
-      // dd($datetime);
-      // dd($studentsID);
-      // var_dump($studentsID);
-      // print_r($studentsID);
-
-
-      /*
-      foreach ($studentsID as $studentID) {
-        $arr[] = $studentID->student_id;
-      }*/
-      $arr = $students->toArray();
-
-      // print_r($arr);
-      //
-      // if (in_array("1111111111", $arr)) {
-      //     echo "Got My";
-      // }
-
-      if ($request->hasFile('file')) {
-
-        $fact = true;
-        $factGrade = true;
-        $factValidate = true;
-        $factEmpty = true;
-        $file = Input::file('file');
-        $file_name = $file->getClientOriginalName();
-        $file_type = \File::extension('files/'.$file_name);
-        $file->move('files/', $file_name);
-        $checkFileName = substr("$file_name", 0, 8);
-      }
-
-      $results = Excel::load('files/'.$file_name,function($reader){
-        $reader->setHeaderRow(3);
-        $reader->all();
-      })->get();
-      $courseID = $resultsCourse->getHeading()[1];
-
-      $redi  = $courseID."/".$resultsCourse[0]->no;
-      return redirect($redi);
-
-    } // END upload Activities
-
-
-
 
 
     public function getUploadComments(Request $request)
