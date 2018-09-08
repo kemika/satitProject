@@ -18,6 +18,7 @@ use App\Physical_Record;
 use App\Behavior_Type;
 use App\Behavior_Record;
 use App\Attendance_Record;
+use App\Teacher_Comment;
 use auth;
   ini_set('max_execution_time', 180);
 
@@ -101,6 +102,15 @@ class ReportCardController extends Controller
     ->get();
     $grade_semester1 = self::getGradeToFrom($grade_semester1);
     $grade_avg_sem1 = self::getAvg($grade_semester1);
+
+
+    $teacher_comments = Teacher_Comment::where('student_id',$student_id)
+    ->where('academic_year',$academic_year)
+    ->where('data_status',1)
+    ->orderBy('semester')
+    ->orderBy('quater')
+    ->get();
+    // dd(count($teacher_coments));
 
 
 
@@ -290,6 +300,7 @@ class ReportCardController extends Controller
       'physical_record_semester1' => $physical_record_semester1,
       'physical_record_semester2' => $physical_record_semester2,
       'attendances' => $attendances,
+      'teacher_comments' => $teacher_comments,
       'behavior_types' => $behavior_types,
       'behavior_records' => $behavior_records]);
 
@@ -313,6 +324,7 @@ class ReportCardController extends Controller
       'physical_record_semester1' => $physical_record_semester1,
       'physical_record_semester2' => $physical_record_semester2,
       'attendances' => $attendances,
+      'teacher_comments' => $teacher_comments,
       'behavior_types' => $behavior_types,
       'behavior_records' => $behavior_records]);
 
@@ -336,6 +348,7 @@ class ReportCardController extends Controller
       'physical_record_semester1' => $physical_record_semester1,
       'physical_record_semester2' => $physical_record_semester2,
       'attendances' => $attendances,
+      'teacher_comments' => $teacher_comments,
       'behavior_types' => $behavior_types,
       'behavior_records' => $behavior_records]);
 
@@ -473,6 +486,8 @@ class ReportCardController extends Controller
         $element = array('course_name'=> $x->course_name,
                         'course_id'=> $x->course_id,
                         'credits'=>$x->credits,
+                        'in_class'=>$x->in_class,
+                        'practice'=>$x->practice,
                         'quater1_sem1' => 0,
                         'quater2_sem1' => 0,
                         'quater3_sem1' => 0,
