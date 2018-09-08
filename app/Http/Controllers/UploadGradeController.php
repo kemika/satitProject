@@ -56,9 +56,6 @@ class UploadGradeController extends Controller
     // }
 
 
-
-
-
     public function getUploadComments(Request $request)
     {
 
