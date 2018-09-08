@@ -39,7 +39,7 @@ class UploadGradeController extends Controller
 
     // public function import(Request $request)
     // {
-    //   if($request->hasfFile('file')){
+    //   if($request->hasfFile('file')){getUpload
     //     $path = $request->file('file')->getRealpath();
     //     $data = Excel::load($path, function($reader){})->get();
     //       if (!empty($data) && $data->count()) {
@@ -358,7 +358,7 @@ class UploadGradeController extends Controller
 
     } // END upload Behavior
 
-
+    
 
     public function getUploadAttendance(Request $request)
     {
