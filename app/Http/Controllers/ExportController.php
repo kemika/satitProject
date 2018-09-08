@@ -102,7 +102,7 @@ class ExportController extends Controller
 
 
 
-  $academic_year = Academic_Year::where('classroom_id',$classroom_id)->where('curriculum_year',$curriculum_year)->select('Academic_Year.*')->get()[0];
+  $academic_year = Academic_Year::where('classroom_id',$classroom_id)->where('curriculum_year',$curriculum_year)->select('academic_year.*')->get()[0];
 
 
 
@@ -255,7 +255,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
 
 
-    $academic_year = Academic_Year::where('classroom_id',$classroom_id)->where('curriculum_year',$curriculum_year)->select('Academic_Year.*')->get()[0];
+    $academic_year = Academic_Year::where('classroom_id',$classroom_id)->where('curriculum_year',$curriculum_year)->select('academic_year.*')->get()[0];
 
 
 
