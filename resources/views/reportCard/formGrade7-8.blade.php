@@ -41,7 +41,7 @@
 
     <tr>
       <td>{{$grade['course_name']}}</td>
-      <td>{{strtoupper(substr($grade['course_name'], 0, 3))." ".$grade['course_id']}}</td>
+      <td>{{$grade['course_id']}}</td>
       <td>{{ $grade['credits']}}</td>
       <td>{{ $grade['quater1']}}</td>
       <td>{{ $grade['quater2']}}</td>
@@ -60,17 +60,17 @@
 
     @endforeach
 
-    @for ($i = count($grade_semester1); $i < 24; $i++)
-    <tr>
-      <td></td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-    </tr>
-    @endfor
+    {{--@for ($i = count($grade_semester1); $i < 24; $i++)--}}
+    {{--<tr>--}}
+      {{--<td></td>--}}
+      {{--<td>  </td>--}}
+      {{--<td>  </td>--}}
+      {{--<td>  </td>--}}
+      {{--<td>  </td>--}}
+      {{--<td>  </td>--}}
+      {{--<td>  </td>--}}
+    {{--</tr>--}}
+    {{--@endfor--}}
 
 
 
@@ -141,7 +141,7 @@
 
     <tr>
       <td>{{$grade['course_name']}}</td>
-      <td>{{strtoupper(substr($grade['course_name'], 0, 3))." ".$grade['course_id']}}</td>
+      <td>{{$grade['course_id']}}</td>
       <td>{{ $grade['credits']}}</td>
       <td>{{ $grade['quater1']}}</td>
       <td>{{ $grade['quater2']}}</td>
@@ -159,17 +159,17 @@
     @endforeach
 
 
-    @for ($i = count($grade_semester2); $i < 24; $i++)
-    <tr>
-      <td>{{" "." "}}</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    @endfor
+    {{--@for ($i = count($grade_semester2); $i < 24; $i++)--}}
+    {{--<tr>--}}
+      {{--<td>{{" "." "}}</td>--}}
+      {{--<td></td>--}}
+      {{--<td></td>--}}
+      {{--<td></td>--}}
+      {{--<td></td>--}}
+      {{--<td></td>--}}
+      {{--<td></td>--}}
+    {{--</tr>--}}
+    {{--@endfor--}}
 
 
 
