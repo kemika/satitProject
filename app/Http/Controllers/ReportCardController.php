@@ -301,6 +301,7 @@ class ReportCardController extends Controller
       'physical_record_semester1' => $physical_record_semester1,
       'physical_record_semester2' => $physical_record_semester2,
       'attendances' => $attendances,
+      'teacher_comments' => $teacher_comments,
       'behavior_types' => $behavior_types,
       'behavior_records' => $behavior_records]);
 
@@ -324,6 +325,7 @@ class ReportCardController extends Controller
       'physical_record_semester1' => $physical_record_semester1,
       'physical_record_semester2' => $physical_record_semester2,
       'attendances' => $attendances,
+      'teacher_comments' => $teacher_comments,
       'behavior_types' => $behavior_types,
       'behavior_records' => $behavior_records]);
 
@@ -347,6 +349,7 @@ class ReportCardController extends Controller
       'physical_record_semester1' => $physical_record_semester1,
       'physical_record_semester2' => $physical_record_semester2,
       'attendances' => $attendances,
+      'teacher_comments' => $teacher_comments,
       'behavior_types' => $behavior_types,
       'behavior_records' => $behavior_records]);
 
