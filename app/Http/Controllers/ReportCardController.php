@@ -61,7 +61,9 @@ class ReportCardController extends Controller
         //    and grades.datetime = latest_grade.datetime
         //WHERE `student_id` = '2540080850' and `academic_year` = 2018
         //
-        // We need this to get the latest grade value
+
+        // Get the latest grade value by getting the time of the latest valid grades then select
+        // the actual grade later by sub join
         $student_latest_grade_keys = Grade::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
             ->where('data_status', 1)
@@ -77,7 +79,7 @@ class ReportCardController extends Controller
             })
             ->select('grades.*');
 
-        //dd($student_latest_grades);
+        // Get student grade level and classroom_id
 
         //SELECT academic_year.grade_level , student_grade_levels.classroom_id
         //FROM student_grade_levels
@@ -113,15 +115,53 @@ class ReportCardController extends Controller
                 $join->on('offered_courses.open_course_id', 'student_latest_grades.open_course_id');
             })
             ->where('curriculums.is_activity', '0')
-            ->where('offered_courses.is_elective', '0')
             ->select('student_latest_grades.quater', 'student_latest_grades.grade', 'student_latest_grades.grade_status', 'offered_courses.*', 'curriculums.*')
             ->orderby('curriculums.course_name');
 
 
-        $grade_semester1 = (clone $grade)->where('offered_courses.semester', '1')->get();
-        $grade_semester1 = self::getGradeToFrom($grade_semester1);
+        // Get grade for semester 1
+        $grade_semester1_raw = (clone $grade)->where('offered_courses.semester', '1')
+            ->where('offered_courses.is_elective', '0')
+            ->get();
+        $grade_semester1 = self::getGradeToFrom($grade_semester1_raw);
         $grade_avg_sem1 = self::getAvg($grade_semester1);
 
+        // Get grades for semester 2
+        $grade_semester2_raw = (clone $grade)->where('offered_courses.semester', '2')
+            ->where('offered_courses.is_elective', '0')
+            ->get();
+        $grade_semester2 = self::getGradeToFrom($grade_semester2_raw);
+        $grade_avg_sem2 = self::getAvg($grade_semester2);
+
+        $grade_semester1_6 = self::getGradeToFrom1_6($grade_semester1_raw, $grade_semester2_raw);
+
+        // Get activities for semester 1 Use the same technique as grades
+        $student_latest_act_keys = Activity_Record::where('student_id', $student_id)
+            ->where('academic_year', $academic_year)
+            ->where('data_status', 1)
+            ->groupBy('open_course_id')
+            ->select(DB::raw('MAX(datetime) as datetime'), 'open_course_id');
+
+        $student_latest_acts = Activity_Record::where('student_id', $student_id)
+            ->where('academic_year', $academic_year)
+            ->joinSub($student_latest_act_keys, 'latest_act', function ($join) {
+                $join->on('activity_records.open_course_id', 'latest_act.open_course_id');
+                $join->on('activity_records.datetime', 'latest_act.datetime');
+            })
+            ->select('activity_records.*');
+
+        // Create template for all activity query
+        $acts = Offered_Courses::where('classroom_id', $grade_level->classroom_id)
+            ->join('curriculums', 'curriculums.course_id', 'offered_courses.course_id')
+            ->leftJoinSub($student_latest_acts, 'student_latest_acts', function ($join) {
+                $join->on('offered_courses.open_course_id', 'student_latest_acts.open_course_id');
+            })
+            ->where('curriculums.is_activity', '1')
+            ->select('student_latest_acts.grade_status', 'offered_courses.*', 'curriculums.*')
+            ->orderby('curriculums.course_name');
+
+        $activity_semester1 = (clone $acts)->where('offered_courses.semester', '1')->get();
+        $activity_semester2 = (clone $acts)->where('offered_courses.semester', '2')->get();
 
         $teacher_comments = Teacher_Comment::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
@@ -132,106 +172,17 @@ class ReportCardController extends Controller
             ->get();
         //dd(count($teacher_coments));
 
-
-        $grade_semester1_6_sem1 = Grade::where('grades.student_id', $student_id)
-            ->where('grades.data_status', '1')
-            ->distinct()
-            ->where('grades.semester', '1')
-            ->where('grades.academic_year', $academic_year)
-            ->join('offered_courses', 'offered_courses.open_course_id', 'grades.open_course_id')
-            // ->where('offered_courses','offered_courses.semester','grades.semester')
-            ->where('offered_courses.is_elective', '0')
-            ->select('grades.*', 'offered_courses.*')
-            ->join('curriculums', 'curriculums.course_id', 'offered_courses.course_id')
-            ->select('grades.*', 'offered_courses.*', 'curriculums.*')
-            // ->where('curriculums.curriculum_year','offered_courses.curriculum_year')
-            // ->select('grades.*','offered_courses.*','curriculums.*')
-            ->get();
-
-
-        $grade_semester1_6_sem2 = Grade::where('grades.student_id', $student_id)
-            ->where('grades.data_status', '1')
-            ->distinct()
-            ->where('grades.semester', '2')
-            ->where('grades.academic_year', $academic_year)
-            ->join('offered_courses', 'offered_courses.open_course_id', 'grades.open_course_id')
-            // ->where('offered_courses','offered_courses.semester','grades.semester')
-            ->where('offered_courses.is_elective', '0')
-            ->select('grades.*', 'offered_courses.*')
-            ->join('curriculums', 'curriculums.course_id', 'offered_courses.course_id')
-            ->select('grades.*', 'offered_courses.*', 'curriculums.*')
-            // ->where('curriculums.curriculum_year','offered_courses.curriculum_year')
-            // ->select('grades.*','offered_courses.*','curriculums.*')
-            ->get();
-
-
-        $grade_semester1_6 = self::getGradeToFrom1_6($grade_semester1_6_sem1, $grade_semester1_6_sem2);
-        // dd(count($grade_semester1_6));
-
-
-        $activity_semester1 = Activity_Record::where('student_id', $student_id)
-            ->where('activity_records.data_status', '1')
-            ->where('activity_records.semester', '1')
-            ->where('activity_records.academic_year', $academic_year)
-            ->join('offered_courses', 'offered_courses.open_course_id', 'activity_records.open_course_id')
-            // ->where('offered_courses','offered_courses.semester','grades.semester')
-            ->where('offered_courses.is_elective', '0')
-            ->select('activity_records.*', 'offered_courses.*')
-            ->join('curriculums', 'curriculums.course_id', 'offered_courses.course_id')
-            // ->where('curriculums.curriculum_year','offered_courses.curriculum_year')
-            ->select('activity_records.*', 'offered_courses.*', 'curriculums.*')
-            ->join('grade_status', 'grade_status.grade_status', 'activity_records.grade_status')
-            ->select('activity_records.*', 'offered_courses.*', 'curriculums.*', 'grade_status.*')
-            ->get();
-
-
         $physical_record_semester1 = Physical_Record::where('student_id', $student_id)
             ->where('physical_records.semester', '1')
             ->where('physical_records.academic_year', $academic_year)
             ->select('physical_records.*')
             ->first();
 
-
-//        $grade_semester2 = Grade::where('student_id', $student_id)
-//            ->where('grades.data_status', '1')
-//            ->distinct()
-//            ->where('grades.semester', '2')
-//            ->where('grades.academic_year', $academic_year)
-//            ->join('offered_courses', 'offered_courses.open_course_id', 'grades.open_course_id')
-//            // ->where('offered_courses','offered_courses.semester','grades.semester')
-//            ->where('offered_courses.is_elective', '0')
-//            ->select('grades.*', 'offered_courses.*')
-//            ->join('curriculums', 'curriculums.course_id', 'offered_courses.course_id')
-//            // ->where('curriculums.curriculum_year','offered_courses.curriculum_year')
-//            ->select('grades.*', 'offered_courses.*', 'curriculums.*')
-//            ->get();
-
-        $grade_semester2 = (clone $grade)->where('offered_courses.semester', '2')->get();
-        $grade_semester2 = self::getGradeToFrom($grade_semester2);
-        $grade_avg_sem2 = self::getAvg($grade_semester2);
-
-
         $physical_record_semester2 = Physical_Record::where('student_id', $student_id)
             ->where('physical_records.semester', '2')
             ->where('physical_records.academic_year', $academic_year)
             ->select('physical_records.*')
             ->first();
-
-
-        $activity_semester2 = Activity_Record::where('student_id', $student_id)
-            ->where('activity_records.data_status', '1')
-            ->where('activity_records.semester', '2')
-            ->where('activity_records.academic_year', $academic_year)
-            ->join('offered_courses', 'offered_courses.open_course_id', 'activity_records.open_course_id')
-            // ->where('offered_courses','offered_courses.semester','grades.semester')
-            ->where('offered_courses.is_elective', '0')
-            ->select('activity_records.*', 'offered_courses.*')
-            ->join('curriculums', 'curriculums.course_id', 'offered_courses.course_id')
-            // ->where('curriculums.curriculum_year','offered_courses.curriculum_year')
-            ->select('activity_records.*', 'offered_courses.*', 'curriculums.*')
-            ->join('grade_status', 'grade_status.grade_status', 'activity_records.grade_status')
-            ->select('activity_records.*', 'offered_courses.*', 'curriculums.*', 'grade_status.*')
-            ->get();
 
         $elective_grades = Grade::where('student_id', $student_id)
             ->where('grades.data_status', '1')
