@@ -93,6 +93,8 @@ Route::get('/export/room/{academic_year}/{semester}/{grade_level}/{room}','Expor
 Route::get('/exportHeight/{classroom_id}/{curriculum_year}','ExportController@exportHeight');
 Route::get('/exportComments/{classroom_id}/{curriculum_year}','ExportController@exportComments');
 Route::get('/exportBehavior/{classroom_id}/{curriculum_year}','ExportController@exportBehavior');
+Route::get('/exportAttandance/{classroom_id}/{curriculum_year}','ExportController@exportAttandance');
+Route::get('/exportActivities/{classroom_id}/{curriculum_year}','ExportController@exportActivities');
 // Route::get('/export2/{academic_year}/{semester}//','ExportController@show');
 Route::get('/export_menu','ExportController@index2');
 
