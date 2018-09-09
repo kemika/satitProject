@@ -135,7 +135,12 @@ class ReportCardController extends Controller
 
         $grade_semester1_6 = self::getGradeToFrom1_6($grade_semester1_raw, $grade_semester2_raw);
 
-        // Get activities for semester 1 Use the same technique as grades
+        // Get elective grades
+        $elective_grades = (clone $grade)->where('offered_courses.is_elective', '1')->get();
+        $elective_grades = self::getGradeToFrom($elective_grades);
+        $elective_grade_avg = self::getAvg($elective_grades);
+
+        // Get latest activities Use the same technique as grades
         $student_latest_act_keys = Activity_Record::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
             ->where('data_status', 1)
@@ -163,14 +168,24 @@ class ReportCardController extends Controller
         $activity_semester1 = (clone $acts)->where('offered_courses.semester', '1')->get();
         $activity_semester2 = (clone $acts)->where('offered_courses.semester', '2')->get();
 
+        // Get latest comments Use the same technique as grades
+        $latest_comment_keys = Teacher_Comment::where('student_id', $student_id)
+            ->where('academic_year', $academic_year)
+            //TODO           ->where('data_status', 1)  // There is no approval system for teacher comment yet
+            ->groupBy('semester', 'quater')
+            ->select(DB::raw('MAX(datetime) as datetime'), 'semester', 'quater');
+
         $teacher_comments = Teacher_Comment::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
-            //           ->where('data_status', 1)  // There is no approval system for teacher comment yet
+            ->joinSub($latest_comment_keys, 'latest_comments', function ($join) {
+                $join->on('teacher_comments.semester', 'latest_comments.semester');
+                $join->on('teacher_comments.quater', 'latest_comments.quater');
+                $join->on('teacher_comments.datetime', 'latest_comments.datetime');
+            })
+            ->select('teacher_comments.*')
             ->orderBy('semester')
             ->orderBy('quater')
-            ->groupBy('semester', 'quater')
             ->get();
-        //dd(count($teacher_coments));
 
         $physical_record_semester1 = Physical_Record::where('student_id', $student_id)
             ->where('physical_records.semester', '1')
@@ -183,21 +198,6 @@ class ReportCardController extends Controller
             ->where('physical_records.academic_year', $academic_year)
             ->select('physical_records.*')
             ->first();
-
-        $elective_grades = Grade::where('student_id', $student_id)
-            ->where('grades.data_status', '1')
-            ->distinct()
-            ->where('grades.academic_year', $academic_year)
-            ->join('offered_courses', 'offered_courses.open_course_id', 'grades.open_course_id')
-            // ->where('offered_courses','offered_courses.semester','grades.semester')
-            ->where('offered_courses.is_elective', '1')
-            ->select('grades.*', 'offered_courses.*')
-            ->join('curriculums', 'curriculums.course_id', 'offered_courses.course_id')
-            // ->where('curriculums.curriculum_year','offered_courses.curriculum_year')
-            ->select('grades.*', 'offered_courses.*', 'curriculums.*')
-            ->get();
-        $elective_grades = self::getGradeToFrom($elective_grades);
-        $elective_grade_avg = self::getAvg($elective_grades);
 
         $behavior_records = Behavior_Record::where('student_id', $student_id)
             ->where('behavior_records.academic_year', $academic_year)
