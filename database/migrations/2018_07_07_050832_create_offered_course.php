@@ -21,6 +21,8 @@ class CreateOfferedCourse extends Migration
                       $table->unsignedInteger('open_course_id')->unique()->autoIncrement();
                       $table->boolean('is_elective');
                       $table->float('credits');
+                      $table->string('in_class',10);
+                      $table->string('practice',10);
                        $table->timestamps();
 
                       $table->foreign('classroom_id')
