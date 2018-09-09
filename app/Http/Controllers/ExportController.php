@@ -10,7 +10,7 @@ use App\Teacher;
 use App\Student;
 use App\Academic_Year;
 use App\Offered_Courses;
-
+use App\Behavior_type;
 
 use App\Curriculum;
 use App\Student_Grade_Level;
@@ -26,8 +26,7 @@ class ExportController extends Controller
   public function index(){
     $academicYear = Academic_Year::groupBy('academic_year')->distinct('academic_year')->orderBy('academic_year')->get();
     $gradeLevel = Academic_Year::groupBy('grade_level')->distinct('grade_level')->orderBy('grade_level')->get();
-    // dd(count($academicYear),count($gradeLevel));
-
+    // dd(count($academicYear),count($gradeLevel));C
     return view('export.index',['academicYear' => $academicYear,'gradeLevel' => $gradeLevel]);
 
 
@@ -84,8 +83,7 @@ class ExportController extends Controller
 
 
 
-  public function exportExcel($classroom_id,$course_id,$curriculum_year)
-{
+  public function exportExcel($classroom_id,$course_id,$curriculum_year){
 
 
   $subject = Offered_Courses::where('classroom_id', $classroom_id)
@@ -356,6 +354,289 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
   })->export($type);
 
 }
+
+  public function exportHeight($classroom_id, $curriculum_year){
+    $academic_year = Academic_Year::where('classroom_id',$classroom_id)->where('curriculum_year',$curriculum_year)->select('academic_year.*')->get()[0];
+
+
+    $students = Student_Grade_Level::where('classroom_id',$classroom_id)
+    ->select('student_grade_levels.*')
+    ->join('students','students.student_id','student_grade_levels.student_id')
+    ->select('student_grade_levels.*','students.*')
+    ->get();
+
+    $room = Academic_Year::where('classroom_id',$classroom_id)
+    ->where('curriculum_year',$curriculum_year)
+    ->select('academic_year.*')
+    ->get()[0];
+
+    $type='xlsx';
+    Excel::create('HeightandWeight', function($excel) use($students,$room,$academic_year) {
+
+      $excel->sheet('Excel sheet', function($sheet) use($students,$room,$academic_year) {
+
+        $sheet->setOrientation('landscape');
+
+        $sheet->setCellValue('A1', 'Academic Year');
+        $sheet->setCellValue('A2', 'Grade Level');
+        $sheet->setCellValue('A3', 'Room');
+        $sheet->setCellValue('A4', 'Students ID');
+        $sheet->setCellValue('B4', 'Students Name');
+        $sheet->setCellValue('C4', 'S1 Height');
+        $sheet->setCellValue('D4', 'S1 Weight');
+        $sheet->setCellValue('E4', 'S2 Height');
+        $sheet->setCellValue('F4', 'S2 Weight');
+
+        $sheet->setCellValue('B1', $academic_year->academic_year);
+        $sheet->setCellValue('B2', $academic_year->grade_level);
+        $sheet->setCellValue('B3', $academic_year->room);
+        ////////////////////////////Student/////////////////////////////
+
+        $i=5;
+        foreach ($students as $student) {
+
+          $sheet->cells('A'.$i, function($cells) {
+            $cells->setAlignment('center');
+            $cells->setValignment('center');
+          });
+            $sheet->setCellValue('A'.$i, $student->student_id);
+            $sheet->setCellValue('B'.$i, $student->firstname." ".$student->lastname);
+            $i+=1;
+
+        }
+
+
+        $sheet->setWidth(array(
+            'A' => 12,
+            'B' => 25,
+            'C' => 19
+        ));
+
+        $sheet->setStyle(array(
+            'font' => array(
+                'name'      =>  'Tw Cen MT',
+                'size'      =>  12,
+                'bold'      =>  false
+            )
+        ));
+
+        $sheet->setBorder('A4:G4', 'thin');
+
+        $sheet->cells('D4:G4', function($cells) {
+            $cells->setAlignment('center');
+            $cells->setValignment('center');
+            $cells->setTextRotation(90);
+          });
+
+      });
+
+    })->export($type);
+
+  }
+
+  public function exportComments($classroom_id, $curriculum_year){
+    $academic_year = Academic_Year::where('classroom_id',$classroom_id)->where('curriculum_year',$curriculum_year)->select('academic_year.*')->get()[0];
+
+
+    $students = Student_Grade_Level::where('classroom_id',$classroom_id)
+    ->select('student_grade_levels.*')
+    ->join('students','students.student_id','student_grade_levels.student_id')
+    ->select('student_grade_levels.*','students.*')
+    ->get();
+
+    $room = Academic_Year::where('classroom_id',$classroom_id)
+    ->where('curriculum_year',$curriculum_year)
+    ->select('academic_year.*')
+    ->get()[0];
+
+    $type='xlsx';
+    Excel::create('Comments', function($excel) use($students,$room,$academic_year) {
+
+      $excel->sheet('Excel sheet', function($sheet) use($students,$room,$academic_year) {
+
+        $sheet->setOrientation('landscape');
+
+        ////////////////////////////Student/////////////////////////////
+
+        $i=5;
+        foreach ($students as $student) {
+
+          $sheet->cells('A'.$i, function($cells) {
+            $cells->setAlignment('center');
+            $cells->setValignment('center');
+          });
+            $sheet->setCellValue('A'.$i, $student->student_id);
+            $sheet->setCellValue('B'.$i, $student->firstname." ".$student->lastname);
+            $i+=1;
+
+        }
+
+        $sheet->setCellValue('B1', $academic_year->academic_year);
+        $sheet->setCellValue('B2', $academic_year->grade_level);
+        $sheet->setCellValue('B3', $academic_year->room);
+
+        $sheet->setCellValue('A1', 'Academic Year');
+        $sheet->setCellValue('A2', 'Grade Level');
+        $sheet->setCellValue('A3', 'Room');
+        $sheet->setCellValue('A4', 'Students ID');
+        $sheet->setCellValue('B4', 'Students Name');
+        $sheet->setCellValue('C4', 'Quater 1');
+        $sheet->setCellValue('D4', 'Quater 2');
+        $sheet->setCellValue('E4', 'Quater 3');
+        $sheet->setCellValue('F4', 'Quater 4');
+
+
+        $sheet->setWidth(array(
+            'A' => 12,
+            'B' => 25,
+            'C' => 50,
+            'D' => 50,
+            'E' => 50,
+            'F' => 50
+        ));
+
+        $sheet->setStyle(array(
+            'font' => array(
+                'name'      =>  'Tw Cen MT',
+                'size'      =>  12,
+                'bold'      =>  false
+            ),
+            'borders' => [
+                'allborders' => [
+                    'color' => [
+                        'rgb' => 'DBDBDB'
+                    ]
+                ]
+            ]
+        ));
+
+
+      });
+
+    })->export($type);
+
+  }
+
+  public function exportBehavior($classroom_id, $curriculum_year){
+    $academic_year = Academic_Year::where('classroom_id',$classroom_id)->where('curriculum_year',$curriculum_year)->select('academic_year.*')->get()[0];
+
+
+    $students = Student_Grade_Level::where('classroom_id',$classroom_id)
+    ->select('student_grade_levels.*')
+    ->join('students','students.student_id','student_grade_levels.student_id')
+    ->select('student_grade_levels.*','students.*')
+    ->get();
+
+    $room = Academic_Year::where('classroom_id',$classroom_id)
+    ->where('curriculum_year',$curriculum_year)
+    ->select('academic_year.*')
+    ->get()[0];
+
+    $behaviors = Behavior_type::all();
+
+    $type='xlsx';
+    Excel::create('Behavior', function($excel) use($students,$room,$academic_year, $behaviors) {
+
+      $excel->sheet('Excel sheet', function($sheet) use($students,$room,$academic_year, $behaviors) {
+
+        $sheet->setOrientation('landscape');
+
+        ////////////////////////////Student/////////////////////////////
+
+        $i=5;
+
+        foreach ($students as $student) {
+
+          $sheet->cells('A'.$i, function($cells) {
+            $cells->setAlignment('center');
+            $cells->setValignment('center');
+          });
+            $sheet->setCellValue('A'.$i, $student->student_id);
+            $sheet->setCellValue('B'.$i, $student->firstname." ".$student->lastname);
+            $i+=1;
+
+        }
+
+        ////////////////////////////Behaavior/////////////////////////////
+
+        $j=67;
+        $c = 65;
+
+        $BOOM = array();
+        foreach ($behaviors as $behavior) {
+          $chr1 = '';
+          $chr2 = '';
+          if($j > 90){
+            $count = floor($j/90);
+
+            $jj = 65+($j%90);
+            $chr2 = chr(64+$count).''.chr($jj+4).''.'5';
+            $jj = chr(64+$count).chr($jj).'5';
+            $chr1 = $jj;
+
+          }else{
+            $chr1 = chr($j).'5';
+            $chr2 = chr($j+4).'5';
+          }
+          // $sheet->mergeCells($chr1.':'.$chr2);
+          // $sheet->cells(chr($j).'5', function($cells) {
+          //   $cells->setAlignment('center');
+          //   $cells->setValignment('center');
+          // });
+
+
+
+
+          $sheet->setCellValue($chr1, $behavior->behavior_type_text);
+          $j+=5;
+
+          array_push($BOOM, $chr1,$chr2);
+        }
+        dd($BOOM);
+
+
+        $sheet->setCellValue('B1', $academic_year->academic_year);
+        $sheet->setCellValue('B2', $academic_year->grade_level);
+        $sheet->setCellValue('B3', $academic_year->room);
+
+        $sheet->setCellValue('A1', 'Academic Year');
+        $sheet->setCellValue('A2', 'Grade Level');
+        $sheet->setCellValue('A3', 'Room');
+        $sheet->setCellValue('A4', 'Behavior');
+        $sheet->setCellValue('A5', 'Students ID');
+        $sheet->setCellValue('B5', 'Students Name');
+        //-------- From Behavior table--------------------//
+        $sheet->setCellValue('C6', 'Q1');
+        $sheet->setCellValue('D6', 'Q2');
+        $sheet->setCellValue('E6', 'Q3');
+        $sheet->setCellValue('F6', 'Q4');
+
+
+        $sheet->setWidth(array(
+            'A' => 12,
+            'B' => 25
+        ));
+
+        $sheet->setStyle(array(
+            'font' => array(
+                'name'      =>  'Tw Cen MT',
+                'size'      =>  12,
+                'bold'      =>  false
+            )
+        ));
+
+
+
+
+
+        $sheet->setBorder('A4:F23', 'thin');
+
+
+      });
+
+    })->export($type);
+
+  }
 
 
 

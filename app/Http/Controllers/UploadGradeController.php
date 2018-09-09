@@ -358,7 +358,7 @@ class UploadGradeController extends Controller
 
     } // END upload Behavior
 
-    
+
 
     public function getUploadAttendance(Request $request)
     {
@@ -1188,23 +1188,21 @@ class UploadGradeController extends Controller
           $sheet->setCellValue('A1', 'Academic Year');
           $sheet->setCellValue('A2', 'Grade Level');
           $sheet->setCellValue('A3', 'Room');
-          $sheet->setCellValue('A4', 'No');
-          $sheet->setCellValue('B4', 'Students ID');
-          $sheet->setCellValue('C4', 'Students Name');
-          $sheet->setCellValue('D4', 'Quater 1');
-          $sheet->setCellValue('E4', 'Quater 2');
-          $sheet->setCellValue('F4', 'Quater 3');
-          $sheet->setCellValue('G4', 'Quater 4');
+          $sheet->setCellValue('A4', 'Students ID');
+          $sheet->setCellValue('B4', 'Students Name');
+          $sheet->setCellValue('C4', 'Quater 1');
+          $sheet->setCellValue('D4', 'Quater 2');
+          $sheet->setCellValue('E4', 'Quater 3');
+          $sheet->setCellValue('F4', 'Quater 4');
 
 
           $sheet->setWidth(array(
               'A' => 12,
-              'B' => 12,
-              'C' => 19,
+              'B' => 19,
+              'C' => 50,
               'D' => 50,
               'E' => 50,
-              'F' => 50,
-              'G' => 50
+              'F' => 50
           ));
 
           $sheet->setStyle(array(
