@@ -14,7 +14,7 @@
 
         @else
         @foreach($subjectElecs as $subject)
-          <button class="form-control" ><a href='/export_elective_course/{{$subject->classroom_id}}/{{$subject->course_id}}/{{$subject->curriculum_year}}'>{{ $subject->course_name}}</a></button>
+          <button class="form-control" ><a href='/export_elective_course/{{$subject->classroom_id}}/{{$subject->course_id}}/{{$subject->curriculum_year}}'>{{ $subject->course_name}}  ( {{$subject->course_id}} )</a></button>
           <br>
         @endforeach
 
@@ -26,7 +26,7 @@
       <div class="col-4 mt-5 card" style="padding: 10px;">
         <h2>Main Coruse</h2>
         @foreach($subjects as $subject)
-          <button class="form-control" ><a href='/export_grade/{{$subject->classroom_id}}/{{$subject->course_id}}/{{$subject->curriculum_year}}'>{{ $subject->course_name}}</a></button>
+          <button class="form-control" ><a href='/export_grade/{{$subject->classroom_id}}/{{$subject->course_id}}/{{$subject->curriculum_year}}'>{{ $subject->course_name}} ( {{$subject->course_id}} )</a></button>
           <br>
         @endforeach
         </div>
@@ -45,9 +45,9 @@
             <br>
             <button class="form-control"> <a href="/exportBehavior/{{$academic_year->classroom_id}}/{{$academic_year->curriculum_year}}}"> Behavior </a></button>
             <br>
-            <button class="form-control"> <a href="#"> Attandance </a></button>
+            <button class="form-control"> <a href="/exportAttandance/{{$academic_year->classroom_id}}/{{$academic_year->curriculum_year}}}"> Attandance </a></button>
             <br>
-            <button class="form-control"> <a href="#"> Activities </a></button>
+            <button class="form-control"> <a href="/exportActivities/{{$academic_year->classroom_id}}/{{$academic_year->curriculum_year}}}"> Activities </a></button>
 
           </div>
         </div>
