@@ -41,7 +41,7 @@
 
     <tr>
       <td>{{$grade['course_name']}}</td>
-      <td>{{strtoupper(substr($grade['course_name'], 0, 3))." ".$grade['course_id']}}</td>
+      <td>{{$grade['course_id']}}</td>
       <td>{{ $grade['credits']}}</td>
       <td>{{ $grade['quater1']}}</td>
       <td>{{ $grade['quater2']}}</td>
@@ -60,17 +60,17 @@
 
     @endforeach
 
-    @for ($i = count($grade_semester1); $i < 24; $i++)
-    <tr>
-      <td></td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-    </tr>
-    @endfor
+    {{--@for ($i = count($grade_semester1); $i < 24; $i++)--}}
+    {{--<tr>--}}
+      {{--<td></td>--}}
+      {{--<td>  </td>--}}
+      {{--<td>  </td>--}}
+      {{--<td>  </td>--}}
+      {{--<td>  </td>--}}
+      {{--<td>  </td>--}}
+      {{--<td>  </td>--}}
+    {{--</tr>--}}
+    {{--@endfor--}}
 
 
 
@@ -141,7 +141,7 @@
 
     <tr>
       <td>{{$grade['course_name']}}</td>
-      <td>{{strtoupper(substr($grade['course_name'], 0, 3))." ".$grade['course_id']}}</td>
+      <td>{{$grade['course_id']}}</td>
       <td>{{ $grade['credits']}}</td>
       <td>{{ $grade['quater1']}}</td>
       <td>{{ $grade['quater2']}}</td>
@@ -159,17 +159,17 @@
     @endforeach
 
 
-    @for ($i = count($grade_semester2); $i < 24; $i++)
-    <tr>
-      <td>{{" "." "}}</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    @endfor
+    {{--@for ($i = count($grade_semester2); $i < 24; $i++)--}}
+    {{--<tr>--}}
+      {{--<td>{{" "." "}}</td>--}}
+      {{--<td></td>--}}
+      {{--<td></td>--}}
+      {{--<td></td>--}}
+      {{--<td></td>--}}
+      {{--<td></td>--}}
+      {{--<td></td>--}}
+    {{--</tr>--}}
+    {{--@endfor--}}
 
 
 
@@ -432,11 +432,18 @@
     No information for evaluation</p>
 
 </div>
+@for($i = 0 ; $i < 4 ; $i++)
+
 <div class="page-break"></div>
 
 <div class="board">
   <div class="dotBottom">
+    @if($i <= 1)
     <center><h4 class="heading">FIRST SEMESTER COMMENT</h4></center> <br>
+    @else
+    <center><h4 class="heading">SECOND SEMESTER COMMENT</h4></center> <br>
+    @endif
+
     <h5>First Comment</h5> <br>
     <h6>Classroom Teacher : ……………..…..…….………………………..…..…….………………………..………………………</h6>
   </div>
@@ -457,12 +464,22 @@
     </table>
   </div>
   <br>
+  @if($i < count($teacher_comments) )
+  <h6>Guardian : {{$teacher_comments[$i]->comment}}.…..…….………………………..…………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  @else
   <h6>Guardian : ……………..…..…….………………………..…..…….………………………..…………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+
+  @endif
 
   <div style="margin-left: 59%;">
     <table style="margin-top:20px;">
@@ -481,153 +498,8 @@
   </div>
 </div>
 
-<div class="page-break"></div>
 
-<div class="board">
-  <div class="dotBottom">
-    <center><h4 class="heading">FIRST SEMESTER COMMENT</h4></center> <br>
-    <h5>Second Comment</h5> <br>
-    <h6>Classroom Teacher : ……………..…..…….………………………..…..…….………………………..………………………</h6>
-  </div>
-
-  <div style="margin-left: 59%;">
-    <table style="margin-top:20px;">
-      <tr>
-        <th>Signature</th>
-        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
-      </tr>
-      <tr>
-        <td></td>
-        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
-        <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ {{$academic_year}}
-      </td>
-      </tr>
-    </table>
-  </div>
-  <br>
-  <h6>Guardian : ……………..…..…….………………………..…..…….………………………..…………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-
-  <div style="margin-left: 59%;">
-    <table style="margin-top:20px;">
-      <tr>
-        <th>Signature</th>
-        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
-      </tr>
-      <tr>
-        <td></td>
-        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
-        <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ {{$academic_year}}
-      </td>
-      </tr>
-    </table>
-  </div>
-</div>
-<div class="page-break"></div>
-
-<div class="board">
-  <div class="dotBottom">
-    <center><h4 class="heading">SECOND SEMESTER COMMENT</h4></center> <br>
-    <h5>First Comment</h5> <br>
-    <h6>Classroom Teacher : ……………..…..…….………………………..…..…….………………………..………………………</h6>
-  </div>
-
-  <div style="margin-left: 59%;">
-    <table style="margin-top:20px;">
-      <tr>
-        <th>Signature</th>
-        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
-      </tr>
-      <tr>
-        <td></td>
-        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
-        <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ {{$academic_year}}
-      </td>
-      </tr>
-    </table>
-  </div>
-  <br>
-  <h6>Guardian : ……………..…..…….………………………..…..…….………………………..…………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-
-  <div style="margin-left: 59%;">
-    <table style="margin-top:20px;">
-      <tr>
-        <th>Signature</th>
-        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
-      </tr>
-      <tr>
-        <td></td>
-        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
-        <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ {{$academic_year}}
-      </td>
-      </tr>
-    </table>
-  </div>
-</div>
-
-<div class="page-break"></div>
-
-<div class="board">
-  <div class="dotBottom">
-    <center><h4 class="heading">SECOND SEMESTER COMMENT</h4></center> <br>
-    <h5>Second Comment</h5> <br>
-    <h6>Classroom Teacher : ……………..…..…….………………………..…..…….………………………..………………………</h6>
-  </div>
-
-  <div style="margin-left: 59%;">
-    <table style="margin-top:20px;">
-      <tr>
-        <th>Signature</th>
-        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
-      </tr>
-      <tr>
-        <td></td>
-        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
-        <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ {{$academic_year}}
-      </td>
-      </tr>
-    </table>
-  </div>
-  <br>
-  <h6>Guardian : ……………..…..…….………………………..…..…….………………………..…………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-
-  <div style="margin-left: 59%;">
-    <table style="margin-top:20px;">
-      <tr>
-        <th>Signature</th>
-        <th style="width:200px; border-bottom: 1.5px solid black;"></th>
-      </tr>
-      <tr>
-        <td></td>
-        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
-        <span style="color:white">---------------</span>/
-        <span style="color:white">------</span>/ {{$academic_year}}
-      </td>
-      </tr>
-    </table>
-  </div>
-</div>
-<div class="page-break"></div>
-
+@endfor
 <h6>Final  Report</h6>
 <table style="margin-top:20px; margin-left:40px;" class="finalReport">
   <tr>
