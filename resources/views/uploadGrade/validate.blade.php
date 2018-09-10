@@ -25,10 +25,12 @@
       </thead>
       <tbody>
         @foreach($arrayValidates as $arrayValidate)
+        @if($arrayValidate != "")
         <tr>
           <td>{{ $loop->iteration }}</td>
           <td>{{ $arrayValidate }}</td>
         </tr>
+        @endif
         @endforeach
 
       </tbody>
