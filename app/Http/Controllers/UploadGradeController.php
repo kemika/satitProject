@@ -59,9 +59,6 @@ class UploadGradeController extends Controller
     public function getUploadComments(Request $request)
     {
 
-
-
-
       // dd($datetime);
       // dd($studentsID);
       // var_dump($studentsID);
@@ -79,10 +76,12 @@ class UploadGradeController extends Controller
       // }
 
       if ($request->hasFile('file')) {
+        $errorArray = array();
+
         foreach($request->file as $file){
-          $file_name = $file->getClientOriginalName();
 
-
+          $finalResult = array();
+          $errorDetail = array();
           $fact = true;
           $factGrade = true;
           $factValidate = true;
@@ -134,38 +133,65 @@ class UploadGradeController extends Controller
 
           foreach ($studentsID as $studentID) {
             $stdArray[] = $studentID->student_id;
-            $stdName[$studentID->student_id] = $studentID->firstname." ".$studentID->lastname;
+            $stdName[(String) ($studentID->student_id)] = $studentID->firstname." ".$studentID->lastname;
           }
-          
+
 
           for ($i = 0; $i < count($results); $i++) {
-            if(in_array($results[$i]->students_id,$stdArray) && ($stdName[$results[$i]->students_id] === $results[$i]->students_name)){
-              for ($j = 1; $j <= 4; $j++) {
-                $qComment = "quater_".$j;
-                if($j == 1 || $j == 2){
-                  $semester = 1;
-                }
-                else if($j == 3 || $j == 4){
-                  $semester = 2;
-                }
-                if($results[$i]->$qComment != ""){
-                  $comment = new Teacher_Comment;
-                  $comment->student_id = $results[$i]->students_id;
-                  $comment->quater = $j;
-                  $comment->comment = $results[$i]->$qComment;
-                  $comment->semester = $semester;
-                  $comment->academic_year = $year;
-                  $comment->datetime = $datetime;
-                  $comment->save();
+            if(in_array($results[$i]->students_id,$stdArray)){
+
+              if($stdName[(String) ($results[$i]->students_id)] === $results[$i]->students_name){
+                for ($j = 1; $j <= 4; $j++) {
+                  $qComment = "quater_".$j;
+                  if($j == 1 || $j == 2){
+                    $semester = 1;
+                  }
+                  else if($j == 3 || $j == 4){
+                    $semester = 2;
+                  }
+                  if($results[$i]->$qComment != ""){
+                    $comment = new Teacher_Comment;
+                    $comment->student_id = $results[$i]->students_id;
+                    $comment->quater = $j;
+                    $comment->comment = $results[$i]->$qComment;
+                    $comment->semester = $semester;
+                    $comment->academic_year = $year;
+                    $comment->datetime = $datetime;
+                    $finalResult[] = $comment;
+                  }
                 }
               }
+              else if ($stdName[$results[$i]->students_id] !== $results[$i]->students_name){
+                $errorDetail[(String) ($results[$i]->students_id)] = $results[$i]->students_id." This student ID doesn't match with student name";
+              }
+            }
+            else if (!in_array($results[$i]->students_id,$stdArray)){
+              $errorDetail[(String) ($results[$i]->students_id)] = $results[$i]->students_id." this Student ID doesn't exist in this room";
             }
 
           }
+          if(count($errorDetail) <= 0){
+            foreach($finalResult as $result){
+              $result->save();
+            }
+            $errorDetail[0] = "upload file Academic_Year : ".$year." Grade Level : ".$gradeLevel." Room : ".$room." success";
+            
+          }
+          else {
+            /*
+            foreach($errorDetail as $key => $value){
+              print_r("Student ID : ".$key." got error => ".$value."</br>");
+            }*/
+
+          }
+          $errorArray[] = $errorDetail[];
+
 
         }
 
       }
+
+
 
 
       $redi  = 'temp/test';
