@@ -221,7 +221,7 @@ class ExportController extends Controller
 
 
         $sheet->setCellValue('B3', $room->grade_level.'/'.$room->room);
-        $sheet->setCellValue('B2', strtoupper(substr($subject->course_name, 0, 3))." ".$subject->course_id);
+        $sheet->setCellValue('B2', $subject->course_id);
         $sheet->setCellValue('C2', $subject->course_name);
         $sheet->setCellValue('B4', $academic_year->academic_year);
 
@@ -340,7 +340,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
 
         $sheet->setCellValue('B3', '');
-        $sheet->setCellValue('B2', strtoupper(substr($subject->course_name, 0, 3))." ".$subject->course_id);
+        $sheet->setCellValue('B2', $subject->course_id);
         $sheet->setCellValue('C2', $subject->course_name);
         $sheet->setCellValue('B4', $academic_year->academic_year);
 
@@ -796,22 +796,22 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
         $sheet->setCellValue('A2', 'Grade Level');
         $sheet->setCellValue('A3', 'Room');
         $sheet->setCellValue('A4', 'Fill these cells in with S, U, or leave blank');
-        $sheet->setCellValue('A6', 'No');
-        $sheet->setCellValue('B6', 'Students ID');
-        $sheet->setCellValue('C6', 'Students Name');
+        // $sheet->setCellValue('A6', 'No');
+        $sheet->setCellValue('A6', 'Students ID');
+        $sheet->setCellValue('B6', 'Students Name');
 
-        $sheet->setCellValue('C5', 'Activities');
+        $sheet->setCellValue('B5', 'Activities');
         //------------- From Attentance table ----------//
-        $cells = self::get_index_cell(ord('D'),count($subject_sem1),5);
+        $cells = self::get_index_cell(ord('C'),count($subject_sem1),5);
 
         $i = 0;
         foreach ($cells as $cell ) {
-          $sheet->setCellValue($cell, $subject_sem1[$i]->course_id);
+          $sheet->setCellValue($cell,$subject_sem1[$i]->course_name.' ('. $subject_sem1[$i]->course_id.')' );
           $i+=1;
 
         }
 
-        $b = self::get_index_char_cell(ord('D'),count($subject_sem1)-1,6);
+        $b = self::get_index_char_cell(ord('C'),count($subject_sem1)-1,6);
 
         $sheet->mergeCells($b[0].':'.$b[1]);
         $sheet->cell($b[0].':'.$b[1], function($cell) {
@@ -819,7 +819,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
         });
         $sheet->setCellValue($b[0], '1st Semester');
 
-        $start = ord('D')+count($subject_sem1);
+        $start = ord('C')+count($subject_sem1);
 
 
 
@@ -828,7 +828,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
         $i = 0;
         foreach ($cells as $cell ) {
-          $sheet->setCellValue($cell, $subject_sem2[$i]->course_id);
+          $sheet->setCellValue($cell,$subject_sem2[$i]->course_name.' ('. $subject_sem2[$i]->course_id.')' );
           $i+=1;
 
         }
@@ -843,9 +843,9 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
         $sheet->setCellValue($b[0], '2st Semester');
 
         for($i =1 ; $i<=count($students) ;$i++){
-          $sheet->setCellValue('A'.(6+$i), $i);
-          $sheet->setCellValue('B'.(6+$i), $students[$i-1]->student_id);
-          $sheet->setCellValue('C'.(6+$i), $students[$i-1]->firstname.' '.$students[$i-1]->lastname);
+          // $sheet->setCellValue('A'.(6+$i), $i);
+          $sheet->setCellValue('A'.(6+$i), $students[$i-1]->student_id);
+          $sheet->setCellValue('B'.(6+$i), $students[$i-1]->firstname.' '.$students[$i-1]->lastname);
         }
 
 
@@ -855,8 +855,8 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
         $sheet->setWidth(array(
             'A' => 12,
-            'B' => 12,
-            'C' => 35
+            'B' => 35,
+            'C' => 12
         ));
 
         $sheet->setHeight(array(
@@ -887,7 +887,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
             $cell->setAlignment('center');
         });
 
-        $sheet->cell('C5', function($cell) {
+        $sheet->cell('B5', function($cell) {
             $cell->setBackground('#FFC300');
         });
 
