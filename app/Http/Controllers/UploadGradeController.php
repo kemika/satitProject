@@ -59,6 +59,9 @@ class UploadGradeController extends Controller
     public function getUploadComments(Request $request)
     {
 
+
+
+
       // dd($datetime);
       // dd($studentsID);
       // var_dump($studentsID);
@@ -76,82 +79,95 @@ class UploadGradeController extends Controller
       // }
 
       if ($request->hasFile('file')) {
-
-        $fact = true;
-        $factGrade = true;
-        $factValidate = true;
-        $factEmpty = true;
-        $file = Input::file('file');
-        $file_name = $file->getClientOriginalName();
-        $file_type = \File::extension('files/'.$file_name);
-        $file->move('files/', $file_name);
-        $checkFileName = substr("$file_name", 0, 8);
-      }
+        foreach($request->file as $file){
+          $file_name = $file->getClientOriginalName();
 
 
-      $getAcademicYear = Excel::load('files/'.$file_name,function($reader){
-        $reader->setHeaderRow(1);
-      })->get();
+          $fact = true;
+          $factGrade = true;
+          $factValidate = true;
+          $factEmpty = true;
+          //$file = Input::file('file');
+          $file_name = $file->getClientOriginalName();
+          $file_type = \File::extension('files/'.$file_name);
+          $file->move('files/', $file_name);
+          $checkFileName = substr("$file_name", 0, 8);
 
 
-      $getGradeLevel = Excel::load('files/'.$file_name,function($reader){
-        $reader->setHeaderRow(2);
-      })->get();
+          $getAcademicYear = Excel::load('files/'.$file_name,function($reader){
+            $reader->setHeaderRow(1);
+          })->get();
 
-      $getRoom = Excel::load('files/'.$file_name,function($reader){
-        $reader->setHeaderRow(3);
-      })->get();
 
-      $results = Excel::load('files/'.$file_name,function($reader){
-        $reader->setHeaderRow(4);
-        $reader->all();
-      })->get();
+          $getGradeLevel = Excel::load('files/'.$file_name,function($reader){
+            $reader->setHeaderRow(2);
+          })->get();
 
-      $year = $getAcademicYear->getHeading()[1];
-      $gradeLevel = $getGradeLevel->getHeading()[1];
-      $room = $getRoom->getHeading()[1];
+          $getRoom = Excel::load('files/'.$file_name,function($reader){
+            $reader->setHeaderRow(3);
+          })->get();
 
-      $students = Student::all();
-      $studentsID = Student::Join('student_grade_levels','student_grade_levels.student_id','=','students.student_id')
-          ->Join('academic_year','academic_year.classroom_id','=','student_grade_levels.classroom_id')
-          ->where('academic_year.academic_year',$year)
-          ->where('academic_year.room',$room)
-          ->where('academic_year.grade_level',$gradeLevel)
-          ->select('students.student_id')
-          ->get();
-      $stdArray = array();
+          $results = Excel::load('files/'.$file_name,function($reader){
+            $reader->setHeaderRow(4);
+            $reader->all();
+          })->get();
 
-      date_default_timezone_set('Asia/Bangkok');
-      $datetime = date("Y-m-d H:i:s");
+          $year = $getAcademicYear->getHeading()[1];
+          $gradeLevel = $getGradeLevel->getHeading()[1];
+          $room = $getRoom->getHeading()[1];
 
-      foreach ($studentsID as $studentID) {
-        $stdArray[] = $studentID->student_id;
-      }
 
-      for ($i = 0; $i < count($results); $i++) {
-        if(in_array($results[$i]->students_id,$stdArray)){
-          for ($j = 1; $j <= 4; $j++) {
-            $qComment = "quater_".$j;
-            if($j == 1 || $j == 2){
-              $semester = 1;
-            }
-            else if($j == 3 || $j == 4){
-              $semester = 2;
-            }
-            if($results[$i]->$qComment != ""){
-              $comment = new Teacher_Comment;
-              $comment->student_id = $results[$i]->students_id;
-              $comment->quater = $j;
-              $comment->comment = $results[$i]->$qComment;
-              $comment->semester = $semester;
-              $comment->academic_year = $year;
-              $comment->datetime = $datetime;
-              $comment->save();
-            }
+          $students = Student::all();
+          $studentsID = Student::Join('student_grade_levels','student_grade_levels.student_id','=','students.student_id')
+              ->Join('academic_year','academic_year.classroom_id','=','student_grade_levels.classroom_id')
+              ->where('academic_year.academic_year',$year)
+              ->where('academic_year.room',$room)
+              ->where('academic_year.grade_level',$gradeLevel)
+              ->select('students.student_id','students.firstname','students.lastname')
+              ->get();
+
+          $stdArray = array();
+          $stdName = array();
+
+          date_default_timezone_set('Asia/Bangkok');
+          $datetime = date("Y-m-d H:i:s");
+
+          foreach ($studentsID as $studentID) {
+            $stdArray[] = $studentID->student_id;
+            $stdName[$studentID->student_id] = $studentID->firstname." ".$studentID->lastname;
           }
+          
+
+          for ($i = 0; $i < count($results); $i++) {
+            if(in_array($results[$i]->students_id,$stdArray) && ($stdName[$results[$i]->students_id] === $results[$i]->students_name)){
+              for ($j = 1; $j <= 4; $j++) {
+                $qComment = "quater_".$j;
+                if($j == 1 || $j == 2){
+                  $semester = 1;
+                }
+                else if($j == 3 || $j == 4){
+                  $semester = 2;
+                }
+                if($results[$i]->$qComment != ""){
+                  $comment = new Teacher_Comment;
+                  $comment->student_id = $results[$i]->students_id;
+                  $comment->quater = $j;
+                  $comment->comment = $results[$i]->$qComment;
+                  $comment->semester = $semester;
+                  $comment->academic_year = $year;
+                  $comment->datetime = $datetime;
+                  $comment->save();
+                }
+              }
+            }
+
+          }
+
         }
 
       }
+
+
       $redi  = 'temp/test';
       return redirect($redi);
 
@@ -1049,7 +1065,7 @@ class UploadGradeController extends Controller
          dd("Please Select File");
        }
     }
-
+/*
 
     public function exportExcel($type)
     {
@@ -1446,7 +1462,7 @@ class UploadGradeController extends Controller
     }
 
 
-
+*/
 
 
 }

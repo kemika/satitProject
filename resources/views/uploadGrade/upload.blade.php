@@ -50,7 +50,7 @@
       <form action="/getUploadComments" method="post" enctype="multipart/form-data" class="form-inline">
         {{csrf_field()}}
 
-        <input type="file" name="file">
+        <input type="file" name="files[]" multiple>
         <input type="hidden" name="_token" value="{{csrf_token()}}">
         <input type="submit" class="btn btn-primary mb-2" value="upload Comments">
 
