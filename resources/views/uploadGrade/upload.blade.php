@@ -43,7 +43,7 @@
         {{csrf_field()}}
         <input type="file" name="file">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="submit" class="btn btn-danger mb-2" value="upload">
+        <input type="submit" class="btn btn-primary mb-2" value="upload">
       </form>
 
 
