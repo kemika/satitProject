@@ -43,7 +43,7 @@
         {{csrf_field()}}
         <input type="file" name="file">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="submit" class="btn btn-danger mb-2" value="upload">
+        <input type="submit" class="btn btn-primary mb-2" value="upload">
       </form>
 
 
@@ -84,10 +84,3 @@
         <input type="submit" class="btn btn-danger mb-2" value="upload Activities">
       </form>
     </div>
-
-    <h4>Extra</h4>
-    <a href="{{ route('export.height',['type'=>'xlsx']) }}">Height and Weight</a> <br><br>
-    <a href="{{ route('export.comments',['type'=>'xlsx']) }}">Comments</a> <br><br>
-    <a href="{{ route('export.behavior',['type'=>'xlsx']) }}">Behavior</a> <br><br>
-    <a href="{{ route('export.attandance',['type'=>'xlsx']) }}">Attandance</a> <br><br>
-    <a href="{{ route('export.activities',['type'=>'xlsx']) }}">Activities</a> <br><br>
