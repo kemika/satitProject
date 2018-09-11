@@ -62,6 +62,7 @@ Route::post('/uploadGrade/import', 'UploadGradeController@import');
 Route::get('/upload', 'UploadGradeController@upload');
 Route::post('/getUpload', 'UploadGradeController@getUpload');
 
+
 Route::get('export-height/{type}', 'UploadGradeController@exportHeight')->name('export.height');
 Route::get('export-comments/{type}', 'UploadGradeController@exportComments')->name('export.comments');
 Route::get('export-behavior/{type}', 'UploadGradeController@exportBehavior')->name('export.behavior');
@@ -84,6 +85,11 @@ Route::get('porbar','ReportCardController@index2');
 
 Route::get('/export','ExportController@index');
 Route::get('/export/room/{academic_year}/{semester}/{grade_level}/{room}','ExportController@show');
+Route::get('/exportHeight/{classroom_id}/{curriculum_year}','ExportController@exportHeight');
+Route::get('/exportComments/{classroom_id}/{curriculum_year}','ExportController@exportComments');
+Route::get('/exportBehavior/{classroom_id}/{curriculum_year}','ExportController@exportBehavior');
+Route::get('/exportAttandance/{classroom_id}/{curriculum_year}','ExportController@exportAttandance');
+Route::get('/exportActivities/{classroom_id}/{curriculum_year}','ExportController@exportActivities');
 // Route::get('/export2/{academic_year}/{semester}//','ExportController@show');
 Route::get('/export_menu','ExportController@index2');
 

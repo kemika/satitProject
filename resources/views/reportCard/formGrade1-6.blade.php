@@ -152,19 +152,13 @@
     @endfor
 
     <?php
-
-
-      if($total_credit == 0){
-        $GPA_total = 0;
-        $GPA_sem1 =0;
-        $GPA_sem2 =0;
-      }else{
-        $GPA_sem1 = substr($GPA_sem1/$total_credit,0,strpos($GPA_sem1/$total_credit,'.')+3);
-        $GPA_sem2 = substr($GPA_sem2/$total_credit,0,strpos($GPA_sem2/$total_credit,'.')+3);
-
-      $GPA_total = ($GPA_sem1 + $GPA_sem2) / $total_credit;
+      $denominator = $total_credit;
+      if($denominator == 0){
+          $denominator = 1;
       }
-
+      $GPA_sem1 = substr($GPA_sem1/$denominator,0,strpos($GPA_sem1/$denominator,'.')+3);
+      $GPA_sem2 = substr($GPA_sem2/$denominator,0,strpos($GPA_sem2/$denominator,'.')+3);
+      $GPA_total = ($GPA_sem1 + $GPA_sem2) / $denominator;
       $GPA_total = substr($GPA_total,0,strpos($GPA_total,'.')+3);
 
     ?>
@@ -509,6 +503,9 @@
 
     <h5>First Comment</h5> <br>
     <h6>Classroom Teacher : ……………..…..…….………………………..…..…….………………………..………………………</h6>
+        @if($i < count($teacher_comments) )
+            <p>{{$teacher_comments[$i]->comment}}</p>
+        @endif
   </div>
 
   <div style="margin-left: 59%;">
@@ -527,22 +524,12 @@
     </table>
   </div>
   <br>
-  @if($i < count($teacher_comments) )
-  <h6>Guardian : {{$teacher_comments[$i]->comment}}.…..…….………………………..…………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  @else
   <h6>Guardian : ……………..…..…….………………………..…..…….………………………..…………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-
-  @endif
 
   <div style="margin-left: 59%;">
     <table style="margin-top:20px;">

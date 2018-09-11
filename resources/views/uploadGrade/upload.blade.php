@@ -30,6 +30,7 @@
                  @csrf
              </form></li>
 
+
              <li style="float:right"><a href='#'>{{ auth::user()->firstname.' '.auth::user()->lastname}}</a></li>
   </ul>
 
@@ -44,11 +45,42 @@
         <input type="hidden" name="_token" value="{{csrf_token()}}">
         <input type="submit" class="btn btn-primary mb-2" value="upload">
       </form>
-    </div>
 
-    <h4>Extra</h4>
-    <a href="{{ route('export.height',['type'=>'xlsx']) }}">Height and Weight</a> <br><br>
-    <a href="{{ route('export.comments',['type'=>'xlsx']) }}">Comments</a> <br><br>
-    <a href="{{ route('export.behavior',['type'=>'xlsx']) }}">Behavior</a> <br><br>
-    <a href="{{ route('export.attandance',['type'=>'xlsx']) }}">Attandance</a> <br><br>
-    <a href="{{ route('export.activities',['type'=>'xlsx']) }}">Activities</a> <br><br>
+
+      <form action="/getUploadComments" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+
+        <input type="file" name="file[]" multiple>
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-primary mb-2" value="upload Comments">
+
+      </form>
+
+      <form action="/getUploadHeightAndWeight" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+        <input type="file" name="file[]" multiple>
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-primary mb-2" value="upload Height And Weight">
+      </form>
+
+      <form action="/getUploadBehavior" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+        <input type="file" name="file[]" multiple>
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-primary mb-2" value="upload Behavior">
+      </form>
+
+      <form action="/getUploadAttendance" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+        <input type="file" name="file[]" multiple>
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-primary mb-2" value="upload Attendance">
+      </form>
+
+      <form action="/getUploadActivities" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+        <input type="file" name="file[]" multiple>
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-danger mb-2" value="upload Activities">
+      </form>
+    </div>
