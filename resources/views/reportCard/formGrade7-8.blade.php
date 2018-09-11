@@ -187,22 +187,6 @@
 
     @endforeach
 
-
-    {{--@for ($i = count($grade_semester2); $i < 24; $i++)--}}
-    {{--<tr>--}}
-      {{--<td>{{" "." "}}</td>--}}
-      {{--<td></td>--}}
-      {{--<td></td>--}}
-      {{--<td></td>--}}
-      {{--<td></td>--}}
-      {{--<td></td>--}}
-      {{--<td></td>--}}
-    {{--</tr>--}}
-    {{--@endfor--}}
-
-
-
-
     <tr>
       <th scope="col" colspan="2">Total</th>
       <th scope="col">{{$total_credit}}</th>

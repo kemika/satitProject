@@ -124,6 +124,7 @@ class ReportCardController extends Controller
             ->where('offered_courses.is_elective', '0')
             ->get();
         $grade_semester1 = self::getGradeToFrom($grade_semester1_raw);
+
         $grade_avg_sem1 = self::getAvg($grade_semester1);
 
         // Get grades for semester 2
@@ -374,31 +375,18 @@ class ReportCardController extends Controller
         foreach ($arr as $x) {
             if (!in_array($x->course_id . "", $check)) {
 
-
                 $element = array('course_name' => $x->course_name,
                     'course_id' => $x->course_id,
                     'credits' => $x->credits,
-                    'quater1' => 0,
-                    'quater2' => 0,
-                    'quater3' => 0,
+                    'quater1' => -1,
+                    'quater2' => -1,
+                    'quater3' => -1,
                     'total_point' => 0);
 
-        $element = array('course_name'=> $x->course_name,
-                        'course_id'=> $x->course_id,
-                        'credits'=>$x->credits,
-                        'quater1' => -1,
-                        'quater2' => -1,
-                        'quater3' => -1,
-                        'total_point' => 0);
-
-
-            } else {
-
-                $result[$x->course_id]['quater' . $x->quater] = $x->grade;
-                $result[$x->course_id]['total_point'] += $x->grade;
-
+                $result[$x->course_id] = $element;
             }
-
+            $result[$x->course_id]['quater' . $x->quater] = $x->grade;
+            $result[$x->course_id]['total_point'] += $x->grade;
         }
 
 
@@ -445,20 +433,20 @@ class ReportCardController extends Controller
 
             } else {
 
-        $element = array('course_name'=> $x->course_name,
-                        'course_id'=> $x->course_id,
-                        'credits'=>$x->credits,
-                        'in_class'=>$x->in_class,
-                        'practice'=>$x->practice,
-                        'quater1_sem1' => -1,
-                        'quater2_sem1' => -1,
-                        'quater3_sem1' => -1,
-                        'quater1_sem2' => -1,
-                        'quater2_sem2' => -1,
-                        'quater3_sem2' => -1,
-                        'total_point' => 0,
-                        'total_point_sem1' => 0 ,
-                        'total_point_sem2' => 0);
+                $element = array('course_name' => $x->course_name,
+                    'course_id' => $x->course_id,
+                    'credits' => $x->credits,
+                    'in_class' => $x->in_class,
+                    'practice' => $x->practice,
+                    'quater1_sem1' => -1,
+                    'quater2_sem1' => -1,
+                    'quater3_sem1' => -1,
+                    'quater1_sem2' => -1,
+                    'quater2_sem2' => -1,
+                    'quater3_sem2' => -1,
+                    'total_point' => 0,
+                    'total_point_sem1' => 0,
+                    'total_point_sem2' => 0);
 
             }
 
