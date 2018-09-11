@@ -43,9 +43,24 @@
       <td>{{$grade['course_name']}}</td>
       <td>{{$grade['course_id']}}</td>
       <td>{{ $grade['credits']}}</td>
-      <td>{{ $grade['quater1']}}</td>
-      <td>{{ $grade['quater2']}}</td>
-      <td>{{ $grade['quater3']}}</td>
+      @if($grade['quater1'] != -1)
+        <td>{{ $grade['quater1']}}</td>
+      @else
+        <td></td>
+      @endif
+
+      @if($grade['quater2'] != -1)
+        <td>{{ $grade['quater2']}}</td>
+      @else
+        <td></td>
+      @endif
+
+      @if($grade['quater3'] != -1)
+        <td>{{ $grade['quater3']}}</td>
+      @else
+        <td></td>
+      @endif
+
       <?php
       $grade_total  = $grade['total_point']/3;
 
@@ -143,9 +158,23 @@
       <td>{{$grade['course_name']}}</td>
       <td>{{$grade['course_id']}}</td>
       <td>{{ $grade['credits']}}</td>
-      <td>{{ $grade['quater1']}}</td>
-      <td>{{ $grade['quater2']}}</td>
-      <td>{{ $grade['quater3']}}</td>
+      @if($grade['quater1'] != -1)
+        <td>{{ $grade['quater1']}}</td>
+      @else
+        <td></td>
+      @endif
+
+      @if($grade['quater2'] != -1)
+        <td>{{ $grade['quater2']}}</td>
+      @else
+        <td></td>
+      @endif
+
+      @if($grade['quater3'] != -1)
+        <td>{{ $grade['quater3']}}</td>
+      @else
+        <td></td>
+      @endif
       <?php
       $grade_total  = $grade['total_point']/3;
       $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);

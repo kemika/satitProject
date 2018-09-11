@@ -383,10 +383,13 @@ class ReportCardController extends Controller
                     'quater3' => 0,
                     'total_point' => 0);
 
-                $element['quater' . $x->quater] = $x->grade;
-                $element['total_point'] += +$x->grade;
-                $result[$x->course_id] = $element;
-                array_push($check, $x->course_id);
+        $element = array('course_name'=> $x->course_name,
+                        'course_id'=> $x->course_id,
+                        'credits'=>$x->credits,
+                        'quater1' => -1,
+                        'quater2' => -1,
+                        'quater3' => -1,
+                        'total_point' => 0);
 
 
             } else {
@@ -442,9 +445,20 @@ class ReportCardController extends Controller
 
             } else {
 
-                $result[$x->course_id]['quater' . $x->quater . '_sem1'] = $x->grade;
-                $result[$x->course_id]['total_point'] += $x->grade;
-                $result[$x->course_id]['total_point_sem1'] += $x->grade;
+        $element = array('course_name'=> $x->course_name,
+                        'course_id'=> $x->course_id,
+                        'credits'=>$x->credits,
+                        'in_class'=>$x->in_class,
+                        'practice'=>$x->practice,
+                        'quater1_sem1' => -1,
+                        'quater2_sem1' => -1,
+                        'quater3_sem1' => -1,
+                        'quater1_sem2' => -1,
+                        'quater2_sem2' => -1,
+                        'quater3_sem2' => -1,
+                        'total_point' => 0,
+                        'total_point_sem1' => 0 ,
+                        'total_point_sem2' => 0);
 
             }
 
