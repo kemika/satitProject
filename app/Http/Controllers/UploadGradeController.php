@@ -667,14 +667,17 @@ class UploadGradeController extends Controller
             || $data == "No grade" || $data == "no grade" || $data == "No Grade") {
             $factGrade = false;
             $factEmpty = true;
+            $factValidate = true;
           }
           elseif($factGrade && $data != ""){
             // echo "Field '$fied' is incorrect format at row '$column".($row+6)."'<br>";
+            dd('aaaa');
             $text = "Field '$fied' is incorrect format at row '$column".($row+7)."'";
             // $arrayValidates[] = $text;
             $factGrade = true;
             $factValidate = false;
             $factEmpty = true;
+            $factValidate = false;
             return $text;
 
           }
@@ -830,21 +833,17 @@ class UploadGradeController extends Controller
 
                       //----- Validate Q1 -------//
                         $arrayValidates[] = validateGrade($results[$i]->q1, "Q1", "C", $factGrade, $i);
-                        $factValidate = false;
 
                       //----- Validate Q2 -------//
                         $arrayValidates[] = validateGrade($results[$i]->q2, "Q2", "D", $factGrade, $i);
-                        $factValidate = false;
 
 
                       //----- Validate Q3 -------//
                         $arrayValidates[] = validateGrade($results[$i]->q3, "Q3", "G", $factGrade, $i);
-                        $factValidate = false;
 
 
                       //----- Validate Q4 -------//
                         $arrayValidates[] = validateGrade($results[$i]->q4, "Q4", "H", $factGrade, $i);
-                        $factValidate = false;
 
 
                     }
