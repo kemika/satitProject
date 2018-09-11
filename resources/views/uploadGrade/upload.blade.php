@@ -37,8 +37,27 @@
   </div>
 
 </head>
+
     <h1 style="margin: 25px 50px 75px 100px;"> Upload </h1>
+
     <div style="margin-left:150px">
+      @if(isset($errorDetail))
+        @foreach ($errorDetail as $error)
+          {{$error["Status"]}}
+          </br>
+          </br>
+          @if(strpos($error["Status"], 'error') !== false)
+            @foreach ($error as $key => $val)
+              @if($key !== "Status")
+                {{$val}}
+                </br>
+              @endif
+            @endforeach
+          @endif
+          </br>
+          </br>
+        @endforeach
+      @endif
       <form action="/getUpload" method="post" enctype="multipart/form-data" class="form-inline">
         {{csrf_field()}}
         <input type="file" name="file">

@@ -167,7 +167,7 @@ class UploadGradeController extends Controller
               }
             }
             else if (!in_array($results[$i]->students_id,$stdArray)){
-              $errorDetail[(String) ($results[$i]->students_id)] = $results[$i]->students_id." this Student ID doesn't exist in this room";
+              $errorDetail[(String) ($results[$i]->students_id)] = $results[$i]->students_id." This Student ID doesn't exist in this room";
             }
 
           }
@@ -175,17 +175,18 @@ class UploadGradeController extends Controller
             foreach($finalResult as $result){
               $result->save();
             }
-            $errorDetail[0] = "upload file Academic_Year : ".$year." Grade Level : ".$gradeLevel." Room : ".$room." success";
+            $errorDetail["Status"] = "upload file Academic_Year : ".$year." Grade Level : ".$gradeLevel." Room : ".$room." success";
 
           }
           else {
+            $errorDetail["Status"] = "upload file Academic_Year : ".$year." Grade Level : ".$gradeLevel." Room : ".$room." error";
             /*
             foreach($errorDetail as $key => $value){
               print_r("Student ID : ".$key." got error => ".$value."</br>");
             }*/
 
           }
-          //$errorArray[] = $errorDetail[];
+          $errorArray[] = $errorDetail;
 
 
         }
@@ -193,10 +194,7 @@ class UploadGradeController extends Controller
       }
 
 
-
-
-      $redi  = 'temp/test';
-      return redirect($redi);
+      return view('uploadGrade.upload' , ['errorDetail' => $errorArray]);
 
     } // END upload Comment
 
