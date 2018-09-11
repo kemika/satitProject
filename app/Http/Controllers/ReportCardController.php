@@ -169,7 +169,7 @@ class ReportCardController extends Controller
         $activity_semester1 = (clone $acts)->where('offered_courses.semester', '1')->get();
         $activity_semester2 = (clone $acts)->where('offered_courses.semester', '2')->get();
 
-        // Get latest comments Use the same technique as grades
+        // Get latest comments
         $latest_comment_keys = Teacher_Comment::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
             //TODO           ->where('data_status', 1)  // There is no approval system for teacher comment yet
@@ -188,35 +188,61 @@ class ReportCardController extends Controller
             ->orderBy('quater')
             ->get();
 
+        // Get latest comments
+        // TODO no approval for this yet
         $physical_record_semester1 = Physical_Record::where('student_id', $student_id)
             ->where('physical_records.semester', '1')
             ->where('physical_records.academic_year', $academic_year)
             ->select('physical_records.*')
+            ->orderBy('datetime', 'desc')
             ->first();
 
         $physical_record_semester2 = Physical_Record::where('student_id', $student_id)
             ->where('physical_records.semester', '2')
             ->where('physical_records.academic_year', $academic_year)
             ->select('physical_records.*')
+            ->orderBy('datetime', 'desc')
             ->first();
 
-        $behavior_records = Behavior_Record::where('student_id', $student_id)
-            ->where('behavior_records.academic_year', $academic_year)
-            ->where('behavior_records.data_status', 1)
-            ->select('behavior_records.*')
-            ->get();
+        // Get latest Behavior using the same technique as grades
+        $latest_behavior_keys = Behavior_Record::where('student_id', $student_id)
+            ->where('academic_year', $academic_year)
+            //TODO           ->where('data_status', 1)  // There is no approval system for behavior  yet
+            ->groupBy('semester', 'quater')
+            ->select(DB::raw('MAX(datetime) as datetime'), 'semester', 'quater');
 
+        $behavior_records = Behavior_Record::where('student_id', $student_id)
+            ->where('academic_year', $academic_year)
+            ->joinSub($latest_behavior_keys, 'latest_behavior_keys', function ($join) {
+                $join->on('behavior_records.semester', 'latest_behavior_keys.semester');
+                $join->on('behavior_records.quater', 'latest_behavior_keys.quater');
+                $join->on('behavior_records.datetime', 'latest_behavior_keys.datetime');
+            })
+            ->join('behavior_types','behavior_records.behavior_type','behavior_types.behavior_type')
+            ->select('behavior_records.*','behavior_types.behavior_type_text')
+            ->orderBy('behavior_types.behavior_type_text')
+            ->get();
 
         $behavior_types = Behavior_Type::all();
         $behavior_records = self::getBehaviorToFrom($behavior_records, $behavior_types);
 
 
-        $attendances = Attendance_Record::where('data_status', 1)
-            ->where('attendace_records.student_id', $student_id)
-            ->where('attendace_records.academic_year', $academic_year)
-            ->select('attendace_records.*')
-            ->get();
+        // Get latest attendance using the same technique as grades
+        $latest_att_keys = Attendance_Record::where('student_id', $student_id)
+            ->where('academic_year', $academic_year)
+            //TODO           ->where('data_status', 1)  // There is no approval system for behavior  yet
+            ->groupBy('semester')
+            ->select(DB::raw('MAX(datetime) as datetime'), 'semester');
 
+        $attendances = Attendance_Record::where('student_id', $student_id)
+            ->where('academic_year', $academic_year)
+            ->joinSub($latest_att_keys, 'latest_att_keys', function ($join) {
+                $join->on('attendace_records.semester', 'latest_att_keys.semester');
+                $join->on('attendace_records.datetime', 'latest_att_keys.datetime');
+            })
+            ->select('attendace_records.*')
+            ->orderBy('semester','asc')
+            ->get();
 
         $student = Student::where('students.student_id', $student_id)
             ->join('student_grade_levels', 'student_grade_levels.student_id', 'students.student_id')
@@ -225,75 +251,36 @@ class ReportCardController extends Controller
             ->select('students.*', 'student_grade_levels.*', 'academic_year.*')
             ->first();
 
+        // Pack data for view
+        $view_data = ['academic_year' => $academic_year,
+            'grade_semester1' => $grade_semester1,
+            'grade_semester2' => $grade_semester2,
+            'student' => $student,
+            'avg1' => $grade_avg_sem1,
+            'avg2' => $grade_avg_sem2,
+            'activity_semester1' => $activity_semester1,
+            'activity_semester2' => $activity_semester2,
+            'elective_grades' => $elective_grades,
+            'elective_grade_avg' => $elective_grade_avg,
+            'physical_record_semester1' => $physical_record_semester1,
+            'physical_record_semester2' => $physical_record_semester2,
+            'attendances' => $attendances,
+            'teacher_comments' => $teacher_comments,
+            'behavior_types' => $behavior_types,
+            'behavior_records' => $behavior_records];
 
         if ($grade_level->grade_level <= 6) {
             //ยังต้องเปลี่ยนเป็นฟอร์ม 1-6 ถ้าอาจารจะทดสอบให้ทดสอบที่อันนี้ก่อนครับ ผมมีตารางใน seeder แล้วนะครับ ลองseedได้ครับ
-            $pdf = PDF::loadView('reportCard.formGrade1-6', ['academic_year' => $academic_year,
-                'grade_semester1' => $grade_semester1_6,
-                'grade_semester2' => $grade_semester2,
-                'student' => $student,
-                'avg1' => $grade_avg_sem1,
-                'avg2' => $grade_avg_sem2,
-                'activity_semester1' => $activity_semester1,
-                'activity_semester2' => $activity_semester2,
-                'elective_grades' => $elective_grades,
-                'elective_grade_avg' => $elective_grade_avg,
-                'physical_record_semester1' => $physical_record_semester1,
-                'physical_record_semester2' => $physical_record_semester2,
-                'attendances' => $attendances,
-                'teacher_comments' => $teacher_comments,
-                'behavior_types' => $behavior_types,
-                'behavior_records' => $behavior_records]);
-
-            $pdf->setPaper('a4', 'potrait');
-            return $pdf->stream();
-
-        } elseif ($grade_level->grade_level <= 8) {
-
-            $pdf = PDF::loadView('reportCard.formGrade7-8', ['academic_year' => $academic_year,
-                'grade_semester1' => $grade_semester1,
-                'grade_semester2' => $grade_semester2,
-                'student' => $student,
-                'avg1' => $grade_avg_sem1,
-                'avg2' => $grade_avg_sem2,
-                'activity_semester1' => $activity_semester1,
-                'activity_semester2' => $activity_semester2,
-                'elective_grades' => $elective_grades,
-                'elective_grade_avg' => $elective_grade_avg,
-                'physical_record_semester1' => $physical_record_semester1,
-                'physical_record_semester2' => $physical_record_semester2,
-                'attendances' => $attendances,
-                'teacher_comments' => $teacher_comments,
-                'behavior_types' => $behavior_types,
-                'behavior_records' => $behavior_records]);
-
-            $pdf->setPaper('a4', 'potrait');
-            return $pdf->stream();
-
-        } elseif ($grade_level->grade_level <= 12) {
-
-            $pdf = PDF::loadView('reportCard.formGrade9-12', ['academic_year' => $academic_year,
-                'grade_semester1' => $grade_semester1,
-                'grade_semester2' => $grade_semester2,
-                'student' => $student,
-                'avg1' => $grade_avg_sem1,
-                'avg2' => $grade_avg_sem2,
-                'activity_semester1' => $activity_semester1,
-                'activity_semester2' => $activity_semester2,
-                'elective_grades' => $elective_grades,
-                'elective_grade_avg' => $elective_grade_avg,
-                'physical_record_semester1' => $physical_record_semester1,
-                'physical_record_semester2' => $physical_record_semester2,
-                'attendances' => $attendances,
-                'teacher_comments' => $teacher_comments,
-                'behavior_types' => $behavior_types,
-                'behavior_records' => $behavior_records]);
-
-            $pdf->setPaper('a4', 'potrait');
-            return $pdf->stream();
-
+            $view_data['grade_semester1'] = $grade_semester1_6;
+            $pdf = PDF::loadView('reportCard.formGrade1-6', $view_data);
+        }elseif ($grade_level->grade_level <= 8) {
+            $pdf = PDF::loadView('reportCard.formGrade7-8', $view_data);
+        }else{ //If not it can only be grade 9-12
+            $pdf = PDF::loadView('reportCard.formGrade9-12', $view_data);
         }
 
+        $pdf->setPaper('a4', 'potrait');
+        return $pdf->stream();
 
         // return $pdf->download('reportCard.pdf');
 
@@ -360,7 +347,7 @@ class ReportCardController extends Controller
                         $behavior_type->sem2_q2 = $behavior_record->grade;
                     }
                 }
-                // code...
+
             }
         }
         return $behavior_types;
