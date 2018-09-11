@@ -920,37 +920,35 @@ class UploadGradeController extends Controller
                     $grade->academic_year = $year;
                     $grade->datetime = $datetime;
                     // $grade->grade = $results[$i]->q1;
-                    if($results[$i]->q1 == "No grade" ||
-                    $results[$i]->q1 == "no grade" || $results[$i]->q1 == "no grade"){
-                      $grade->grade_status = '0';
-                      $grade->grade = '0';
+                    if($results[$i]->q1 != ""){
+                      if($results[$i]->q1 == "No grade" ||
+                      $results[$i]->q1 == "no grade" || $results[$i]->q1 == "no grade"){
+                        $grade->grade_status = '0';
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q1 == "I" || $results[$i]->q1 == "i"){
+                        $grade->grade_status = '1';
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q1 == "S" ||   $results[$i]->q1 == "s"){
+                        $grade->grade_status = 2;
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q1 == "U" ||   $results[$i]->q1 == "u"){
+                        $grade->grade_status = '3';
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q1 == "0/1"){
+                        $grade->grade_status = '4';
+                        $grade->grade = '1';
+                      }
+                      else {
+                        $grade->grade_status = '5';
+                        $grade->grade = $results[$i]->q1;
+                      }
+                      $grade->data_status = '0';
+                  		$grade->save();
                     }
-                    elseif($results[$i]->q1 == "I" || $results[$i]->q1 == "i"){
-                      $grade->grade_status = '1';
-                      $grade->grade = '0';
-                    }
-                    elseif($results[$i]->q1 == "S" ||   $results[$i]->q1 == "s"){
-                      $grade->grade_status = 2;
-                      $grade->grade = '0';
-                    }
-                    elseif($results[$i]->q1 == "U" ||   $results[$i]->q1 == "u"){
-                      $grade->grade_status = '3';
-                      $grade->grade = '0';
-                    }
-                    elseif($results[$i]->q1 == "0/1"){
-                      $grade->grade_status = '4';
-                      $grade->grade = '1';
-                    }
-                    elseif($results[$i]->q1 == ""){
-                      $grade->grade_status = '5';
-                      $grade->grade = "";
-                    }
-                    else {
-                      $grade->grade_status = '5';
-                      $grade->grade = $results[$i]->q1;
-                    }
-                    $grade->data_status = '0';
-                		$grade->save();
 
                     //-------------------- add Q2 -----------------
                     $grade = new Grade;
@@ -961,37 +959,35 @@ class UploadGradeController extends Controller
                     $grade->academic_year = $year;
                     $grade->datetime = $datetime;
                     // $grade->grade = $results[$i]->q1;
-                    if($results[$i]->q2 == "No grade" ||
-                    $results[$i]->q2 == "no grade" || $results[$i]->q2 == "no grade"){
-                      $grade->grade_status = '0';
-                      $grade->grade = '0';
+                    if($results[$i]->q2 != ""){
+                      if($results[$i]->q2 == "No grade" ||
+                      $results[$i]->q2 == "no grade" || $results[$i]->q2 == "no grade"){
+                        $grade->grade_status = '0';
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q2 == "I" || $results[$i]->q2 == "i"){
+                        $grade->grade_status = '1';
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q2 == "S" ||   $results[$i]->q2 == "s"){
+                        $grade->grade_status = 2;
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q2 == "U" ||   $results[$i]->q2 == "u"){
+                        $grade->grade_status = '3';
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q2 == "0/1"){
+                        $grade->grade_status = '4';
+                        $grade->grade = '1';
+                      }
+                      else {
+                        $grade->grade_status = '5';
+                        $grade->grade = $results[$i]->q2;
+                      }
+                      $grade->data_status = '0';
+                  		$grade->save();
                     }
-                    elseif($results[$i]->q2 == "I" || $results[$i]->q2 == "i"){
-                      $grade->grade_status = '1';
-                      $grade->grade = '0';
-                    }
-                    elseif($results[$i]->q2 == "S" ||   $results[$i]->q2 == "s"){
-                      $grade->grade_status = 2;
-                      $grade->grade = '0';
-                    }
-                    elseif($results[$i]->q2 == "U" ||   $results[$i]->q2 == "u"){
-                      $grade->grade_status = '3';
-                      $grade->grade = '0';
-                    }
-                    elseif($results[$i]->q2 == "0/1"){
-                      $grade->grade_status = '4';
-                      $grade->grade = '1';
-                    }
-                    elseif($results[$i]->q2 == ""){
-                      $grade->grade_status = '5';
-                      $grade->grade = "";
-                    }
-                    else {
-                      $grade->grade_status = '5';
-                      $grade->grade = $results[$i]->q2;
-                    }
-                    $grade->data_status = '0';
-                		$grade->save();
 
                     //-------------------- add Q3 -----------------
                     $grade = new Grade;
@@ -1002,37 +998,35 @@ class UploadGradeController extends Controller
                     $grade->academic_year = $year;
                     $grade->datetime = $datetime;
                     // $grade->grade = $results[$i]->q1;
-                    if($results[$i]->q3 == "No grade" ||
-                    $results[$i]->q3 == "no grade" || $results[$i]->q3 == "no grade"){
-                      $grade->grade_status = '0';
-                      $grade->grade = '0';
+                    if($results[$i]->q3 != ""){
+                      if($results[$i]->q3 == "No grade" ||
+                      $results[$i]->q3 == "no grade" || $results[$i]->q3 == "no grade"){
+                        $grade->grade_status = '0';
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q3 == "I" || $results[$i]->q3 == "i"){
+                        $grade->grade_status = '1';
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q3 == "S" ||   $results[$i]->q3 == "s"){
+                        $grade->grade_status = 2;
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q3 == "U" ||   $results[$i]->q3 == "u"){
+                        $grade->grade_status = '3';
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q3 == "0/1"){
+                        $grade->grade_status = '4';
+                        $grade->grade = '1';
+                      }
+                      else {
+                        $grade->grade_status = '5';
+                        $grade->grade = $results[$i]->q3;
+                      }
+                      $grade->data_status = '0';
+                  		$grade->save();
                     }
-                    elseif($results[$i]->q3 == "I" || $results[$i]->q3 == "i"){
-                      $grade->grade_status = '1';
-                      $grade->grade = '0';
-                    }
-                    elseif($results[$i]->q3 == "S" ||   $results[$i]->q3 == "s"){
-                      $grade->grade_status = 2;
-                      $grade->grade = '0';
-                    }
-                    elseif($results[$i]->q3 == "U" ||   $results[$i]->q3 == "u"){
-                      $grade->grade_status = '3';
-                      $grade->grade = '0';
-                    }
-                    elseif($results[$i]->q3 == "0/1"){
-                      $grade->grade_status = '4';
-                      $grade->grade = '1';
-                    }
-                    elseif($results[$i]->q3 == ""){
-                      $grade->grade_status = '5';
-                      $grade->grade = "";
-                    }
-                    else {
-                      $grade->grade_status = '5';
-                      $grade->grade = $results[$i]->q3;
-                    }
-                    $grade->data_status = '0';
-                		$grade->save();
 
                     //-------------------- add Q4 -----------------
                     $grade = new Grade;
@@ -1043,37 +1037,35 @@ class UploadGradeController extends Controller
                     $grade->academic_year = $year;
                     $grade->datetime = $datetime;
                     // $grade->grade = $results[$i]->q1;
-                    if($results[$i]->q4 == "No grade" ||
-                    $results[$i]->q4 == "no grade" || $results[$i]->q2 == "no grade"){
-                      $grade->grade_status = '0';
-                      $grade->grade = '0';
+                    if($results[$i]->q4 != ""){
+                      if($results[$i]->q4 == "No grade" ||
+                      $results[$i]->q4 == "no grade" || $results[$i]->q2 == "no grade"){
+                        $grade->grade_status = '0';
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q4 == "I" || $results[$i]->q4 == "i"){
+                        $grade->grade_status = '1';
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q4 == "S" ||   $results[$i]->q4 == "s"){
+                        $grade->grade_status = 2;
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q4 == "U" ||   $results[$i]->q4 == "u"){
+                        $grade->grade_status = '3';
+                        $grade->grade = '0';
+                      }
+                      elseif($results[$i]->q4 == "0/1"){
+                        $grade->grade_status = '4';
+                        $grade->grade = '1';
+                      }
+                      else {
+                        $grade->grade_status = '5';
+                        $grade->grade = $results[$i]->q4;
+                      }
+                      $grade->data_status = '0';
+                  		$grade->save();
                     }
-                    elseif($results[$i]->q4 == "I" || $results[$i]->q4 == "i"){
-                      $grade->grade_status = '1';
-                      $grade->grade = '0';
-                    }
-                    elseif($results[$i]->q4 == "S" ||   $results[$i]->q4 == "s"){
-                      $grade->grade_status = 2;
-                      $grade->grade = '0';
-                    }
-                    elseif($results[$i]->q4 == "U" ||   $results[$i]->q4 == "u"){
-                      $grade->grade_status = '3';
-                      $grade->grade = '0';
-                    }
-                    elseif($results[$i]->q4 == "0/1"){
-                      $grade->grade_status = '4';
-                      $grade->grade = '1';
-                    }
-                    elseif($results[$i]->q4 == ""){
-                      $grade->grade_status = '5';
-                      $grade->grade = "";
-                    }
-                    else {
-                      $grade->grade_status = '5';
-                      $grade->grade = $results[$i]->q4;
-                    }
-                    $grade->data_status = '0';
-                		$grade->save();
 
 
                   }
