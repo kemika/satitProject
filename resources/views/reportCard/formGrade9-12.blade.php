@@ -43,9 +43,29 @@
       <td>{{$grade['course_name']}}</td>
       <td>{{$grade['course_id']}}</td>
       <td>{{ $grade['credits']}}</td>
-      <td>{{ $grade['quater1']}}</td>
-      <td>{{ $grade['quater2']}}</td>
-      <td>{{ $grade['quater3']}}</td>
+
+
+
+
+      @if($grade['quater1'] != -1)
+        <td>{{ $grade['quater1']}}</td>
+      @else
+        <td></td>
+      @endif
+
+      @if($grade['quater2'] != -1)
+        <td>{{ $grade['quater2']}}</td>
+      @else
+        <td></td>
+      @endif
+
+      @if($grade['quater3'] != -1)
+        <td>{{ $grade['quater3']}}</td>
+      @else
+        <td></td>
+      @endif
+
+
       <?php
       $grade_total  = $grade['total_point']/3;
 
@@ -143,9 +163,27 @@
       <td>{{$grade['course_name']}}</td>
       <td>{{$grade['course_id']}}</td>
       <td>{{ $grade['credits']}}</td>
-      <td>{{ $grade['quater1']}}</td>
-      <td>{{ $grade['quater2']}}</td>
-      <td>{{ $grade['quater3']}}</td>
+
+
+      @if($grade['quater1'] != -1)
+        <td>{{ $grade['quater1']}}</td>
+      @else
+        <td></td>
+      @endif
+
+      @if($grade['quater2'] != -1)
+        <td>{{ $grade['quater2']}}</td>
+      @else
+        <td></td>
+      @endif
+
+      @if($grade['quater3'] != -1)
+        <td>{{ $grade['quater3']}}</td>
+      @else
+        <td></td>
+      @endif
+
+      
       <?php
       $grade_total  = $grade['total_point']/3;
       $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
@@ -523,6 +561,9 @@
 
     <h5>First Comment</h5> <br>
     <h6>Classroom Teacher : ……………..…..…….………………………..…..…….………………………..………………………</h6>
+        @if($i < count($teacher_comments) )
+            <p>{{$teacher_comments[$i]->comment}}</p>
+        @endif
   </div>
 
   <div style="margin-left: 59%;">
@@ -541,22 +582,12 @@
     </table>
   </div>
   <br>
-  @if($i < count($teacher_comments) )
-  <h6>Guardian : {{$teacher_comments[$i]->comment}}.…..…….………………………..…………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  @else
   <h6>Guardian : ……………..…..…….………………………..…..…….………………………..…………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
   <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-
-  @endif
 
   <div style="margin-left: 59%;">
     <table style="margin-top:20px;">
