@@ -690,18 +690,16 @@ class UploadGradeController extends Controller
 
                         foreach($courseIDSec as $key => $id){
                           $resUp = strtoupper($resultsSecond[$i+2]->$key);
-
                           if(array_key_exists($resUp, $statusArr)){
                             $activity = new Activity_Record;
                             $activity->student_id = $resultsStudent[$i]->students_id;
                             $activity->open_course_id = $courseArr[$id." 2"];
                             $activity->grade_status = $statusArr[$resUp];
-                            $activity->semester = 1;
+                            $activity->semester = 2;
                             $activity->academic_year = $year;
                             $activity->datetime = $datetime;
                             $activity->data_status = 1;
                             $activity->save();
-
                           }
 
                         }
@@ -710,8 +708,6 @@ class UploadGradeController extends Controller
 
                 }
         }
-        $redi = 'temp/test' . $results[1]->sick_s2;
-        return redirect($redi);
 
       }
 
