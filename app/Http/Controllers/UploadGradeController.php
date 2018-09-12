@@ -693,9 +693,14 @@ class UploadGradeController extends Controller
                 //$courseID = "1";
                 $getCourseID = str_replace("_", " ", "$getCourseID");
 
-                $courseID = Offered_Courses::where('offered_courses.course_id', $getCourseID)
-                    ->select('offered_courses.*')
-                    ->first();
+                $openCourseIDSem1 = Offered_Courses::where('offered_courses.course_id', $getCourseID)
+                    ->where('offered_courses.semester',1)
+                    ->value('open_course_id');
+                    //->first();
+                //dd($openCourseIDSem1);
+                $openCourseIDSem2 = Offered_Courses::where('offered_courses.course_id', $getCourseID)
+                    ->where('offered_courses.semester',2)
+                    ->value('open_course_id');
                 //dd($courseID->open_course_id);
 
                 $resultsGradeLevel = Excel::load('files/' . $file_name, function ($reader) {
@@ -756,7 +761,7 @@ class UploadGradeController extends Controller
                                     $factEmpty = false;
                                     $arrayValidates[] = $text;
                                 }
-                                if ($courseID == "") {
+                                if ($getCourseID == "") {
                                     $text = "Field 'Course' is empty at row 'B2'";
                                     $factValidate = false;
                                     $factEmpty = false;
@@ -797,7 +802,7 @@ class UploadGradeController extends Controller
                                         $arrayValidates[] = $text;
                                     }
 
-                                    if ($courseID == "") {
+                                    if ($getCourseID == "") {
                                         $text = "Field 'Course' is empty at row 'B2'";
                                         $factValidate = false;
                                         $factEmpty = false;
@@ -836,7 +841,7 @@ class UploadGradeController extends Controller
                                     //-------------------- add Q1 -----------------
                                     $grade = new Grade;
                                     $grade->student_id = $results[$i]->student_id;
-                                    $grade->open_course_id = $courseID->open_course_id;
+                                    $grade->open_course_id = $openCourseIDSem1;
                                     $grade->quater = '1';
                                     $grade->semester = '1';
                                     $grade->academic_year = $year;
@@ -849,7 +854,7 @@ class UploadGradeController extends Controller
                                     //-------------------- add Q2 -----------------
                                     $grade = new Grade;
                                     $grade->student_id = $results[$i]->student_id;
-                                    $grade->open_course_id = $courseID->open_course_id;
+                                    $grade->open_course_id = $openCourseIDSem1;
                                     $grade->quater = '2';
                                     $grade->semester = '1';
                                     $grade->academic_year = $year;
@@ -862,7 +867,7 @@ class UploadGradeController extends Controller
                                     //-------------------- add Q3 -----------------
                                     $grade = new Grade;
                                     $grade->student_id = $results[$i]->student_id;
-                                    $grade->open_course_id = $courseID->open_course_id;
+                                    $grade->open_course_id = $openCourseIDSem2;
                                     $grade->quater = '1';
                                     $grade->semester = '2';
                                     $grade->academic_year = $year;
@@ -875,7 +880,7 @@ class UploadGradeController extends Controller
                                     //-------------------- add Q4 -----------------
                                     $grade = new Grade;
                                     $grade->student_id = $results[$i]->student_id;
-                                    $grade->open_course_id = $courseID->open_course_id;
+                                    $grade->open_course_id = $openCourseIDSem2;
                                     $grade->quater = '2';
                                     $grade->semester = '2';
                                     $grade->academic_year = $year;
@@ -893,7 +898,7 @@ class UploadGradeController extends Controller
                                     $this->set_grade(
                                         $results[$i]->q1,
                                         $results[$i]->student_id,
-                                        $courseID->open_course_id,
+                                        $openCourseIDSem1,
                                         '1','1', $year, $datetime
                                     );
 
@@ -901,7 +906,7 @@ class UploadGradeController extends Controller
                                     $this->set_grade(
                                         $results[$i]->q2,
                                         $results[$i]->student_id,
-                                        $courseID->open_course_id,
+                                        $openCourseIDSem1,
                                         '2','1', $year, $datetime
                                     );
 
@@ -910,7 +915,7 @@ class UploadGradeController extends Controller
                                     $this->set_grade(
                                         $results[$i]->q3,
                                         $results[$i]->student_id,
-                                        $courseID->open_course_id,
+                                        $openCourseIDSem2,
                                         '1','2', $year, $datetime
                                     );
 
@@ -919,7 +924,7 @@ class UploadGradeController extends Controller
                                     $this->set_grade(
                                         $results[$i]->q4,
                                         $results[$i]->student_id,
-                                        $courseID->open_course_id,
+                                        $openCourseIDSem2,
                                         '2','2', $year, $datetime
                                     );
 
@@ -953,7 +958,11 @@ class UploadGradeController extends Controller
     private function set_grade($grade_value,$student_id,$open_course_id,
                                       $quater,$semester,$academic_year,$datetime)
     {
-         $grade = new Grade;
+        if($open_course_id === null){
+            // Don't do anything if the course does not open
+            return;
+        }
+        $grade = new Grade;
          $grade->student_id = $student_id;
          $grade->open_course_id = $open_course_id;
          $grade->quater = $quater;
