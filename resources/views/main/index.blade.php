@@ -64,6 +64,7 @@
 
     <div class="row justify-content-md-center">
       <div class="col col-lg-3">
+        <button class="btn btn-outline-secondary"  onclick="window.location.href='/manageDirector'">Manage Director</button>
       </div>
       <div class="col col-lg-2">
         <button class="btn btn-outline-secondary"  onclick="window.location.href='/reportCard'">Report Cards</button>
