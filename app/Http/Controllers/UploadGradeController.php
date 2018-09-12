@@ -684,6 +684,7 @@ class UploadGradeController extends Controller
 
                 })->get();
 
+                //dd($results);
                 $resultsCourse = Excel::load('files/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(2);
                 })->get();
@@ -821,6 +822,9 @@ class UploadGradeController extends Controller
                                     //----- Validate Q2 -------//
                                     $arrayValidates[] = validateGrade($results[$i]->q2, "Q2", "D", $factGrade, $i);
 
+                                    //----- Validate SUM1 -------//
+                                    $arrayValidates[] = validateGrade($results[$i]->q2, "SUM 1", "E", $factGrade, $i);
+
 
                                     //----- Validate Q3 -------//
                                     $arrayValidates[] = validateGrade($results[$i]->q3, "Q3", "G", $factGrade, $i);
@@ -829,6 +833,8 @@ class UploadGradeController extends Controller
                                     //----- Validate Q4 -------//
                                     $arrayValidates[] = validateGrade($results[$i]->q4, "Q4", "H", $factGrade, $i);
 
+                                    //----- Validate SUM2 -------//
+                                    $arrayValidates[] = validateGrade($results[$i]->q2, "SUM 2", "I", $factGrade, $i);
 
                                 }
 
@@ -910,6 +916,13 @@ class UploadGradeController extends Controller
                                         '2','1', $year, $datetime
                                     );
 
+                                    //-------------------- add SUM 1 -----------------
+                                    $this->set_grade(
+                                        $results[$i]->sum_1,
+                                        $results[$i]->student_id,
+                                        $openCourseIDSem1,
+                                        '3','1', $year, $datetime
+                                    );
 
                                     //-------------------- add Q3 -----------------
                                     $this->set_grade(
@@ -928,7 +941,13 @@ class UploadGradeController extends Controller
                                         '2','2', $year, $datetime
                                     );
 
-
+                                    //-------------------- add SUM 2 -----------------
+                                    $this->set_grade(
+                                        $results[$i]->sum_2,
+                                        $results[$i]->student_id,
+                                        $openCourseIDSem2,
+                                        '3','2', $year, $datetime
+                                    );
                                 }
                             }
 
