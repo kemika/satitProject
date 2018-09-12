@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(Student_StatusTableSeeder::class);
         // $this->call(StudentsTableSeeder::class);
         // $this->call(Data_StatusesTableSeeder::class);
-        $this->call(Teacher_CommentsTableSeeder::class);
+        // $this->call(Teacher_CommentsTableSeeder::class);
         // $this->call(StudentGradeLevelTableSeeder::class);
         // $this->call(AttendanceRecordTableSeeder::class);
         // $this->call(BehaviorTypesTableSeeder::class);
@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(PhysicalRecordsTableSeeder::class);
         // $this->call(GradeStatusTableSeeder::class);
         // $this->call(OfferedCoursesTableSeeder::class);
-        // $this->call(GradeTableSeeder::class);
+        $this->call(GradeTableSeeder::class);
         // $this->call(ActivityRecordsTableSeeder::class);
         // $this->call(HomeroomTableSeeder::class);
 

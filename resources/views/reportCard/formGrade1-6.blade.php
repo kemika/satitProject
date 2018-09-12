@@ -11,9 +11,9 @@
 
 <div class = "container">
   <div class = "square1">
-    <h6> Grade {{ $student->grade_level." : ".$student->room}}</h6>
-    <h6> Student Name :	{{ $student->firstname." ".$student->lastname}} </h6>
-    <h6> Student ID :	{{ $student->student_id }} </h6>
+    <h6> Grade {{$student->grade_level}} / {{$student->room}} :	{{$student->academic_year}}	</h6>
+    <h6> Student Name :	{{$student->firstname}} {{$student->lastname}} </h6>
+    <h6> Student ID :	{{$student->student_id}} </h6>
   </div>
   <div class = "square2">
     <h6> Classroom Teachers </h6>
@@ -109,14 +109,18 @@
 
 
 
+
+
     <td>{{ $grade['total_point_sem2']}}</td>
 
 
 
       <?php
       $grade_total  = $grade['total_point']/6;
+      if($grade['enable'] != false ){
       $GPA_sem1 += ($grade['credits']*$grade['total_point_sem1']);
       $GPA_sem2 += ($grade['credits']*$grade['total_point_sem2']);
+      }
       $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
       $total_credit += $grade['credits'];
 
@@ -218,7 +222,7 @@
 <br>
 <div class="boxHeader"><h6>Evaluation  :</h6>
 <div class="box"></div>
-<div class="boxTail"><p>to be permitted to grade \\\2 in academic year \\\2018</p>
+<div class="boxTail"><p>to be permitted to grade {{$student->grade_level + 1}} in academic year {{$student->academic_year}}</p>
 </div>
 
 <div class="boxHeader">
@@ -247,11 +251,11 @@
 
     <tr>
       <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
-      /<span style="color:white">------</span>/ {{$academic_year}}
+      /<span style="color:white">------</span>/ {{$student->academic_year}}
       </td>
       <td></td>
       <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
-      /<span style="color:white">------</span>/ {{$academic_year}}
+      /<span style="color:white">------</span>/ {{$student->academic_year}}
       </td>
     </tr>
 
