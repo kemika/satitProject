@@ -390,35 +390,11 @@ class ReportCardController extends Controller
         $boom = array();
 
         foreach ($grade_sem1 as $x) {
-            $b = $x->course_id . " : " . $x->course_name . "    :" . ('quater' . $x->quater . '_sem' . $x->semester . '  :' . $x->grade . "  " . $x->open_course_id);
+            $b = $x->course_id . " : " . $x->course_name . "    :" . ('quater' . $x->quater . '_sem' . $x->semester . '  :' . $x->grade . "  open course id : " . $x->open_course_id);
             array_push($boom, $b);
 
             if (!in_array($x->course_id . "", $check)) {
 
-
-                $element = array('course_name' => $x->course_name,
-                    'course_id' => $x->course_id,
-                    'credits' => $x->credits,
-                    'in_class' => $x->in_class,
-                    'practice' => $x->practice,
-                    'quater1_sem1' => 0,
-                    'quater2_sem1' => 0,
-                    'quater3_sem1' => 0,
-                    'quater1_sem2' => 0,
-                    'quater2_sem2' => 0,
-                    'quater3_sem2' => 0,
-                    'total_point' => 0,
-                    'total_point_sem1' => 0,
-                    'total_point_sem2' => 0);
-
-                $element['quater' . $x->quater . '_sem1'] = $x->grade;
-                $element['total_point'] += +$x->grade;
-                $element['total_point_sem1'] += +$x->grade;
-                $result[$x->course_id] = $element;
-                array_push($check, $x->course_id);
-
-
-            } else {
 
                 $element = array('course_name' => $x->course_name,
                     'course_id' => $x->course_id,
@@ -432,8 +408,22 @@ class ReportCardController extends Controller
                     'quater2_sem2' => -1,
                     'quater3_sem2' => -1,
                     'total_point' => 0,
+                    'enable' => true,
                     'total_point_sem1' => 0,
                     'total_point_sem2' => 0);
+
+                $element['quater' . $x->quater . '_sem1'] = $x->grade;
+                $element['total_point'] += +$x->grade;
+                $element['total_point_sem1'] += +$x->grade;
+                $result[$x->course_id] = $element;
+                array_push($check, $x->course_id);
+
+
+            } else {
+
+              $result[$x->course_id]['quater' . $x->quater . '_sem1'] = $x->grade;
+              $result[$x->course_id]['total_point'] += $x->grade;
+              $result[$x->course_id]['total_point_sem1'] += $x->grade;
 
             }
 
@@ -442,7 +432,7 @@ class ReportCardController extends Controller
         array_push($boom, '================================');
 
         foreach ($grade_sem2 as $x) {
-            $b = $x->course_id . " : " . $x->course_name . "    :" . ('quater' . $x->quater . '_sem' . $x->semester . '  :' . $x->grade . "  " . $x->open_course_id);
+            $b = $x->course_id . " : " . $x->course_name . "    :" . ('quater' . $x->quater . '_sem' . $x->semester . '  :' . $x->grade . "  open course id : " . $x->open_course_id);
             array_push($boom, $b);
 
             if (!in_array($x->course_id . "", $check)) {
@@ -451,12 +441,15 @@ class ReportCardController extends Controller
                 $element = array('course_name' => $x->course_name,
                     'course_id' => $x->course_id,
                     'credits' => $x->credits,
-                    'quater1_sem1' => 0,
-                    'quater2_sem1' => 0,
-                    'quater3_sem1' => 0,
-                    'quater1_sem2' => 0,
+                    'in_class' => $x->in_class,
+                    'practice' => $x->practice,
+                    'quater1_sem1' => -1,
+                    'quater2_sem1' => -1,
+                    'quater3_sem1' => -1,
+                    'quater1_sem2' => -1,
                     'quater2_sem2' => 0,
                     'quater3_sem2' => 0,
+                    'enable' => true,
                     'total_point' => 0,
                     'total_point_sem1' => 0,
                     'total_point_sem2' => 0);
@@ -477,6 +470,18 @@ class ReportCardController extends Controller
             }
 
         }
+
+
+
+        foreach ($result as $x){
+          if($x['quater1_sem1'] == -1 || $x['quater2_sem1'] == -1  || $x['quater3_sem1'] == -1 || $x['quater1_sem2'] == -1 || $x['quater2_sem2'] == -1  || $x['quater3_sem2'] == -1   ){
+            $result[$x['course_id']]['enable'] = false;
+            $result[$x['course_id']]['total_point'] -= ($x['total_point_sem1']  +$x['total_point_sem2']);
+
+          }
+
+        }
+
 
         // dd($boom);
 
