@@ -86,7 +86,7 @@
         {{csrf_field()}}
         <input type="file" name="file[]" multiple>
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="submit" class="btn btn-primary mb-2" value="upload Behavior">
+        <input type="submit" class="btn btn-danger mb-2" value="upload Behavior">
       </form>
 
       <form action="/getUploadAttendance" method="post" enctype="multipart/form-data" class="form-inline">
@@ -100,6 +100,6 @@
         {{csrf_field()}}
         <input type="file" name="file[]" multiple>
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="submit" class="btn btn-danger mb-2" value="upload Activities">
+        <input type="submit" class="btn btn-primary mb-2" value="upload Activities">
       </form>
     </div>

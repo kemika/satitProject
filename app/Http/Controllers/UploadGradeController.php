@@ -18,6 +18,8 @@ use App\Behavior_Record;
 use App\Attendance_Record;
 use App\Activity_Record;
 use App\Room;
+use App\Academic_Year;
+use App\Grade_Status;
 use App\WaitApprove;
 use Illuminate\Support\Facades\Input;
 use App\Grade;
@@ -116,6 +118,18 @@ class UploadGradeController extends Controller
           $gradeLevel = $getGradeLevel->getHeading()[1];
           $room = $getRoom->getHeading()[1];
 
+          $checkYear = Academic_Year::where('academic_year.academic_year',$year)->first();
+          $checkRoom = Academic_Year::where('academic_year.room',$room)->first();
+          $checkGradeLevel = Academic_Year::where('academic_year.grade_level',$gradeLevel)->first();
+
+
+
+          if(!is_int($year)){
+            $errorDetail["year"] = "Invalid type of Academic Year";
+          }
+          else{
+
+          }
 
           $students = Student::all();
           $studentsID = Student::Join('student_grade_levels','student_grade_levels.student_id','=','students.student_id')
@@ -530,94 +544,184 @@ class UploadGradeController extends Controller
       // }
 
       if ($request->hasFile('file')) {
+        $errorArray = array();
 
-        $fact = true;
-        $factGrade = true;
-        $factValidate = true;
-        $factEmpty = true;
-        $file = Input::file('file');
-        $file_name = $file->getClientOriginalName();
-        $file_type = \File::extension('files/'.$file_name);
-        $file->move('files/', $file_name);
-        $checkFileName = substr("$file_name", 0, 8);
-      }
+        foreach($request->file as $file){
 
+          $fact = true;
+          $factGrade = true;
+          $factValidate = true;
+          $factEmpty = true;
+          //$file = Input::file('file');
+          $file_name = $file->getClientOriginalName();
+          $file_type = \File::extension('files/'.$file_name);
+          $file->move('files/', $file_name);
+          $checkFileName = substr("$file_name", 0, 8);
 
-      $getAcademicYear = Excel::load('files/'.$file_name,function($reader){
-        $reader->setHeaderRow(1);
-      })->get();
-
-
-      $getGradeLevel = Excel::load('files/'.$file_name,function($reader){
-        $reader->setHeaderRow(2);
-      })->get();
-
-      $getRoom = Excel::load('files/'.$file_name,function($reader){
-        $reader->setHeaderRow(3);
-      })->get();
-
-      $results = Excel::load('files/'.$file_name,function($reader){
-        $reader->setHeaderRow(5);
-        $reader->all();
-      })->get();
-
-      $resultsStudent = Excel::load('files/'.$file_name,function($reader){
-        $reader->setHeaderRow(6);
-        $reader->all();
-      })->get();
+                $getAcademicYear = Excel::load('files/'.$file_name,function($reader){
+                  $reader->setHeaderRow(1);
+                })->get();
 
 
+                $getGradeLevel = Excel::load('files/'.$file_name,function($reader){
+                  $reader->setHeaderRow(2);
+                })->get();
 
-      $year = $getAcademicYear->getHeading()[1];
-      $gradeLevel = $getGradeLevel->getHeading()[1];
-      $room = $getRoom->getHeading()[1];
+                $getRoom = Excel::load('files/'.$file_name,function($reader){
+                  $reader->setHeaderRow(3);
+                })->get();
 
-      $students = Student::all();
-      $studentsID = Student::Join('student_grade_levels','student_grade_levels.student_id','=','students.student_id')
-          ->Join('academic_year','academic_year.classroom_id','=','student_grade_levels.classroom_id')
-          ->where('academic_year.academic_year',$year)
-          ->where('academic_year.room',$room)
-          ->where('academic_year.grade_level',$gradeLevel)
-          ->select('students.student_id')
-          ->get();
-      $stdArray = array();
+                $resultsStudent = Excel::load('files/'.$file_name,function($reader){
+                  $reader->setHeaderRow(7);
+                  $reader->all();
+                })->get();
 
-      date_default_timezone_set('Asia/Bangkok');
-      $datetime = date("Y-m-d H:i:s");
 
-      foreach ($studentsID as $studentID) {
-        $stdArray[] = $studentID->student_id;
-      }
+                $flipped = array_flip($resultsStudent->getHeading());
+                $indexSecSem = $flipped["2st_semester"];
 
-      for ($i = 0; $i < count($resultsStudent); $i++) {
-        if(in_array($resultsStudent[$i]->students_id,$stdArray)){
-              $activity = new Activity_Record;
-              $activity->student_id = $resultsStudent[$i]->students_id;
-              $activity->late = $results[$i+1]->late;
-              $activity->absent = $results[$i+1]->absent;
-              $activity->leave = $results[$i+1]->leave;
-              $activity->sick = $results[$i+1]->sick;
-              $activity->semester = 1;
-              $activity->academic_year = $year;
-              $activity->datetime = $datetime;
-              $activity->data_status = 1;
-              $activity->save();
+              //  for($i = 0; $i < count($resultsSemester); $i++)
 
-              $attendance = new Activity_Record;
-              $attendance->student_id = $resultsStudent[$i]->students_id;
-              $attendance->late = $results[$i+1]->late_s2;
-              $attendance->absent = $results[$i+1]->absent_s2;
-              $attendance->leave = $results[$i+1]->leave_s2;
-              $attendance->sick = $results[$i+1]->sick_s2;
-              $attendance->semester = 2;
-              $attendance->academic_year = $year;
-              $attendance->datetime = $datetime;
-              $attendance->data_status = 1;
-              $attendance->save();
+                $resultsFirst = Excel::load('files/'.$file_name,function($reader) use($indexSecSem){
+                  $reader->setHeaderRow(5);
+                  //$reader->limitColumns(7);
+                  $reader->limitColumns($indexSecSem);
+                  $reader->skipColumns(2);
+                  $reader->all();
+                })->get();
+
+                $resultsSecond = Excel::load('files/'.$file_name,function($reader) use($indexSecSem){
+                  $reader->setHeaderRow(5);
+                  //$reader->limitColumns(7);
+                  $reader->skipColumns($indexSecSem);
+                  $reader->all();
+                })->get();
+
+              //  dd($resultsFirst);
+
+                $courseIDFirst = array();
+                $courseIDSec = array();
+                foreach($resultsFirst[0] as $key => $val){
+                  if($key !== 0){
+                    /*
+                    //$id = strtoupper($key);
+                    $id = $key;
+                    $id = explode("_", $id);
+                    $slice = array_slice($id, 0,-2);
+                    foreach($slice as $key2 => $str){
+                      $slice[$key2] = ucfirst($str);;
+                    }
+                    $res = join(' ', $slice);
+                    //print_r(array_slice($id, -2));
+          */
+                    $courseIDFirst[$key] = $val;
+
+                  }
+                }
+
+                foreach($resultsSecond[0] as $key => $val){
+                  if($key !== 0){
+                    $courseIDSec[$key] = $val;
+                  }
+                }
+
+
+
+                //dd($courseIDSec);
+                $year = $getAcademicYear->getHeading()[1];
+                $gradeLevel = $getGradeLevel->getHeading()[1];
+                $room = $getRoom->getHeading()[1];
+
+                $courses  = Academic_Year::Join('offered_courses','offered_courses.classroom_id','=','academic_year.classroom_id')
+                        ->Join('curriculums', function($join)
+                                     {
+                                         $join->on('curriculums.course_id', '=', 'offered_courses.course_id');
+                                         $join->on('curriculums.curriculum_year','=', 'offered_courses.curriculum_year');
+                                     })
+                        ->where('academic_year.academic_year',$year)
+                        ->where('academic_year.room',$room)
+                        ->where('academic_year.grade_level',$gradeLevel)
+                        ->where('curriculums.is_activity',true)
+                        ->select('offered_courses.open_course_id','offered_courses.semester','offered_courses.course_id','curriculums.course_name')
+                        ->get();
+
+                $courseArr = array();
+
+                foreach($courses as $course){
+                    $courseArr[$course->course_id." ".$course->semester] = $course->open_course_id;
+                }
+                //dd($courseArr);
+
+                $students = Student::all();
+                $studentsID = Student::Join('student_grade_levels','student_grade_levels.student_id','=','students.student_id')
+                    ->Join('academic_year','academic_year.classroom_id','=','student_grade_levels.classroom_id')
+                    ->where('academic_year.academic_year',$year)
+                    ->where('academic_year.room',$room)
+                    ->where('academic_year.grade_level',$gradeLevel)
+                    ->select('students.student_id')
+                    ->get();
+                $stdArray = array();
+
+                $gradeStatus = Grade_Status::all();
+                $GStatusArr = array();
+                foreach($gradeStatus as $status){
+                  $statusArr[$status->grade_status_text] = $status->grade_status;
+                }
+
+
+                date_default_timezone_set('Asia/Bangkok');
+                $datetime = date("Y-m-d H:i:s");
+
+                foreach ($studentsID as $studentID) {
+                  $stdArray[] = $studentID->student_id;
+                }
+
+                for ($i = 0; $i < count($resultsStudent); $i++) {
+                  if(in_array($resultsStudent[$i]->students_id,$stdArray)){
+
+                        foreach($courseIDFirst as $key => $id){
+                          $resUp = strtoupper($resultsFirst[$i+2]->$key);
+                          if(array_key_exists($resUp, $statusArr)){
+                            $activity = new Activity_Record;
+                            $activity->student_id = $resultsStudent[$i]->students_id;
+                            $activity->open_course_id = $courseArr[$id." 1"];
+                            $activity->grade_status = $statusArr[$resUp];
+                            $activity->semester = 1;
+                            $activity->academic_year = $year;
+                            $activity->datetime = $datetime;
+                            $activity->data_status = 1;
+                            $activity->save();
+
+                          }
+                        }
+
+                        foreach($courseIDSec as $key => $id){
+                          $resUp = strtoupper($resultsSecond[$i+2]->$key);
+
+                          if(array_key_exists($resUp, $statusArr)){
+                            $activity = new Activity_Record;
+                            $activity->student_id = $resultsStudent[$i]->students_id;
+                            $activity->open_course_id = $courseArr[$id." 2"];
+                            $activity->grade_status = $statusArr[$resUp];
+                            $activity->semester = 1;
+                            $activity->academic_year = $year;
+                            $activity->datetime = $datetime;
+                            $activity->data_status = 1;
+                            $activity->save();
+
+                          }
+
+                        }
+
+                  }
+
+                }
         }
 
       }
-      $redi  = 'temp/test'.$results[1]->sick_s2;
+
+
+      $redi  = '/upload';
       return redirect($redi);
 
     } // END upload Activity
