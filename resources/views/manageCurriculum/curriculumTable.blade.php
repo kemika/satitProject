@@ -18,6 +18,8 @@
 
 
 <link href="{{ asset('bootstrap/css/studentCSS.css') }}" rel="stylesheet">
+<title>Satit Kaset</title>
+<link rel="shortcut icon" href="img/satitLogo.gif" />
 
 
 <h1> Manage Curriculum Year <?php echo $curricula->first()->year; ?></h1>

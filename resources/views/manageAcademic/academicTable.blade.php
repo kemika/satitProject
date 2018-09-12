@@ -1,3 +1,4 @@
+@extends('layouts.web')
 <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
 

@@ -1,5 +1,3 @@
-
-
 <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -14,6 +12,8 @@
 <link href="{{ asset('bootstrap/css/studentCSS.css') }}" rel="stylesheet">
 
 <head>
+  <title>Satit Kaset</title>
+  <link rel="shortcut icon" href="{{ asset('img/satitLogo.gif') }}" />
   <div id='cssmenu'>
   <ul>
      <li ><a href='/main'>SatitKaset</a></li>
@@ -35,11 +35,22 @@
   </ul>
 
   </div>
+  <script type="text/javascript">
+
+  $(document).ready(function() {
+    $('#table').DataTable({
+      columnDefs: [
+       {type: 'non-empty-string', targets: 0} // define 'name' column as non-empty-string type
+      ]
+    	} );
+  } );
+  </script>
+
 
 </head>
 
-<center>
 <h1> Approval Status </h1>
+<center>
 @if (session('status'))
     @if (session('status') === "Approve!")
     <div class="alert alert-success alert-dismissible fade show" role="alert" style="width: 120rem;">
@@ -238,18 +249,6 @@
 @endif
 
 
-  <div class="col ">
-    <button class="btn btn-danger" onclick="window.location.href='/main'">Back to main</button>
-  </div>
 
 </div>
 </center>
-<script type="text/javascript">
-
-$(document).ready(function() {
-  $('#table').DataTable();
-} );
-
-
-
-</script>

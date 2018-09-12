@@ -1,14 +1,9 @@
-
-
-
-
-
-
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Satit Kaset</title>
+    <link rel="shortcut icon" href="img/satitLogo.gif" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="/css/nav.css">
     @stack('style')
@@ -21,7 +16,7 @@
           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
-       <title>CSS MenuMaker</title>
+       
     </head>
     <body>
 

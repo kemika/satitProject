@@ -21,6 +21,8 @@
 
 
 <head>
+  <title>Satit Kaset</title>
+  <link rel="shortcut icon" href="img/satitLogo.gif" />
   <div id='cssmenu'>
   <ul>
      <li ><a href='/main'>SatitKaset</a></li>
