@@ -107,3 +107,6 @@ Route::get('/exportForm', 'ReportCardController@exportForm');
 Route::get('/exportGrade1', 'ReportCardController@exportGrade1');
 Route::get('/exportGrade2', 'ReportCardController@exportGrade2');
 Route::get('/exportGrade3', 'ReportCardController@exportGrade3');
+
+Route::get('/manageDirector', 'ManageDirectorController@index');
+Route::put('/manageDirector/update', 'ManageDirectorController@update');
