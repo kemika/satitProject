@@ -61,6 +61,9 @@ Route::get('export-file/{type}', 'UploadGradeController@exportExcel')->name('exp
 Route::post('/uploadGrade/import', 'UploadGradeController@import');
 Route::get('/upload', 'UploadGradeController@upload');
 Route::post('/getUpload', 'UploadGradeController@getUpload');
+Route::post('/getUploadComments', 'UploadGradeController@getUploadComments');
+Route::post('/getUpload', 'UploadGradeController@getUpload');
+Route::post('/getUpload', 'UploadGradeController@getUpload');
 
 
 Route::get('export-height/{type}', 'UploadGradeController@exportHeight')->name('export.height');
