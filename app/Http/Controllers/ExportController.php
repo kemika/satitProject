@@ -797,21 +797,31 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
         $sheet->setCellValue('A3', 'Room');
         $sheet->setCellValue('A4', 'Fill these cells in with S, U, or leave blank');
         // $sheet->setCellValue('A6', 'No');
-        $sheet->setCellValue('A6', 'Students ID');
-        $sheet->setCellValue('B6', 'Students Name');
+        $sheet->setCellValue('A7', 'Students ID');
+        $sheet->setCellValue('B7', 'Students Name');
 
         $sheet->setCellValue('B5', 'Activities');
+        $sheet->setCellValue('B6', 'Course ID');
         //------------- From Attentance table ----------//
         $cells = self::get_index_cell(ord('C'),count($subject_sem1),5);
 
         $i = 0;
         foreach ($cells as $cell ) {
-          $sheet->setCellValue($cell,$subject_sem1[$i]->course_name.' ('. $subject_sem1[$i]->course_id.')' );
+          $sheet->setCellValue($cell,$subject_sem1[$i]->course_name);
           $i+=1;
-
         }
 
-        $b = self::get_index_char_cell(ord('C'),count($subject_sem1)-1,6);
+        $cells = self::get_index_cell(ord('C'),count($subject_sem1),6);
+
+        $i = 0;
+        foreach ($cells as $cell ) {
+          $sheet->setCellValue($cell,$subject_sem1[$i]->course_id);
+          $i+=1;
+        }
+
+
+
+        $b = self::get_index_char_cell(ord('C'),count($subject_sem1)-1,7);
 
         $sheet->mergeCells($b[0].':'.$b[1]);
         $sheet->cell($b[0].':'.$b[1], function($cell) {
@@ -828,12 +838,20 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
         $i = 0;
         foreach ($cells as $cell ) {
-          $sheet->setCellValue($cell,$subject_sem2[$i]->course_name.' ('. $subject_sem2[$i]->course_id.')' );
+          $sheet->setCellValue($cell,$subject_sem2[$i]->course_name);
           $i+=1;
 
         }
 
-        $b = self::get_index_char_cell($start,count($subject_sem2)-1,6);
+        $cells = self::get_index_cell($start,count($subject_sem2),6);
+
+        $i = 0;
+        foreach ($cells as $cell ) {
+          $sheet->setCellValue($cell,$subject_sem2[$i]->course_id);
+          $i+=1;
+        }
+
+        $b = self::get_index_char_cell($start,count($subject_sem2)-1,7);
         $sheet->mergeCells($b[0].':'.$b[1]);
         $sheet->cell($b[0].':'.$b[1], function($cell) {
             $cell->setAlignment('center');
@@ -844,12 +862,9 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
         for($i =1 ; $i<=count($students) ;$i++){
           // $sheet->setCellValue('A'.(6+$i), $i);
-          $sheet->setCellValue('A'.(6+$i), $students[$i-1]->student_id);
-          $sheet->setCellValue('B'.(6+$i), $students[$i-1]->firstname.' '.$students[$i-1]->lastname);
+          $sheet->setCellValue('A'.(7+$i), $students[$i-1]->student_id);
+          $sheet->setCellValue('B'.(7+$i), $students[$i-1]->firstname.' '.$students[$i-1]->lastname);
         }
-
-
-
 
 
 
@@ -863,6 +878,10 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
             'B' => 100
         ));
 
+
+
+
+
         $sheet->setStyle(array(
             'font' => array(
                 'name'      =>  'Tw Cen MT',
@@ -871,14 +890,15 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
             )
         ));
 
-        $sheet->getStyle('A5:Z5')->getAlignment()->setWrapText(true);
+        $sheet->getStyle('A5:Z6')->getAlignment()->setWrapText(true);
+        //$sheet->getStyle('A6:Z6')->getAlignment()->setWrapText(true);
 
-        $sheet->setBorder('A5:Q6', 'thin');
+        $sheet->setBorder('A5:Q7', 'thin');
 
-        $sheet->cells('A5:AN5', function($cells) {
+        $sheet->cells('A5:AN6', function($cells) {
             $cells->setAlignment('center');
             $cells->setValignment('center');
-            $cells->setTextRotation(90);
+            //$cells->setTextRotation(90);
           });
 
 
@@ -888,6 +908,10 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
         });
 
         $sheet->cell('B5', function($cell) {
+            $cell->setBackground('#FFC300');
+        });
+
+        $sheet->cell('B6', function($cell) {
             $cell->setBackground('#FFC300');
         });
 
