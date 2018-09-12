@@ -10,7 +10,7 @@ use App\Teacher;
 use App\Student;
 use App\Academic_Year;
 use App\Offered_Courses;
-use App\Behavior_type;
+use App\Behavior_Type;
 
 use App\Curriculum;
 use App\Student_Grade_Level;
@@ -529,7 +529,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
     ->get();
 
 
-    $behaviors = Behavior_type::all();
+    $behaviors = Behavior_Type::all();
 
     $type='xlsx';
     Excel::create('Behavior', function($excel) use($students,$academic_year, $behaviors) {
