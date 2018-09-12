@@ -35,6 +35,17 @@
   </ul>
 
   </div>
+  <script type="text/javascript">
+
+  $(document).ready(function() {
+    $('#table').DataTable({
+      columnDefs: [
+       {type: 'non-empty-string', targets: 0} // define 'name' column as non-empty-string type
+      ]
+    	} );
+  } );
+  </script>
+
 
 </head>
 
@@ -241,12 +252,3 @@
 
 </div>
 </center>
-<script type="text/javascript">
-
-$(document).ready(function() {
-  $('#table').DataTable();
-} );
-
-
-
-</script>

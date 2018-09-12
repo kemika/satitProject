@@ -36,7 +36,7 @@ class ApproveGradeController extends Controller
             ->orderBy('course_id','asc')
             ->orderBy('datetime','desc')
             ->get();*/
-   ;
+
 
    $courses  = Academic_Year::Join('offered_courses','offered_courses.classroom_id','=','academic_year.classroom_id')
            ->Join('curriculums', function($join)
