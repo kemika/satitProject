@@ -898,7 +898,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
         $sheet->cells('A5:AN6', function($cells) {
             $cells->setAlignment('center');
             $cells->setValignment('center');
-            $cells->setTextRotation(90);
+            //$cells->setTextRotation(90);
           });
 
 
