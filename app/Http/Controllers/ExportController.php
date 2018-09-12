@@ -540,7 +540,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
         ////////////////////////////Student/////////////////////////////
 
-        $i=5;
+        $i=7;
 
         foreach ($students as $student) {
 
@@ -599,9 +599,10 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
         $sheet->setCellValue('A1', 'Academic Year');
         $sheet->setCellValue('A2', 'Grade Level');
         $sheet->setCellValue('A3', 'Room');
-        $sheet->setCellValue('A4', 'Behavior');
-        $sheet->setCellValue('A5', 'Students ID');
-        $sheet->setCellValue('B5', 'Students Name');
+        $sheet->setCellValue('A4', 'Behavior ID');
+        $sheet->setCellValue('A5', 'Behavior Name');
+        $sheet->setCellValue('A6', 'Students ID');
+        $sheet->setCellValue('B6', 'Students Name');
         //-------- From Behavior table--------------------//
         $sheet->setCellValue('C6', 'Q1');
         $sheet->setCellValue('D6', 'Q2');
@@ -626,7 +627,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
 
 
-        $sheet->setBorder('A4:F23', 'thin');
+        $sheet->setBorder('A4:AP'.$i, 'thin');
 
 
       });
