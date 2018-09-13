@@ -14,6 +14,7 @@ use App\Behavior_type;
 
 use App\Curriculum;
 use App\Student_Grade_Level;
+use ZipArchive;
 
 
 class ExportController extends Controller
@@ -988,6 +989,35 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
     }
 
     return $result;
+
+  }
+
+  public function download_all(Request $request){
+    if($request->has('download')) {
+      // Define Dir Folder
+      $public_dir=public_path();
+      // Zip File Name
+      $zipFileName = 'AllDocuments.zip';
+      // Create ZipArchive Obj
+      $zip = new ZipArchive;
+      if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
+      // Add Multiple file
+      foreach($files as $file) {
+          $zip->addFile($file->path, $file->name);
+        }        
+      $zip->close();
+      }
+      // Set Header
+      $headers = array(
+      'Content-Type' => 'application/octet-stream',
+      );
+      $filetopath=$public_dir.'/'.$zipFileName;
+      // Create Download Response
+      if(file_exists($filetopath)){
+        return response()->download($filetopath,$zipFileName,$headers);
+      }
+    }
+    return view('createZip');
 
   }
 
