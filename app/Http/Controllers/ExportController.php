@@ -56,7 +56,7 @@ class ExportController extends Controller
       ->join('curriculums', function($j) {
       $j->on('curriculums.course_id', '=', 'offered_courses.course_id');
       $j->on('curriculums.curriculum_year','=','offered_courses.curriculum_year');
-      })
+      })->where('curriculums.is_activity',false)
       ->select('offered_courses.*','curriculums.*')
       ->get();
 
