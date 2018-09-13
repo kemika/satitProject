@@ -494,7 +494,7 @@ class ReportCardController extends Controller
         }
         $b =count($result);
 
-        for($i = count($result) ; $i < 20 ;$i ++){
+        for($i = count($result) ; $i < 14 ;$i ++){
 
           $element = array('course_name' => '',
               'course_id' => '',

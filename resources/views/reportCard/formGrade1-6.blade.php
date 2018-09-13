@@ -24,8 +24,8 @@
 </div>
 <table class="table table-bordered tableStyle">
     <tr>
-      <th scope="col" rowspan="2">Course</th>
-      <th scope="col" rowspan="2">Code</th>
+      <th scope="col" rowspan="2" style="width: 100px;">Course</th>
+      <th scope="col" rowspan="2" style="width: 70px;">Code</th>
       <th scope="col" colspan="2" align="center">Periods/Week</th>
       <th scope="col" rowspan="2" style="width:10px;">Credit Hour</th>
       <th scope="col" colspan="4" align="center">1st Semester Grade</th>
@@ -150,7 +150,7 @@
   <div class="absolute4"> <p>Cumulative GPA/37.0 = null</p> </div>
 </div>
 
-
+<div class="page-break"></div>
 
 <br>
 <div class="boxHeader"><h6>Evaluation  :</h6>
@@ -507,7 +507,7 @@ h6{
   margin-bottom: 10px;
 }
 .table thead th {
-  border-bottom: 1px solid black;
+  /* border-bottom: 1px solid black; */
 }
 
 .table-bordered th {
@@ -538,6 +538,12 @@ tr {
 .tableStyle{
   width: 100%;
   margin-top: 20px;
+  border: 1px solid black;
+}
+
+.tableStyle2{
+  width: 50%;
+  /* margin-top: 20px; */
   border: 1px solid black;
 }
 

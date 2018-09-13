@@ -682,9 +682,7 @@
   right: 1px;
   bottom: -50px;
 }
-.table thead th {
-  border-bottom: 1px solid black;
-}
+
 .table-bordered th {
   border: 1px solid black;
 }
@@ -707,7 +705,7 @@ tr {
     page-break-after: always;
 }
 .table td, .table th {
-    padding: .35rem;
+    padding: .20rem;
     vertical-align: top;
 }
 .tableStyle5 th{

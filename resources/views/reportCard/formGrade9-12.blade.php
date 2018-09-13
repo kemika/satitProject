@@ -805,9 +805,7 @@
   right: 1px;
   bottom: -50px;
 }
-.table thead th {
-  border-bottom: 1px solid black;
-}
+
 .table-bordered th {
     border: 1px solid black;
 }
