@@ -123,7 +123,9 @@ class ReportCardController extends Controller
         $grade_semester1_raw = (clone $grade)->where('offered_courses.semester', '1')
             ->where('offered_courses.is_elective', '0')
             ->get();
+
         $grade_semester1 = self::getGradeToFrom($grade_semester1_raw);
+        // dd($grade_semester1);
 
         $grade_avg_sem1 = self::getAvg($grade_semester1);
 
@@ -358,8 +360,10 @@ class ReportCardController extends Controller
     {
         $check = array();
         $result = array();
-
+        $boom = array();
         foreach ($arr as $x) {
+          array_push($boom,$x->open_course_id.' SEM: '.$x->semester.' POINT: '.$x->grade);
+
             if (!in_array($x->course_id . "", $check)) {
 
                 $element = array('course_name' => $x->course_name,
@@ -368,13 +372,44 @@ class ReportCardController extends Controller
                     'quater1' => -1,
                     'quater2' => -1,
                     'quater3' => -1,
+                    'enable' => true,
                     'total_point' => 0);
 
                 $result[$x->course_id] = $element;
+                array_push($check,$x->course_id);
             }
-            $result[$x->course_id]['quater' . $x->quater] = $x->grade;
-            $result[$x->course_id]['total_point'] += $x->grade;
+
+              $result[$x->course_id]['quater' . $x->quater] = $x->grade;
+              $result[$x->course_id]['total_point'] += $x->grade;
+
+
         }
+
+        foreach($result as $x){
+          for($i = 1 ; $i <= 3;$i ++){
+            if($x['quater'.$i] == -1){
+              $result[$x['course_id']]['total_point'] = '';
+              $result[$x['course_id']]['enable'] = false;
+              $result[$x['course_id']]['quater'.$i] = '';
+
+            }
+          }
+          for($i = count($result);$i<14;$i++){
+            $element = array('course_name' => '',
+                'course_id' => '',
+                'credits' => '',
+                'quater1' => '',
+                'quater2' => '',
+                'quater3' => '',
+                'enable' => false,
+                'total_point' => '');
+              $result['course'.$i] = $element;
+
+          }
+        }
+
+
+
 
 
         return $result;
@@ -494,7 +529,7 @@ class ReportCardController extends Controller
         }
         $b =count($result);
 
-        for($i = count($result) ; $i < 20 ;$i ++){
+        for($i = count($result) ; $i < 14 ;$i ++){
 
           $element = array('course_name' => '',
               'course_id' => '',
@@ -535,11 +570,15 @@ class ReportCardController extends Controller
         $total_score = 0;
         $total_credit = 0;
         foreach ($arr as $key => $x) {
+          if($x['enable']){
+
             $score = (($x['total_point'] / 3) * $x['credits']);
             $score = substr($score, 0, strpos($score, '.') + 3);
             // $total_score += number_format((($x['total_point']/3)*$x['credits']),2);
             $total_score += $score;
             $total_credit += $x['credits'];
+          }
+
         }
         if ($total_credit == 0) {
             return 0;

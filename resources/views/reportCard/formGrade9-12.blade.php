@@ -1,4 +1,4 @@
-<head>
+<head>head>
   <title>Report Card</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,57 +42,35 @@
     <tr>
       <td>{{$grade['course_name']}}</td>
       <td>{{$grade['course_id']}}</td>
+      @if($grade['credits'] != 0)
       <td>{{ $grade['credits']}}</td>
-
-
-
-
-      @if($grade['quater1'] != -1)
-        <td>{{ $grade['quater1']}}</td>
       @else
-        <td></td>
+      <td></td>
       @endif
 
-      @if($grade['quater2'] != -1)
-        <td>{{ $grade['quater2']}}</td>
-      @else
-        <td></td>
-      @endif
 
-      @if($grade['quater3'] != -1)
-        <td>{{ $grade['quater3']}}</td>
-      @else
-        <td></td>
-      @endif
-
+      <td>{{ $grade['quater1']}}</td>
+      <td>{{ $grade['quater2']}}</td>
+      <td>{{ $grade['quater3']}}</td>
 
       <?php
-      $grade_total  = $grade['total_point']/3;
-
-      $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
+      $grade_total = '';
+      if($grade['enable']){
+        $grade_total  = $grade['total_point']/3;
+        $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
+      }
 
        ?>
       <td>{{  $grade_total }}</td>
-      <?php $total_credit +=  $grade['credits'] ?>
+      <?php
+      if($grade['enable']){
+       $total_credit +=  $grade['credits'];
+      }
+        ?>
 
-      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
     </tr>
 
     @endforeach
-
-    @for ($i = count($grade_semester1); $i < 24; $i++)
-    <tr>
-      <td></td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-    </tr>
-    @endfor
-
-
 
     <tr>
       <th scope="col" colspan="2">Total</th>
@@ -134,7 +112,7 @@
     <tr>
       <th scope="col">Student Name</th>
       <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
-      <th scope="col" class="setLeft">Grade</th>
+      <th scope="col" class="setLeft">Grade {{ $student->grade_level."/".$student->room}}</th>
     </tr>
 </table>
 
@@ -162,55 +140,35 @@
     <tr>
       <td>{{$grade['course_name']}}</td>
       <td>{{$grade['course_id']}}</td>
+      @if($grade['credits'] != 0)
       <td>{{ $grade['credits']}}</td>
-
-
-      @if($grade['quater1'] != -1)
-        <td>{{ $grade['quater1']}}</td>
       @else
-        <td></td>
+      <td></td>
       @endif
 
-      @if($grade['quater2'] != -1)
-        <td>{{ $grade['quater2']}}</td>
-      @else
-        <td></td>
-      @endif
 
-      @if($grade['quater3'] != -1)
-        <td>{{ $grade['quater3']}}</td>
-      @else
-        <td></td>
-      @endif
-
+      <td>{{ $grade['quater1']}}</td>
+      <td>{{ $grade['quater2']}}</td>
+      <td>{{ $grade['quater3']}}</td>
 
       <?php
-      $grade_total  = $grade['total_point']/3;
-      $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
+      $grade_total = '';
+      if($grade['enable']){
+        $grade_total  = $grade['total_point']/3;
+        $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
+      }
+
        ?>
       <td>{{  $grade_total }}</td>
-      <?php $total_credit +=  $grade['credits'] ?>
+      <?php
+      if($grade['enable']){
+       $total_credit +=  $grade['credits'];
+      }
+        ?>
 
-      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
     </tr>
 
     @endforeach
-
-
-    @for ($i = count($grade_semester2); $i < 24; $i++)
-    <tr>
-      <td>{{" "." "}}</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    @endfor
-
-
-
 
     <tr>
       <th scope="col" colspan="2">Total</th>
@@ -243,85 +201,7 @@
 <p class="classroomStyle">Classroom signature................................................</p>
 
 </center>
-<div class="page-break"></div>
 
-<center><h4 class="heading">SECOND SEMESTER REPORT</h4></center>
-<table class="nameStyle">
-    <tr>
-      <th scope="col">Student Name</th>
-      <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
-      <th scope="col" class="setLeft">Grade</th>
-    </tr>
-</table>
-
-
-<center>
-<table class="table table-bordered tableStyle">
-    <tr>
-      <th scope="col" rowspan="2">Course</th>
-      <th scope="col" rowspan="2">Code</th>
-      <th scope="col" rowspan="2">Credit</th>
-      <th scope="col" colspan="4" align="center">2nd Semester Grade</th>
-    </tr>
-    <tr>
-      <th>1</th>
-      <th>2</th>
-      <th>3</th>
-      <th>Semester Grade</th>
-    </tr>
-    <?php $i = 1 ;
-          $total_credit =0;
-    ?>
-    @foreach($elective_grades as $key => $elective_grade )
-
-
-    <tr>
-      <td>{{$elective_grade['course_name']}}</td>
-      <td>{{strtoupper(substr($elective_grade['course_name'], 0, 3))." ".$elective_grade['course_id']}}</td>
-      <td>{{ $elective_grade['credits']}}</td>
-      <td>{{ $elective_grade['quater1']}}</td>
-      <td>{{ $elective_grade['quater2']}}</td>
-      <td>{{ $elective_grade['quater3']}}</td>
-      <?php
-      $grade_total  = $elective_grade['total_point']/3;
-
-      $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
-
-       ?>
-      <td>{{  $grade_total }}</td>
-      <?php $total_credit +=  $elective_grade['credits'] ?>
-
-      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
-    </tr>
-
-    @endforeach
-
-    @for ($i = count($elective_grades); $i < 24; $i++)
-    <tr>
-      <td></td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-      <td>  </td>
-    </tr>
-    @endfor
-
-
-
-    <tr>
-      <th scope="col" colspan="2">Total</th>
-      <th scope="col">{{$total_credit}}</th>
-      <th scope="col" colspan="3" class="setRight">GPA</th>
-      <th scope="col">{{ $elective_grade_avg }}</th>
-    </tr>
-</table>
-
-
-<p class="classroomStyle">Classroom signature................................................</p>
-
-</center>
 
 <div class="page-break"></div>
 
