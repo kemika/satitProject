@@ -24,8 +24,8 @@
 </div>
 <table class="table table-bordered tableStyle">
     <tr>
-      <th scope="col" rowspan="2">Course</th>
-      <th scope="col" rowspan="2">Code</th>
+      <th scope="col" rowspan="2" style="width: 100px;">Course</th>
+      <th scope="col" rowspan="2" style="width: 70px;">Code</th>
       <th scope="col" colspan="2" align="center">Periods/Week</th>
       <th scope="col" rowspan="2" style="width:10px;">Credit Hour</th>
       <th scope="col" colspan="4" align="center">1st Semester Grade</th>
@@ -60,101 +60,47 @@
       <td>{{$grade['course_id']}}</td>
       <td>{{$grade['in_class']}}</td>
       <td>{{$grade['practice']}}</td>
-      <td>{{ $grade['credits']*2}}</td>
-
-      @if($grade['quater1_sem1'] != -1)
-        <td>{{ $grade['quater1_sem1']}}</td>
+      @if($grade['credits'] != 0)
+        <td>{{ $grade['credits']*2}}</td>
       @else
-        <td></td>
+          <td></td>
       @endif
 
 
-      @if($grade['quater2_sem1'] != -1)
-        <td>{{ $grade['quater2_sem1']}}</td>
-      @else
-        <td></td>
-      @endif
-
-
-      @if($grade['quater3_sem1'] != -1)
-        <td>{{ $grade['quater3_sem1']}}</td>
-      @else
-        <td></td>
-      @endif
-
-
-
-      <td>{{ $grade['total_point_sem1']}}</td>
-
-
-    @if($grade['quater1_sem2'] != -1)
-      <td>{{ $grade['quater1_sem2']}}</td>
-    @else
-      <td></td>
-    @endif
-
-
-    @if($grade['quater2_sem2'] != -1)
-      <td>{{ $grade['quater2_sem2']}}</td>
-    @else
-      <td></td>
-    @endif
-
-
-    @if($grade['quater3_sem2'] != -1)
-      <td>{{ $grade['quater3_sem2']}}</td>
-    @else
-      <td></td>
-    @endif
-
-
-
-
-
-    <td>{{ $grade['total_point_sem2']}}</td>
-
-
+          <td>{{ $grade['quater1_sem1']}}</td>
+          <td>{{ $grade['quater2_sem1']}}</td>
+          <td>{{ $grade['quater3_sem1']}}</td>
 
       <?php
-      $grade_total  = $grade['total_point']/6;
-      if($grade['enable'] != false ){
-      $GPA_sem1 += ($grade['credits']*$grade['total_point_sem1']);
-      $GPA_sem2 += ($grade['credits']*$grade['total_point_sem2']);
-      }
-      $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
-      $total_credit += $grade['credits'];
+          $grade_total ='';
+          if($grade['enable_sem1'] && $grade['enable_sem2']){
+            $grade_total  = $grade['total_point']/6;
+            $GPA_sem1 += ($grade['credits']*$grade['total_point_sem1']);
+            $GPA_sem2 += ($grade['credits']*$grade['total_point_sem2']);
+            $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
+            $total_credit += $grade['credits'];
+
+          }
+          else{
+            if($grade['enable_sem1']){
+              $GPA_sem1 += ($grade['credits']*$grade['total_point_sem1']);
+            }
+            if($grade['enable_sem2']){
+              $GPA_sem1 += ($grade['credits']*$grade['total_point_sem2']);
+            }
+
+          }
 
        ?>
+
+      <td>{{ $grade['total_point_sem1']}}</td>
+      <td>{{ $grade['quater1_sem2']}}</td>
+      <td>{{ $grade['quater2_sem2']}}</td>
+      <td>{{ $grade['quater3_sem2']}}</td>
+      <td>{{ $grade['total_point_sem2']}}</td>
       <td>{{ $grade_total }}</td>
-
-
-
-
-
-
     </tr>
-
     @endforeach
-
-    @for ($i = count($grade_semester1); $i < 14; $i++)
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td>-</td>
-      <td>-</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>-</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    @endfor
-
     <?php
       $denominator = $total_credit;
       if($denominator == 0){
@@ -166,12 +112,6 @@
       $GPA_total = substr($GPA_total,0,strpos($GPA_total,'.')+3);
 
     ?>
-
-
-
-
-
-
     <tr>
       <th scope="col" colspan="4">Total</th>
       <th scope="col">{{$total_credit}}</th>
@@ -184,40 +124,33 @@
 </table>
 
 <div class="relative3">
-  <table class="table table-bordered tableActivity">
+  <table class="table table-bordered tableStyle2">
       <tr>
         <th scope="col">Activity</th>
         <th scope="col">S/U</th>
       </tr>
+      @foreach($activity_semester1 as $grade)
       <tr>
-        <td>Homeroom 3</td>
-        <td></td>
+        <td>{{ $grade->course_name }}</td>
+        <td>{{ $grade->grade_status_text }}</td>
       </tr>
+      @endforeach
+      @for ($i = count($activity_semester1); $i < 5; $i++)
       <tr>
-        <td>Extra Curricular Activities 3</td>
-        <td></td>
+        <td> </td>
+        <td> </td>
+
       </tr>
-      <tr>
-        <td>Guidance and Developmental Skills 3</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>@Social Spirit 3</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>Shadowing</td>
-        <td></td>
-      </tr>
+      @endfor
+
 
   </table>
-
 
   <div class="absolute3"><p class="classroomStyle">Classroom signature................................................</p></div>
   <div class="absolute4"> <p>Cumulative GPA/37.0 = null</p> </div>
 </div>
 
-
+<div class="page-break"></div>
 
 <br>
 <div class="boxHeader"><h6>Evaluation  :</h6>
@@ -574,7 +507,7 @@ h6{
   margin-bottom: 10px;
 }
 .table thead th {
-  border-bottom: 1px solid black;
+  /* border-bottom: 1px solid black; */
 }
 
 .table-bordered th {
@@ -605,6 +538,12 @@ tr {
 .tableStyle{
   width: 100%;
   margin-top: 20px;
+  border: 1px solid black;
+}
+
+.tableStyle2{
+  width: 50%;
+  /* margin-top: 20px; */
   border: 1px solid black;
 }
 

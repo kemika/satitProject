@@ -39,24 +39,16 @@
     <tr>
       <td>{{$grade['course_name']}}</td>
       <td>{{$grade['course_id']}}</td>
+      @if($grade['credits'] != 0)
       <td>{{ $grade['credits']}}</td>
-      @if($grade['quater1'] != -1)
-        <td>{{ $grade['quater1']}}</td>
       @else
-        <td></td>
+      <td></td>
       @endif
 
-      @if($grade['quater2'] != -1)
-        <td>{{ $grade['quater2']}}</td>
-      @else
-        <td></td>
-      @endif
 
-      @if($grade['quater3'] != -1)
-        <td>{{ $grade['quater3']}}</td>
-      @else
-        <td></td>
-      @endif
+      <td>{{ $grade['quater1']}}</td>
+      <td>{{ $grade['quater2']}}</td>
+      <td>{{ $grade['quater3']}}</td>
 
       @if($grade['total_point'] != "-")
         <td>{{number_format($grade['total_point'],1) }}</td>
@@ -132,18 +124,12 @@
     <tr>
       <td>{{$grade['course_name']}}</td>
       <td>{{$grade['course_id']}}</td>
+      @if($grade['credits'] != 0)
       <td>{{ $grade['credits']}}</td>
-      @if($grade['quater1'] != -1)
-        <td>{{ $grade['quater1']}}</td>
       @else
-        <td></td>
+      <td></td>
       @endif
 
-      @if($grade['quater2'] != -1)
-        <td>{{ $grade['quater2']}}</td>
-      @else
-        <td></td>
-      @endif
 
       @if($grade['quater3'] != -1)
         <td>{{ $grade['quater3']}}</td>
@@ -670,9 +656,7 @@
   right: 1px;
   bottom: -50px;
 }
-.table thead th {
-  border-bottom: 1px solid black;
-}
+
 .table-bordered th {
   border: 1px solid black;
 }
@@ -695,7 +679,7 @@ tr {
     page-break-after: always;
 }
 .table td, .table th {
-    padding: .35rem;
+    padding: .20rem;
     vertical-align: top;
 }
 .tableStyle5 th{
