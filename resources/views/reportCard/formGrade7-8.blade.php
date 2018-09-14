@@ -33,9 +33,6 @@
       <th>3</th>
       <th>Semester Grade</th>
     </tr>
-    <?php $i = 1 ;
-          $total_credit =0;
-    ?>
     @foreach($grade_semester1 as $key => $grade )
 
 
@@ -61,23 +58,18 @@
         <td></td>
       @endif
 
-      <?php
-      $grade_total  = $grade['total_point']/3;
-
-      $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
-
-       ?>
-      <td>{{  $grade_total }}</td>
-      <?php $total_credit +=  $grade['credits'] ?>
-
-      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
+      @if($grade['total_point'] != "-")
+        <td>{{number_format($grade['total_point'],1) }}</td>
+      @else
+        <td>{{$grade['total_point']}}</td>
+      @endif
     </tr>
 
     @endforeach
 
     <tr>
       <th scope="col" colspan="2">Total</th>
-      <th scope="col">{{$total_credit}}</th>
+      <th scope="col">{{$total_sem1_credit}}</th>
       <th scope="col" colspan="3" class="setRight">GPA</th>
       <th scope="col">{{ $avg1 }}</th>
     </tr>
@@ -134,9 +126,6 @@
       <th>3</th>
       <th>Semester Grade</th>
     </tr>
-    <?php $i = 1 ;
-          $total_credit =0;
-    ?>
     @foreach($grade_semester2 as $key => $grade )
 
 
@@ -161,21 +150,20 @@
       @else
         <td></td>
       @endif
-      <?php
-      $grade_total  = $grade['total_point']/3;
-      $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
-       ?>
-      <td>{{  $grade_total }}</td>
-      <?php $total_credit +=  $grade['credits'] ?>
 
-      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
+      @if($grade['total_point'] != "-")
+        <td>{{number_format($grade['total_point'],1) }}</td>
+      @else
+        <td>{{$grade['total_point']}}</td>
+      @endif
+
     </tr>
 
     @endforeach
 
     <tr>
       <th scope="col" colspan="2">Total</th>
-      <th scope="col">{{$total_credit}}</th>
+      <th scope="col">{{$total_sem2_credit}}</th>
       <th scope="col" colspan="3" class="setRight">GPA</th>
       <th scope="col">{{$avg2}}</th>
     </tr>
@@ -506,37 +494,37 @@
   <tr>
     <td style="text-align:left;">First Semester : </td>
     <td>CR</td>
-    <td class="dotBottom2">0.00</td>
+    <td class="dotBottom2">{{$total_sem1_credit}}</td>
     <td>CE</td>
-    <td class="dotBottom2">0.00</td>
+    <td class="dotBottom2">{{$total_sem1_credit}}</td>
     <td>Sum</td>
-    <td class="dotBottom2">#DIV/0!</td>
+    <td class="dotBottom2">{{number_format($avg1,1)}}</td>
     <td>GPA</td>
-    <td class="dotBottom2">#DIV/0!</td>
+    <td class="dotBottom2">{{number_format($avg1,1)}}</td>
   </tr>
 
   <tr>
     <td style="text-align:left;">Second Semester : </td>
     <td>CR</td>
-    <td class="dotBottom2">0.00</td>
+    <td class="dotBottom2">{{$total_sem2_credit}}</td>
     <td>CE</td>
-    <td class="dotBottom2">0.00</td>
+    <td class="dotBottom2">{{$total_sem2_credit}}</td>
     <td>Sum</td>
-    <td class="dotBottom2">#DIV/0!</td>
+    <td class="dotBottom2">{{number_format($avg2,1)}}</td>
     <td>GPA</td>
-    <td class="dotBottom2">#DIV/0!</td>
+    <td class="dotBottom2">{{number_format($gpa,1)}}</td>
   </tr>
 
   <tr>
     <th style="text-align:left;">Cumulative :</th>
     <th>CR</th>
-    <th class="dotBottom2">0.00</th>
+    <th class="dotBottom2">{{$total_credit}}</th>
     <th>CE</td>
-    <th class="dotBottom2">0.00</th>
+    <th class="dotBottom2">{{$total_credit}}</th>
     <th>Sum</td>
-    <th class="dotBottom2">#DIV/0!</th>
+    <th class="dotBottom2">{{number_format($gpa,1)}}</th>
     <th>GPA</td>
-    <th class="dotBottom2">#DIV/0!</th>
+    <th class="dotBottom2">{{number_format($gpa,1)}}</th>
   </tr>
 </table>
 
