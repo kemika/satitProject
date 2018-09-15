@@ -508,7 +508,7 @@
   <div class="boxTail"><p>to be permitted to graduate in academic year {{$academic_year}}</p>
 
 @else
-  <div class="boxTail"><p>to be permitted to {{$student->grade_level + 1}} in academic year {{$academic_year}}</p>
+  <div class="boxTail"><p>to be permitted to {{$student->grade_level + 1}} in academic year {{$academic_year+1}}</p>
 @endif
 
 
