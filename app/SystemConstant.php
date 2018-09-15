@@ -19,4 +19,7 @@ class SystemConstant
     const G1_6 = 0;
     const G7_8 = 1;
     const G9_12 = 2;
+
+    // 2 quaters plus 1 final
+    const TOTAL_QUARTERS = 3;
 }

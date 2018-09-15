@@ -39,13 +39,7 @@
     <tr>
       <td>{{$grade['course_name']}}</td>
       <td>{{$grade['course_id']}}</td>
-      @if($grade['credits'] != 0)
       <td>{{ $grade['credits']}}</td>
-      @else
-      <td></td>
-      @endif
-
-
       <td>{{ $grade['quater1']}}</td>
       <td>{{ $grade['quater2']}}</td>
       <td>{{ $grade['quater3']}}</td>
@@ -124,18 +118,10 @@
     <tr>
       <td>{{$grade['course_name']}}</td>
       <td>{{$grade['course_id']}}</td>
-      @if($grade['credits'] != 0)
       <td>{{ $grade['credits']}}</td>
-      @else
-      <td></td>
-      @endif
-
-
-      @if($grade['quater3'] != -1)
-        <td>{{ $grade['quater3']}}</td>
-      @else
-        <td></td>
-      @endif
+      <td>{{ $grade['quater1']}}</td>
+      <td>{{ $grade['quater2']}}</td>
+      <td>{{ $grade['quater3']}}</td>
 
       @if($grade['total_point'] != "-")
         <td>{{number_format($grade['total_point'],1) }}</td>
@@ -251,7 +237,7 @@
         {{$check =1}}
           <tr>
             <!-- <td>$attendance->present</td> -->
-            <td></td>
+            <td>{{$attendance->total_days}}</td>
             <td>{{$attendance->late}}</td>
             <td>{{$attendance->sick}}</td>
             <td>{{$attendance->leave}}</td>

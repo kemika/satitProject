@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\School_Days;
 use App\SystemConstant;
 use DB;
 use App\Offered_Courses;
@@ -78,8 +79,8 @@ class ReportCardController extends Controller
                 $join->on('grades.quater', 'latest_grade.quater');
                 $join->on('grades.datetime', 'latest_grade.datetime');
             })
-            ->leftJoin('grade_status','grades.grade_status','grade_status.grade_status')
-            ->select('grades.*','grade_status.grade_status_text');
+            ->leftJoin('grade_status', 'grades.grade_status', 'grade_status.grade_status')
+            ->select('grades.*', 'grade_status.grade_status_text');
 
         // Get student grade level and classroom_id
 
@@ -148,8 +149,8 @@ class ReportCardController extends Controller
         // Get elective with most scores
         $selected_elective = null;
         $top_number_of_grade = 0;
-        foreach($elective_grades as $g){
-            if($g['grade_count'] > $top_number_of_grade){
+        foreach ($elective_grades as $g) {
+            if ($g['grade_count'] > $top_number_of_grade) {
                 $selected_elective = $g;
                 $top_number_of_grade = $g['grade_count'];
             }
@@ -170,8 +171,8 @@ class ReportCardController extends Controller
                 $join->on('activity_records.open_course_id', 'latest_act.open_course_id');
                 $join->on('activity_records.datetime', 'latest_act.datetime');
             })
-            ->leftJoin('grade_status','activity_records.grade_status','grade_status.grade_status')
-            ->select('activity_records.*','grade_status.grade_status_text');
+            ->leftJoin('grade_status', 'activity_records.grade_status', 'grade_status.grade_status')
+            ->select('activity_records.*', 'grade_status.grade_status_text');
 
         // Create template for all activity query
         $acts = Offered_Courses::where('classroom_id', $grade_level->classroom_id)
@@ -180,7 +181,7 @@ class ReportCardController extends Controller
                 $join->on('offered_courses.open_course_id', 'student_latest_acts.open_course_id');
             })
             ->where('curriculums.is_activity', '1')
-            ->select('student_latest_acts.grade_status','student_latest_acts.grade_status_text', 'offered_courses.*', 'curriculums.*')
+            ->select('student_latest_acts.grade_status', 'student_latest_acts.grade_status_text', 'offered_courses.*', 'curriculums.*')
             ->orderby('curriculums.course_name');
 
         $activity_semester1 = (clone $acts)->where('offered_courses.semester', '1')->get();
@@ -235,8 +236,8 @@ class ReportCardController extends Controller
                 $join->on('behavior_records.quater', 'latest_behavior_keys.quater');
                 $join->on('behavior_records.datetime', 'latest_behavior_keys.datetime');
             })
-            ->join('behavior_types','behavior_records.behavior_type','behavior_types.behavior_type')
-            ->select('behavior_records.*','behavior_types.behavior_type_text')
+            ->join('behavior_types', 'behavior_records.behavior_type', 'behavior_types.behavior_type')
+            ->select('behavior_records.*', 'behavior_types.behavior_type_text')
             ->orderBy('behavior_types.behavior_type_text')
             ->get();
 
@@ -252,343 +253,332 @@ class ReportCardController extends Controller
             ->select(DB::raw('MAX(datetime) as datetime'), 'semester');
 
         $attendances = Attendance_Record::where('student_id', $student_id)
-            ->where('academic_year', $academic_year)
+            ->where('attendace_records.academic_year', $academic_year)
             ->joinSub($latest_att_keys, 'latest_att_keys', function ($join) {
                 $join->on('attendace_records.semester', 'latest_att_keys.semester');
                 $join->on('attendace_records.datetime', 'latest_att_keys.datetime');
             })
-            ->select('attendace_records.*')
-            ->orderBy('semester','asc')
+            ->join('school_days', function ($join) {
+                $join->on('school_days.semester', 'attendace_records.semester');
+                $join->on('school_days.academic_year', 'attendace_records.academic_year');
+            })
+            ->select('attendace_records.*', 'school_days.total_days')
+            ->orderBy('semester', 'asc')
             ->get();
 
-        $student = Student::where('students.student_id', $student_id)
-            ->join('student_grade_levels', 'student_grade_levels.student_id', 'students.student_id')
-            ->select('students.*', 'student_grade_levels.*')
-            ->join('academic_year', 'academic_year.classroom_id', 'student_grade_levels.classroom_id')
-            ->select('students.*', 'student_grade_levels.*', 'academic_year.*')
-            ->first();
+        // Subtrace school day if there are attendances record
+        foreach ($attendances as $att) {
+            $att->total_days -= $att->late;
+            $att->total_days -= $att->sick;
+            $att->total_days -= $att->leave;
+            $att->total_days -= $att->absent;
+        }
 
-        // Pack data for view
-        $view_data = ['academic_year' => $academic_year,
-            'grade_semester1' => $grade_semester1,
-            'grade_semester2' => $grade_semester2,
-            'student' => $student,
+$student = Student::where('students.student_id', $student_id)
+    ->join('student_grade_levels', 'student_grade_levels.student_id', 'students.student_id')
+    ->select('students.*', 'student_grade_levels.*')
+    ->join('academic_year', 'academic_year.classroom_id', 'student_grade_levels.classroom_id')
+    ->select('students.*', 'student_grade_levels.*', 'academic_year.*')
+    ->first();
+
+// Pack data for view
+$view_data = ['academic_year' => $academic_year,
+    'grade_semester1' => $grade_semester1,
+    'grade_semester2' => $grade_semester2,
+    'student' => $student,
 //            'avg1' => $grade_avg_sem1,
 //            'avg2' => $grade_avg_sem2,
-            'activity_semester1' => $activity_semester1,
-            'activity_semester2' => $activity_semester2,
-            'elective_grades' => $elective_grades,
-            'selected_elective' => $selected_elective,
+    'activity_semester1' => $activity_semester1,
+    'activity_semester2' => $activity_semester2,
+    'elective_grades' => $elective_grades,
+    'selected_elective' => $selected_elective,
 //            'elective_grade_avg' => $elective_grade_avg,
-            'physical_record_semester1' => $physical_record_semester1,
-            'physical_record_semester2' => $physical_record_semester2,
-            'attendances' => $attendances,
-            'teacher_comments' => $teacher_comments,
-            'behavior_types' => $behavior_types,
-            'behavior_records' => $behavior_records];
+    'physical_record_semester1' => $physical_record_semester1,
+    'physical_record_semester2' => $physical_record_semester2,
+    'attendances' => $attendances,
+    'teacher_comments' => $teacher_comments,
+    'behavior_types' => $behavior_types,
+    'behavior_records' => $behavior_records];
 
-        if ($grade_level->grade_level <= 6) {
-            //ยังต้องเปลี่ยนเป็นฟอร์ม 1-6 ถ้าอาจารจะทดสอบให้ทดสอบที่อันนี้ก่อนครับ ผมมีตารางใน seeder แล้วนะครับ ลองseedได้ครับ
-            $view_data['grade_semester1'] = $grade_semester1_6;
-            $view_data = self::computeCumulative($view_data,SystemConstant::G1_6);
-            $pdf = PDF::loadView('reportCard.formGrade1-6', $view_data);
-        }elseif ($grade_level->grade_level <= 8) {
-            $view_data = self::computeCumulative($view_data, SystemConstant::G7_8);
-            $pdf = PDF::loadView('reportCard.formGrade7-8', $view_data);
-        }else{ //If not it can only be grade 9-12
-            $view_data = self::computeCumulative($view_data, SystemConstant::G9_12);
-            $pdf = PDF::loadView('reportCard.formGrade9-12', $view_data);
+if ($grade_level->grade_level <= 6) {
+    //ยังต้องเปลี่ยนเป็นฟอร์ม 1-6 ถ้าอาจารจะทดสอบให้ทดสอบที่อันนี้ก่อนครับ ผมมีตารางใน seeder แล้วนะครับ ลองseedได้ครับ
+    $view_data['grade_semester1'] = $grade_semester1_6;
+    $view_data = self::computeCumulative($view_data, SystemConstant::G1_6);
+    $pdf = PDF::loadView('reportCard.formGrade1-6', $view_data);
+} elseif ($grade_level->grade_level <= 8) {
+    $view_data = self::computeCumulative($view_data, SystemConstant::G7_8);
+    $pdf = PDF::loadView('reportCard.formGrade7-8', $view_data);
+} else { //If not it can only be grade 9-12
+    $view_data = self::computeCumulative($view_data, SystemConstant::G9_12);
+    $pdf = PDF::loadView('reportCard.formGrade9-12', $view_data);
+}
+
+$pdf->setPaper('a4', 'potrait');
+return $pdf->stream();
+
+// return $pdf->download('reportCard.pdf');
+
+}
+
+
+public
+static function getDistinct($arr, $field)
+{
+    $result = array();
+    $check = array();
+
+
+    foreach ($arr as $x) {
+
+        if (!in_array($x->classroom_id . "", $check)) {
+            array_push($check, $x->classroom_id);
+            array_push($result, $x);
+
         }
-
-        $pdf->setPaper('a4', 'potrait');
-        return $pdf->stream();
-
-        // return $pdf->download('reportCard.pdf');
-
     }
 
+    return $result;
 
-    public static function getDistinct($arr, $field)
-    {
-        $result = array();
-        $check = array();
+}
 
 
-        foreach ($arr as $x) {
+public
+function Room($classroom_id)
+{
 
-            if (!in_array($x->classroom_id . "", $check)) {
-                array_push($check, $x->classroom_id);
-                array_push($result, $x);
+    $room = Academic_Year::where('classroom_id', $classroom_id)
+        ->select('academic_year.*')
+        ->first();
 
-            }
-        }
+    $students = Student_Grade_Level::where('classroom_id', $classroom_id)
+        ->select('student_grade_levels.*')
+        ->join('students', 'students.student_id', 'student_grade_levels.student_id')
+        ->select('student_grade_levels.*', 'students.*')
+        ->get();
+    return view('reportCard.room', ['students' => $students, 'room' => $room]);
 
-        return $result;
+}
 
+public
+function getBehaviorToFrom($behavior_records, $behavior_types)
+{
+    foreach ($behavior_types as $behavior_type) {
+        $behavior_type->sem1_q1 = '';
+        $behavior_type->sem1_q2 = '';
+        $behavior_type->sem2_q1 = '';
+        $behavior_type->sem2_q2 = '';
     }
-
-
-    public function Room($classroom_id)
-    {
-
-        $room = Academic_Year::where('classroom_id', $classroom_id)
-            ->select('academic_year.*')
-            ->first();
-
-        $students = Student_Grade_Level::where('classroom_id', $classroom_id)
-            ->select('student_grade_levels.*')
-            ->join('students', 'students.student_id', 'student_grade_levels.student_id')
-            ->select('student_grade_levels.*', 'students.*')
-            ->get();
-        return view('reportCard.room', ['students' => $students, 'room' => $room]);
-
-    }
-
-    public function getBehaviorToFrom($behavior_records, $behavior_types)
-    {
-        foreach ($behavior_types as $behavior_type) {
-            $behavior_type->sem1_q1 = '';
-            $behavior_type->sem1_q2 = '';
-            $behavior_type->sem2_q1 = '';
-            $behavior_type->sem2_q2 = '';
-        }
-        foreach ($behavior_types as $behavior_type) {
-            foreach ($behavior_records as $behavior_record) {
-                if ($behavior_type->behavior_type == $behavior_record->behavior_type) {
-                    if ($behavior_record->semester == 1 && $behavior_record->quater == 1) {
-                        $behavior_type->sem1_q1 = $behavior_record->grade;
-                    }
-                    if ($behavior_record->semester == 1 && $behavior_record->quater == 2) {
-                        $behavior_type->sem1_q2 = $behavior_record->grade;
-                    }
-                    if ($behavior_record->semester == 2 && $behavior_record->quater == 1) {
-                        $behavior_type->sem2_q1 = $behavior_record->grade;
-                    }
-                    if ($behavior_record->semester == 2 && $behavior_record->quater == 2) {
-                        $behavior_type->sem2_q2 = $behavior_record->grade;
-                    }
+    foreach ($behavior_types as $behavior_type) {
+        foreach ($behavior_records as $behavior_record) {
+            if ($behavior_type->behavior_type == $behavior_record->behavior_type) {
+                if ($behavior_record->semester == 1 && $behavior_record->quater == 1) {
+                    $behavior_type->sem1_q1 = $behavior_record->grade;
                 }
-
+                if ($behavior_record->semester == 1 && $behavior_record->quater == 2) {
+                    $behavior_type->sem1_q2 = $behavior_record->grade;
+                }
+                if ($behavior_record->semester == 2 && $behavior_record->quater == 1) {
+                    $behavior_type->sem2_q1 = $behavior_record->grade;
+                }
+                if ($behavior_record->semester == 2 && $behavior_record->quater == 2) {
+                    $behavior_type->sem2_q2 = $behavior_record->grade;
+                }
             }
+
         }
-        return $behavior_types;
+    }
+    return $behavior_types;
+}
+
+
+public
+static function getGradeToFrom($arr)
+{
+    $check = array();
+    $result = array();
+
+    foreach ($arr as $x) {
+        if (!in_array($x->course_id . "", $check)) {
+
+            $element = array('course_name' => $x->course_name,
+                'course_id' => $x->course_id,
+                'credits' => $x->credits,
+                'quater1' => "",
+                'quater2' => "",
+                'quater3' => "",
+                'total_point' => 0,
+                'grade_count' => 0);
+
+            $result[$x->course_id] = $element;
+        }
+
+        switch ($x->grade_status) {
+            case SystemConstant::NO_GRADE:
+                $result[$x->course_id]['quater' . $x->quater] = "";
+                break;
+            case SystemConstant::HAS_GRADE:
+                $result[$x->course_id]['quater' . $x->quater] = $x->grade;
+                $result[$x->course_id]['total_point'] += $x->grade / 3.0;
+                $result[$x->course_id]['grade_count']++;
+                break;
+            default:
+                $result[$x->course_id]['quater' . $x->quater] = $x->grade_status_text;
+        }
+    }
+
+    // Change total point to "-" when one of the quarter is missing
+    foreach ($result as $key => $x) {
+        if ($x['grade_count'] != SystemConstant::TOTAL_QUARTERS) {
+            $x['total_point'] = "-";
+            $result[$key] = $x;
+        }
+    }
+
+    return $result;
+
+}
+
+
+public
+static function getGradeToFrom1_6($grade_sem1, $grade_sem2)
+{
+    $check = array();
+    $result = array();
+
+    $boom = array();
+
+    foreach ($grade_sem1 as $x) {
+        $b = $x->course_id . " : " . $x->course_name . "    :" . ('quater' . $x->quater . '_sem' . $x->semester . '  :' . $x->grade . "  open course id : " . $x->open_course_id);
+        array_push($boom, $b);
+
+        if (!in_array($x->course_id . "", $check)) {
+
+
+            $element = array('course_name' => $x->course_name,
+                'course_id' => $x->course_id,
+                'credits' => $x->credits,
+                'in_class' => $x->in_class,
+                'practice' => $x->practice,
+                'quater1_sem1' => -1,
+                'quater2_sem1' => -1,
+                'quater3_sem1' => -1,
+                'quater1_sem2' => -1,
+                'quater2_sem2' => -1,
+                'quater3_sem2' => -1,
+                'total_point' => 0,
+                'enable_sem1' => true,
+                'enable_sem2' => true,
+                'total_point_sem1' => 0,
+                'total_point_sem2' => 0);
+
+            $element['quater' . $x->quater . '_sem1'] = $x->grade;
+            $element['total_point'] += +$x->grade;
+            $element['total_point_sem1'] += +$x->grade;
+            $result[$x->course_id] = $element;
+            array_push($check, $x->course_id);
+
+
+        } else {
+
+            $result[$x->course_id]['quater' . $x->quater . '_sem1'] = $x->grade;
+            $result[$x->course_id]['total_point'] += $x->grade;
+            $result[$x->course_id]['total_point_sem1'] += $x->grade;
+
+        }
+
+    }
+
+    array_push($boom, '================================');
+
+    foreach ($grade_sem2 as $x) {
+        $b = $x->course_id . " : " . $x->course_name . "    :" . ('quater' . $x->quater . '_sem' . $x->semester . '  :' . $x->grade . "  open course id : " . $x->open_course_id);
+        array_push($boom, $b);
+
+        if (!in_array($x->course_id . "", $check)) {
+
+
+            $element = array('course_name' => $x->course_name,
+                'course_id' => $x->course_id,
+                'credits' => $x->credits,
+                'in_class' => $x->in_class,
+                'practice' => $x->practice,
+                'quater1_sem1' => -1,
+                'quater2_sem1' => -1,
+                'quater3_sem1' => -1,
+                'quater1_sem2' => -1,
+                'quater2_sem2' => 0,
+                'quater3_sem2' => 0,
+                'enable_sem1' => true,
+                'enable_sem2' => true,
+                'total_point' => 0,
+                'total_point_sem1' => 0,
+                'total_point_sem2' => 0);
+
+            $element['quater' . $x->quater . '_sem2'] = $x->grade;
+            $element['total_point'] += $x->grade;
+            $element['total_point_sem2'] += $x->grade;
+            $result[$x->course_id] = $element;
+            array_push($check, $x->course_id);
+
+
+        } else {
+
+            $result[$x->course_id]['quater' . $x->quater . '_sem2'] = $x->grade;
+            $result[$x->course_id]['total_point'] += $x->grade;
+            $result[$x->course_id]['total_point_sem2'] += $x->grade;
+
+        }
+
     }
 
 
-    public static function getGradeToFrom($arr)
-    {
-        $check = array();
-        $result = array();
-        $boom = array();
-        foreach ($arr as $x) {
-          array_push($boom,$x->open_course_id.' SEM: '.$x->semester.' POINT: '.$x->grade);
-
-            if (!in_array($x->course_id . "", $check)) {
-
-                $element = array('course_name' => $x->course_name,
-                    'course_id' => $x->course_id,
-                    'credits' => $x->credits,
-                    'quater1' => -1,
-                    'quater2' => -1,
-                    'quater3' => -1,
-                    'total_point' => 0,
-                    'grade_count' => 0);
-
-                $result[$x->course_id] = $element;
-                array_push($check,$x->course_id);
-            }
-
-            switch ($x->grade_status){
-                case SystemConstant::NO_GRADE:
-                    $result[$x->course_id]['quater' . $x->quater] = "";
-                    break;
-                case SystemConstant::HAS_GRADE:
-                    $result[$x->course_id]['quater' . $x->quater] = $x->grade;
-                    $result[$x->course_id]['total_point'] += $x->grade / 3.0;
-                    $result[$x->course_id]['grade_count']++;
-                    break;
-                default:
-                    $result[$x->course_id]['quater' . $x->quater] = $x->grade_status_text;
+    foreach ($result as $x) {
+        for ($j = 1; $j <= 2; $j++) {
+            for ($i = 1; $i <= 3; $i++) {
+                if ($x['quater' . $i . '_sem' . $j] == -1) {
+                    $result[$x['course_id']]['total_point_sem' . $j] = '';
+                    $result[$x['course_id']]['enable_sem' . $j] = false;
+                    $result[$x['course_id']]['quater' . $i . '_sem' . $j] = '';
+                }
             }
         }
-
-        foreach ($result as $key => $x){
-            if($x['grade_count'] != 3 ){
-                $x['total_point'] = "-";
-                $result[$key] = $x;
-            }
-        }
-
-            }
-          }
-          for($i = count($result);$i<14;$i++){
-            $element = array('course_name' => '',
-                'course_id' => '',
-                'credits' => '',
-                'quater1' => '',
-                'quater2' => '',
-                'quater3' => '',
-                'enable' => false,
-                'total_point' => '');
-              $result['course'.$i] = $element;
-
-          }
-        }
-
-
-
-
-
-        return $result;
+        // if($x['quater1_sem1'] == -1 || $x['quater2_sem1'] == -1  || $x['quater3_sem1'] == -1 || $x['quater1_sem2'] == -1 || $x['quater2_sem2'] == -1  || $x['quater3_sem2'] == -1   ){
+        //
+        //   $result[$x['course_id']]['total_point'] -= ($x['total_point_sem1']  +$x['total_point_sem2']);
+        //
+        // }
 
     }
+    $b = count($result);
 
+    for ($i = count($result); $i < 14; $i++) {
 
-    public static function getGradeToFrom1_6($grade_sem1, $grade_sem2)
-    {
-        $check = array();
-        $result = array();
+        $element = array('course_name' => '',
+            'course_id' => '',
+            'credits' => 0,
+            'in_class' => '',
+            'practice' => '',
+            'quater1_sem1' => '',
+            'quater2_sem1' => '',
+            'quater3_sem1' => '',
+            'quater1_sem2' => '',
+            'quater2_sem2' => '',
+            'quater3_sem2' => '',
+            'enable_sem1' => false,
+            'enable_sem2' => false,
+            'total_point' => '',
+            'total_point_sem1' => '',
+            'total_point_sem2' => '');
 
-        $boom = array();
-
-        foreach ($grade_sem1 as $x) {
-            $b = $x->course_id . " : " . $x->course_name . "    :" . ('quater' . $x->quater . '_sem' . $x->semester . '  :' . $x->grade . "  open course id : " . $x->open_course_id);
-            array_push($boom, $b);
-
-            if (!in_array($x->course_id . "", $check)) {
-
-
-                $element = array('course_name' => $x->course_name,
-                    'course_id' => $x->course_id,
-                    'credits' => $x->credits,
-                    'in_class' => $x->in_class,
-                    'practice' => $x->practice,
-                    'quater1_sem1' => -1,
-                    'quater2_sem1' => -1,
-                    'quater3_sem1' => -1,
-                    'quater1_sem2' => -1,
-                    'quater2_sem2' => -1,
-                    'quater3_sem2' => -1,
-                    'total_point' => 0,
-                    'enable_sem1' => true,
-                    'enable_sem2' => true,
-                    'total_point_sem1' => 0,
-                    'total_point_sem2' => 0);
-
-                $element['quater' . $x->quater . '_sem1'] = $x->grade;
-                $element['total_point'] += +$x->grade;
-                $element['total_point_sem1'] += +$x->grade;
-                $result[$x->course_id] = $element;
-                array_push($check, $x->course_id);
-
-
-            } else {
-
-              $result[$x->course_id]['quater' . $x->quater . '_sem1'] = $x->grade;
-              $result[$x->course_id]['total_point'] += $x->grade;
-              $result[$x->course_id]['total_point_sem1'] += $x->grade;
-
-            }
-
-        }
-
-        array_push($boom, '================================');
-
-        foreach ($grade_sem2 as $x) {
-            $b = $x->course_id . " : " . $x->course_name . "    :" . ('quater' . $x->quater . '_sem' . $x->semester . '  :' . $x->grade . "  open course id : " . $x->open_course_id);
-            array_push($boom, $b);
-
-            if (!in_array($x->course_id . "", $check)) {
-
-
-                $element = array('course_name' => $x->course_name,
-                    'course_id' => $x->course_id,
-                    'credits' => $x->credits,
-                    'in_class' => $x->in_class,
-                    'practice' => $x->practice,
-                    'quater1_sem1' => -1,
-                    'quater2_sem1' => -1,
-                    'quater3_sem1' => -1,
-                    'quater1_sem2' => -1,
-                    'quater2_sem2' => 0,
-                    'quater3_sem2' => 0,
-                    'enable_sem1' => true,
-                    'enable_sem2' => true,
-                    'total_point' => 0,
-                    'total_point_sem1' => 0,
-                    'total_point_sem2' => 0);
-
-                $element['quater' . $x->quater . '_sem2'] = $x->grade;
-                $element['total_point'] += $x->grade;
-                $element['total_point_sem2'] += $x->grade;
-                $result[$x->course_id] = $element;
-                array_push($check, $x->course_id);
-
-
-            } else {
-
-                $result[$x->course_id]['quater' . $x->quater . '_sem2'] = $x->grade;
-                $result[$x->course_id]['total_point'] += $x->grade;
-                $result[$x->course_id]['total_point_sem2'] += $x->grade;
-
-            }
-
-        }
-
-
-
-        foreach ($result as $x){
-          for($j = 1 ;$j <= 2;$j++){
-            for($i =1 ;$i <= 3;$i++){
-              if($x['quater'.$i.'_sem'.$j] == -1){
-                $result[$x['course_id']]['total_point_sem'.$j] = '';
-                $result[$x['course_id']]['enable_sem'.$j] = false;
-                $result[$x['course_id']]['quater'.$i.'_sem'.$j] = '';
-              }
-            }
-          }
-          // if($x['quater1_sem1'] == -1 || $x['quater2_sem1'] == -1  || $x['quater3_sem1'] == -1 || $x['quater1_sem2'] == -1 || $x['quater2_sem2'] == -1  || $x['quater3_sem2'] == -1   ){
-          //
-          //   $result[$x['course_id']]['total_point'] -= ($x['total_point_sem1']  +$x['total_point_sem2']);
-          //
-          // }
-
-        }
-        $b =count($result);
-
-        for($i = count($result) ; $i < 14 ;$i ++){
-
-          $element = array('course_name' => '',
-              'course_id' => '',
-              'credits' => 0,
-              'in_class' => '',
-              'practice' => '',
-              'quater1_sem1' => '',
-              'quater2_sem1' => '',
-              'quater3_sem1' => '',
-              'quater1_sem2' => '',
-              'quater2_sem2' => '',
-              'quater3_sem2' => '',
-              'enable_sem1' => false,
-              'enable_sem2' => false,
-              'total_point' => '',
-              'total_point_sem1' => '',
-              'total_point_sem2' => '');
-
-          $result['course'.$i] = $element;
-
-        }
-        // dd($b,count($result),$result);
-
-
-
-
-
-
-
-        return $result;
+        $result['course' . $i] = $element;
 
     }
+    // dd($b,count($result),$result);
+
+
+    return $result;
+
+}
 
 
 //    public static function getAvg($arr)
@@ -612,112 +602,119 @@ class ReportCardController extends Controller
 //    }
 
 
-    public function index()
-    {
-        return view('reportCard.master2');
-    }
+public
+function index()
+{
+    return view('reportCard.master2');
+}
 
-    public function exportForm()
-    {
-        $pdf = PDF::loadView('reportCard.form2');
-        $pdf->setPaper('a4', 'potrait');
-        return $pdf->stream();
-    }
+public
+function exportForm()
+{
+    $pdf = PDF::loadView('reportCard.form2');
+    $pdf->setPaper('a4', 'potrait');
+    return $pdf->stream();
+}
 
-    public function exportGrade1()
-    {
-        $pdf = PDF::loadView('reportCard.formGrade1-6');
-        $pdf->setPaper('a4', 'potrait');
-        return $pdf->stream();
-    }
+public
+function exportGrade1()
+{
+    $pdf = PDF::loadView('reportCard.formGrade1-6');
+    $pdf->setPaper('a4', 'potrait');
+    return $pdf->stream();
+}
 
-    public function exportGrade2()
-    {
-        $pdf = PDF::loadView('reportCard.formGrade7-8');
-        $pdf->setPaper('a4', 'potrait');
-        return $pdf->stream();
-    }
+public
+function exportGrade2()
+{
+    $pdf = PDF::loadView('reportCard.formGrade7-8');
+    $pdf->setPaper('a4', 'potrait');
+    return $pdf->stream();
+}
 
-    public function exportGrade3()
-    {
-        $pdf = PDF::loadView('reportCard.formGrade9-12');
-        $pdf->setPaper('a4', 'potrait');
-        return $pdf->stream();
-    }
+public
+function exportGrade3()
+{
+    $pdf = PDF::loadView('reportCard.formGrade9-12');
+    $pdf->setPaper('a4', 'potrait');
+    return $pdf->stream();
+}
 
-    /* $view_data = ['academic_year' => $academic_year,
-            'grade_semester1' => $grade_semester1,
-            'grade_semester2' => $grade_semester2,
-            'student' => $student,
-            'avg1' => $grade_avg_sem1,
-            'avg2' => $grade_avg_sem2,
-            'activity_semester1' => $activity_semester1,
-            'activity_semester2' => $activity_semester2,
-            'elective_grades' => $elective_grades,
-            'elective_grade_avg' => $elective_grade_avg,
-            'physical_record_semester1' => $physical_record_semester1,
-            'physical_record_semester2' => $physical_record_semester2,
-            'attendances' => $attendances,
-            'teacher_comments' => $teacher_comments,
-            'behavior_types' => $behavior_types,
-            'behavior_records' => $behavior_records];
-    */
-    /* Compute cumulative stats such as GPA, Semester GPA, CR, CE*/
-    public function computeCumulative($view_data, $grade_level_group){
-        $total_credit = 0; // CR CE
-        $total_sem1_credit = 0;
-        $total_sem2_credit = 0;
-        $grade_avg_sem1 = 0;
-        $grade_avg_sem2 = 0;
-        foreach ($view_data['grade_semester1'] as $key => $g){
-            $credit = $g['credits'];
-            $total_sem1_credit += $credit;
-            $grade = $g['total_point'];
-            if($grade != "-"){
-                $grade_avg_sem1 += $grade * $credit;
-            }
+/* $view_data = ['academic_year' => $academic_year,
+        'grade_semester1' => $grade_semester1,
+        'grade_semester2' => $grade_semester2,
+        'student' => $student,
+        'avg1' => $grade_avg_sem1,
+        'avg2' => $grade_avg_sem2,
+        'activity_semester1' => $activity_semester1,
+        'activity_semester2' => $activity_semester2,
+        'elective_grades' => $elective_grades,
+        'elective_grade_avg' => $elective_grade_avg,
+        'physical_record_semester1' => $physical_record_semester1,
+        'physical_record_semester2' => $physical_record_semester2,
+        'attendances' => $attendances,
+        'teacher_comments' => $teacher_comments,
+        'behavior_types' => $behavior_types,
+        'behavior_records' => $behavior_records];
+*/
+/* Compute cumulative stats such as GPA, Semester GPA, CR, CE*/
+public
+function computeCumulative($view_data, $grade_level_group)
+{
+    $total_credit = 0; // CR CE
+    $total_sem1_credit = 0;
+    $total_sem2_credit = 0;
+    $grade_avg_sem1 = 0;
+    $grade_avg_sem2 = 0;
+    foreach ($view_data['grade_semester1'] as $key => $g) {
+        $credit = $g['credits'];
+        $total_sem1_credit += $credit;
+        $grade = $g['total_point'];
+        if ($grade != "-") {
+            $grade_avg_sem1 += $grade * $credit;
         }
-        $total_credit += $total_sem1_credit;
-        $gpa = $grade_avg_sem1;
-        $grade_avg_sem1 /= $total_sem1_credit;
-        foreach ($view_data['grade_semester2'] as $key => $g){
-
-            $credit = $g['credits'];
-            $total_sem2_credit += $credit;
-            $grade = $g['total_point'];
-            if($grade != "-"){
-                $grade_avg_sem2 += $grade * $credit;
-            }
-        }
-        // Grade 1-6 already double count credits so there is
-        // no need to add more to total credit
-        switch ($grade_level_group){
-            case SystemConstant::G7_8:
-                $total_credit += $total_sem2_credit;
-                break;
-            case SystemConstant::G9_12:
-                $total_credit += $total_sem2_credit;
-                // Add selected elective
-                $credit = $view_data['selected_elective']['credit'];
-                $total_credit += $credit;
-                $grade = $view_data['selected_elective']['total_point'];
-                $grade_avg_sem2 += $grade * $credit;
-                break;
-        }
-
-        $gpa += $grade_avg_sem2;
-        $grade_avg_sem2 /= $total_sem2_credit;
-
-        $gpa /= $total_credit;
-
-        // Pack data back to view_data
-        $view_data['gpa'] = $gpa;
-        $view_data['avg1'] = $grade_avg_sem1;
-        $view_data['avg2'] = $grade_avg_sem2;
-        $view_data['total_sem1_credit'] = $total_sem1_credit;
-        $view_data['total_sem2_credit'] = $total_sem2_credit;
-        $view_data['total_credit'] = $total_credit;
-
-        return $view_data;
     }
+    $total_credit += $total_sem1_credit;
+    $gpa = $grade_avg_sem1;
+    $grade_avg_sem1 /= $total_sem1_credit;
+    foreach ($view_data['grade_semester2'] as $key => $g) {
+
+        $credit = $g['credits'];
+        $total_sem2_credit += $credit;
+        $grade = $g['total_point'];
+        if ($grade != "-") {
+            $grade_avg_sem2 += $grade * $credit;
+        }
+    }
+    // Grade 1-6 already double count credits so there is
+    // no need to add more to total credit
+    switch ($grade_level_group) {
+        case SystemConstant::G7_8:
+            $total_credit += $total_sem2_credit;
+            break;
+        case SystemConstant::G9_12:
+            $total_credit += $total_sem2_credit;
+            // Add selected elective
+            $credit = $view_data['selected_elective']['credit'];
+            $total_credit += $credit;
+            $grade = $view_data['selected_elective']['total_point'];
+            $grade_avg_sem2 += $grade * $credit;
+            break;
+    }
+
+    $gpa += $grade_avg_sem2;
+    $grade_avg_sem2 /= $total_sem2_credit;
+
+    $gpa /= $total_credit;
+
+    // Pack data back to view_data
+    $view_data['gpa'] = $gpa;
+    $view_data['avg1'] = $grade_avg_sem1;
+    $view_data['avg2'] = $grade_avg_sem2;
+    $view_data['total_sem1_credit'] = $total_sem1_credit;
+    $view_data['total_sem2_credit'] = $total_sem2_credit;
+    $view_data['total_credit'] = $total_credit;
+
+    return $view_data;
+}
 }
