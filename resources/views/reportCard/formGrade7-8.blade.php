@@ -44,10 +44,10 @@
       <td>{{ $grade['quater2']}}</td>
       <td>{{ $grade['quater3']}}</td>
 
-      @if($grade['total_point'] != "-")
-        <td>{{number_format($grade['total_point'],1) }}</td>
+      @if($grade['semester_grade'] != "-")
+        <td>{{number_format($grade['semester_grade'],1) }}</td>
       @else
-        <td>{{$grade['total_point']}}</td>
+        <td>{{$grade['semester_grade']}}</td>
       @endif
     </tr>
 
@@ -57,7 +57,7 @@
       <th scope="col" colspan="2">Total</th>
       <th scope="col">{{$total_sem1_credit}}</th>
       <th scope="col" colspan="3" class="setRight">GPA</th>
-      <th scope="col">{{ $avg1 }}</th>
+      <th scope="col">{{ $semester_1_gpa }}</th>
     </tr>
 </table>
 
@@ -123,10 +123,10 @@
       <td>{{ $grade['quater2']}}</td>
       <td>{{ $grade['quater3']}}</td>
 
-      @if($grade['total_point'] != "-")
-        <td>{{number_format($grade['total_point'],1) }}</td>
+      @if($grade['semester_grade'] != "-")
+        <td>{{number_format($grade['semester_grade'],1) }}</td>
       @else
-        <td>{{$grade['total_point']}}</td>
+        <td>{{$grade['semester_grade']}}</td>
       @endif
 
     </tr>
@@ -137,7 +137,7 @@
       <th scope="col" colspan="2">Total</th>
       <th scope="col">{{$total_sem2_credit}}</th>
       <th scope="col" colspan="3" class="setRight">GPA</th>
-      <th scope="col">{{$avg2}}</th>
+      <th scope="col">{{$semester_2_gpa}}</th>
     </tr>
 </table>
 
@@ -469,10 +469,10 @@
     <td class="dotBottom2">{{$total_sem1_credit}}</td>
     <td>CE</td>
     <td class="dotBottom2">{{$total_sem1_credit}}</td>
-    <td>Sum</td>
-    <td class="dotBottom2">{{number_format($avg1,1)}}</td>
+    {{--<td>Sum</td>--}}
+    {{--<td class="dotBottom2">{{number_format($semester_1_gpa,2)}}</td>--}}
     <td>GPA</td>
-    <td class="dotBottom2">{{number_format($avg1,1)}}</td>
+    <td class="dotBottom2">{{number_format($semester_1_gpa,2)}}</td>
   </tr>
 
   <tr>
@@ -481,10 +481,10 @@
     <td class="dotBottom2">{{$total_sem2_credit}}</td>
     <td>CE</td>
     <td class="dotBottom2">{{$total_sem2_credit}}</td>
-    <td>Sum</td>
-    <td class="dotBottom2">{{number_format($avg2,1)}}</td>
+    {{--<td>Sum</td>--}}
+    {{--<td class="dotBottom2">{{number_format($semester_2_gpa,2)}}</td>--}}
     <td>GPA</td>
-    <td class="dotBottom2">{{number_format($gpa,1)}}</td>
+    <td class="dotBottom2">{{number_format($semester_2_gpa,2)}}</td>
   </tr>
 
   <tr>
@@ -493,10 +493,10 @@
     <th class="dotBottom2">{{$total_credit}}</th>
     <th>CE</td>
     <th class="dotBottom2">{{$total_credit}}</th>
-    <th>Sum</td>
-    <th class="dotBottom2">{{number_format($gpa,1)}}</th>
+    {{--<th>Sum</td>--}}
+    {{--<th class="dotBottom2">{{number_format($gpa,2)}}</th>--}}
     <th>GPA</td>
-    <th class="dotBottom2">{{number_format($gpa,1)}}</th>
+    <th class="dotBottom2">{{number_format($gpa,2)}}</th>
   </tr>
 </table>
 

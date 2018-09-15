@@ -15,11 +15,9 @@ class SystemConstant
     const NO_GRADE = 0;
     const HAS_GRADE = 5;
 
-    // Constant for grade_level_group
-    const G1_6 = 0;
-    const G7_8 = 1;
-    const G9_12 = 2;
+    // 2 quaters exclude final
+    const TOTAL_QUARTERS = 2;
 
-    // 2 quaters plus 1 final
-    const TOTAL_QUARTERS = 3;
+    // Quarter signifying final score
+    const FINAL_Q = 3;
 }

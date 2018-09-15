@@ -74,7 +74,7 @@
       <?php
           $grade_total ='';
           if($grade['enable_sem1'] && $grade['enable_sem2']){
-            $grade_total  = $grade['total_point']/6;
+            $grade_total  = $grade['semester_grade']/6;
             $GPA_sem1 += ($grade['credits']*$grade['total_point_sem1']);
             $GPA_sem2 += ($grade['credits']*$grade['total_point_sem2']);
             $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);

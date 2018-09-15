@@ -52,21 +52,7 @@
       <td>{{ $grade['quater1']}}</td>
       <td>{{ $grade['quater2']}}</td>
       <td>{{ $grade['quater3']}}</td>
-
-      <?php
-      $grade_total = '';
-      if($grade['enable']){
-        $grade_total  = $grade['total_point']/3;
-        $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
-      }
-
-       ?>
-      <td>{{  $grade_total }}</td>
-      <?php
-      if($grade['enable']){
-       $total_credit +=  $grade['credits'];
-      }
-        ?>
+      <td>{{  $grade['semester_grade'] }}</td>
 
     </tr>
 
@@ -76,7 +62,7 @@
       <th scope="col" colspan="2">Total</th>
       <th scope="col">{{$total_credit}}</th>
       <th scope="col" colspan="3" class="setRight">GPA</th>
-      <th scope="col">{{ $avg1 }}</th>
+      <th scope="col">{{ $semester_1_gpa }}</th>
     </tr>
 </table>
 
@@ -150,22 +136,7 @@
       <td>{{ $grade['quater1']}}</td>
       <td>{{ $grade['quater2']}}</td>
       <td>{{ $grade['quater3']}}</td>
-
-      <?php
-      $grade_total = '';
-      if($grade['enable']){
-        $grade_total  = $grade['total_point']/3;
-        $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
-      }
-
-       ?>
-      <td>{{  $grade_total }}</td>
-      <?php
-      if($grade['enable']){
-       $total_credit +=  $grade['credits'];
-      }
-        ?>
-
+      <td>{{ $grade['semester_grade']}}</td>
     </tr>
 
     @endforeach
@@ -174,7 +145,7 @@
       <th scope="col" colspan="2">Total</th>
       <th scope="col">{{$total_credit}}</th>
       <th scope="col" colspan="3" class="setRight">GPA</th>
-      <th scope="col">{{$avg2}}</th>
+      <th scope="col">{{$semester_2_gpa}}</th>
     </tr>
 </table>
 
