@@ -599,27 +599,6 @@ class ReportCardController extends Controller
     }
 
 
-//    public static function getAvg($arr)
-//    {
-//
-//        $total_score = 0;
-//        $total_credit = 0;
-//        foreach ($arr as $key => $x) {
-//            $score = (($x['total_point']) * $x['credits']);
-//            $score = substr($score, 0, strpos($score, '.') + 3);
-//            // $total_score += number_format((($x['total_point']/3)*$x['credits']),2);
-//            $total_score += $score;
-//            $total_credit += $x['credits'];
-//        }
-//        if ($total_credit == 0) {
-//            return 0;
-//        }
-//        $avg = $total_score / $total_credit;
-//
-//        return substr($avg, 0, strpos($avg, '.') + 3);
-//    }
-
-
     public
     function index()
     {
@@ -658,23 +637,6 @@ class ReportCardController extends Controller
         return $pdf->stream();
     }
 
-    /* $view_data = ['academic_year' => $academic_year,
-            'grade_semester1' => $grade_semester1,
-            'grade_semester2' => $grade_semester2,
-            'student' => $student,
-            'avg1' => $grade_avg_sem1,
-            'avg2' => $grade_avg_sem2,
-            'activity_semester1' => $activity_semester1,
-            'activity_semester2' => $activity_semester2,
-            'elective_grades' => $elective_grades,
-            'elective_grade_avg' => $elective_grade_avg,
-            'physical_record_semester1' => $physical_record_semester1,
-            'physical_record_semester2' => $physical_record_semester2,
-            'attendances' => $attendances,
-            'teacher_comments' => $teacher_comments,
-            'behavior_types' => $behavior_types,
-            'behavior_records' => $behavior_records];
-    */
     /* Compute cumulative stats such as GPA, Semester GPA, CR, CE*/
     public
     function computeCumulative($view_data, $grade_level)
@@ -693,22 +655,22 @@ class ReportCardController extends Controller
             $total_sem1_credit += $credit;
             $grade = $g['semester_grade'];
             if ($grade != "-") {
-                if($grade_level <= 6){
-                    $semester_1_gpa += $grade;
-                    $total_sem1_subject++;
-                }else {
+//                if($grade_level <= 6){
+//                    $semester_1_gpa += $grade;
+//                    $total_sem1_subject++;
+//                }else {
                     $semester_1_gpa += $grade * $credit;
-                }
+//                }
             }
         }
 
         $total_credit += $total_sem1_credit;
         $gpa = $semester_1_gpa;
-        if($grade_level <=6){
-            $semester_1_gpa = round($semester_1_gpa / $total_sem1_subject, 2);
-        }else {
+//        if($grade_level <=6){
+//            $semester_1_gpa = round($semester_1_gpa / $total_sem1_subject, 2);
+//        }else {
             $semester_1_gpa = round($semester_1_gpa / $total_sem1_credit, 2);
-        }
+//        }
 
         // Semester 2 computation
         foreach ($view_data['grade_semester2'] as $key => $g) {
@@ -717,12 +679,12 @@ class ReportCardController extends Controller
             $total_sem2_credit += $credit;
             $grade = $g['semester_grade'];
             if ($grade != "-") {
-                if($grade_level <= 6){
-                    $semester_2_gpa += $grade;
-                    $total_sem2_subject++;
-                }else {
+//                if($grade_level <= 6){
+//                    $semester_2_gpa += $grade;
+//                    $total_sem2_subject++;
+//                }else {
                     $semester_2_gpa += $grade * $credit;
-                }
+//                }
             }
         }
 
@@ -743,12 +705,12 @@ class ReportCardController extends Controller
         }
 
         $gpa += $semester_2_gpa;
-        if($grade_level <=6){
-            // total subject in semester 1 and 2 should be equal
-            $semester_2_gpa = round($semester_2_gpa / $total_sem2_subject, 2);
-        }else {
+//        if($grade_level <=6){
+//            // total subject in semester 1 and 2 should be equal
+//            $semester_2_gpa = round($semester_2_gpa / $total_sem2_subject, 2);
+//        }else {
             $semester_2_gpa = round($semester_2_gpa / $total_sem2_credit, 2);
-        }
+//        }
         $gpa /= $total_credit;
 
         // Pack data back to view_data
