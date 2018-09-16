@@ -138,7 +138,7 @@
         {{--Elective course--}}
         @if($selected_elective === null)
             <tr>
-                <td></td>
+                <td>Elective</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -295,7 +295,7 @@
             {{$check =1}}
             <tr>
                 <!-- <td>$attendance->present</td> -->
-                <td></td>
+                <td>{{$attendance->total_days}}</td>
                 <td>{{$attendance->late}}</td>
                 <td>{{$attendance->sick}}</td>
                 <td>{{$attendance->leave}}</td>
@@ -499,40 +499,40 @@
     <tr>
         <td style="text-align:left;">First Semester :</td>
         <td>CR</td>
-        <td class="dotBottom2">0.00</td>
+        <td class="dotBottom2">{{$total_sem1_credit}}</td>
         <td>CE</td>
-        <td class="dotBottom2">0.00</td>
-        <td>Sum</td>
-        <td class="dotBottom2">#DIV/0!</td>
+        <td class="dotBottom2">{{$total_sem1_credit}}</td>
+        {{--<td>Sum</td>--}}
+        {{--<td class="dotBottom2">#DIV/0!</td>--}}
         <td>GPA</td>
-        <td class="dotBottom2">#DIV/0!</td>
+        <td class="dotBottom2">{{number_format($semester_1_gpa,2)}}</td>
     </tr>
 
     <tr>
         <td style="text-align:left;">Second Semester :</td>
         <td>CR</td>
-        <td class="dotBottom2">0.00</td>
+        <td class="dotBottom2">{{$total_sem2_credit}}</td>
         <td>CE</td>
-        <td class="dotBottom2">0.00</td>
-        <td>Sum</td>
-        <td class="dotBottom2">#DIV/0!</td>
+        <td class="dotBottom2">{{$total_sem2_credit}}</td>
+        {{--<td>Sum</td>--}}
+        {{--<td class="dotBottom2">#DIV/0!</td>--}}
         <td>GPA</td>
-        <td class="dotBottom2">#DIV/0!</td>
+        <td class="dotBottom2">{{number_format($semester_2_gpa,2)}}</td>
     </tr>
 
     <tr>
         <th style="text-align:left;">Cumulative :</th>
         <th>CR</th>
-        <th class="dotBottom2">0.00</th>
+        <th class="dotBottom2">{{$total_credit}}</th>
         <th>CE
         </td>
-        <th class="dotBottom2">0.00</th>
-        <th>Sum
-        </td>
-        <th class="dotBottom2">#DIV/0!</th>
+        <th class="dotBottom2">{{$total_credit}}</th>
+        {{--<th>Sum--}}
+        {{--</td>--}}
+        {{--<th class="dotBottom2">#DIV/0!</th>--}}
         <th>GPA
         </td>
-        <th class="dotBottom2">#DIV/0!</th>
+        <th class="dotBottom2">{{number_format($gpa,2)}}</th>
     </tr>
 </table>
 
