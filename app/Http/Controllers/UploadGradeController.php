@@ -399,8 +399,6 @@ class UploadGradeController extends Controller
                     $reader->all();
                 })->get();
 
-                dd($resultsStudent);
-
                 $headerBehavior = array_flip($results->getHeading());
 
                 unset($headerBehavior["behavior_name"]);
