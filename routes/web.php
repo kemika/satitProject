@@ -66,6 +66,9 @@ Route::post('/getUploadHeightAndWeight', 'UploadGradeController@getUploadHeightA
 Route::post('/getUploadBehavior', 'UploadGradeController@getUploadBehavior');
 Route::post('/getUploadAttendance', 'UploadGradeController@getUploadAttendance');
 Route::post('/getUploadActivities', 'UploadGradeController@getUploadActivities');
+//Route::post('/uploadErrorDetail', 'UploadGradeController@getUploadBehavior');
+
+
 
 
 Route::get('export-height/{type}', 'UploadGradeController@exportHeight')->name('export.height');
