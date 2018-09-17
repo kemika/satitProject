@@ -3,6 +3,8 @@
 
 namespace App\Http\Controllers;
 
+use App\School_Days;
+use App\SystemConstant;
 use DB;
 use App\Offered_Courses;
 use Illuminate\Http\Request;
@@ -70,6 +72,7 @@ class ReportCardController extends Controller
             ->groupBy('open_course_id', 'quater')
             ->select(DB::raw('MAX(datetime) as datetime'), 'open_course_id', 'quater');
 
+
         $student_latest_grades = Grade::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
             ->joinSub($student_latest_grade_keys, 'latest_grade', function ($join) {
@@ -77,7 +80,8 @@ class ReportCardController extends Controller
                 $join->on('grades.quater', 'latest_grade.quater');
                 $join->on('grades.datetime', 'latest_grade.datetime');
             })
-            ->select('grades.*');
+            ->leftJoin('grade_status', 'grades.grade_status', 'grade_status.grade_status')
+            ->select('grades.*', 'grade_status.grade_status_text');
 
         // Get student grade level and classroom_id
 
@@ -115,7 +119,9 @@ class ReportCardController extends Controller
                 $join->on('offered_courses.open_course_id', 'student_latest_grades.open_course_id');
             })
             ->where('curriculums.is_activity', '0')
-            ->select('student_latest_grades.quater', 'student_latest_grades.grade', 'student_latest_grades.grade_status', 'offered_courses.*', 'curriculums.*')
+            ->select('student_latest_grades.quater', 'student_latest_grades.grade',
+                'student_latest_grades.grade_status', 'student_latest_grades.grade_status_text',
+                'offered_courses.*', 'curriculums.*')
             ->orderby('curriculums.course_name');
 
 
@@ -123,23 +129,35 @@ class ReportCardController extends Controller
         $grade_semester1_raw = (clone $grade)->where('offered_courses.semester', '1')
             ->where('offered_courses.is_elective', '0')
             ->get();
-        $grade_semester1 = self::getGradeToFrom($grade_semester1_raw);
 
-        $grade_avg_sem1 = self::getAvg($grade_semester1);
+        $grade_semester1 = self::getGradeToFrom($grade_semester1_raw,$grade_level->grade_level);
+        //dd($grade_semester1);
+
+//        $grade_avg_sem1 = self::getAvg($grade_semester1);
 
         // Get grades for semester 2
         $grade_semester2_raw = (clone $grade)->where('offered_courses.semester', '2')
             ->where('offered_courses.is_elective', '0')
             ->get();
-        $grade_semester2 = self::getGradeToFrom($grade_semester2_raw);
-        $grade_avg_sem2 = self::getAvg($grade_semester2);
+        $grade_semester2 = self::getGradeToFrom($grade_semester2_raw,$grade_level->grade_level);
+//        $grade_avg_sem2 = self::getAvg($grade_semester2);
 
         $grade_semester1_6 = self::getGradeToFrom1_6($grade_semester1_raw, $grade_semester2_raw);
 
         // Get elective grades
         $elective_grades = (clone $grade)->where('offered_courses.is_elective', '1')->get();
-        $elective_grades = self::getGradeToFrom($elective_grades);
-        $elective_grade_avg = self::getAvg($elective_grades);
+        $elective_grades = self::getGradeToFrom($elective_grades,$grade_level->grade_level);
+        // Get elective with most scores
+        $selected_elective = null;
+        $top_number_of_grade = 0;
+        foreach ($elective_grades as $g) {
+            if ($g['grade_count'] > $top_number_of_grade) {
+                $selected_elective = $g;
+                $top_number_of_grade = $g['grade_count'];
+            }
+        }
+
+//        $elective_grade_avg = self::getAvg($elective_grades);
 
         // Get latest activities Use the same technique as grades
         $student_latest_act_keys = Activity_Record::where('student_id', $student_id)
@@ -154,7 +172,8 @@ class ReportCardController extends Controller
                 $join->on('activity_records.open_course_id', 'latest_act.open_course_id');
                 $join->on('activity_records.datetime', 'latest_act.datetime');
             })
-            ->select('activity_records.*');
+            ->leftJoin('grade_status', 'activity_records.grade_status', 'grade_status.grade_status')
+            ->select('activity_records.*', 'grade_status.grade_status_text');
 
         // Create template for all activity query
         $acts = Offered_Courses::where('classroom_id', $grade_level->classroom_id)
@@ -163,7 +182,7 @@ class ReportCardController extends Controller
                 $join->on('offered_courses.open_course_id', 'student_latest_acts.open_course_id');
             })
             ->where('curriculums.is_activity', '1')
-            ->select('student_latest_acts.grade_status', 'offered_courses.*', 'curriculums.*')
+            ->select('student_latest_acts.grade_status', 'student_latest_acts.grade_status_text', 'offered_courses.*', 'curriculums.*')
             ->orderby('curriculums.course_name');
 
         $activity_semester1 = (clone $acts)->where('offered_courses.semester', '1')->get();
@@ -218,8 +237,8 @@ class ReportCardController extends Controller
                 $join->on('behavior_records.quater', 'latest_behavior_keys.quater');
                 $join->on('behavior_records.datetime', 'latest_behavior_keys.datetime');
             })
-            ->join('behavior_types','behavior_records.behavior_type','behavior_types.behavior_type')
-            ->select('behavior_records.*','behavior_types.behavior_type_text')
+            ->join('behavior_types', 'behavior_records.behavior_type', 'behavior_types.behavior_type')
+            ->select('behavior_records.*', 'behavior_types.behavior_type_text')
             ->orderBy('behavior_types.behavior_type_text')
             ->get();
 
@@ -235,14 +254,26 @@ class ReportCardController extends Controller
             ->select(DB::raw('MAX(datetime) as datetime'), 'semester');
 
         $attendances = Attendance_Record::where('student_id', $student_id)
-            ->where('academic_year', $academic_year)
+            ->where('attendace_records.academic_year', $academic_year)
             ->joinSub($latest_att_keys, 'latest_att_keys', function ($join) {
                 $join->on('attendace_records.semester', 'latest_att_keys.semester');
                 $join->on('attendace_records.datetime', 'latest_att_keys.datetime');
             })
-            ->select('attendace_records.*')
-            ->orderBy('semester','asc')
+            ->join('school_days', function ($join) {
+                $join->on('school_days.semester', 'attendace_records.semester');
+                $join->on('school_days.academic_year', 'attendace_records.academic_year');
+            })
+            ->select('attendace_records.*', 'school_days.total_days')
+            ->orderBy('semester', 'asc')
             ->get();
+
+        // Subtrace school day if there are attendances record
+        foreach ($attendances as $att) {
+            $att->total_days -= $att->late;
+            $att->total_days -= $att->sick;
+            $att->total_days -= $att->leave;
+            $att->total_days -= $att->absent;
+        }
 
         $student = Student::where('students.student_id', $student_id)
             ->join('student_grade_levels', 'student_grade_levels.student_id', 'students.student_id')
@@ -251,43 +282,60 @@ class ReportCardController extends Controller
             ->select('students.*', 'student_grade_levels.*', 'academic_year.*')
             ->first();
 
-        // Pack data for view
+        $teachers = Homeroom::where('classroom_id',$grade_level->classroom_id)
+            ->where('valid',1)
+            ->join('teachers','teachers.teacher_id','homeroom.teacher_id')
+            ->select('name_title','firstname','lastname')
+            ->get();
+
+        $teacher_names = array();
+        foreach ($teachers as $t){
+            $teacher_names[] = $t->name_title . " " . $t->firstname . " " . $t->lastname;
+        }
+
+// Pack data for view
         $view_data = ['academic_year' => $academic_year,
             'grade_semester1' => $grade_semester1,
             'grade_semester2' => $grade_semester2,
             'student' => $student,
-            'avg1' => $grade_avg_sem1,
-            'avg2' => $grade_avg_sem2,
+//            'avg1' => $grade_avg_sem1,
+//            'avg2' => $grade_avg_sem2,
             'activity_semester1' => $activity_semester1,
             'activity_semester2' => $activity_semester2,
             'elective_grades' => $elective_grades,
-            'elective_grade_avg' => $elective_grade_avg,
+            'selected_elective' => $selected_elective,
+//            'elective_grade_avg' => $elective_grade_avg,
             'physical_record_semester1' => $physical_record_semester1,
             'physical_record_semester2' => $physical_record_semester2,
             'attendances' => $attendances,
             'teacher_comments' => $teacher_comments,
             'behavior_types' => $behavior_types,
-            'behavior_records' => $behavior_records];
+            'behavior_records' => $behavior_records,
+            'teacher_names' => $teacher_names];
 
         if ($grade_level->grade_level <= 6) {
             //ยังต้องเปลี่ยนเป็นฟอร์ม 1-6 ถ้าอาจารจะทดสอบให้ทดสอบที่อันนี้ก่อนครับ ผมมีตารางใน seeder แล้วนะครับ ลองseedได้ครับ
             $view_data['grade_semester1'] = $grade_semester1_6;
+            $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade1-6', $view_data);
-        }elseif ($grade_level->grade_level <= 8) {
+        } elseif ($grade_level->grade_level <= 8) {
+            $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade7-8', $view_data);
-        }else{ //If not it can only be grade 9-12
+        } else { //If not it can only be grade 9-12
+            $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade9-12', $view_data);
         }
 
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream();
 
-        // return $pdf->download('reportCard.pdf');
+// return $pdf->download('reportCard.pdf');
 
     }
 
 
-    public static function getDistinct($arr, $field)
+    public
+    static function getDistinct($arr, $field)
     {
         $result = array();
         $check = array();
@@ -307,7 +355,8 @@ class ReportCardController extends Controller
     }
 
 
-    public function Room($classroom_id)
+    public
+    function Room($classroom_id)
     {
 
         $room = Academic_Year::where('classroom_id', $classroom_id)
@@ -323,7 +372,8 @@ class ReportCardController extends Controller
 
     }
 
-    public function getBehaviorToFrom($behavior_records, $behavior_types)
+    public
+    function getBehaviorToFrom($behavior_records, $behavior_types)
     {
         foreach ($behavior_types as $behavior_type) {
             $behavior_type->sem1_q1 = '';
@@ -354,191 +404,272 @@ class ReportCardController extends Controller
     }
 
 
-    public static function getGradeToFrom($arr)
+    // This method set up grade into a form ready for report card
+    // Also compute semester grade of each subject
+    public
+    static function getGradeToFrom($arr, $grade_level)
     {
-        $check = array();
         $result = array();
-
         foreach ($arr as $x) {
-            if (!in_array($x->course_id . "", $check)) {
+
+            if (!array_key_exists($x->course_id, $result)) {
 
                 $element = array('course_name' => $x->course_name,
                     'course_id' => $x->course_id,
                     'credits' => $x->credits,
-                    'quater1' => -1,
-                    'quater2' => -1,
-                    'quater3' => -1,
-                    'total_point' => 0);
+                    'inclass' => $x->inclass,
+                    'practice' => $x->practice,
+                    'quater1' => "",
+                    'quater2' => "",
+                    'quater3' => "",
+                    'semester_grade' => 0,
+                    'grade_count' => 0);
 
                 $result[$x->course_id] = $element;
+            } else {
+                $element = $result[$x->course_id];
             }
-            $result[$x->course_id]['quater' . $x->quater] = $x->grade;
-            $result[$x->course_id]['total_point'] += $x->grade;
+
+            switch ($x->grade_status) {
+                case SystemConstant::NO_GRADE:
+                    $element['quater' . $x->quater] = "";
+                    break;
+                case SystemConstant::HAS_GRADE:
+                    $element['quater' . $x->quater] = $x->grade;
+                    $element['semester_grade'] += $x->grade;
+                    // Only count when this is not final quarter
+                    if($x->quater < SystemConstant::FINAL_Q){
+                        $element['grade_count']++;
+                    }
+                    break;
+                default:
+                    $element['quater' . $x->quater] = $x->grade_status_text;
+            }
+            $result[$x->course_id] = $element;
         }
 
+        // Change semester to "-" when one of the quarters is missing
+        // otherwise compute semester grade normally
+        foreach ($result as $key => $x) {
+            if ($x['grade_count'] != SystemConstant::TOTAL_QUARTERS) {
+                $x['semester_grade'] = "-";
+
+            }else{
+                if($x['quater'.SystemConstant::FINAL_Q] == ""){
+                    // There is no final just average grade without
+                    $grade = $x['semester_grade'] / SystemConstant::TOTAL_QUARTERS;
+                }else{
+                    $grade = $x['semester_grade'] / (SystemConstant::TOTAL_QUARTERS + 1);
+                }
+                $x['semester_grade'] = round($grade,1);
+            }
+            $result[$key] = $x;
+        }
 
         return $result;
 
     }
 
 
-    public static function getGradeToFrom1_6($grade_sem1, $grade_sem2)
+    // This takes $grade_sem1 and $grade_sem2 that is output from getGradeToFrom method
+    public
+    static function getGradeToFrom1_6($grade_sem1, $grade_sem2)
     {
-        $check = array();
         $result = array();
 
-        $boom = array();
+        // Combine two grades into one and compute year grade
+        foreach ($grade_sem1 as $course_id => $s1){
+            $s2 = $grade_sem2[$course_id];
 
-        foreach ($grade_sem1 as $x) {
-            $b = $x->course_id . " : " . $x->course_name . "    :" . ('quater' . $x->quater . '_sem' . $x->semester . '  :' . $x->grade . "  " . $x->open_course_id);
-            array_push($boom, $b);
+            $grade['course_name'] = $s1['course_name'];
+            $grade['course_id'] = $s1['course_id'];
+            $grade['credits'] = $s1['credits'];
+            $grade['inclass'] = $s1['inclass'];
+            $grade['practice'] = $s1['practice'];
+            for($i = 1; $i <= SystemConstant::TOTAL_QUARTERS+1; $i++) {
+                $grade['quater' . $i . '_sem1'] = $s1['quater' . $i];
+                $grade['quater' . $i . '_sem2'] = $s2['quater' . $i];
+            }
+            $grade['semester1_grade'] = $s1['semester_grade'];
+            $grade['semester2_grade'] = $s1['semester_grade'];
 
-            if (!in_array($x->course_id . "", $check)) {
-
-
-                $element = array('course_name' => $x->course_name,
-                    'course_id' => $x->course_id,
-                    'credits' => $x->credits,
-                    'in_class' => $x->in_class,
-                    'practice' => $x->practice,
-                    'quater1_sem1' => 0,
-                    'quater2_sem1' => 0,
-                    'quater3_sem1' => 0,
-                    'quater1_sem2' => 0,
-                    'quater2_sem2' => 0,
-                    'quater3_sem2' => 0,
-                    'total_point' => 0,
-                    'total_point_sem1' => 0,
-                    'total_point_sem2' => 0);
-
-                $element['quater' . $x->quater . '_sem1'] = $x->grade;
-                $element['total_point'] += +$x->grade;
-                $element['total_point_sem1'] += +$x->grade;
-                $result[$x->course_id] = $element;
-                array_push($check, $x->course_id);
-
-
-            } else {
-
-                $element = array('course_name' => $x->course_name,
-                    'course_id' => $x->course_id,
-                    'credits' => $x->credits,
-                    'in_class' => $x->in_class,
-                    'practice' => $x->practice,
-                    'quater1_sem1' => -1,
-                    'quater2_sem1' => -1,
-                    'quater3_sem1' => -1,
-                    'quater1_sem2' => -1,
-                    'quater2_sem2' => -1,
-                    'quater3_sem2' => -1,
-                    'total_point' => 0,
-                    'total_point_sem1' => 0,
-                    'total_point_sem2' => 0);
-
+            // Compute year grade when possible
+            if($grade['semester1_grade'] != "-" && $grade['semester2_grade'] != "-"){
+                $grade['year_grade'] = self::academic_evaluation_cart_2(
+                    ($grade['semester1_grade'] + $grade['semester2_grade'])/2);
+            }else{
+                $grade['year_grade'] = '-';
             }
 
+            $result[$course_id ] = $grade;
         }
-
-        array_push($boom, '================================');
-
-        foreach ($grade_sem2 as $x) {
-            $b = $x->course_id . " : " . $x->course_name . "    :" . ('quater' . $x->quater . '_sem' . $x->semester . '  :' . $x->grade . "  " . $x->open_course_id);
-            array_push($boom, $b);
-
-            if (!in_array($x->course_id . "", $check)) {
-
-
-                $element = array('course_name' => $x->course_name,
-                    'course_id' => $x->course_id,
-                    'credits' => $x->credits,
-                    'quater1_sem1' => 0,
-                    'quater2_sem1' => 0,
-                    'quater3_sem1' => 0,
-                    'quater1_sem2' => 0,
-                    'quater2_sem2' => 0,
-                    'quater3_sem2' => 0,
-                    'total_point' => 0,
-                    'total_point_sem1' => 0,
-                    'total_point_sem2' => 0);
-
-                $element['quater' . $x->quater . '_sem2'] = $x->grade;
-                $element['total_point'] += $x->grade;
-                $element['total_point_sem2'] += $x->grade;
-                $result[$x->course_id] = $element;
-                array_push($check, $x->course_id);
-
-
-            } else {
-
-                $result[$x->course_id]['quater' . $x->quater . '_sem2'] = $x->grade;
-                $result[$x->course_id]['total_point'] += $x->grade;
-                $result[$x->course_id]['total_point_sem2'] += $x->grade;
-
-            }
-
-        }
-
-        // dd($boom);
-
 
         return $result;
 
     }
 
 
-    public static function getAvg($arr)
-    {
-
-        $total_score = 0;
-        $total_credit = 0;
-        foreach ($arr as $key => $x) {
-            $score = (($x['total_point'] / 3) * $x['credits']);
-            $score = substr($score, 0, strpos($score, '.') + 3);
-            // $total_score += number_format((($x['total_point']/3)*$x['credits']),2);
-            $total_score += $score;
-            $total_credit += $x['credits'];
-        }
-        if ($total_credit == 0) {
-            return 0;
-        }
-        $avg = $total_score / $total_credit;
-
-        return substr($avg, 0, strpos($avg, '.') + 3);
-    }
-
-
-    public function index()
+    public
+    function index()
     {
         return view('reportCard.master2');
     }
 
-    public function exportForm()
+    public
+    function exportForm()
     {
         $pdf = PDF::loadView('reportCard.form2');
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream();
     }
 
-    public function exportGrade1()
+    public
+    function exportGrade1()
     {
         $pdf = PDF::loadView('reportCard.formGrade1-6');
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream();
     }
 
-    public function exportGrade2()
+    public
+    function exportGrade2()
     {
         $pdf = PDF::loadView('reportCard.formGrade7-8');
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream();
     }
 
-    public function exportGrade3()
+    public
+    function exportGrade3()
     {
         $pdf = PDF::loadView('reportCard.formGrade9-12');
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream();
     }
 
+    /* Compute cumulative stats such as GPA, Semester GPA, CR, CE*/
+    public
+    function computeCumulative($view_data, $grade_level)
+    {
+        $total_credit = 0; // CR CE
+        $total_sem1_credit = 0;
+        $total_sem2_credit = 0;
+        $semester_1_gpa = 0;
+        $semester_2_gpa = 0;
+        $total_sem1_subject = 0;
+        $total_sem2_subject = 0;
+        $gpa = 0;
 
+        // Semester 1 computation
+        foreach ($view_data['grade_semester1'] as $key => $g) {
+            $credit = $g['credits'];
+            $total_sem1_credit += $credit;
+            if($grade_level <= 6) {
+                $semester_grade = $g['semester1_grade'];
+            }else {
+                $semester_grade = $g['semester_grade'];
+            }
+            if ($semester_grade != "-") {
+                if($grade_level <= 6){
+                    // For grade 1-6
+                    $year_grade = $g['year_grade'];
+                    if($year_grade != "-") {
+                        $gpa += $year_grade * $credit;
+                    }
+                }else {
+                    $semester_1_gpa += $semester_grade * $credit;
+                }
+            }
+        }
+
+        $total_credit += $total_sem1_credit;
+        if($grade_level <= 6){
+            $gpa = round($gpa / $total_sem1_credit, 2);
+        }else {
+            $gpa = $semester_1_gpa;
+        }
+//        if($grade_level <=6){
+//            $semester_1_gpa = round($semester_1_gpa / $total_sem1_subject, 2);
+//        }else {
+        $semester_1_gpa = round($semester_1_gpa / $total_sem1_credit, 2);
+//        }
+
+        // Semester 2 computation
+        foreach ($view_data['grade_semester2'] as $key => $g) {
+
+            $credit = $g['credits'];
+            $total_sem2_credit += $credit;
+            $grade = $g['semester_grade'];
+            if ($grade != "-") {
+//                if($grade_level <= 6){
+//                    $semester_2_gpa += $grade;
+//                    $total_sem2_subject++;
+//                }else {
+                    $semester_2_gpa += $grade * $credit;
+//                }
+            }
+        }
+
+        // Grade 1-6 already double count credits so there is
+        // no need to add more to total credit
+        //  Moreover Grade 1-6 already computed GPA from semester 1 computation
+        if($grade_level > 6) {
+            if ($grade_level < 9) {  // Grade 7-8
+                $total_credit += $total_sem2_credit;
+            } else {  // Grade 9-12
+
+                // Add selected elective
+                $credit = $view_data['selected_elective']['credit'];
+                $total_sem2_credit += $credit;
+                $grade = $view_data['selected_elective']['semester_grade'];
+                $semester_2_gpa += $grade * $credit;
+                $total_credit += $total_sem2_credit;
+            }
+            $gpa += $semester_2_gpa;
+
+            $semester_2_gpa = round($semester_2_gpa / $total_sem2_credit, 2);
+            $gpa /= $total_credit;
+        }
+//        if($grade_level <=6){
+//            // total subject in semester 1 and 2 should be equal
+//            $semester_2_gpa = round($semester_2_gpa / $total_sem2_subject, 2);
+//        }else {
+
+//        }
+
+        // Pack data back to view_data
+        $view_data['gpa'] = $gpa;
+        $view_data['semester_1_gpa'] = $semester_1_gpa;
+        $view_data['semester_2_gpa'] = $semester_2_gpa;
+        $view_data['total_sem1_credit'] = $total_sem1_credit;
+        $view_data['total_sem2_credit'] = $total_sem2_credit;
+        $view_data['total_credit'] = $total_credit;
+
+        return $view_data;
+    }
+
+    // This method take floating grade number from 0.0 to 4.0 and output
+    // Grade according to academic evaluation chart 2
+    // The input is expected to be a float.
+    static public function academic_evaluation_cart_2($grade){
+        // Round number to two decimal points
+        $grade = round($grade,2);
+        if($grade < 1.00){
+            return 0;
+        }elseif ($grade < 1.25){
+            return 1;
+        }elseif ($grade < 1.75){
+            return 1.5;
+        }elseif ($grade < 2.25){
+            return 2;
+        }elseif ($grade < 2.75){
+            return 2.5;
+        }elseif ($grade < 3.25){
+            return 3;
+        }elseif ($grade < 3.75){
+            return 3.5;
+        }
+
+        return 4;
+    }
 }

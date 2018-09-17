@@ -10,10 +10,11 @@ use App\Teacher;
 use App\Student;
 use App\Academic_Year;
 use App\Offered_Courses;
-use App\Behavior_type;
+use App\Behavior_Type;
 
 use App\Curriculum;
 use App\Student_Grade_Level;
+use ZipArchive;
 
 
 class ExportController extends Controller
@@ -56,7 +57,7 @@ class ExportController extends Controller
       ->join('curriculums', function($j) {
       $j->on('curriculums.course_id', '=', 'offered_courses.course_id');
       $j->on('curriculums.curriculum_year','=','offered_courses.curriculum_year');
-      })
+      })->where('curriculums.is_activity',false)
       ->select('offered_courses.*','curriculums.*')
       ->get();
 
@@ -529,7 +530,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
     ->get();
 
 
-    $behaviors = Behavior_type::all();
+    $behaviors = Behavior_Type::all();
 
     $type='xlsx';
     Excel::create('Behavior', function($excel) use($students,$academic_year, $behaviors) {
@@ -989,6 +990,35 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
     }
 
     return $result;
+
+  }
+
+  public function download_all(Request $request){
+    if($request->has('download')) {
+      // Define Dir Folder
+      $public_dir=public_path();
+      // Zip File Name
+      $zipFileName = 'AllDocuments.zip';
+      // Create ZipArchive Obj
+      $zip = new ZipArchive;
+      if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
+      // Add Multiple file
+      foreach($files as $file) {
+          $zip->addFile($file->path, $file->name);
+        }        
+      $zip->close();
+      }
+      // Set Header
+      $headers = array(
+      'Content-Type' => 'application/octet-stream',
+      );
+      $filetopath=$public_dir.'/'.$zipFileName;
+      // Create Download Response
+      if(file_exists($filetopath)){
+        return response()->download($filetopath,$zipFileName,$headers);
+      }
+    }
+    return view('createZip');
 
   }
 

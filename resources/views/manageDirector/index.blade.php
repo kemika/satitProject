@@ -10,7 +10,7 @@
 
 <head>
   <title>Satit Kaset</title>
-  <link rel="shortcut icon" href="img/satitLogo.gif" />
+  <link rel="shortcut icon" href="{{ asset('img/satitLogo.gif') }}" />
   <div id='cssmenu'>
   <ul>
      <li ><a href='/main'>SatitKaset</a></li>

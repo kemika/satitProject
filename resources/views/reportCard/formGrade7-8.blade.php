@@ -33,9 +33,6 @@
       <th>3</th>
       <th>Semester Grade</th>
     </tr>
-    <?php $i = 1 ;
-          $total_credit =0;
-    ?>
     @foreach($grade_semester1 as $key => $grade )
 
 
@@ -43,43 +40,24 @@
       <td>{{$grade['course_name']}}</td>
       <td>{{$grade['course_id']}}</td>
       <td>{{ $grade['credits']}}</td>
-      @if($grade['quater1'] != -1)
-        <td>{{ $grade['quater1']}}</td>
+      <td>{{ $grade['quater1']}}</td>
+      <td>{{ $grade['quater2']}}</td>
+      <td>{{ $grade['quater3']}}</td>
+
+      @if($grade['semester_grade'] != "-")
+        <td>{{number_format($grade['semester_grade'],1) }}</td>
       @else
-        <td></td>
+        <td>{{$grade['semester_grade']}}</td>
       @endif
-
-      @if($grade['quater2'] != -1)
-        <td>{{ $grade['quater2']}}</td>
-      @else
-        <td></td>
-      @endif
-
-      @if($grade['quater3'] != -1)
-        <td>{{ $grade['quater3']}}</td>
-      @else
-        <td></td>
-      @endif
-
-      <?php
-      $grade_total  = $grade['total_point']/3;
-
-      $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
-
-       ?>
-      <td>{{  $grade_total }}</td>
-      <?php $total_credit +=  $grade['credits'] ?>
-
-      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
     </tr>
 
     @endforeach
 
     <tr>
       <th scope="col" colspan="2">Total</th>
-      <th scope="col">{{$total_credit}}</th>
+      <th scope="col">{{$total_sem1_credit}}</th>
       <th scope="col" colspan="3" class="setRight">GPA</th>
-      <th scope="col">{{ $avg1 }}</th>
+      <th scope="col">{{ $semester_1_gpa }}</th>
     </tr>
 </table>
 
@@ -104,7 +82,7 @@
 
 
 </table>
-<p class="classroomStyle">Classroom signature……………..…..…….…………</p>
+<p class="classroomStyle">Classroom signature................................................</p>
 
 </center>
 
@@ -115,7 +93,7 @@
     <tr>
       <th scope="col">Student Name</th>
       <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
-      <th scope="col" class="setLeft">Grade</th>
+      <th scope="col" class="setLeft">Grade {{ $student->grade_level."/".$student->room}}</th>
     </tr>
 </table>
 
@@ -134,9 +112,6 @@
       <th>3</th>
       <th>Semester Grade</th>
     </tr>
-    <?php $i = 1 ;
-          $total_credit =0;
-    ?>
     @foreach($grade_semester2 as $key => $grade )
 
 
@@ -144,40 +119,25 @@
       <td>{{$grade['course_name']}}</td>
       <td>{{$grade['course_id']}}</td>
       <td>{{ $grade['credits']}}</td>
-      @if($grade['quater1'] != -1)
-        <td>{{ $grade['quater1']}}</td>
+      <td>{{ $grade['quater1']}}</td>
+      <td>{{ $grade['quater2']}}</td>
+      <td>{{ $grade['quater3']}}</td>
+
+      @if($grade['semester_grade'] != "-")
+        <td>{{number_format($grade['semester_grade'],1) }}</td>
       @else
-        <td></td>
+        <td>{{$grade['semester_grade']}}</td>
       @endif
 
-      @if($grade['quater2'] != -1)
-        <td>{{ $grade['quater2']}}</td>
-      @else
-        <td></td>
-      @endif
-
-      @if($grade['quater3'] != -1)
-        <td>{{ $grade['quater3']}}</td>
-      @else
-        <td></td>
-      @endif
-      <?php
-      $grade_total  = $grade['total_point']/3;
-      $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
-       ?>
-      <td>{{  $grade_total }}</td>
-      <?php $total_credit +=  $grade['credits'] ?>
-
-      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
     </tr>
 
     @endforeach
 
     <tr>
       <th scope="col" colspan="2">Total</th>
-      <th scope="col">{{$total_credit}}</th>
+      <th scope="col">{{$total_sem2_credit}}</th>
       <th scope="col" colspan="3" class="setRight">GPA</th>
-      <th scope="col">{{$avg2}}</th>
+      <th scope="col">{{$semester_2_gpa}}</th>
     </tr>
 </table>
 
@@ -201,7 +161,7 @@
     @endfor
 
 </table>
-<p class="classroomStyle">Classroom signature……………..…..…….…………</p>
+<p class="classroomStyle">Classroom signature................................................</p>
 
 </center>
 
@@ -213,7 +173,7 @@
     <tr>
       <th scope="col">Student Name</th>
       <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
-      <th scope="col" class="setLeft">Grade</th>
+      <th scope="col" class="setLeft">Grade {{ $student->grade_level."/".$student->room}}</th>
     </tr>
 </table>
 <p class="setPosition">Social Skills and Personal Conduct</p>
@@ -277,7 +237,7 @@
         {{$check =1}}
           <tr>
             <!-- <td>$attendance->present</td> -->
-            <td></td>
+            <td>{{$attendance->total_days}}</td>
             <td>{{$attendance->late}}</td>
             <td>{{$attendance->sick}}</td>
             <td>{{$attendance->leave}}</td>
@@ -339,7 +299,7 @@
     <table>
       <tr>
         <td></td>
-        <td>Height (cm.)</td>
+        <td style="text-align: left;">Height (cm.)</td>
         <td>Weight (kg.)</td>
       </tr>
       <tr>
@@ -431,9 +391,8 @@
     No information for evaluation</p>
 
 </div>
-@for($i = 0 ; $i < 4 ; $i++)
-
 <div class="page-break"></div>
+@for($i = 0 ; $i < 4 ; $i++)
 
 <div class="board">
   <div class="dotBottom">
@@ -444,7 +403,7 @@
     @endif
 
     <h5>First Comment</h5> <br>
-    <h6>Classroom Teacher : ......................................................</h6>
+    <h6>Classroom Teacher : ................................................................................................................................................</h6>
       @if($i < count($teacher_comments) )
         <p>{{$teacher_comments[$i]->comment}}</p>
       @endif
@@ -458,7 +417,7 @@
       </tr>
       <tr>
         <td></td>
-        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
+        <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black; text-align: left;">
         <span style="color:white">---------------</span>/
         <span style="color:white">------</span>/ {{$academic_year}}
       </td>
@@ -466,12 +425,11 @@
     </table>
   </div>
   <br>
-  <h6>Guardian : ……………..…..…….………………………..…..…….………………………..…………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
-  <h6>……………..…..…….………………………..…..…….………………………..………………………………………</h6>
+  <h6>Guardian : <span style="font-size: 14px; font-weight: normal;">...................................................................................................................................................................................</span></h6>
+  <p>.................................................................................................................................................................................................................</p>
+  <p>.................................................................................................................................................................................................................</p>
+  <p>.................................................................................................................................................................................................................</p>
+  <p>.................................................................................................................................................................................................................</p>
 
   <div style="margin-left: 59%;">
     <table style="margin-top:20px;">
@@ -490,9 +448,9 @@
   </div>
 </div>
 
-
+<div class="page-break"></div>
 @endfor
-<h6>Final  Report</h6>
+<h6>Final Report</h6>
 <table style="margin-top:20px; margin-left:40px;" class="finalReport">
   <tr>
     <th><span style="color:white">First Semester : ------</span></th>
@@ -508,37 +466,37 @@
   <tr>
     <td style="text-align:left;">First Semester : </td>
     <td>CR</td>
-    <td class="dotBottom2">0.00</td>
+    <td class="dotBottom2">{{$total_sem1_credit}}</td>
     <td>CE</td>
-    <td class="dotBottom2">0.00</td>
-    <td>Sum</td>
-    <td class="dotBottom2">#DIV/0!</td>
+    <td class="dotBottom2">{{$total_sem1_credit}}</td>
+    {{--<td>Sum</td>--}}
+    {{--<td class="dotBottom2">{{number_format($semester_1_gpa,2)}}</td>--}}
     <td>GPA</td>
-    <td class="dotBottom2">#DIV/0!</td>
+    <td class="dotBottom2">{{number_format($semester_1_gpa,2)}}</td>
   </tr>
 
   <tr>
     <td style="text-align:left;">Second Semester : </td>
     <td>CR</td>
-    <td class="dotBottom2">0.00</td>
+    <td class="dotBottom2">{{$total_sem2_credit}}</td>
     <td>CE</td>
-    <td class="dotBottom2">0.00</td>
-    <td>Sum</td>
-    <td class="dotBottom2">#DIV/0!</td>
+    <td class="dotBottom2">{{$total_sem2_credit}}</td>
+    {{--<td>Sum</td>--}}
+    {{--<td class="dotBottom2">{{number_format($semester_2_gpa,2)}}</td>--}}
     <td>GPA</td>
-    <td class="dotBottom2">#DIV/0!</td>
+    <td class="dotBottom2">{{number_format($semester_2_gpa,2)}}</td>
   </tr>
 
   <tr>
     <th style="text-align:left;">Cumulative :</th>
     <th>CR</th>
-    <th class="dotBottom2">0.00</th>
+    <th class="dotBottom2">{{$total_credit}}</th>
     <th>CE</td>
-    <th class="dotBottom2">0.00</th>
-    <th>Sum</td>
-    <th class="dotBottom2">#DIV/0!</th>
+    <th class="dotBottom2">{{$total_credit}}</th>
+    {{--<th>Sum</td>--}}
+    {{--<th class="dotBottom2">{{number_format($gpa,2)}}</th>--}}
     <th>GPA</td>
-    <th class="dotBottom2">#DIV/0!</th>
+    <th class="dotBottom2">{{number_format($gpa,2)}}</th>
   </tr>
 </table>
 
@@ -550,29 +508,29 @@
   <div class="boxTail"><p>to be permitted to graduate in academic year {{$academic_year}}</p>
 
 @else
-  <div class="boxTail"><p>to be permitted to {{$student->grade_level + 1}} in academic year {{$academic_year}}</p>
+  <div class="boxTail"><p>to be permitted to {{$student->grade_level + 1}} in academic year {{$academic_year+1}}</p>
 @endif
-
 
 
 </div>
 
 <div class="boxHeader">
 <div class="box"></div>
-<div class="boxTail"><p>to be considered.…….………………………..…..…….………………………..….…….……………………</p>
+<div class="boxTail"><p>to be considered............................................................................................................................................</p>
 </div>
 <br>
 <p></p>
-<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
-<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
-<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
+<p>.................................................................................................................................................................................................................</p>
+<p>.................................................................................................................................................................................................................</p>
+<p>.................................................................................................................................................................................................................</p>
+<p>.................................................................................................................................................................................................................</p>
 
 <div>
   <table style="margin-top:20px;">
     <tr>
-      <td>.…….………………………..…..…….…………………</td>
-      <td style="color:white">-----------------------</td>
-      <td>.…….………………………..…..…….……………</td>
+      <td>........................................................</td>
+      <td style="color:white">----------------------------------------------------------------------------------------</td>
+      <td>........................................................</td>
     </tr>
     <tr>
       <td style="text-align: center;">Asst.Prof. Acharapan Corvanich</td>
@@ -598,10 +556,11 @@
   </table>
 </div>
 <br><br>
-<p>Guardian's Acknowledgement : .…..…….……………………….…….………………………..…..……………………………………….</p>
-<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
-<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
-<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
+<p>Guardian's Acknowledgement : ..............................................................................................................................................................</p>
+<p>.................................................................................................................................................................................................................</p>
+<p>.................................................................................................................................................................................................................</p>
+<p>.................................................................................................................................................................................................................</p>
+<p>.................................................................................................................................................................................................................</p>
 <div style="margin-left: 59%;">
   <table style="margin-top:20px;">
     <tr>
@@ -619,11 +578,10 @@
 </div>
 
 <br><br>
-<p>Remark: .…..…….……………………….…….………………………..…..……………………………………………………………….…</p>
-<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
-<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
-<p>.…….………………………..…..…….……………………….…….………………………..…..…….………………………………………</p>
-
+<p>Remark: ..................................................................................................................................................................................................</p>
+<p>.................................................................................................................................................................................................................</p>
+<p>.................................................................................................................................................................................................................</p>
+<p>.................................................................................................................................................................................................................</p>
 
 <style>
 .heading{
@@ -679,24 +637,22 @@
   margin-left:70px;
 }
 .classroomStyle{
-  font-size: 14px;
+  font-size: 12px;
   position: absolute;
   right: 1px;
   bottom: -50px;
 }
-.table thead th {
-  border-bottom: 1px solid black;
-}
+
 .table-bordered th {
-    border: 1px solid black;
+  border: 1px solid black;
 }
 th {
     text-align: center;
-    font-size: 12px;
+    font-size: 10px;
     height: -10px;
 }
 td {
-  font-size: 12px;
+  font-size: 10px;
   height: -10px;
 }
 tr {
@@ -709,11 +665,15 @@ tr {
     page-break-after: always;
 }
 .table td, .table th {
-    padding: .35rem;
+    padding: .20rem;
     vertical-align: top;
 }
 .tableStyle5 th{
   text-align: left;
+  font-size: 10px;
+}
+.tableStyle5 td{
+  font-size: 10px;
 }
 .noGrade p{
   font-size: 10px;

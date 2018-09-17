@@ -45,19 +45,7 @@
 
 </div>
 
-<div class="mt-5">
 
-
-
-
-
-
-<h1 class="heading">this is Jarvis</h1>
-
-
-
-
-</div>
 
     @endsection
 
