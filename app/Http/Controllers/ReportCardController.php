@@ -405,7 +405,7 @@ class ReportCardController extends Controller
                 $element = array('course_name' => $x->course_name,
                     'course_id' => $x->course_id,
                     'credits' => $x->credits,
-                    'in_class' => $x->in_class,
+                    'inclass' => $x->inclass,
                     'practice' => $x->practice,
                     'quater1' => "",
                     'quater2' => "",
@@ -470,10 +470,11 @@ class ReportCardController extends Controller
             $s2 = $grade_sem2[$course_id];
 
             $grade['course_name'] = $s1['course_name'];
+            $grade['course_id'] = $s1['course_id'];
             $grade['credits'] = $s1['credits'];
-            $grade['in_class'] = $s1['in_class'];
+            $grade['inclass'] = $s1['inclass'];
             $grade['practice'] = $s1['practice'];
-            for($i = 1; $i < SystemConstant::TOTAL_QUARTERS+1; $i++) {
+            for($i = 1; $i <= SystemConstant::TOTAL_QUARTERS+1; $i++) {
                 $grade['quater' . $i . '_sem1'] = $s1['quater' . $i];
                 $grade['quater' . $i . '_sem2'] = $s2['quater' . $i];
             }
@@ -551,8 +552,12 @@ class ReportCardController extends Controller
         foreach ($view_data['grade_semester1'] as $key => $g) {
             $credit = $g['credits'];
             $total_sem1_credit += $credit;
-            $grade = $g['semester_grade'];
-            if ($grade != "-") {
+            if($grade_level <= 6) {
+                $semester_grade = $g['semester1_grade'];
+            }else {
+                $semester_grade = $g['semester_grade'];
+            }
+            if ($semester_grade != "-") {
                 if($grade_level <= 6){
                     // For grade 1-6
                     $year_grade = $g['year_grade'];
@@ -560,7 +565,7 @@ class ReportCardController extends Controller
                         $gpa += $year_grade * $credit;
                     }
                 }else {
-                    $semester_1_gpa += $grade * $credit;
+                    $semester_1_gpa += $semester_grade * $credit;
                 }
             }
         }
@@ -634,7 +639,7 @@ class ReportCardController extends Controller
     // This method take floating grade number from 0.0 to 4.0 and output
     // Grade according to academic evaluation chart 2
     // The input is expected to be a float.
-    public function academic_evaluation_cart_2($grade){
+    static public function academic_evaluation_cart_2($grade){
         // Round number to two decimal points
         $grade = round($grade,2);
         if($grade < 1.00){
