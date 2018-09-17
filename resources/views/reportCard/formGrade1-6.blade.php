@@ -17,9 +17,9 @@
     </div>
     <div class="square2">
         <h6> Classroom Teachers </h6>
-        <p> \\\Mr. Ronald Diaz </p>
-        <p> \\\Mr. Tana Ratanadilokchai </p>
-        <p> \\\Ms. Rungnapa Inta </p>
+        @foreach($teacher_names as $name)
+            <p> {{$name}} </p>
+        @endforeach
     </div>
 </div>
 <table class="table table-bordered tableStyle">
@@ -72,15 +72,15 @@
             <td>{{$grade['year_grade']}}</td>
         </tr>
     @endforeach
-        <tr>
-            <th scope="col" colspan="4">Total</th>
-            <th scope="col">{{$total_credit}}</th>
-            <th scope="col" colspan="3" style="font-weight: normal;">1st Semester GPA</th>
-            <th scope="col">{{$semester_1_gpa}}</th>
-            <th scope="col" colspan="3" style="font-weight: normal;">2nd Semester GPA</th>
-            <th scope="col">{{$semester_2_gpa }}</th>
-            <th scope="col">{{$gpa}}</th>
-        </tr>
+    <tr>
+        <th scope="col" colspan="4">Total</th>
+        <th scope="col">{{$total_credit}}</th>
+        <th scope="col" colspan="3" style="font-weight: normal;">1st Semester GPA</th>
+        <th scope="col">{{$semester_1_gpa}}</th>
+        <th scope="col" colspan="3" style="font-weight: normal;">2nd Semester GPA</th>
+        <th scope="col">{{$semester_2_gpa }}</th>
+        <th scope="col">{{$gpa}}</th>
+    </tr>
 </table>
 
 <div class="relative3">

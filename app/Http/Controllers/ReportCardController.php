@@ -282,6 +282,17 @@ class ReportCardController extends Controller
             ->select('students.*', 'student_grade_levels.*', 'academic_year.*')
             ->first();
 
+        $teachers = Homeroom::where('classroom_id',$grade_level->classroom_id)
+            ->where('valid',1)
+            ->join('teachers','teachers.teacher_id','homeroom.teacher_id')
+            ->select('name_title','firstname','lastname')
+            ->get();
+
+        $teacher_names = array();
+        foreach ($teachers as $t){
+            $teacher_names[] = $t->name_title . " " . $t->firstname . " " . $t->lastname;
+        }
+
 // Pack data for view
         $view_data = ['academic_year' => $academic_year,
             'grade_semester1' => $grade_semester1,
@@ -299,7 +310,8 @@ class ReportCardController extends Controller
             'attendances' => $attendances,
             'teacher_comments' => $teacher_comments,
             'behavior_types' => $behavior_types,
-            'behavior_records' => $behavior_records];
+            'behavior_records' => $behavior_records,
+            'teacher_names' => $teacher_names];
 
         if ($grade_level->grade_level <= 6) {
             //ยังต้องเปลี่ยนเป็นฟอร์ม 1-6 ถ้าอาจารจะทดสอบให้ทดสอบที่อันนี้ก่อนครับ ผมมีตารางใน seeder แล้วนะครับ ลองseedได้ครับ
