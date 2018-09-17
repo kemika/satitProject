@@ -10,7 +10,7 @@ use App\Teacher;
 use App\Student;
 use App\Academic_Year;
 use App\Offered_Courses;
-use App\Behavior_type;
+use App\Behavior_Type;
 
 use App\Curriculum;
 use App\Student_Grade_Level;
@@ -57,7 +57,7 @@ class ExportController extends Controller
       ->join('curriculums', function($j) {
       $j->on('curriculums.course_id', '=', 'offered_courses.course_id');
       $j->on('curriculums.curriculum_year','=','offered_courses.curriculum_year');
-      })
+      })->where('curriculums.is_activity',false)
       ->select('offered_courses.*','curriculums.*')
       ->get();
 
@@ -530,7 +530,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
     ->get();
 
 
-    $behaviors = Behavior_type::all();
+    $behaviors = Behavior_Type::all();
 
     $type='xlsx';
     Excel::create('Behavior', function($excel) use($students,$academic_year, $behaviors) {
@@ -541,7 +541,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
         ////////////////////////////Student/////////////////////////////
 
-        $i=5;
+        $i=7;
 
         foreach ($students as $student) {
 
@@ -600,9 +600,10 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
         $sheet->setCellValue('A1', 'Academic Year');
         $sheet->setCellValue('A2', 'Grade Level');
         $sheet->setCellValue('A3', 'Room');
-        $sheet->setCellValue('A4', 'Behavior');
-        $sheet->setCellValue('A5', 'Students ID');
-        $sheet->setCellValue('B5', 'Students Name');
+        $sheet->setCellValue('A4', 'Behavior ID');
+        $sheet->setCellValue('A5', 'Behavior Name');
+        $sheet->setCellValue('A6', 'Students ID');
+        $sheet->setCellValue('B6', 'Students Name');
         //-------- From Behavior table--------------------//
         $sheet->setCellValue('C6', 'Q1');
         $sheet->setCellValue('D6', 'Q2');
@@ -627,7 +628,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
 
 
-        $sheet->setBorder('A4:F23', 'thin');
+        $sheet->setBorder('A4:AP'.$i, 'thin');
 
 
       });
