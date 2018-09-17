@@ -304,7 +304,8 @@ class UploadGradeController extends Controller
                               $physical->academic_year = $year;
                               $physical->datetime = $datetime;
                               $physical->data_status = 1;
-                              $physical->save();
+                              //$physical->save();
+                              $finalResult[] = $physical;
                             }
                             if($results[$i]->s2_weight != "" && $results[$i]->s2_height != ""){
                               $physical = new Physical_Record;
@@ -315,7 +316,8 @@ class UploadGradeController extends Controller
                               $physical->academic_year = $year;
                               $physical->datetime = $datetime;
                               $physical->data_status = 1;
-                              $physical->save();
+                              //$physical->save();
+                              $finalResult[] = $physical;
                             }
 
 
@@ -481,7 +483,8 @@ class UploadGradeController extends Controller
                                     $behavior->academic_year = $year;
                                     $behavior->datetime = $datetime;
                                     $behavior->data_status = 1;
-                                    $behavior->save();
+                                    //$behavior->save();
+                                    $finalResult[] = $behavior;
                                   }
                                 }
                               }
@@ -632,8 +635,8 @@ class UploadGradeController extends Controller
                             $attendance->academic_year = $year;
                             $attendance->datetime = $datetime;
                             $attendance->data_status = 1;
-                            if(!$emptyField) $attendance->save();
-
+                            //  if(!$emptyField) $attendance->save();
+                            if(!$emptyField) $finalResult[] = $attendance;
                             $emptyField = false;
                             $attendance = new Attendance_Record;
                             $attendance->student_id = $resultsStudent[$i]->students_id;
@@ -657,7 +660,8 @@ class UploadGradeController extends Controller
                             $attendance->academic_year = $year;
                             $attendance->datetime = $datetime;
                             $attendance->data_status = 1;
-                            if(!$emptyField) $attendance->save();
+                            //  if(!$emptyField) $attendance->save();
+                            if(!$emptyField) $finalResult[] = $attendance;
                           }
                           else if ($stdName[(String)($resultsStudent[$i]->students_id)] !== $resultsStudent[$i]->students_name) {
                             $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This student ID doesn't match with student name";
