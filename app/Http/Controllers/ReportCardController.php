@@ -405,6 +405,8 @@ class ReportCardController extends Controller
                 $element = array('course_name' => $x->course_name,
                     'course_id' => $x->course_id,
                     'credits' => $x->credits,
+                    'in_class' => $x->in_class,
+                    'practice' => $x->practice,
                     'quater1' => "",
                     'quater2' => "",
                     'quater3' => "",
@@ -457,142 +459,37 @@ class ReportCardController extends Controller
     }
 
 
+    // This takes $grade_sem1 and $grade_sem2 that is output from getGradeToFrom method
     public
     static function getGradeToFrom1_6($grade_sem1, $grade_sem2)
     {
-        $check = array();
         $result = array();
 
-        $boom = array();
+        // Combine two grades into one and compute year grade
+        foreach ($grade_sem1 as $course_id => $s1){
+            $s2 = $grade_sem2[$course_id];
 
-        foreach ($grade_sem1 as $x) {
-            $b = $x->course_id . " : " . $x->course_name . "    :" . ('quater' . $x->quater . '_sem' . $x->semester . '  :' . $x->grade . "  open course id : " . $x->open_course_id);
-            array_push($boom, $b);
+            $grade['course_name'] = $s1['course_name'];
+            $grade['credits'] = $s1['credits'];
+            $grade['in_class'] = $s1['in_class'];
+            $grade['practice'] = $s1['practice'];
+            for($i = 1; $i < SystemConstant::TOTAL_QUARTERS+1; $i++) {
+                $grade['quater' . $i . '_sem1'] = $s1['quater' . $i];
+                $grade['quater' . $i . '_sem2'] = $s2['quater' . $i];
+            }
+            $grade['semester1_grade'] = $s1['semester_grade'];
+            $grade['semester2_grade'] = $s1['semester_grade'];
 
-            if (!in_array($x->course_id . "", $check)) {
-
-
-                $element = array('course_name' => $x->course_name,
-                    'course_id' => $x->course_id,
-                    'credits' => $x->credits,
-                    'in_class' => $x->in_class,
-                    'practice' => $x->practice,
-                    'quater1_sem1' => -1,
-                    'quater2_sem1' => -1,
-                    'quater3_sem1' => -1,
-                    'quater1_sem2' => -1,
-                    'quater2_sem2' => -1,
-                    'quater3_sem2' => -1,
-                    'total_point' => 0,
-                    'enable_sem1' => true,
-                    'enable_sem2' => true,
-                    'total_point_sem1' => 0,
-                    'total_point_sem2' => 0);
-
-                $element['quater' . $x->quater . '_sem1'] = $x->grade;
-                $element['total_point'] += +$x->grade;
-                $element['total_point_sem1'] += +$x->grade;
-                $result[$x->course_id] = $element;
-                array_push($check, $x->course_id);
-
-
-            } else {
-
-                $result[$x->course_id]['quater' . $x->quater . '_sem1'] = $x->grade;
-                $result[$x->course_id]['total_point'] += $x->grade;
-                $result[$x->course_id]['total_point_sem1'] += $x->grade;
-
+            // Compute year grade when possible
+            if($grade['semester1_grade'] != "-" && $grade['semester2_grade'] != "-"){
+                $grade['year_grade'] = self::academic_evaluation_cart_2(
+                    ($grade['semester1_grade'] + $grade['semester2_grade'])/2);
+            }else{
+                $grade['year_grade'] = '-';
             }
 
+            $result[$course_id ] = $grade;
         }
-
-        array_push($boom, '================================');
-
-        foreach ($grade_sem2 as $x) {
-            $b = $x->course_id . " : " . $x->course_name . "    :" . ('quater' . $x->quater . '_sem' . $x->semester . '  :' . $x->grade . "  open course id : " . $x->open_course_id);
-            array_push($boom, $b);
-
-            if (!in_array($x->course_id . "", $check)) {
-
-
-                $element = array('course_name' => $x->course_name,
-                    'course_id' => $x->course_id,
-                    'credits' => $x->credits,
-                    'in_class' => $x->in_class,
-                    'practice' => $x->practice,
-                    'quater1_sem1' => -1,
-                    'quater2_sem1' => -1,
-                    'quater3_sem1' => -1,
-                    'quater1_sem2' => -1,
-                    'quater2_sem2' => 0,
-                    'quater3_sem2' => 0,
-                    'enable_sem1' => true,
-                    'enable_sem2' => true,
-                    'total_point' => 0,
-                    'total_point_sem1' => 0,
-                    'total_point_sem2' => 0);
-
-                $element['quater' . $x->quater . '_sem2'] = $x->grade;
-                $element['total_point'] += $x->grade;
-                $element['total_point_sem2'] += $x->grade;
-                $result[$x->course_id] = $element;
-                array_push($check, $x->course_id);
-
-
-            } else {
-
-                $result[$x->course_id]['quater' . $x->quater . '_sem2'] = $x->grade;
-                $result[$x->course_id]['total_point'] += $x->grade;
-                $result[$x->course_id]['total_point_sem2'] += $x->grade;
-
-            }
-
-        }
-
-
-        foreach ($result as $x) {
-            for ($j = 1; $j <= 2; $j++) {
-                for ($i = 1; $i <= 3; $i++) {
-                    if ($x['quater' . $i . '_sem' . $j] == -1) {
-                        $result[$x['course_id']]['total_point_sem' . $j] = '';
-                        $result[$x['course_id']]['enable_sem' . $j] = false;
-                        $result[$x['course_id']]['quater' . $i . '_sem' . $j] = '';
-                    }
-                }
-            }
-            // if($x['quater1_sem1'] == -1 || $x['quater2_sem1'] == -1  || $x['quater3_sem1'] == -1 || $x['quater1_sem2'] == -1 || $x['quater2_sem2'] == -1  || $x['quater3_sem2'] == -1   ){
-            //
-            //   $result[$x['course_id']]['total_point'] -= ($x['total_point_sem1']  +$x['total_point_sem2']);
-            //
-            // }
-
-        }
-        $b = count($result);
-
-        for ($i = count($result); $i < 14; $i++) {
-
-            $element = array('course_name' => '',
-                'course_id' => '',
-                'credits' => 0,
-                'in_class' => '',
-                'practice' => '',
-                'quater1_sem1' => '',
-                'quater2_sem1' => '',
-                'quater3_sem1' => '',
-                'quater1_sem2' => '',
-                'quater2_sem2' => '',
-                'quater3_sem2' => '',
-                'enable_sem1' => false,
-                'enable_sem2' => false,
-                'total_point' => '',
-                'total_point_sem1' => '',
-                'total_point_sem2' => '');
-
-            $result['course' . $i] = $element;
-
-        }
-        // dd($b,count($result),$result);
-
 
         return $result;
 
@@ -648,6 +545,7 @@ class ReportCardController extends Controller
         $semester_2_gpa = 0;
         $total_sem1_subject = 0;
         $total_sem2_subject = 0;
+        $gpa = 0;
 
         // Semester 1 computation
         foreach ($view_data['grade_semester1'] as $key => $g) {
@@ -655,21 +553,28 @@ class ReportCardController extends Controller
             $total_sem1_credit += $credit;
             $grade = $g['semester_grade'];
             if ($grade != "-") {
-//                if($grade_level <= 6){
-//                    $semester_1_gpa += $grade;
-//                    $total_sem1_subject++;
-//                }else {
+                if($grade_level <= 6){
+                    // For grade 1-6
+                    $year_grade = $g['year_grade'];
+                    if($year_grade != "-") {
+                        $gpa += $year_grade * $credit;
+                    }
+                }else {
                     $semester_1_gpa += $grade * $credit;
-//                }
+                }
             }
         }
 
         $total_credit += $total_sem1_credit;
-        $gpa = $semester_1_gpa;
+        if($grade_level <= 6){
+            $gpa = round($gpa / $total_sem1_credit, 2);
+        }else {
+            $gpa = $semester_1_gpa;
+        }
 //        if($grade_level <=6){
 //            $semester_1_gpa = round($semester_1_gpa / $total_sem1_subject, 2);
 //        }else {
-            $semester_1_gpa = round($semester_1_gpa / $total_sem1_credit, 2);
+        $semester_1_gpa = round($semester_1_gpa / $total_sem1_credit, 2);
 //        }
 
         // Semester 2 computation
@@ -690,6 +595,7 @@ class ReportCardController extends Controller
 
         // Grade 1-6 already double count credits so there is
         // no need to add more to total credit
+        //  Moreover Grade 1-6 already computed GPA from semester 1 computation
         if($grade_level > 6) {
             if ($grade_level < 9) {  // Grade 7-8
                 $total_credit += $total_sem2_credit;
@@ -702,16 +608,17 @@ class ReportCardController extends Controller
                 $semester_2_gpa += $grade * $credit;
                 $total_credit += $total_sem2_credit;
             }
-        }
+            $gpa += $semester_2_gpa;
 
-        $gpa += $semester_2_gpa;
+            $semester_2_gpa = round($semester_2_gpa / $total_sem2_credit, 2);
+            $gpa /= $total_credit;
+        }
 //        if($grade_level <=6){
 //            // total subject in semester 1 and 2 should be equal
 //            $semester_2_gpa = round($semester_2_gpa / $total_sem2_subject, 2);
 //        }else {
-            $semester_2_gpa = round($semester_2_gpa / $total_sem2_credit, 2);
+
 //        }
-        $gpa /= $total_credit;
 
         // Pack data back to view_data
         $view_data['gpa'] = $gpa;

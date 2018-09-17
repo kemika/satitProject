@@ -20,4 +20,7 @@ class SystemConstant
 
     // Quarter signifying final score
     const FINAL_Q = 3;
+
+    // Constant for N/A grade to be used with all cumulative grade data
+    const NA_GRADE = "-";
 }
