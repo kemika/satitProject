@@ -993,7 +993,10 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
   }
 
-  public function download_all(Request $request){
+   public function download_all(Request $request){
+    $files = array('readme.txt', 'test.html', 'image.gif');
+    $file_name = 'test.html';
+    $file_path = 'files/'.$file_name;
     if($request->has('download')) {
       // Define Dir Folder
       $public_dir=public_path();
@@ -1002,29 +1005,30 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
       // Create ZipArchive Obj
       $zip = new ZipArchive;
       if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
-      // Add Multiple file
-      foreach($files as $file) {
-          $zip->addFile($file->path, $file->name);
-        }        
-      $zip->close();
-      }
+            	// Add File in ZipArchive
+                $zip->addFile($file_path,'file_name');
+                // Close ZipArchive
+                $zip->close();
+            }
       // Set Header
       $headers = array(
       'Content-Type' => 'application/octet-stream',
       );
       $filetopath=$public_dir.'/'.$zipFileName;
+      dd($filetopath);
+      //dd(file_exists($filetopath));
+
       // Create Download Response
-      if(file_exists($filetopath)){
+      if((file_exists($filetopath))){
         return response()->download($filetopath,$zipFileName,$headers);
       }
     }
-    return view('createZip');
+    return view('export.download_all');
 
-  }
-
-
+   }
 
 
 
-    //
+
+
 }
