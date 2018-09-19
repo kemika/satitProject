@@ -15,7 +15,7 @@ class SystemConstant
     const NO_GRADE = 0;
     const HAS_GRADE = 5;
 
-    // 2 quaters exclude final
+    // 2 quaters exclude final  This is total quarter for each semester.
     const TOTAL_QUARTERS = 2;
 
     // Quarter signifying final score
@@ -23,4 +23,6 @@ class SystemConstant
 
     // Constant for N/A grade to be used with all cumulative grade data
     const NA_GRADE = "-";
+
+    const TOTAL_SEMESTERS = 2;
 }
