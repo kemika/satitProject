@@ -717,7 +717,7 @@ div.attendance {
 .board{
   width: 100%;
   height: 97%;
-  border-right: 1px solid black;
+  /* border: 1px solid black; */
 }
 .dotBottom{
   height: 40%;

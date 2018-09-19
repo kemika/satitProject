@@ -686,7 +686,7 @@
             .board {
                 width: 100%;
                 height: 97%;
-                border-right: 1px solid black;
+                /* border-right: 1px solid black; */
             }
 
             .dotBottom {
