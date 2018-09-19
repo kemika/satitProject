@@ -211,7 +211,7 @@ class UploadGradeController extends Controller
         }
 
 
-        return view('uploadGrade.upload', ['errorDetail' => $errorArray]);
+        return view('uploadGrade.errorDetail', ['errorDetail' => $errorArray]);
 
     } // END upload Comment
 
@@ -304,7 +304,8 @@ class UploadGradeController extends Controller
                               $physical->academic_year = $year;
                               $physical->datetime = $datetime;
                               $physical->data_status = 1;
-                              $physical->save();
+                              //$physical->save();
+                              $finalResult[] = $physical;
                             }
                             if($results[$i]->s2_weight != "" && $results[$i]->s2_height != ""){
                               $physical = new Physical_Record;
@@ -315,7 +316,8 @@ class UploadGradeController extends Controller
                               $physical->academic_year = $year;
                               $physical->datetime = $datetime;
                               $physical->data_status = 1;
-                              $physical->save();
+                              //$physical->save();
+                              $finalResult[] = $physical;
                             }
 
 
@@ -323,21 +325,36 @@ class UploadGradeController extends Controller
                           else if ($stdName[(String)($results[$i]->students_id)] !== $results[$i]->students_name) {
                             $errorDetail[(String)($results[$i]->students_id)] = $results[$i]->students_id . " This student ID doesn't match with student name";
                           }
-                          else if (!in_array($results[$i]->students_id, $stdArray)) {
-                            $errorDetail[(String)($results[$i]->students_id)] = $results[$i]->students_id . " This Student ID doesn't exist in this room";
-                          }
 
+
+                    }
+                    else if (!in_array($results[$i]->students_id, $stdArray)) {
+                      $errorDetail[(String)($results[$i]->students_id)] = $results[$i]->students_id . " This Student ID doesn't exist in this room";
                     }
 
                 }
+                if (count($errorDetail) <= 0) {
+                    foreach ($finalResult as $result) {
+                        $result->save();
+                    }
+                    $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " success";
+
+                } else {
+                    $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " error";
+                    /*
+                    foreach($errorDetail as $key => $value){
+                      print_r("Student ID : ".$key." got error => ".$value."</br>");
+                    }*/
+
+                }
+                $errorArray[] = $errorDetail;
             }
           }
 
 
 
 
-        $redi = '/upload';
-        return redirect($redi);
+        return view('uploadGrade.errorDetail', ['errorDetail' => $errorArray]);
 
     } // END upload HeightAndWeight
 
@@ -466,7 +483,8 @@ class UploadGradeController extends Controller
                                     $behavior->academic_year = $year;
                                     $behavior->datetime = $datetime;
                                     $behavior->data_status = 1;
-                                    $behavior->save();
+                                    //$behavior->save();
+                                    $finalResult[] = $behavior;
                                   }
                                 }
                               }
@@ -476,21 +494,36 @@ class UploadGradeController extends Controller
                           else if ($stdName[(String)($resultsStudent[$i]->students_id)] !== $resultsStudent[$i]->students_name) {
                             $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This student ID doesn't match with student name";
                           }
-                          else if (!in_array($resultsStudent[$i]->students_id, $stdArray)) {
-                            $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This Student ID doesn't exist in this room";
-                          }
 
+
+                        }
+                        else if (!in_array($resultsStudent[$i]->students_id, $stdArray)) {
+                          $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This Student ID doesn't exist in this room";
                         }
 
                   }
+                  if (count($errorDetail) <= 0) {
+                      foreach ($finalResult as $result) {
+                          $result->save();
+                      }
+                      $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " success";
+
+                  } else {
+                      $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " error";
+                      /*
+                      foreach($errorDetail as $key => $value){
+                        print_r("Student ID : ".$key." got error => ".$value."</br>");
+                      }*/
+
+                  }
+                  $errorArray[] = $errorDetail;
 
 
             }
 
         }
 
-        $redi = '/upload';
-        return redirect($redi);
+        return view('uploadGrade.errorDetail', ['errorDetail' => $errorArray]);
 
     } // END upload Behavior
 
@@ -602,8 +635,8 @@ class UploadGradeController extends Controller
                             $attendance->academic_year = $year;
                             $attendance->datetime = $datetime;
                             $attendance->data_status = 1;
-                            if(!$emptyField) $attendance->save();
-
+                            //  if(!$emptyField) $attendance->save();
+                            if(!$emptyField) $finalResult[] = $attendance;
                             $emptyField = false;
                             $attendance = new Attendance_Record;
                             $attendance->student_id = $resultsStudent[$i]->students_id;
@@ -627,18 +660,35 @@ class UploadGradeController extends Controller
                             $attendance->academic_year = $year;
                             $attendance->datetime = $datetime;
                             $attendance->data_status = 1;
-                            if(!$emptyField) $attendance->save();
+                            //  if(!$emptyField) $attendance->save();
+                            if(!$emptyField) $finalResult[] = $attendance;
                           }
                           else if ($stdName[(String)($resultsStudent[$i]->students_id)] !== $resultsStudent[$i]->students_name) {
                             $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This student ID doesn't match with student name";
                           }
-                          else if (!in_array($resultsStudent[$i]->students_id, $stdArray)) {
-                            $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This Student ID doesn't exist in this room";
-                          }
 
+
+                    }
+                    else if (!in_array($resultsStudent[$i]->students_id, $stdArray)) {
+                      $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This Student ID doesn't exist in this room";
                     }
 
                 }
+                if (count($errorDetail) <= 0) {
+                    foreach ($finalResult as $result) {
+                        $result->save();
+                    }
+                    $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " success";
+
+                } else {
+                    $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " error";
+                    /*
+                    foreach($errorDetail as $key => $value){
+                      print_r("Student ID : ".$key." got error => ".$value."</br>");
+                    }*/
+
+                }
+                $errorArray[] = $errorDetail;
 
 
             }
@@ -646,8 +696,7 @@ class UploadGradeController extends Controller
 
 
 
-        $redi = '/upload' ;
-        return redirect($redi);
+        return view('uploadGrade.errorDetail', ['errorDetail' => $errorArray]);
 
     } // END upload Attendance
 
@@ -673,7 +722,8 @@ class UploadGradeController extends Controller
         $errorArray = array();
 
         foreach($request->file as $file){
-
+          $finalResult = array();
+          $errorDetail = array();
           $fact = true;
           $factGrade = true;
           $factValidate = true;
@@ -795,6 +845,8 @@ class UploadGradeController extends Controller
 
             $stdArray = array();
             $stdName = array();
+            //$typeStatus = array("U","S","I");
+
 
             date_default_timezone_set('Asia/Bangkok');
             $datetime = date("Y-m-d H:i:s");
@@ -811,6 +863,7 @@ class UploadGradeController extends Controller
 
                       foreach($courseIDFirst as $key => $id){
                         $resUp = strtoupper($resultsFirst[$i+2]->$key);
+
                         if(array_key_exists($resUp, $statusArr)){
                           $activity = new Activity_Record;
                           $activity->student_id = $resultsStudent[$i]->students_id;
@@ -820,9 +873,13 @@ class UploadGradeController extends Controller
                           $activity->academic_year = $year;
                           $activity->datetime = $datetime;
                           $activity->data_status = 1;
-                          $activity->save();
-
+                        //  $activity->save();
+                          $finalResult[] = $activity;
                         }
+                        else if($resUp !== ""){
+                          $errorDetail[(String)($resultsStudent[$i]->students_id)] = " Please check at this student ID ".$resultsStudent[$i]->students_id." Grade must be S/U/I";
+                        }
+
                       }
 
                       foreach($courseIDSec as $key => $id){
@@ -836,28 +893,45 @@ class UploadGradeController extends Controller
                           $activity->academic_year = $year;
                           $activity->datetime = $datetime;
                           $activity->data_status = 1;
-                          $activity->save();
+                          //  $activity->save();
+                          $finalResult[] = $activity;
                         }
-
+                        else if($resUp !== ""){
+                          $errorDetail[(String)($resultsStudent[$i]->students_id)] = " Please check at this student ID ".$resultsStudent[$i]->students_id." Grade must be S/U/I";
+                        }
                       }
                     }
                     else if ($stdName[(String)($resultsStudent[$i]->students_id)] !== $resultsStudent[$i]->students_name) {
                       $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This student ID doesn't match with student name";
                     }
-                    else if (!in_array($resultsStudent[$i]->students_id, $stdArray)) {
-                      $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This Student ID doesn't exist in this room";
-                    }
 
+              }
+              else if (!in_array($resultsStudent[$i]->students_id, $stdArray)) {
+                $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This Student ID doesn't exist in this room";
               }
 
           }
+          if (count($errorDetail) <= 0) {
+              foreach ($finalResult as $result) {
+                  $result->save();
+              }
+              $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " success";
+
+          } else {
+              $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " error";
+              /*
+              foreach($errorDetail as $key => $value){
+                print_r("Student ID : ".$key." got error => ".$value."</br>");
+              }*/
+
+          }
+          $errorArray[] = $errorDetail;
         }
 
       }
 
 
-      $redi  = '/upload';
-      return redirect($redi);
+      return view('uploadGrade.errorDetail', ['errorDetail' => $errorArray]);
 
     } // END upload Activity
 
