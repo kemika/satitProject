@@ -142,8 +142,6 @@ class ReportCardController extends Controller
         $grade_semester2 = self::getGradeToFrom($grade_semester2_raw,$grade_level->grade_level);
 //        $grade_avg_sem2 = self::getAvg($grade_semester2);
 
-        $grade_semester1_6 = self::getGradeToFrom1_6($grade_semester1_raw, $grade_semester2_raw);
-
         // Get elective grades
         $elective_grades = (clone $grade)->where('offered_courses.is_elective', '1')->get();
         $elective_grades = self::getGradeToFrom($elective_grades,$grade_level->grade_level);
@@ -315,6 +313,7 @@ class ReportCardController extends Controller
 
         if ($grade_level->grade_level <= 6) {
             //ยังต้องเปลี่ยนเป็นฟอร์ม 1-6 ถ้าอาจารจะทดสอบให้ทดสอบที่อันนี้ก่อนครับ ผมมีตารางใน seeder แล้วนะครับ ลองseedได้ครับ
+            $grade_semester1_6 = self::getGradeToFrom1_6($grade_semester1_raw, $grade_semester2_raw);
             $view_data['grade_semester1'] = $grade_semester1_6;
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade1-6', $view_data);
