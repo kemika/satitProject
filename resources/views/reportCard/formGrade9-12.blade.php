@@ -1,4 +1,4 @@
-<head>head>
+<head>
     <title>Report Card</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -800,7 +800,7 @@
                         .board {
                             width: 100%;
                             height: 97%;
-                            border-right: 1px solid black;
+                            /* border: 1px solid black; */
                         }
 
                         .dotBottom {
