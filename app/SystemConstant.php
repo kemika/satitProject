@@ -14,6 +14,7 @@ class SystemConstant
     // These 2 values should be set following value in Grade Status table in database
     const NO_GRADE = 0;
     const HAS_GRADE = 5;
+    const PASS_I = 6;
 
     // 2 quaters exclude final  This is total quarter for each semester.
     const TOTAL_QUARTERS = 2;

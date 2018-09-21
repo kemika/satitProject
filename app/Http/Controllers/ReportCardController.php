@@ -441,6 +441,14 @@ class ReportCardController extends Controller
                         $element['grade_count']++;
                     }
                     break;
+                case SystemConstant::PASS_I:
+                    $element['quater' . $x->quater] = "I/".$x->grade;
+                    $element['semester_grade'] += $x->grade;
+                    // Only count when this is not final quarter
+                    if($x->quater < SystemConstant::FINAL_Q){
+                        $element['grade_count']++;
+                    }
+                    break;
                 default:
                     $element['quater' . $x->quater] = $x->grade_status_text;
             }
