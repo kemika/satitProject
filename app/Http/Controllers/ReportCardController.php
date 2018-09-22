@@ -24,6 +24,7 @@ use App\Behavior_Record;
 use App\Attendance_Record;
 use App\Teacher_Comment;
 use auth;
+use File;
 
 ini_set('max_execution_time', 180);
 
@@ -46,7 +47,40 @@ class ReportCardController extends Controller
 
     }
 
-    public function exportPDF($student_id, $academic_year)
+    public function exportPDFAll($classroom_id, $academic_year){
+      $students = Student_Grade_Level::where('classroom_id', $classroom_id)
+          ->select('student_grade_levels.*')
+          ->join('students', 'students.student_id', 'student_grade_levels.student_id')
+          ->select('student_grade_levels.*', 'students.*')
+          ->get();
+
+
+          $room = Academic_Year::where('academic_year', $academic_year)
+          ->where('classroom_id', $classroom_id)
+          ->select('academic_year.*')
+          ->first();
+              if($room->room < 10){
+                $folder_name = $room->grade_level.'0'.$room->room . '_' . date("Y-m-d-H-i-s");
+              }
+              else {
+                $folder_name = $room->grade_level . $room->room . '_' . date("Y-m-d-H-i-s");
+              }
+
+              $path = public_path().'/fileToZip'. '/' . $folder_name;
+              // dd($path);
+              // dd(File::exists($path));
+              if(!File::exists($path)) {
+                File::makeDirectory($path, $mode = 0777, true, true);
+              }
+
+      foreach ($students as $student) {
+        self::exportPDF($student->student_id, $academic_year, 1,$folder_name);
+        // code...
+      }
+
+    }
+
+    public function exportPDF($student_id, $academic_year, $download_all,$folder_name)
     {
         // Sanity check for security
         // TODO  Need to implement student_id check and $academic_year check to prevent SQL injection
@@ -318,15 +352,27 @@ class ReportCardController extends Controller
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade1-6', $view_data);
         } elseif ($grade_level->grade_level <= 8) {
+            $public_dir = public_path();
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade7-8', $view_data);
         } else { //If not it can only be grade 9-12
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade9-12', $view_data);
         }
-
         $pdf->setPaper('a4', 'potrait');
-        return $pdf->stream();
+        if (!$download_all) {
+          return $pdf->stream();
+        }
+        else {
+
+          $file_name = $student->student_id;
+          $pdf->save(public_path('fileToZip/'. $folder_name . '/' . $file_name . '.pdf', true));
+
+
+
+        }
+
+        //return $pdf->stream();
 
 // return $pdf->download('reportCard.pdf');
 
