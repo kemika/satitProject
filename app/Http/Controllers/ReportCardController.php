@@ -312,11 +312,12 @@ class ReportCardController extends Controller
             'teacher_names' => $teacher_names];
 
         if ($grade_level->grade_level <= 6) {
-            //ยังต้องเปลี่ยนเป็นฟอร์ม 1-6 ถ้าอาจารจะทดสอบให้ทดสอบที่อันนี้ก่อนครับ ผมมีตารางใน seeder แล้วนะครับ ลองseedได้ครับ
+
             $grade_semester1_6 = self::getGradeToFrom1_6($grade_semester1_raw, $grade_semester2_raw);
             $view_data['grade_semester1'] = $grade_semester1_6;
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade1-6', $view_data);
+            return $pdf->download('reportCard.pdf');
         } elseif ($grade_level->grade_level <= 8) {
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade7-8', $view_data);
@@ -328,7 +329,7 @@ class ReportCardController extends Controller
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream();
 
-// return $pdf->download('reportCard.pdf');
+
 
     }
 

@@ -993,42 +993,79 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
   }
 
-   public function download_all(Request $request){
-    $files = array('readme.txt', 'test.html', 'image.gif');
-    $file_name = 'test.html';
-    $file_path = 'files/'.$file_name;
-    if($request->has('download')) {
-      // Define Dir Folder
-      $public_dir=public_path();
-      // Zip File Name
-      $zipFileName = 'AllDocuments.zip';
-      // Create ZipArchive Obj
-      $zip = new ZipArchive;
-      if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
-            	// Add File in ZipArchive
-                $zip->addFile($file_path,'file_name');
-                // Close ZipArchive
-                $zip->close();
-            }
-      // Set Header
-      $headers = array(
-      'Content-Type' => 'application/octet-stream',
-      );
-      $filetopath=$public_dir.'/'.$zipFileName;
-      dd($filetopath);
-      //dd(file_exists($filetopath));
+   // public function download_all(Request $request){
+   //  $files = array('readme.txt', 'test.html', 'image.gif');
+   //  $file_name = 'test.html';
+   //  $file_path = 'files/'.$file_name;
+   //  if($request->has('download')) {
+   //    // Define Dir Folder
+   //    $public_dir=
 
-      // Create Download Response
-      if((file_exists($filetopath))){
-        return response()->download($filetopath,$zipFileName,$headers);
-      }
-    }
-    return view('export.download_all');
+   //    // Zip File Name
+   //    $zipFileName = 'AllDocuments.zip';
+   //    // Create ZipArchive Obj
+   //    $zip = new ZipArchive;
+   //    if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
+   //          	// Add File in ZipArchive
+   //              $zip->addFile($file_path,'file_name');
+   //              // Close ZipArchive
+   //              $zip->close();
+   //          }
+   //    // Set Header
+   //    $headers = array(
+   //    'Content-Type' => 'application/octet-stream',
+   //    );
+   //    $filetopath=$public_dir.'/'.$zipFileName;
+   //    dd($filetopath);
+   //    //dd(file_exists($filetopath));
+   //
+   //    // Create Download Response
+   //    if((file_exists($filetopath))){
+   //      return response()->download($filetopath,$zipFileName,$headers);
+   //    }
+   //  }
+   //  return view('export.download_all');
+   //
+   // }
 
+
+   public function download_all($name)
+   {
+  
+
+         // Define Dir Folder
+         $public_dir=public_path();
+         // Zip File Name
+           $zipFileName = 'my.zip';
+           // Create ZipArchive Obj
+           $zip = new ZipArchive;
+           if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
+
+             // Add File in ZipArchive
+               $zip->addFile($public_dir . '/' .'img/satitLogo.gif','603/satitLogo.gif');
+
+               $zip->addFile($public_dir . '/' .'img/box.png','603/box.png');
+               $zip->renameName('img','mumu');
+               // dd($zip->statIndex( 0 ));
+
+
+
+               $zip->close();
+
+
+           }
+
+           // Set Header
+           $headers = array(
+
+           );
+           $filetopath=$public_dir.'/'.$zipFileName;
+           // dd($filetopath);
+           // Create Download Response
+              if((file_exists($filetopath))){
+                return response()->download($filetopath,$zipFileName,$headers);
+              }
+
+       return view('createZip');
    }
-
-
-
-
-
 }
