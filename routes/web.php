@@ -104,7 +104,7 @@ Route::get('/export_menu','ExportController@index2');
 
 Route::get('/reportCard', 'ReportCardController@index2');
 Route::get('/report_card/room/{classroom_id}','ReportCardController@Room');
-Route::get('/exportReportCard/{student_id}/{academic_year}/{download_all}/{$folder_name}', 'ReportCardController@exportPDF')->name('export.pdf');
+Route::get('/exportReportCard/{student_id}/{academic_year}/{download_all}/{folder_name}', 'ReportCardController@exportPDF')->name('export.pdf');
 Route::get('/export_grade/{classroom_id}/{course_id}/{curriculum_year}','ExportController@exportExcel');
 Route::get('/export_elective_course/{classroom_id}/{course_id}/{curriculum_year}','ExportController@exportElectiveCourseForm');
 Route::get('/exportReportCardDownloadAll/{classroom_id}/{academic_year}','ReportCardController@exportPDFAll');

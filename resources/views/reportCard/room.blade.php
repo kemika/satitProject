@@ -16,7 +16,7 @@
       @foreach($students as $student)
       <div class="card">
         <center>
-        <p class="mt-2"><a href='/exportReportCard/{{$student->student_id}}/{{$room->academic_year}}/{{0}}/{{0}}'>{{$student->student_id." ".$student->firstname." ".$student->lastname }}</a></p>
+        <p class="mt-2"><a href='/exportReportCard/{{$student->student_id}}/{{$room->academic_year}}/{{0}}/{{'asdasd'}}'>{{$student->student_id." ".$student->firstname." ".$student->lastname }}</a></p>
       </center>
       </div>
       @endforeach

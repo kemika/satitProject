@@ -1031,7 +1031,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
    public function download_all($name)
    {
-  
+
 
          // Define Dir Folder
          $public_dir=public_path();
@@ -1039,6 +1039,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
            $zipFileName = 'my.zip';
            // Create ZipArchive Obj
            $zip = new ZipArchive;
+
            if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
 
              // Add File in ZipArchive
@@ -1062,6 +1063,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
            $filetopath=$public_dir.'/'.$zipFileName;
            // dd($filetopath);
            // Create Download Response
+           dd($filetopath);
               if((file_exists($filetopath))){
                 return response()->download($filetopath,$zipFileName,$headers);
               }
