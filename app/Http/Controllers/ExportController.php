@@ -15,7 +15,7 @@ use App\Behavior_Type;
 use App\Curriculum;
 use App\Student_Grade_Level;
 use ZipArchive;
-
+use File;
 
 class ExportController extends Controller
 {
@@ -923,8 +923,16 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
 
       });
-
-    })->export($type);
+      $folder_name = $academic_year->grade_level . '_' . $academic_year->room . '_' . date("Y-m-d-H-i-s");
+      $path = public_path().'/excelToZip'. '/' . $folder_name;
+       //dd($path);
+       // dd(File::exists($path));
+      if(!File::exists($path)) {
+        File::makeDirectory($path, $mode = 0777, true, true);
+      }
+      // dd(public_path('excelToZip'));
+    })->store($type, public_path('excelToZip/'. $folder_name));
+    // })->export($type);
   }
 
 
