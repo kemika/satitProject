@@ -26,8 +26,10 @@ use App\Teacher_Comment;
 use auth;
 use File;
 use ZipArchive;
+use Response;
 
-ini_set('max_execution_time', 180);
+ini_set('max_execution_time', 720);
+// set_time_limit(0);
 
 class ReportCardController extends Controller
 {
@@ -76,7 +78,6 @@ class ReportCardController extends Controller
 
       foreach ($students as $student) {
         self::exportPDF($student->student_id, $academic_year, 1,$folder_name);
-        // code...
       }
 
 
@@ -85,13 +86,47 @@ class ReportCardController extends Controller
       //   $zipFileName = $folder_name.'zip';
       //
       // $boom=  $public_dir . '/' . $zipFileName;
-      // dd($boom);
-      // for($i =0 ; $i < 3 ;$i ++){
+      // for($i =0 ; $i < 1 ;$i ++){
       //   self::exportPDF($students[$i]->student_id, $academic_year, 1,$folder_name);
       //
       // }
-      self::download_all($folder_name,$students);
+      //self::download_all($folder_name, $students);
 
+      // Define Dir Folder
+      $public_dir=public_path();
+      // Zip File Name
+        $zipFileName = $folder_name.'.zip';
+
+        // Create ZipArchive Obj
+        $zip = new ZipArchive;
+        if ($zip->open($public_dir . '/zipPDF//' . $zipFileName, ZipArchive::CREATE) === TRUE) {
+
+
+           foreach($students as $student){
+            $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$student->student_id.'.pdf',$folder_name.'/'.$student->student_id.'.pdf');
+
+           }
+           // dd($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[0]->student_id.'.pdf');
+           // for($i = 0 ; $i < 3 ; $i ++){
+           //  $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[$i]->student_id.'.pdf',$folder_name.'/'.$students[$i]->student_id.'.pdf');
+           //
+           // }
+
+            // $zip->renameName('img','mumu');
+            // dd($zip->statIndex( 0 ));
+
+            $zip->close();
+        }
+
+        // Set Header
+        $headers = array(
+
+        );
+        $filetopath=$public_dir . '/zipPDF//' . $zipFileName;
+        // Create Download Response
+        if((file_exists($filetopath))){
+          return response()->download($filetopath,$zipFileName,$headers);
+        }
     }
 
     public function exportPDF($student_id, $academic_year, $download_all,$folder_name)
@@ -379,18 +414,10 @@ class ReportCardController extends Controller
           return $pdf->stream();
         }
         else {
-
           $file_name = $student->student_id;
           $pdf->save(public_path('fileToZip/'. $folder_name . '/' . $file_name . '.pdf', true));
 
-
-
         }
-
-        //return $pdf->stream();
-
-
-
     }
 
 
@@ -735,58 +762,58 @@ class ReportCardController extends Controller
 
 
 
-       public function download_all($folder_name,$students)
-       {
+       // public function download_all($folder_name, $students)
+       // {
+       //       // Define Dir Folder
+       //       $public_dir=public_path();
+       //       // Zip File Name
+       //         $zipFileName = $folder_name.'.zip';
+       //
+       //         // Create ZipArchive Obj
+       //         $zip = new ZipArchive;
+       //         if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
+       //
+       //
+       //            foreach($students as $student){
+       //             $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$student->student_id.'.pdf',$folder_name.'/'.$student->student_id.'.pdf');
+       //
+       //            }
+       //            // dd($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[0]->student_id.'.pdf');
+       //            // for($i = 0 ; $i < 3 ; $i ++){
+       //            //  $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[$i]->student_id.'.pdf',$folder_name.'/'.$students[$i]->student_id.'.pdf');
+       //            //
+       //            // }
+       //
+       //             // $zip->renameName('img','mumu');
+       //             // dd($zip->statIndex( 0 ));
+       //
+       //             $zip->close();
+       //         }
+       //
+       //         // Set Header
+       //         $headers = array(
+       //
+       //         );
+       //         $filetopath=$public_dir.'/'.$zipFileName;
+       //
+       //         // dd($filetopath);
+       //         // Create Download Response
+       //         // dd($filetopath,file_exists($filetopath));
+       //         if((file_exists($filetopath))){
+       //           //dd('aaa');
+       //           //return 'bbb';
+       //           // response()->download($filetopath,$zipFileName,$headers)
+       //           return response()->download($filetopath,$zipFileName,$headers);
+       //         }
+       //        return 'SUCSESS';
+       //
+       // }
 
-
-
-             // Define Dir Folder
-             $public_dir=public_path();
-             // Zip File Name
-               $zipFileName = $folder_name.'.zip';
-
-               // Create ZipArchive Obj
-               $zip = new ZipArchive;
-               if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
-
-
-                  foreach($students as $student){
-                   $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$student->student_id.'.pdf',$folder_name.'/'.$student->student_id.'.pdf');
-
-                  }
-                  // dd($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[0]->student_id.'.pdf');
-                  // for($i = 0 ; $i < 3 ; $i ++){
-                  //  $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[$i]->student_id.'.pdf',$folder_name.'/'.$students[$i]->student_id.'.pdf');
-                  //
-                  // }
-
-                   // $zip->renameName('img','mumu');
-                   // dd($zip->statIndex( 0 ));
-
-
-
-                   $zip->close();
-
-
-               }
-
-               // Set Header
-               $headers = array(
-
-               );
-               $filetopath=$public_dir.'/'.$zipFileName;
-
-               // dd($filetopath);
-               // Create Download Response
-               // dd($filetopath,file_exists($filetopath));
-               if((file_exists($filetopath))){
-                 return response()->download($filetopath,$zipFileName,$headers);
-               }
-              return 'SUCSESS';
-
-
-
-       }
+       // public function test()
+       // {
+       //   //dd('test');
+       //     return $this->'bbb';
+       // }
 
 
 }

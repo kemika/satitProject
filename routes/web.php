@@ -119,4 +119,4 @@ Route::get('/exportGrade3', 'ReportCardController@exportGrade3');
 Route::get('/manageDirector', 'ManageDirectorController@index');
 Route::put('/manageDirector/update', 'ManageDirectorController@update');
 
-Route::get('/download_all', 'ExportController@download_all')->name('create-zip');;
+Route::get('/download_all', 'ExportController@download_all')->name('create-zip');

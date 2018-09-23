@@ -8,10 +8,21 @@
 
 <div class="" style="background-color:lightgreen;padding:30px">
   <div class="row card" style="padding:10px" >
-    <h2>Room: {{ $room->grade_level.'/'.$room->room}}</h2>
-    <h3>{{"Academicyear: ".$room->academic_year}}</h3>
-    <h3>{{"Semester: "}}</h3>
-    <p>Studentlist :</p>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+          <h2>Room: {{ $room->grade_level.'/'.$room->room}}</h2>
+          <h3>{{"Academicyear: ".$room->academic_year}}</h3>
+          <h3>{{"Semester: "}}</h3>
+          <p>Studentlist :</p>
+        </div>
+        <div class="col-sm" style="text-align: right;">
+          <a href="/exportReportCardDownloadAll/{{$room->classroom_id}}/{{$room->academic_year}}" class="btn btn-info" role="button">Download All</a>
+        </div>
+      </div>
+    </div>
+
+
     <div class="",id="Room Menu">
       @foreach($students as $student)
       <div class="card">
@@ -22,10 +33,9 @@
       @endforeach
 
     </div>
-    <a href='/exportReportCardDownloadAll/{{$room->classroom_id}}/{{$room->academic_year}}'>Download All</a>
-    </div>
-
   </div>
+
+</div>
 
 
 
