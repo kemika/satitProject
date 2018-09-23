@@ -14,7 +14,9 @@ class SystemConstant
     // These 2 values should be set following value in Grade Status table in database
     const NO_GRADE = 0;
     const HAS_GRADE = 5;
-    const PASS_I = 6;
+    const PASS_I_GRADE = 6;
+    const DROP_GRADE = 7;
+    const DROP_GRADE_TEXT = "DROP";
 
     // 2 quaters exclude final  This is total quarter for each semester.
     const TOTAL_QUARTERS = 2;
@@ -26,4 +28,10 @@ class SystemConstant
     const NA_GRADE = "-";
 
     const TOTAL_SEMESTERS = 2;
+
+    // Helper functions
+    public static function clean_blank_spaces($str){
+        return trim(preg_replace('/\s\s+/', ' ', str_replace("\n", " ", $str)));
+    }
 }
+

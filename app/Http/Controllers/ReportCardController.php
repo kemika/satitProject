@@ -441,7 +441,7 @@ class ReportCardController extends Controller
                         $element['grade_count']++;
                     }
                     break;
-                case SystemConstant::PASS_I:
+                case SystemConstant::PASS_I_GRADE:
                     $element['quater' . $x->quater] = "I/".$x->grade;
                     $element['semester_grade'] += $x->grade;
                     // Only count when this is not final quarter
@@ -449,6 +449,9 @@ class ReportCardController extends Controller
                         $element['grade_count']++;
                     }
                     break;
+                case SystemConstant::DROP_GRADE:
+                    // Set credit to zero to drop class from student record
+                    $element['credits'] = 0;
                 default:
                     $element['quater' . $x->quater] = $x->grade_status_text;
             }
@@ -458,19 +461,24 @@ class ReportCardController extends Controller
         // Change semester to "-" when one of the quarters is missing
         // otherwise compute semester grade normally
         foreach ($result as $key => $x) {
-            if ($x['grade_count'] != SystemConstant::TOTAL_QUARTERS) {
-                $x['semester_grade'] = "-";
+            if($x['credit'] == 0){
+                // Drop class from result
+                unset($result[$key]);
+            }else {
+                if ($x['grade_count'] != SystemConstant::TOTAL_QUARTERS) {
+                    $x['semester_grade'] = "-";
 
-            }else{
-                if($x['quater'.SystemConstant::FINAL_Q] == ""){
-                    // There is no final just average grade without
-                    $grade = $x['semester_grade'] / SystemConstant::TOTAL_QUARTERS;
-                }else{
-                    $grade = $x['semester_grade'] / (SystemConstant::TOTAL_QUARTERS + 1);
+                } else {
+                    if ($x['quater' . SystemConstant::FINAL_Q] == "") {
+                        // There is no final just average grade without
+                        $grade = $x['semester_grade'] / SystemConstant::TOTAL_QUARTERS;
+                    } else {
+                        $grade = $x['semester_grade'] / (SystemConstant::TOTAL_QUARTERS + 1);
+                    }
+                    $x['semester_grade'] = round($grade, 1);
                 }
-                $x['semester_grade'] = round($grade,1);
+                $result[$key] = $x;
             }
-            $result[$key] = $x;
         }
 
         return $result;
