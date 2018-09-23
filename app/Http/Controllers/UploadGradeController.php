@@ -997,18 +997,8 @@ class UploadGradeController extends Controller
 
     public function getUpload(Request $request)
     {
-        $studentsID = Student::select('student_id')->get();
-        $arr = array();
-
         date_default_timezone_set('Asia/Bangkok');
         $datetime = date("Y-m-d H:i:s");
-        // dd($datetime);
-        // dd($studentsID);
-        // var_dump($studentsID);
-        // print_r($studentsID);
-        foreach ($studentsID as $studentID) {
-            $arr[] = $studentID->student_id;
-        }
 
         $errorArray = array();
 
@@ -1047,13 +1037,9 @@ class UploadGradeController extends Controller
 
                 $importRow = count(\Excel::load('files/' . $file_name, function ($reader) {
                 })->get());
-                // dd($importRow);
+                // Check if there are enough header
                 if ($importRow < 5) {
-                    $isOK = false;
-                    $text = "File ".$file_name." is not in correct format.";
-                    $errorArray[] = $text;
-                    $isOK = false;
-                    //return view('uploadGrade.validate', compact('errorArray'));
+                    $errorArray[] = "File ".$file_name." is not in correct format.";
                 }
                 else {
                     // Get grades of each student in class
@@ -1084,23 +1070,40 @@ class UploadGradeController extends Controller
                     })->get();
                     $year = $resultsYear->getHeading()[1];
 
+                    // Get all students that can take this course
+                    $students_query = Academic_Year::where('academic_year', $year)
+                        ->join('student_grade_levels',
+                            'student_grade_levels.classroom_id',
+                            'academic_year.classroom_id')
+                        ->join('offered_courses','offered_courses.classroom_id',
+                            'academic_year.classroom_id')
+                        ->where('offered_courses.course_id',$course_id)
+                        ->join('students','students.student_id',
+                            'student_grade_levels.student_id')
+                        ->select('students.student_id','students.firstname','students.lastname')
+                        ->get();
+                    $students = array();
+                    foreach ($students_query as $r){
+                        $students[$r->student_id] = $r->firstname . " " . $r->lastname;
+                    }
 
+                    // Check file extension.
                     if ($file_type == "xlsx" || $file_type == "xls") {
+                        // Check number of data in the file
                         if (count($results) == 0) {
-                            $isOK = false;
                             $errorArray[] = "File".$file_name." is empty";
-                            return view('uploadGrade.validate', compact('errorArray'));
                         } else {
-                            if ($isOK) {
+                            // Set up flag so that we stop when there is any error
+                            $isOK = true;
+
+                            // Loop and check correctness of each result
                                 for ($i = 0; $i < count($results); $i++) {
-                                    //----- Validate Student ID -------//
+                                    //----- Validate Student ID and name-------//
                                     if ($results[$i]->student_id == "") {
-                                        $text = "Field 'Student ID' is empty at row 'A" . ($i + 7) . "'";
-                                        $factValidate = false;
-                                        $factEmpty = false;
-                                        $errorArray[] = $text;
-                                    } elseif ($results[$i]->student_id != "") {
-                                        if (in_array($results[$i]->student_id, $arr)) {
+                                        $isOK = false;
+                                        $errorArray[] = "Field 'Student ID' is empty at row 'A" . ($i + 7) . "'";
+                                    } else {
+                                        if ("TODO"){//in_array($results[$i]->student_id, $arr)) {
 
                                         } else {
                                             $text = "'Student ID' at row 'A" . ($i + 7) . "' is not in database.";
@@ -1131,34 +1134,31 @@ class UploadGradeController extends Controller
                                         $errorArray[] = $text;
                                     }
 
+                                    // NEED TO FIX THIS
                                     //----- Validate Q1 -------//
-                                    $errorArray[] = validateGrade($results[$i]->q1, "Q1", "C", $factGrade, $i);
+                                    $errorArray[] = validateGrade($results[$i]->q1, "Q1", "C", $i);
 
                                     //----- Validate Q2 -------//
-                                    $errorArray[] = validateGrade($results[$i]->q2, "Q2", "D", $factGrade, $i);
+                                    $errorArray[] = validateGrade($results[$i]->q2, "Q2", "D", $i);
 
                                     //----- Validate SUM1 -------//
-                                    $errorArray[] = validateGrade($results[$i]->q2, "SUM 1", "E", $factGrade, $i);
+                                    $errorArray[] = validateGrade($results[$i]->q2, "SUM 1", "E", $i);
 
 
                                     //----- Validate Q3 -------//
-                                    $errorArray[] = validateGrade($results[$i]->q3, "Q3", "G", $factGrade, $i);
+                                    $errorArray[] = validateGrade($results[$i]->q3, "Q3", "G", $i);
 
 
                                     //----- Validate Q4 -------//
-                                    $errorArray[] = validateGrade($results[$i]->q4, "Q4", "H", $factGrade, $i);
+                                    $errorArray[] = validateGrade($results[$i]->q4, "Q4", "H", $i);
 
                                     //----- Validate SUM2 -------//
-                                    $errorArray[] = validateGrade($results[$i]->q2, "SUM 2", "I", $factGrade, $i);
+                                    $errorArray[] = validateGrade($results[$i]->q2, "SUM 2", "I", $i);
                                 }
-
-                            }
-
                             if ($factValidate == TRUE) {
-                                // dd($results);
                                 for ($i = 0; $i < count($results); $i++) {
 
-                                    // Getting course ID
+                                    // Getting open course ID (Not the same as course ID)
                                     $open_course_id_template = Academic_Year::where('academic_year', $year)
                                         ->join('student_grade_levels',
                                             'student_grade_levels.classroom_id',
@@ -1239,7 +1239,6 @@ class UploadGradeController extends Controller
                         }
 
                     } else {
-                        $isOK = false;
                         $errorArray[] =  $file_name." file's type is not xlsx or xls.";
                     }
                 }
@@ -1247,7 +1246,6 @@ class UploadGradeController extends Controller
 
             }
         } elseif (!($request->hasFile('file'))) {
-            $isOK = false;
             $errorArray[] = "Please Select File";
         }
 
