@@ -74,10 +74,10 @@ class ReportCardController extends Controller
                 File::makeDirectory($path, $mode = 0777, true, true);
               }
 
-      // foreach ($students as $student) {
-      //   self::exportPDF($student->student_id, $academic_year, 1,$folder_name);
-      //   // code...
-      // }
+      foreach ($students as $student) {
+        self::exportPDF($student->student_id, $academic_year, 1,$folder_name);
+        // code...
+      }
 
 
       // $public_dir=public_path();
@@ -86,10 +86,10 @@ class ReportCardController extends Controller
       //
       // $boom=  $public_dir . '/' . $zipFileName;
       // dd($boom);
-      for($i =0 ; $i < 3 ;$i ++){
-        self::exportPDF($students[$i]->student_id, $academic_year, 1,$folder_name);
-
-      }
+      // for($i =0 ; $i < 3 ;$i ++){
+      //   self::exportPDF($students[$i]->student_id, $academic_year, 1,$folder_name);
+      //
+      // }
       self::download_all($folder_name,$students);
 
     }
@@ -365,7 +365,7 @@ class ReportCardController extends Controller
             $view_data['grade_semester1'] = $grade_semester1_6;
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade1-6', $view_data);
-            return $pdf->download('reportCard.pdf');
+            // return $pdf->download('reportCard.pdf');
         } elseif ($grade_level->grade_level <= 8) {
             $public_dir = public_path();
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
@@ -750,15 +750,15 @@ class ReportCardController extends Controller
                if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
 
 
-                  // foreach($students as $student){
-                  //  $zip->addFile($public_dir . '/' .$folder_name.'/'.$student->student_id.'.pdf',$folder_name.'/'.$student->student_id.'.pdf');
-                  //
-                  // }
-                  // dd($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[0]->student_id.'.pdf');
-                  for($i = 0 ; $i < 3 ; $i ++){
-                   $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[$i]->student_id.'.pdf',$folder_name.'/'.$students[$i]->student_id.'.pdf');
+                  foreach($students as $student){
+                   $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$student->student_id.'.pdf',$folder_name.'/'.$student->student_id.'.pdf');
 
                   }
+                  // dd($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[0]->student_id.'.pdf');
+                  // for($i = 0 ; $i < 3 ; $i ++){
+                  //  $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[$i]->student_id.'.pdf',$folder_name.'/'.$students[$i]->student_id.'.pdf');
+                  //
+                  // }
 
                    // $zip->renameName('img','mumu');
                    // dd($zip->statIndex( 0 ));
