@@ -20,16 +20,14 @@
     <table class="table table-striped table-dark" style="width: 40%;">
       <thead>
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">Validate</th>
+          <th scope="col">Results</th>
         </tr>
       </thead>
       <tbody>
-        @foreach($arrayValidates as $arrayValidate)
-        @if($arrayValidate != "")
+        @foreach($errorArray as $msg)
+        @if($msg != "")
         <tr>
-          <td>{{ $loop->iteration }}</td>
-          <td>{{ $arrayValidate }}</td>
+          <td>{{ $msg }}</td>
         </tr>
         @endif
         @endforeach

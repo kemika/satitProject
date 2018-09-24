@@ -12,10 +12,26 @@ namespace App;
 class SystemConstant
 {
     // These 2 values should be set following value in Grade Status table in database
+/* 0: No grade
+* 1: I
+* 2: S
+* 3: U
+* 4: 0/1
+* 5: Value
+* 6: I/X This type is to be displayed as I/<grade value>
+* 7: Drop */
     const NO_GRADE = 0;
+    const I_GRADE = 1;
+    const S_GRADE = 2;
+    const U_GRADE = 3;
+    const REMEDIAL_GRADE = 4;
     const HAS_GRADE = 5;
     const PASS_I_GRADE = 6;
     const DROP_GRADE = 7;
+
+    // Waiting for approval status
+    const DATA_STATUS_WAIT = 0;
+
     const DROP_GRADE_TEXT = "DROP";
 
     // 2 quaters exclude final  This is total quarter for each semester.
