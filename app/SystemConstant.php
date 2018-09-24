@@ -45,6 +45,8 @@ class SystemConstant
 
     const TOTAL_SEMESTERS = 2;
 
+    const MIN_TO_ZERO = 0.0001;
+
     // Helper functions
     public static function clean_blank_spaces($str){
         return trim(preg_replace('/\s\s+/', ' ', str_replace("\n", " ", $str)));

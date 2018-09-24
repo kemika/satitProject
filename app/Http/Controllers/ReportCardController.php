@@ -549,8 +549,10 @@ class ReportCardController extends Controller
         // Change semester to "-" when one of the quarters is missing
         // otherwise compute semester grade normally
         foreach ($result as $key => $x) {
-            if($x['credits'] == 0){
-                // Drop class from result
+            if($x['credits'] == 0 || $x['grade_count'] < 1){
+                // Drop class from result if there is a drop status
+                // (signalled by credit being set to 0)
+                // or grade count is zero
                 unset($result[$key]);
             }else {
                 if ($x['grade_count'] != SystemConstant::TOTAL_QUARTERS) {
@@ -687,15 +689,23 @@ class ReportCardController extends Controller
 
         $total_credit += $total_sem1_credit;
         if($grade_level <= 6){
-            $gpa = round($gpa / $total_sem1_credit, 2);
+            if($total_sem1_credit < SystemConstant::MIN_TO_ZERO){
+                $gpa = 0;
+            }else {
+                $gpa = round($gpa / $total_sem1_credit, 2);
+            }
         }else {
             $gpa = $semester_1_gpa;
         }
 //        if($grade_level <=6){
 //            $semester_1_gpa = round($semester_1_gpa / $total_sem1_subject, 2);
 //        }else {
-        $semester_1_gpa = round($semester_1_gpa / $total_sem1_credit, 2);
-//        }
+
+        if($total_sem1_credit < SystemConstant::MIN_TO_ZERO){
+            $semester_1_gpa = 0;
+        }else{
+            $semester_1_gpa = round($semester_1_gpa / $total_sem1_credit, 2);
+        }
 
         // Semester 2 computation
         foreach ($view_data['grade_semester2'] as $key => $g) {
@@ -730,8 +740,16 @@ class ReportCardController extends Controller
             }
             $gpa += $semester_2_gpa;
 
-            $semester_2_gpa = round($semester_2_gpa / $total_sem2_credit, 2);
-            $gpa /= $total_credit;
+            if($total_sem2_credit < SystemConstant::MIN_TO_ZERO){
+                $semester_2_gpa = 0;
+            }else {
+                $semester_2_gpa = round($semester_2_gpa / $total_sem2_credit, 2);
+            }
+            if($total_credit < SystemConstant::MIN_TO_ZERO){
+                $gpa = 0;
+            }else {
+                $gpa /= $total_credit;
+            }
         }
 //        if($grade_level <=6){
 //            // total subject in semester 1 and 2 should be equal
