@@ -259,7 +259,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
 
   $type='xlsx';
-  Excel::create('template', function($excel) use($subject,$academic_year) {
+  Excel::create($subject->course_name."-".$academic_year->academic_year, function($excel) use($subject,$academic_year) {
 
     $excel->sheet('Excel sheet', function($sheet) use($subject,$academic_year) {
 
@@ -923,16 +923,16 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
 
       });
-      $folder_name = $academic_year->grade_level . '_' . $academic_year->room . '_' . date("Y-m-d-H-i-s");
-      $path = public_path().'/excelToZip'. '/' . $folder_name;
-       //dd($path);
-       // dd(File::exists($path));
-      if(!File::exists($path)) {
-        File::makeDirectory($path, $mode = 0777, true, true);
-      }
-      // dd(public_path('excelToZip'));
-    })->store($type, public_path('excelToZip/'. $folder_name));
-    // })->export($type);
+//      $folder_name = $academic_year->grade_level . '_' . $academic_year->room . '_' . date("Y-m-d-H-i-s");
+//      $path = public_path().'/excelToZip'. '/' . $folder_name;
+//       //dd($path);
+//       // dd(File::exists($path));
+//      if(!File::exists($path)) {
+//        File::makeDirectory($path, $mode = 0777, true, true);
+//      }
+//      // dd(public_path('excelToZip'));
+//    })->store($type, public_path('excelToZip/'. $folder_name));
+     })->export($type);
   }
 
 
