@@ -24,8 +24,12 @@ use App\Behavior_Record;
 use App\Attendance_Record;
 use App\Teacher_Comment;
 use auth;
+use File;
+use ZipArchive;
+use Response;
 
-ini_set('max_execution_time', 180);
+ini_set('max_execution_time', 720);
+// set_time_limit(0);
 
 class ReportCardController extends Controller
 {
@@ -46,7 +50,86 @@ class ReportCardController extends Controller
 
     }
 
-    public function exportPDF($student_id, $academic_year)
+    public function exportPDFAll($classroom_id, $academic_year){
+      $students = Student_Grade_Level::where('classroom_id', $classroom_id)
+          ->select('student_grade_levels.*')
+          ->join('students', 'students.student_id', 'student_grade_levels.student_id')
+          ->select('student_grade_levels.*', 'students.*')
+          ->get();
+
+
+          $room = Academic_Year::where('academic_year', $academic_year)
+          ->where('classroom_id', $classroom_id)
+          ->select('academic_year.*')
+          ->first();
+              if($room->room < 10){
+                $folder_name = $room->grade_level.'0'.$room->room . '_' . date("Y-m-d-H-i-s");
+              }
+              else {
+                $folder_name = $room->grade_level . $room->room . '_' . date("Y-m-d-H-i-s");
+              }
+
+              $path = public_path().'/fileToZip'. '/' . $folder_name;
+              // dd($path);
+              // dd(File::exists($path));
+              if(!File::exists($path)) {
+                File::makeDirectory($path, $mode = 0777, true, true);
+              }
+
+      foreach ($students as $student) {
+        self::exportPDF($student->student_id, $academic_year, 1,$folder_name);
+      }
+
+
+      // $public_dir=public_path();
+      // // Zip File Name
+      //   $zipFileName = $folder_name.'zip';
+      //
+      // $boom=  $public_dir . '/' . $zipFileName;
+      // for($i =0 ; $i < 1 ;$i ++){
+      //   self::exportPDF($students[$i]->student_id, $academic_year, 1,$folder_name);
+      //
+      // }
+      //self::download_all($folder_name, $students);
+
+      // Define Dir Folder
+      $public_dir=public_path();
+      // Zip File Name
+        $zipFileName = $folder_name.'.zip';
+
+        // Create ZipArchive Obj
+        $zip = new ZipArchive;
+        if ($zip->open($public_dir . '/zipPDF//' . $zipFileName, ZipArchive::CREATE) === TRUE) {
+
+
+           foreach($students as $student){
+            $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$student->student_id.'.pdf',$folder_name.'/'.$student->student_id.'.pdf');
+
+           }
+           // dd($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[0]->student_id.'.pdf');
+           // for($i = 0 ; $i < 3 ; $i ++){
+           //  $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[$i]->student_id.'.pdf',$folder_name.'/'.$students[$i]->student_id.'.pdf');
+           //
+           // }
+
+            // $zip->renameName('img','mumu');
+            // dd($zip->statIndex( 0 ));
+
+            $zip->close();
+        }
+
+        // Set Header
+        $headers = array(
+
+        );
+        $filetopath=$public_dir . '/zipPDF//' . $zipFileName;
+        // Create Download Response
+        if((file_exists($filetopath))){
+          return response()->download($filetopath,$zipFileName,$headers);
+        }
+    }
+
+    public function exportPDF($student_id, $academic_year, $download_all,$folder_name)
     {
         // Sanity check for security
         // TODO  Need to implement student_id check and $academic_year check to prevent SQL injection
@@ -312,24 +395,29 @@ class ReportCardController extends Controller
             'teacher_names' => $teacher_names];
 
         if ($grade_level->grade_level <= 6) {
-            //ยังต้องเปลี่ยนเป็นฟอร์ม 1-6 ถ้าอาจารจะทดสอบให้ทดสอบที่อันนี้ก่อนครับ ผมมีตารางใน seeder แล้วนะครับ ลองseedได้ครับ
+
             $grade_semester1_6 = self::getGradeToFrom1_6($grade_semester1_raw, $grade_semester2_raw);
             $view_data['grade_semester1'] = $grade_semester1_6;
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade1-6', $view_data);
+            // return $pdf->download('reportCard.pdf');
         } elseif ($grade_level->grade_level <= 8) {
+            $public_dir = public_path();
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade7-8', $view_data);
         } else { //If not it can only be grade 9-12
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade9-12', $view_data);
         }
-
         $pdf->setPaper('a4', 'potrait');
-        return $pdf->stream();
+        if (!$download_all) {
+          return $pdf->stream();
+        }
+        else {
+          $file_name = $student->student_id;
+          $pdf->save(public_path('fileToZip/'. $folder_name . '/' . $file_name . '.pdf', true));
 
-// return $pdf->download('reportCard.pdf');
-
+        }
     }
 
 
@@ -687,4 +775,61 @@ class ReportCardController extends Controller
 
         return 4;
     }
+
+
+
+       // public function download_all($folder_name, $students)
+       // {
+       //       // Define Dir Folder
+       //       $public_dir=public_path();
+       //       // Zip File Name
+       //         $zipFileName = $folder_name.'.zip';
+       //
+       //         // Create ZipArchive Obj
+       //         $zip = new ZipArchive;
+       //         if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
+       //
+       //
+       //            foreach($students as $student){
+       //             $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$student->student_id.'.pdf',$folder_name.'/'.$student->student_id.'.pdf');
+       //
+       //            }
+       //            // dd($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[0]->student_id.'.pdf');
+       //            // for($i = 0 ; $i < 3 ; $i ++){
+       //            //  $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[$i]->student_id.'.pdf',$folder_name.'/'.$students[$i]->student_id.'.pdf');
+       //            //
+       //            // }
+       //
+       //             // $zip->renameName('img','mumu');
+       //             // dd($zip->statIndex( 0 ));
+       //
+       //             $zip->close();
+       //         }
+       //
+       //         // Set Header
+       //         $headers = array(
+       //
+       //         );
+       //         $filetopath=$public_dir.'/'.$zipFileName;
+       //
+       //         // dd($filetopath);
+       //         // Create Download Response
+       //         // dd($filetopath,file_exists($filetopath));
+       //         if((file_exists($filetopath))){
+       //           //dd('aaa');
+       //           //return 'bbb';
+       //           // response()->download($filetopath,$zipFileName,$headers)
+       //           return response()->download($filetopath,$zipFileName,$headers);
+       //         }
+       //        return 'SUCSESS';
+       //
+       // }
+
+       // public function test()
+       // {
+       //   //dd('test');
+       //     return $this->'bbb';
+       // }
+
+
 }

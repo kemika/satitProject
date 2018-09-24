@@ -61,8 +61,9 @@
 
 
   </div>
-
+	<a href="download_all/Anaphat2" class="btn btn-info" >Download ZIP</a>
 </div>
+
 
 
 

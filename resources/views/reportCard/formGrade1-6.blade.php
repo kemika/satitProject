@@ -24,7 +24,7 @@
 </div>
 <table class="table table-bordered tableStyle">
     <tr>
-        <th scope="col" rowspan="2" style="width: 100px;">Course</th>
+        <th scope="col" rowspan="2" style="width: 120px;">Course</th>
         <th scope="col" rowspan="2" style="width: 70px;">Code</th>
         <th scope="col" colspan="2" align="center">Periods/Week</th>
         <th scope="col" rowspan="2" style="width:10px;">Credit Hour</th>
