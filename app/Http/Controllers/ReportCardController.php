@@ -549,7 +549,7 @@ class ReportCardController extends Controller
         // Change semester to "-" when one of the quarters is missing
         // otherwise compute semester grade normally
         foreach ($result as $key => $x) {
-            if($x['credit'] == 0){
+            if($x['credits'] == 0){
                 // Drop class from result
                 unset($result[$key]);
             }else {
