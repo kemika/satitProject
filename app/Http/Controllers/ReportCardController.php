@@ -9,6 +9,7 @@ use DB;
 use App\Offered_Courses;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use PDF;
 use App\Student;
 use App\Student_Grade_Level;
@@ -29,6 +30,7 @@ use ZipArchive;
 use Response;
 
 ini_set('max_execution_time', 720);
+
 // set_time_limit(0);
 
 class ReportCardController extends Controller
@@ -50,86 +52,87 @@ class ReportCardController extends Controller
 
     }
 
-    public function exportPDFAll($classroom_id, $academic_year){
-      $students = Student_Grade_Level::where('classroom_id', $classroom_id)
-          ->select('student_grade_levels.*')
-          ->join('students', 'students.student_id', 'student_grade_levels.student_id')
-          ->select('student_grade_levels.*', 'students.*')
-          ->get();
+    public function exportPDFAll($classroom_id, $academic_year)
+    {
+        $students = Student_Grade_Level::where('classroom_id', $classroom_id)
+            ->select('student_grade_levels.*')
+            ->join('students', 'students.student_id', 'student_grade_levels.student_id')
+            ->select('student_grade_levels.*', 'students.*')
+            ->get();
 
 
-          $room = Academic_Year::where('academic_year', $academic_year)
-          ->where('classroom_id', $classroom_id)
-          ->select('academic_year.*')
-          ->first();
-              if($room->room < 10){
-                $folder_name = $room->grade_level.'0'.$room->room . '_' . date("Y-m-d-H-i-s");
-              }
-              else {
-                $folder_name = $room->grade_level . $room->room . '_' . date("Y-m-d-H-i-s");
-              }
+        $room = Academic_Year::where('academic_year', $academic_year)
+            ->where('classroom_id', $classroom_id)
+            ->select('academic_year.*')
+            ->first();
+        if ($room->room < 10) {
+            $folder_name = $room->grade_level . '0' . $room->room . '_' . date("Y-m-d-H-i-s");
+        } else {
+            $folder_name = $room->grade_level . $room->room . '_' . date("Y-m-d-H-i-s");
+        }
 
-              $path = public_path().'/fileToZip'. '/' . $folder_name;
-              // dd($path);
-              // dd(File::exists($path));
-              if(!File::exists($path)) {
-                File::makeDirectory($path, $mode = 0777, true, true);
-              }
+        // Create output path for pdf file if it doesn't exists
+        $path = public_path() . '/fileToZip' . '/' . $folder_name. '/';
+        // dd($path);
+        // dd(File::exists($path));
+        if (!File::exists($path)) {
+            File::makeDirectory($path, $mode = 0777, true, true);
+        }
 
-      foreach ($students as $student) {
-        self::exportPDF($student->student_id, $academic_year, 1,$folder_name);
-      }
+        // Create output path for zip file if it doesn't exists
+        $zip_output_path = public_path() . '/zipPDF'.'/';
+        if(!File::exists($zip_output_path)) {
+            File::makeDirectory($zip_output_path, $mode = 0777, true, true);
+        }
 
+        foreach ($students as $student) {
+            self::exportPDF($student->student_id, $academic_year, 1, $folder_name);
+           // Log::info("Report for ".$student->student_id." is done.");
+        }
 
-      // $public_dir=public_path();
-      // // Zip File Name
-      //   $zipFileName = $folder_name.'zip';
-      //
-      // $boom=  $public_dir . '/' . $zipFileName;
-      // for($i =0 ; $i < 1 ;$i ++){
-      //   self::exportPDF($students[$i]->student_id, $academic_year, 1,$folder_name);
-      //
-      // }
-      //self::download_all($folder_name, $students);
+//         for($i =0 ; $i < 3;$i ++){
+//           self::exportPDF($students[$i]->student_id, $academic_year, 1,$folder_name);
+//         }
 
-      // Define Dir Folder
-      $public_dir=public_path();
-      // Zip File Name
-        $zipFileName = $folder_name.'.zip';
+        // Zip File Name
+        $zipFileName = $folder_name . '.zip';
 
         // Create ZipArchive Obj
         $zip = new ZipArchive;
-        if ($zip->open($public_dir . '/zipPDF//' . $zipFileName, ZipArchive::CREATE) === TRUE) {
+        if ($zip->open($zip_output_path . $zipFileName, ZipArchive::CREATE) === TRUE) {
 
-
-           foreach($students as $student){
-            $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$student->student_id.'.pdf',$folder_name.'/'.$student->student_id.'.pdf');
-
-           }
-           // dd($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[0]->student_id.'.pdf');
-           // for($i = 0 ; $i < 3 ; $i ++){
-           //  $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[$i]->student_id.'.pdf',$folder_name.'/'.$students[$i]->student_id.'.pdf');
-           //
-           // }
-
-            // $zip->renameName('img','mumu');
-            // dd($zip->statIndex( 0 ));
+            foreach ($students as $student) {
+                if($zip->addFile($path . $student->student_id . '.pdf',$student->student_id . '.pdf')){
+                 //   Log::info("Adding ".$path . $student->student_id . '.pdf'. " to zip");
+                }else{
+                    Log::error("Problem adding ".$path . $student->student_id);
+                }
+            }
+//            for($i = 0; $i < 3; $i++){
+//                if($zip->addFile($path . $students[$i]->student_id . '.pdf',$students[$i]->student_id . '.pdf')){
+//                    Log::info("Adding ".$path . $students[$i]->student_id . '.pdf'. " to zip");
+//                }else{
+//                    Log::error("Problem adding ".$path . $students[$i]->student_id);
+//                }
+//            }
+            //Log::info("Done adding files to zip");
 
             $zip->close();
+        }else{
+            Log::error("Problem open zip file");
         }
 
         // Set Header
-        $headers = array(
-
-        );
-        $filetopath=$public_dir . '/zipPDF//' . $zipFileName;
+        $headers = array();
+        $filetopath = $zip_output_path . $zipFileName;
+        //Log::info("Sending ".$filetopath." to users.");
         // Create Download Response
-        if((file_exists($filetopath))){
-          return response()->download($filetopath,$zipFileName,$headers);
+        if ((file_exists($filetopath))) {
+            return response()->download($filetopath, $zipFileName, $headers);
         }
     }
 
-    public function exportPDF($student_id, $academic_year, $download_all,$folder_name)
+    public function exportPDF($student_id, $academic_year, $download_all, $folder_name)
     {
         // Sanity check for security
         // TODO  Need to implement student_id check and $academic_year check to prevent SQL injection
@@ -213,7 +216,7 @@ class ReportCardController extends Controller
             ->where('offered_courses.is_elective', '0')
             ->get();
 
-        $grade_semester1 = self::getGradeToFrom($grade_semester1_raw,$grade_level->grade_level);
+        $grade_semester1 = self::getGradeToFrom($grade_semester1_raw, $grade_level->grade_level);
         //dd($grade_semester1);
 
 //        $grade_avg_sem1 = self::getAvg($grade_semester1);
@@ -222,12 +225,12 @@ class ReportCardController extends Controller
         $grade_semester2_raw = (clone $grade)->where('offered_courses.semester', '2')
             ->where('offered_courses.is_elective', '0')
             ->get();
-        $grade_semester2 = self::getGradeToFrom($grade_semester2_raw,$grade_level->grade_level);
+        $grade_semester2 = self::getGradeToFrom($grade_semester2_raw, $grade_level->grade_level);
 //        $grade_avg_sem2 = self::getAvg($grade_semester2);
 
         // Get elective grades
         $elective_grades = (clone $grade)->where('offered_courses.is_elective', '1')->get();
-        $elective_grades = self::getGradeToFrom($elective_grades,$grade_level->grade_level);
+        $elective_grades = self::getGradeToFrom($elective_grades, $grade_level->grade_level);
         // Get elective with most scores
         $selected_elective = null;
         $top_number_of_grade = 0;
@@ -363,14 +366,14 @@ class ReportCardController extends Controller
             ->select('students.*', 'student_grade_levels.*', 'academic_year.*')
             ->first();
 
-        $teachers = Homeroom::where('classroom_id',$grade_level->classroom_id)
-            ->where('valid',1)
-            ->join('teachers','teachers.teacher_id','homeroom.teacher_id')
-            ->select('name_title','firstname','lastname')
+        $teachers = Homeroom::where('classroom_id', $grade_level->classroom_id)
+            ->where('valid', 1)
+            ->join('teachers', 'teachers.teacher_id', 'homeroom.teacher_id')
+            ->select('name_title', 'firstname', 'lastname')
             ->get();
 
         $teacher_names = array();
-        foreach ($teachers as $t){
+        foreach ($teachers as $t) {
             $teacher_names[] = $t->name_title . " " . $t->firstname . " " . $t->lastname;
         }
 
@@ -394,6 +397,8 @@ class ReportCardController extends Controller
             'behavior_records' => $behavior_records,
             'teacher_names' => $teacher_names];
 
+        // Export to pdf
+        PDF::setOptions(['isHtml5ParserEnabled' => true]);
         if ($grade_level->grade_level <= 6) {
 
             $grade_semester1_6 = self::getGradeToFrom1_6($grade_semester1_raw, $grade_semester2_raw);
@@ -411,11 +416,10 @@ class ReportCardController extends Controller
         }
         $pdf->setPaper('a4', 'potrait');
         if (!$download_all) {
-          return $pdf->stream();
-        }
-        else {
-          $file_name = $student->student_id;
-          $pdf->save(public_path('fileToZip/'. $folder_name . '/' . $file_name . '.pdf', true));
+            return $pdf->stream();
+        } else {
+            $file_name = $student->student_id;
+            $pdf->save(public_path('fileToZip/' . $folder_name . '/' . $file_name . '.pdf', true));
 
         }
     }
@@ -525,10 +529,21 @@ class ReportCardController extends Controller
                     $element['quater' . $x->quater] = $x->grade;
                     $element['semester_grade'] += $x->grade;
                     // Only count when this is not final quarter
-                    if($x->quater < SystemConstant::FINAL_Q){
+                    if ($x->quater < SystemConstant::FINAL_Q) {
                         $element['grade_count']++;
                     }
                     break;
+                case SystemConstant::PASS_I_GRADE:
+                    $element['quater' . $x->quater] = "I/" . $x->grade;
+                    $element['semester_grade'] += $x->grade;
+                    // Only count when this is not final quarter
+                    if ($x->quater < SystemConstant::FINAL_Q) {
+                        $element['grade_count']++;
+                    }
+                    break;
+                case SystemConstant::DROP_GRADE:
+                    // Set credit to zero to drop class from student record
+                    $element['credits'] = 0;
                 default:
                     $element['quater' . $x->quater] = $x->grade_status_text;
             }
@@ -538,19 +553,26 @@ class ReportCardController extends Controller
         // Change semester to "-" when one of the quarters is missing
         // otherwise compute semester grade normally
         foreach ($result as $key => $x) {
-            if ($x['grade_count'] != SystemConstant::TOTAL_QUARTERS) {
-                $x['semester_grade'] = "-";
+            if ($x['credits'] == 0 || $x['grade_count'] < 1) {
+                // Drop class from result if there is a drop status
+                // (signalled by credit being set to 0)
+                // or grade count is zero
+                unset($result[$key]);
+            } else {
+                if ($x['grade_count'] != SystemConstant::TOTAL_QUARTERS) {
+                    $x['semester_grade'] = "-";
 
-            }else{
-                if($x['quater'.SystemConstant::FINAL_Q] == ""){
-                    // There is no final just average grade without
-                    $grade = $x['semester_grade'] / SystemConstant::TOTAL_QUARTERS;
-                }else{
-                    $grade = $x['semester_grade'] / (SystemConstant::TOTAL_QUARTERS + 1);
+                } else {
+                    if ($x['quater' . SystemConstant::FINAL_Q] == "") {
+                        // There is no final just average grade without
+                        $grade = $x['semester_grade'] / SystemConstant::TOTAL_QUARTERS;
+                    } else {
+                        $grade = $x['semester_grade'] / (SystemConstant::TOTAL_QUARTERS + 1);
+                    }
+                    $x['semester_grade'] = round($grade, 1);
                 }
-                $x['semester_grade'] = round($grade,1);
+                $result[$key] = $x;
             }
-            $result[$key] = $x;
         }
 
         return $result;
@@ -565,7 +587,7 @@ class ReportCardController extends Controller
         $result = array();
 
         // Combine two grades into one and compute year grade
-        foreach ($grade_sem1 as $course_id => $s1){
+        foreach ($grade_sem1 as $course_id => $s1) {
             $s2 = $grade_sem2[$course_id];
 
             $grade['course_name'] = $s1['course_name'];
@@ -573,7 +595,7 @@ class ReportCardController extends Controller
             $grade['credits'] = $s1['credits'];
             $grade['inclass'] = $s1['inclass'];
             $grade['practice'] = $s1['practice'];
-            for($i = 1; $i <= SystemConstant::TOTAL_QUARTERS+1; $i++) {
+            for ($i = 1; $i <= SystemConstant::TOTAL_QUARTERS + 1; $i++) {
                 $grade['quater' . $i . '_sem1'] = $s1['quater' . $i];
                 $grade['quater' . $i . '_sem2'] = $s2['quater' . $i];
             }
@@ -581,14 +603,14 @@ class ReportCardController extends Controller
             $grade['semester2_grade'] = $s1['semester_grade'];
 
             // Compute year grade when possible
-            if($grade['semester1_grade'] != "-" && $grade['semester2_grade'] != "-"){
+            if ($grade['semester1_grade'] != "-" && $grade['semester2_grade'] != "-") {
                 $grade['year_grade'] = self::academic_evaluation_cart_2(
-                    ($grade['semester1_grade'] + $grade['semester2_grade'])/2);
-            }else{
+                    ($grade['semester1_grade'] + $grade['semester2_grade']) / 2);
+            } else {
                 $grade['year_grade'] = '-';
             }
 
-            $result[$course_id ] = $grade;
+            $result[$course_id] = $grade;
         }
 
         return $result;
@@ -651,35 +673,43 @@ class ReportCardController extends Controller
         foreach ($view_data['grade_semester1'] as $key => $g) {
             $credit = $g['credits'];
             $total_sem1_credit += $credit;
-            if($grade_level <= 6) {
+            if ($grade_level <= 6) {
                 $semester_grade = $g['semester1_grade'];
-            }else {
+            } else {
                 $semester_grade = $g['semester_grade'];
             }
             if ($semester_grade != "-") {
-                if($grade_level <= 6){
+                if ($grade_level <= 6) {
                     // For grade 1-6
                     $year_grade = $g['year_grade'];
-                    if($year_grade != "-") {
+                    if ($year_grade != "-") {
                         $gpa += $year_grade * $credit;
                     }
-                }else {
+                } else {
                     $semester_1_gpa += $semester_grade * $credit;
                 }
             }
         }
 
         $total_credit += $total_sem1_credit;
-        if($grade_level <= 6){
-            $gpa = round($gpa / $total_sem1_credit, 2);
-        }else {
+        if ($grade_level <= 6) {
+            if ($total_sem1_credit < SystemConstant::MIN_TO_ZERO) {
+                $gpa = 0;
+            } else {
+                $gpa = round($gpa / $total_sem1_credit, 2);
+            }
+        } else {
             $gpa = $semester_1_gpa;
         }
 //        if($grade_level <=6){
 //            $semester_1_gpa = round($semester_1_gpa / $total_sem1_subject, 2);
 //        }else {
-        $semester_1_gpa = round($semester_1_gpa / $total_sem1_credit, 2);
-//        }
+
+        if ($total_sem1_credit < SystemConstant::MIN_TO_ZERO) {
+            $semester_1_gpa = 0;
+        } else {
+            $semester_1_gpa = round($semester_1_gpa / $total_sem1_credit, 2);
+        }
 
         // Semester 2 computation
         foreach ($view_data['grade_semester2'] as $key => $g) {
@@ -692,7 +722,7 @@ class ReportCardController extends Controller
 //                    $semester_2_gpa += $grade;
 //                    $total_sem2_subject++;
 //                }else {
-                    $semester_2_gpa += $grade * $credit;
+                $semester_2_gpa += $grade * $credit;
 //                }
             }
         }
@@ -700,7 +730,7 @@ class ReportCardController extends Controller
         // Grade 1-6 already double count credits so there is
         // no need to add more to total credit
         //  Moreover Grade 1-6 already computed GPA from semester 1 computation
-        if($grade_level > 6) {
+        if ($grade_level > 6) {
             if ($grade_level < 9) {  // Grade 7-8
                 $total_credit += $total_sem2_credit;
             } else {  // Grade 9-12
@@ -714,8 +744,16 @@ class ReportCardController extends Controller
             }
             $gpa += $semester_2_gpa;
 
-            $semester_2_gpa = round($semester_2_gpa / $total_sem2_credit, 2);
-            $gpa /= $total_credit;
+            if ($total_sem2_credit < SystemConstant::MIN_TO_ZERO) {
+                $semester_2_gpa = 0;
+            } else {
+                $semester_2_gpa = round($semester_2_gpa / $total_sem2_credit, 2);
+            }
+            if ($total_credit < SystemConstant::MIN_TO_ZERO) {
+                $gpa = 0;
+            } else {
+                $gpa /= $total_credit;
+            }
         }
 //        if($grade_level <=6){
 //            // total subject in semester 1 and 2 should be equal
@@ -738,82 +776,81 @@ class ReportCardController extends Controller
     // This method take floating grade number from 0.0 to 4.0 and output
     // Grade according to academic evaluation chart 2
     // The input is expected to be a float.
-    static public function academic_evaluation_cart_2($grade){
+    static public function academic_evaluation_cart_2($grade)
+    {
         // Round number to two decimal points
-        $grade = round($grade,2);
-        if($grade < 1.00){
+        $grade = round($grade, 2);
+        if ($grade < 1.00) {
             return 0;
-        }elseif ($grade < 1.25){
+        } elseif ($grade < 1.25) {
             return 1;
-        }elseif ($grade < 1.75){
+        } elseif ($grade < 1.75) {
             return 1.5;
-        }elseif ($grade < 2.25){
+        } elseif ($grade < 2.25) {
             return 2;
-        }elseif ($grade < 2.75){
+        } elseif ($grade < 2.75) {
             return 2.5;
-        }elseif ($grade < 3.25){
+        } elseif ($grade < 3.25) {
             return 3;
-        }elseif ($grade < 3.75){
+        } elseif ($grade < 3.75) {
             return 3.5;
         }
 
         return 4;
     }
 
+    // public function download_all($folder_name, $students)
+    // {
+    //       // Define Dir Folder
+    //       $public_dir=public_path();
+    //       // Zip File Name
+    //         $zipFileName = $folder_name.'.zip';
+    //
+    //         // Create ZipArchive Obj
+    //         $zip = new ZipArchive;
+    //         if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
+    //
+    //
+    //            foreach($students as $student){
+    //             $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$student->student_id.'.pdf',$folder_name.'/'.$student->student_id.'.pdf');
+    //
+    //            }
+    //            // dd($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[0]->student_id.'.pdf');
+    //            // for($i = 0 ; $i < 3 ; $i ++){
+    //            //  $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[$i]->student_id.'.pdf',$folder_name.'/'.$students[$i]->student_id.'.pdf');
+    //            //
+    //            // }
+    //
+    //             // $zip->renameName('img','mumu');
+    //             // dd($zip->statIndex( 0 ));
+    //
+    //             $zip->close();
+    //         }
+    //
+    //         // Set Header
+    //         $headers = array(
+    //
+    //         );
+    //         $filetopath=$public_dir.'/'.$zipFileName;
+    //
+    //         // dd($filetopath);
+    //         // Create Download Response
+    //         // dd($filetopath,file_exists($filetopath));
+    //         if((file_exists($filetopath))){
+    //           //dd('aaa');
+    //           //return 'bbb';
+    //           // response()->download($filetopath,$zipFileName,$headers)
+    //           return response()->download($filetopath,$zipFileName,$headers);
+    //         }
+    //        return 'SUCSESS';
+    //
+    // }
 
-
-       // public function download_all($folder_name, $students)
-       // {
-       //       // Define Dir Folder
-       //       $public_dir=public_path();
-       //       // Zip File Name
-       //         $zipFileName = $folder_name.'.zip';
-       //
-       //         // Create ZipArchive Obj
-       //         $zip = new ZipArchive;
-       //         if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
-       //
-       //
-       //            foreach($students as $student){
-       //             $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$student->student_id.'.pdf',$folder_name.'/'.$student->student_id.'.pdf');
-       //
-       //            }
-       //            // dd($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[0]->student_id.'.pdf');
-       //            // for($i = 0 ; $i < 3 ; $i ++){
-       //            //  $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[$i]->student_id.'.pdf',$folder_name.'/'.$students[$i]->student_id.'.pdf');
-       //            //
-       //            // }
-       //
-       //             // $zip->renameName('img','mumu');
-       //             // dd($zip->statIndex( 0 ));
-       //
-       //             $zip->close();
-       //         }
-       //
-       //         // Set Header
-       //         $headers = array(
-       //
-       //         );
-       //         $filetopath=$public_dir.'/'.$zipFileName;
-       //
-       //         // dd($filetopath);
-       //         // Create Download Response
-       //         // dd($filetopath,file_exists($filetopath));
-       //         if((file_exists($filetopath))){
-       //           //dd('aaa');
-       //           //return 'bbb';
-       //           // response()->download($filetopath,$zipFileName,$headers)
-       //           return response()->download($filetopath,$zipFileName,$headers);
-       //         }
-       //        return 'SUCSESS';
-       //
-       // }
-
-       // public function test()
-       // {
-       //   //dd('test');
-       //     return $this->'bbb';
-       // }
+    // public function test()
+    // {
+    //   //dd('test');
+    //     return $this->'bbb';
+    // }
 
 
 }
