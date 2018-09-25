@@ -124,7 +124,6 @@ class ExportController extends Controller
 
 
 
-
   $type='xlsx';
   Excel::create($subject->course_name."-".$academic_year->academic_year, function($excel) use($subject,$students,$room,$academic_year) {
 
@@ -356,8 +355,11 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
 }
 
-  public function exportHeight($classroom_id, $curriculum_year){
-    $academic_year = Academic_Year::where('classroom_id',$classroom_id)->where('curriculum_year',$curriculum_year)->select('academic_year.*')->first();
+  public function exportHeight($classroom_id, $curriculum_year,$academic_year,$folder_name=''){
+    $academic_year = Academic_Year::where('classroom_id',$classroom_id)
+    ->where('curriculum_year',$curriculum_year)
+    ->where('academic_year',$academic_year)
+    ->select('academic_year.*')->first();
 
 
     $students = Student_Grade_Level::where('classroom_id',$classroom_id)
@@ -372,7 +374,8 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
     ->first();
 
     $type='xlsx';
-    Excel::create('HeightandWeight', function($excel) use($students,$room,$academic_year) {
+    $excel = Excel::create('HeightandWeight', function($excel) use($students,$room,$academic_year)
+    {
 
       $excel->sheet('Excel sheet', function($sheet) use($students,$room,$academic_year) {
 
@@ -431,12 +434,21 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
       });
 
-    })->export($type);
+    });
+    if($folder_name){
+      $excel->store($type, $folder_name);
+    }
+    else{
+      $excel->export($type);
+    }
 
   }
 
-  public function exportComments($classroom_id, $curriculum_year){
-    $academic_year = Academic_Year::where('classroom_id',$classroom_id)->where('curriculum_year',$curriculum_year)->select('academic_year.*')->first();
+  public function exportComments($classroom_id, $curriculum_year,$academic_year,$folder_name=''){
+    $academic_year = Academic_Year::where('classroom_id',$classroom_id)
+    ->where('curriculum_year',$curriculum_year)
+    ->where('academic_year',$academic_year)
+    ->select('academic_year.*')->first();
 
 
     $students = Student_Grade_Level::where('classroom_id',$classroom_id)
@@ -451,7 +463,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
     ->first();
 
     $type='xlsx';
-    Excel::create('Comments', function($excel) use($students,$room,$academic_year) {
+    $excel = Excel::create('Comments', function($excel) use($students,$room,$academic_year) {
 
       $excel->sheet('Excel sheet', function($sheet) use($students,$room,$academic_year) {
 
@@ -514,12 +526,21 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
       });
 
-    })->export($type);
+    });
+    if($folder_name){
+      $excel->store($type, $folder_name);
+    }
+    else{
+      $excel->export($type);
+    }
 
   }
 
-  public function exportBehavior($classroom_id, $curriculum_year){
-    $academic_year = Academic_Year::where('classroom_id',$classroom_id)->where('curriculum_year',$curriculum_year)->select('academic_year.*')->first();
+  public function exportBehavior($classroom_id, $curriculum_year,$academic_year,$folder_name=''){
+    $academic_year = Academic_Year::where('classroom_id',$classroom_id)
+    ->where('curriculum_year',$curriculum_year)
+    ->where('academic_year',$academic_year)
+    ->select('academic_year.*')->first();
 
 
 
@@ -533,7 +554,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
     $behaviors = Behavior_Type::all();
 
     $type='xlsx';
-    Excel::create('Behavior', function($excel) use($students,$academic_year, $behaviors) {
+    $excel = Excel::create('Behavior', function($excel) use($students,$academic_year, $behaviors) {
 
       $excel->sheet('Excel sheet', function($sheet) use($students,$academic_year, $behaviors) {
 
@@ -633,15 +654,25 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
       });
 
-    })->export($type);
+    });
+
+    if($folder_name){
+      $excel->store($type, $folder_name);
+    }
+    else{
+      $excel->export($type);
+    }
 
   }
 
 
-  public function exportAttandance($classroom_id, $curriculum_year)
+  public function exportAttandance($classroom_id, $curriculum_year,$academic_year,$folder_name='')
   {
     $type='xlsx';
-    $academic_year = Academic_Year::where('classroom_id',$classroom_id)->where('curriculum_year',$curriculum_year)->select('academic_year.*')->first();
+    $academic_year = Academic_Year::where('classroom_id',$classroom_id)
+    ->where('curriculum_year',$curriculum_year)
+    ->where('academic_year',$academic_year)
+    ->select('academic_year.*')->first();
 
 
     $students = Student_Grade_Level::where('classroom_id',$classroom_id)
@@ -653,7 +684,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
 
 
-    Excel::create('Attandance', function($excel) use($students,$academic_year) {
+    $excel = Excel::create('Attandance', function($excel) use($students,$academic_year) {
 
       $excel->sheet('Excel sheet', function($sheet) use($students,$academic_year) {
 
@@ -733,14 +764,22 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
         });
 
-    })->export($type);
+    });
+    if($folder_name){
+      $excel->store($type, $folder_name);
+    }
+    else{
+      $excel->export($type);
+    }
   }
 
 
-  public function exportActivities($classroom_id,$curriculum_year)
+  public function exportActivities($classroom_id,$curriculum_year,$academic_year,$folder_name='')
   {
     $type='xlsx';
-    $academic_year = Academic_Year::where('classroom_id',$classroom_id)->where('curriculum_year',$curriculum_year)->select('academic_year.*')->first();
+    $academic_year = Academic_Year::where('classroom_id',$classroom_id)
+    ->where('curriculum_year',$curriculum_year)
+    ->where('academic_year',$academic_year)->select('academic_year.*')->first();
 
 
     $subject_sem1 = Offered_Courses::where('classroom_id', $classroom_id)
@@ -785,7 +824,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
     ->join('students','students.student_id','student_grade_levels.student_id')
     ->select('student_grade_levels.*','students.*')
     ->get();
-    Excel::create('Activities', function($excel) use($students,$academic_year,$subject_sem1,$subject_sem2) {
+    $excel = Excel::create('Activities', function($excel) use($students,$academic_year,$subject_sem1,$subject_sem2) {
 
       $excel->sheet('Excel sheet', function($sheet) use($students,$academic_year,$subject_sem1,$subject_sem2) {
 
@@ -923,16 +962,24 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
 
       });
-      $folder_name = $academic_year->grade_level . '_' . $academic_year->room . '_' . date("Y-m-d-H-i-s");
-      $path = public_path().'/excelToZip'. '/' . $folder_name;
+      // $folder_name = $academic_year->grade_level . '_' . $academic_year->room . '_' . date("Y-m-d-H-i-s");
+      // $path = public_path().'/excelToZip'.'/zip'.'/' ;
        //dd($path);
        // dd(File::exists($path));
-      if(!File::exists($path)) {
-        File::makeDirectory($path, $mode = 0777, true, true);
-      }
+      // if(!File::exists($path)) {
+      //   File::makeDirectory($path, $mode = 0777, true, true);
+      // }
       // dd(public_path('excelToZip'));
-    })->store($type, public_path('excelToZip/'. $folder_name));
+    });
     // })->export($type);
+    if($folder_name){
+      $excel->store($type, $folder_name);
+    }
+    else{
+      $excel->export($type);
+    }
+
+
   }
 
 
@@ -1077,5 +1124,38 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
               }
 
        return view('createZip');
+   }
+
+
+   public function exportAllElectiveCourse($classroom_id,$academic_year,$curriculum_year){
+     return 'ELECTIVE';
+
+   }
+
+   public function exportAllMainCourse($classroom_id,$academic_year,$curriculum_year){
+     return 'MAIN';
+
+
+   }
+
+   public function exportAllExtra($classroom_id,$academic_year,$curriculum_year){
+     $room = Academic_Year::where('academic_year',$academic_year)
+     ->where('classroom_id',$classroom_id)
+     ->first();
+
+     $folder = $room->grade_level.'0'.$room->room.'_'.$room->academic_year;
+     $path = public_path().'/excelToZip'.'/extra'.'/'.$folder ;
+     if(!File::exists($path)) {
+       File::makeDirectory($path, $mode = 0777, true, true);
+     }
+     self::exportHeight($classroom_id,$curriculum_year,$academic_year,$path);
+     self::exportComments($classroom_id,$curriculum_year,$academic_year,$path);
+     self::exportBehavior($classroom_id,$curriculum_year,$academic_year,$path);
+     self::exportAttandance($classroom_id,$curriculum_year,$academic_year,$path);
+     self::exportActivities($classroom_id,$curriculum_year,$academic_year,$path);
+
+     return 'Activity';
+
+
    }
 }

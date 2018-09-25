@@ -93,11 +93,11 @@ Route::get('porbar','ReportCardController@index2');
 
 Route::get('/export','ExportController@index');
 Route::get('/export/room/{academic_year}/{semester}/{grade_level}/{room}','ExportController@show');
-Route::get('/exportHeight/{classroom_id}/{curriculum_year}','ExportController@exportHeight');
-Route::get('/exportComments/{classroom_id}/{curriculum_year}','ExportController@exportComments');
-Route::get('/exportBehavior/{classroom_id}/{curriculum_year}','ExportController@exportBehavior');
-Route::get('/exportAttandance/{classroom_id}/{curriculum_year}','ExportController@exportAttandance');
-Route::get('/exportActivities/{classroom_id}/{curriculum_year}','ExportController@exportActivities');
+Route::get('/exportHeight/{classroom_id}/{curriculum_year}/{academic_year}','ExportController@exportHeight');
+Route::get('/exportComments/{classroom_id}/{curriculum_year}/{academic_year}','ExportController@exportComments');
+Route::get('/exportBehavior/{classroom_id}/{curriculum_year}/{academic_year}','ExportController@exportBehavior');
+Route::get('/exportAttandance/{classroom_id}/{curriculum_year}/{academic_year}','ExportController@exportAttandance');
+Route::get('/exportActivities/{classroom_id}/{curriculum_year}/{academic_year}','ExportController@exportActivities');
 // Route::get('/export2/{academic_year}/{semester}//','ExportController@show');
 Route::get('/export_menu','ExportController@index2');
 
@@ -115,6 +115,12 @@ Route::get('/exportForm', 'ReportCardController@exportForm');
 Route::get('/exportGrade1', 'ReportCardController@exportGrade1');
 Route::get('/exportGrade2', 'ReportCardController@exportGrade2');
 Route::get('/exportGrade3', 'ReportCardController@exportGrade3');
+
+Route::get('/elective_course_export_all/{classroom_id}/{academic_year}/{curriculum_year}', 'ExportController@exportAllElectiveCourse');
+Route::get('/main_course_export_all/{classroom_id}/{academic_year}/{curriculum_year}', 'ExportController@exportAllMainCourse');
+Route::get('/extra_export_all/{classroom_id}/{academic_year}/{curriculum_year}', 'ExportController@exportAllExtra');
+
+
 
 Route::get('/manageDirector', 'ManageDirectorController@index');
 Route::put('/manageDirector/update', 'ManageDirectorController@update');
