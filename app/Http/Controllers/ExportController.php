@@ -84,7 +84,7 @@ class ExportController extends Controller
 
 
 
-  public function exportExcel($classroom_id,$course_id,$curriculum_year){
+  public function exportExcel($classroom_id,$course_id,$curriculum_year,$folder_name=''){
 
 
   $subject = Offered_Courses::where('classroom_id', $classroom_id)
@@ -119,13 +119,8 @@ class ExportController extends Controller
   ->first();
 
 
-
-
-
-
-
   $type='xlsx';
-  Excel::create($subject->course_name."-".$academic_year->academic_year, function($excel) use($subject,$students,$room,$academic_year) {
+  $excel = Excel::create($subject->course_name."-".$academic_year->academic_year, function($excel) use($subject,$students,$room,$academic_year) {
 
     $excel->sheet('Excel sheet', function($sheet) use($subject,$students,$room,$academic_year) {
 
@@ -232,12 +227,18 @@ class ExportController extends Controller
 
     });
 
-  })->export($type);
+  });
+  if($folder_name){
+    $excel->store($type, $folder_name);
+  }
+  else{
+    $excel->export($type);
+  }
 
 }
 
 
-public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_year){
+public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_year,$folder_name=''){
 
   $subject = Offered_Courses::where('classroom_id', $classroom_id)
   ->where('offered_courses.course_id',  $course_id)
@@ -258,7 +259,7 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
 
   $type='xlsx';
-  Excel::create('template', function($excel) use($subject,$academic_year) {
+  $excel = Excel::create('template', function($excel) use($subject,$academic_year) {
 
     $excel->sheet('Excel sheet', function($sheet) use($subject,$academic_year) {
 
@@ -351,7 +352,13 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
     });
 
-  })->export($type);
+  });
+  if($folder_name){
+    $excel->store($type, $folder_name);
+  }
+  else{
+    $excel->export($type);
+  }
 
 }
 
@@ -1096,9 +1103,11 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
            $zip = new ZipArchive;
 
            if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
+             // dd('DOWNLOAD ALL');
+
 
              // Add File in ZipArchive
-               $zip->addFile($public_dir . '/' .'img/satitLogo.gif','603/satitLogo.gif');
+               $zip->addFile($public_dir . '/' .'excelToZip/101_18','603/satit');
 
                $zip->addFile($public_dir . '/' .'img/box.png','603/box.png');
                $zip->renameName('img','mumu');
@@ -1116,10 +1125,11 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
            );
            $filetopath=$public_dir.'/'.$zipFileName;
-           // dd($filetopath);
-           // Create Download Response
-           dd($filetopath);
+           dd($public_dir.'/'.$zipFileName);
+
+
               if((file_exists($filetopath))){
+                dd($filetopath);
                 return response()->download($filetopath,$zipFileName,$headers);
               }
 
@@ -1128,12 +1138,144 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
 
    public function exportAllElectiveCourse($classroom_id,$academic_year,$curriculum_year){
-     return 'ELECTIVE';
+
+
+     $room = Academic_Year::where('academic_year',$academic_year)
+     ->where('classroom_id',$classroom_id)
+     ->first();
+
+     $zipFileName = 'elective_course_'.$room->grade_level."0".$room->room."_".$academic_year;
+     $zip = new ZipArchive;
+     // dd(public_path() . '/' . $zipFileName);
+     if ($zip->open(public_path() . '/' . $zipFileName.'.zip', ZipArchive::CREATE) === TRUE) {
+
+
+
+            $folder = $room->grade_level.'0'.$room->room.'_'.$room->academic_year;
+            $path = public_path().'/excelToZip'.'/'.$folder.'/Elective Course' ;
+            if(!File::exists($path)) {
+              File::makeDirectory($path, $mode = 0777, true, true);
+            }
+
+               $subjectElecs = Offered_Courses::where('classroom_id', $classroom_id)
+               ->where('offered_courses.is_elective',  '1')
+               ->select('offered_courses.*')
+               ->where('offered_courses.curriculum_year',$curriculum_year)
+               ->select('offered_courses.*')
+               ->join('curriculums', function($j) {
+               $j->on('curriculums.course_id', '=', 'offered_courses.course_id');
+               $j->on('curriculums.curriculum_year','=','offered_courses.curriculum_year');
+               })
+               ->select('offered_courses.*','curriculums.*')
+               ->get();
+
+               foreach ($subjectElecs as $subject ) {
+                  self::exportExcel($classroom_id,$subject->course_id,$curriculum_year,$path);
+
+                  $excel_name = $subject->course_name.'-'.$academic_year.'.xlsx';
+
+                  $zip->addFile($path . '/' .$excel_name,'Elective_Course/'.$excel_name."sa");
+
+               }
+
+
+
+
+
+         $zip->close();
+
+
+
+     }
+
+     // Set Header
+     $headers = array(
+
+     );
+     $filetopath=public_path().'/fileToZip'.'/'.$zipFileName;
+
+
+        if((file_exists($filetopath))){
+          return response()->download($filetopath,$zipFileName,$headers);
+        }
+
+
+     // dd($zipFileName);
+
+     return 'Elective Coruse';
 
    }
 
    public function exportAllMainCourse($classroom_id,$academic_year,$curriculum_year){
-     return 'MAIN';
+
+
+
+
+
+
+          $room = Academic_Year::where('academic_year',$academic_year)
+          ->where('classroom_id',$classroom_id)
+          ->first();
+
+          $zipFileName = 'main_course_'.$room->grade_level."0".$room->room."_".$academic_year;
+          $zip = new ZipArchive;
+          // dd(public_path() . '/' . $zipFileName);
+          if ($zip->open(public_path() . '/' . $zipFileName.'.zip', ZipArchive::CREATE) === TRUE) {
+
+
+
+                 $folder = $room->grade_level.'0'.$room->room.'_'.$room->academic_year;
+                 $path = public_path().'/excelToZip'.'/'.$folder.'/Main Course' ;
+                 if(!File::exists($path)) {
+                   File::makeDirectory($path, $mode = 0777, true, true);
+                 }
+
+                 $subjects = Offered_Courses::where('classroom_id', $classroom_id)
+                 ->where('offered_courses.is_elective',  '0')
+                 ->select('offered_courses.*')
+                 ->where('offered_courses.curriculum_year',$curriculum_year)
+                 ->select('offered_courses.*')
+                 ->join('curriculums', function($j) {
+                 $j->on('curriculums.course_id', '=', 'offered_courses.course_id');
+                 $j->on('curriculums.curriculum_year','=','offered_courses.curriculum_year');
+                 })->where('curriculums.is_activity',false)
+                 ->select('offered_courses.*','curriculums.*')
+                 ->get();
+
+                    foreach ($subjects as $subject ) {
+                       self::exportExcel($classroom_id,$subject->course_id,$curriculum_year,$path);
+
+                       $excel_name = $subject->course_name.'-'.$academic_year.'.xlsx';
+
+                       $zip->addFile($path . '/' .$excel_name,'Main_Course/'.$excel_name);
+
+                    }
+
+
+
+
+
+              $zip->close();
+
+
+
+          }
+
+          // Set Header
+          $headers = array(
+
+          );
+          $filetopath=public_path().'/fileToZip'.'/'.$zipFileName;
+
+
+             if((file_exists($filetopath))){
+               return response()->download($filetopath,$zipFileName,$headers);
+             }
+
+
+          // dd($zipFileName);
+
+          return 'Main Course ';
 
 
    }
@@ -1143,16 +1285,46 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
      ->where('classroom_id',$classroom_id)
      ->first();
 
-     $folder = $room->grade_level.'0'.$room->room.'_'.$room->academic_year;
-     $path = public_path().'/excelToZip'.'/extra'.'/'.$folder ;
-     if(!File::exists($path)) {
-       File::makeDirectory($path, $mode = 0777, true, true);
-     }
-     self::exportHeight($classroom_id,$curriculum_year,$academic_year,$path);
-     self::exportComments($classroom_id,$curriculum_year,$academic_year,$path);
-     self::exportBehavior($classroom_id,$curriculum_year,$academic_year,$path);
-     self::exportAttandance($classroom_id,$curriculum_year,$academic_year,$path);
-     self::exportActivities($classroom_id,$curriculum_year,$academic_year,$path);
+     $zipFileName = 'extra_'.$room->grade_level."0".$room->room."_".$academic_year;
+     $zip = new ZipArchive;
+     // dd(public_path() . '/' . $zipFileName);
+     if ($zip->open(public_path() . '/' . $zipFileName.'.zip', ZipArchive::CREATE) === TRUE) {
+
+
+           $folder = $room->grade_level.'0'.$room->room.'_'.$room->academic_year;
+           $path = public_path().'/excelToZip'.'/'.$folder.'/extra' ;
+           if(!File::exists($path)) {
+             File::makeDirectory($path, $mode = 0777, true, true);
+           }
+           self::exportHeight($classroom_id,$curriculum_year,$academic_year,$path);
+           self::exportComments($classroom_id,$curriculum_year,$academic_year,$path);
+           self::exportBehavior($classroom_id,$curriculum_year,$academic_year,$path);
+           self::exportAttandance($classroom_id,$curriculum_year,$academic_year,$path);
+           self::exportActivities($classroom_id,$curriculum_year,$academic_year,$path);
+
+
+
+           $zip->addFile($path . '/Activities.xlsx' ,'extra/Activities.xlsx');
+           $zip->addFile($path . '/Attandance.xlsx' ,'extra/Attantance.xlsx');
+           $zip->addFile($path . '/Behavior.xlsx' ,'extra/Behavior.xlsx');
+           $zip->addFile($path . '/Comments.xlsx' ,'extra/Comments.xlsx');
+           $zip->addFile($path . '/HeightandWeight.xlsx' ,'extra/HeightandWeight.xlsx');
+           $zip->close();
+
+
+
+
+   }
+
+   $headers = array(
+
+   );
+   $filetopath=public_path().'/fileToZip'.'/'.$zipFileName;
+
+
+      if((file_exists($filetopath))){
+        return response()->download($filetopath,$zipFileName,$headers);
+      }
 
      return 'Activity';
 
