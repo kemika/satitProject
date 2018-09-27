@@ -87,27 +87,24 @@ class UploadGradeController extends Controller
 
                 $finalResult = array();
                 $errorDetail = array();
-                //$file = Input::file('file');
-                $file_name = $file->getClientOriginalName();
-                $file_type = \File::extension('files/' . $file_name);
-                $file->move('files/', $file_name);
-                $checkFileName = substr("$file_name", 0, 8);
+
+                list($file_name,$file_type) = $this->storeFile($file);
 
 
-                $getAcademicYear = Excel::load('files/' . $file_name, function ($reader) {
+                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(1);
                 })->get();
 
 
-                $getGradeLevel = Excel::load('files/' . $file_name, function ($reader) {
+                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(2);
                 })->get();
 
-                $getRoom = Excel::load('files/' . $file_name, function ($reader) {
+                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(3);
                 })->get();
 
-                $results = Excel::load('files/' . $file_name, function ($reader) {
+                $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(4);
                     $reader->all();
                 })->get();
@@ -238,25 +235,23 @@ class UploadGradeController extends Controller
 
                 $finalResult = array();
                 $errorDetail = array();
-                $file_name = $file->getClientOriginalName();
-                $file_type = \File::extension('files/' . $file_name);
-                $file->move('files/', $file_name);
-                $checkFileName = substr("$file_name", 0, 8);
 
-                $getAcademicYear = Excel::load('files/' . $file_name, function ($reader) {
+                list($file_name,$file_type) = $this->storeFile($file);
+
+                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(1);
                 })->get();
 
 
-                $getGradeLevel = Excel::load('files/' . $file_name, function ($reader) {
+                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(2);
                 })->get();
 
-                $getRoom = Excel::load('files/' . $file_name, function ($reader) {
+                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(3);
                 })->get();
 
-                $results = Excel::load('files/' . $file_name, function ($reader) {
+                $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(4);
                     $reader->all();
                 })->get();
@@ -370,28 +365,24 @@ class UploadGradeController extends Controller
 
             foreach ($request->file as $file) {
 
-                $finalResult = array();
                 $errorDetail = array();
-                $file_name = $file->getClientOriginalName();
-                $file_type = \File::extension('files/' . $file_name);
-                $file->move('files/', $file_name);
-                $checkFileName = substr("$file_name", 0, 8);
 
+                list($file_name,$file_type) = $this->storeFile($file);
 
-                $getAcademicYear = Excel::load('files/' . $file_name, function ($reader) {
+                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(1);
                 })->get();
 
 
-                $getGradeLevel = Excel::load('files/' . $file_name, function ($reader) {
+                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(2);
                 })->get();
 
-                $getRoom = Excel::load('files/' . $file_name, function ($reader) {
+                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(3);
                 })->get();
 
-                $results = Excel::load('files/' . $file_name, function ($reader) {
+                $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->skipColumns(2);
                     $reader->setHeaderRow(4);
                     $reader->limitrows(4);
@@ -416,7 +407,7 @@ class UploadGradeController extends Controller
 //                    $reader->all();
 //                })->get();
 
-                $resultsStudent = Excel::load('files/' . $file_name, function ($reader) {
+                $resultsStudent = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(6);
                     $reader->all();
                 })->get();
@@ -470,7 +461,7 @@ class UploadGradeController extends Controller
                     foreach ($behavior_col as $behavior_type => $col_index) {
                         Log::info($col_index);
                         // Read grade of all students for that behavior type
-                        $results = Excel::load('files/' . $file_name, function ($reader) use ($col_index) {
+                        $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) use ($col_index) {
                             $reader->skipColumns($col_index);
                             $reader->limitColumns($col_index + 4);
                             $reader->setHeaderRow(6);
@@ -606,31 +597,28 @@ class UploadGradeController extends Controller
 
                 $finalResult = array();
                 $errorDetail = array();
-                //$file = Input::file('file');
-                $file_name = $file->getClientOriginalName();
-                $file_type = \File::extension('files/' . $file_name);
-                $file->move('files/', $file_name);
-                $checkFileName = substr("$file_name", 0, 8);
 
-                $getAcademicYear = Excel::load('files/' . $file_name, function ($reader) {
+                list($file_name,$file_type) = $this->storeFile($file);
+
+                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(1);
                 })->get();
 
 
-                $getGradeLevel = Excel::load('files/' . $file_name, function ($reader) {
+                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(2);
                 })->get();
 
-                $getRoom = Excel::load('files/' . $file_name, function ($reader) {
+                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(3);
                 })->get();
 
-                $results = Excel::load('files/' . $file_name, function ($reader) {
+                $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(4);
                     $reader->all();
                 })->get();
 
-                $resultsStudent = Excel::load('files/' . $file_name, function ($reader) {
+                $resultsStudent = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(5);
                     $reader->all();
                 })->get();
@@ -771,25 +759,23 @@ class UploadGradeController extends Controller
             foreach ($request->file as $file) {
                 $finalResult = array();
                 $errorDetail = array();
-                $file_name = $file->getClientOriginalName();
-                $file_type = \File::extension('files/' . $file_name);
-                $file->move('files/', $file_name);
-                $checkFileName = substr("$file_name", 0, 8);
 
-                $getAcademicYear = Excel::load('files/' . $file_name, function ($reader) {
+                list($file_name,$file_type) = $this->storeFile($file);
+
+                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(1);
                 })->get();
 
 
-                $getGradeLevel = Excel::load('files/' . $file_name, function ($reader) {
+                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(2);
                 })->get();
 
-                $getRoom = Excel::load('files/' . $file_name, function ($reader) {
+                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(3);
                 })->get();
 
-                $resultsStudent = Excel::load('files/' . $file_name, function ($reader) {
+                $resultsStudent = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                     $reader->setHeaderRow(7);
                     $reader->all();
                 })->get();
@@ -800,7 +786,7 @@ class UploadGradeController extends Controller
 
                 //  for($i = 0; $i < count($resultsSemester); $i++)
 
-                $resultsFirst = Excel::load('files/' . $file_name, function ($reader) use ($indexSecSem) {
+                $resultsFirst = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) use ($indexSecSem) {
                     $reader->setHeaderRow(5);
                     //$reader->limitColumns(7);
                     $reader->limitColumns($indexSecSem);
@@ -808,7 +794,7 @@ class UploadGradeController extends Controller
                     $reader->all();
                 })->get();
 
-                $resultsSecond = Excel::load('files/' . $file_name, function ($reader) use ($indexSecSem) {
+                $resultsSecond = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) use ($indexSecSem) {
                     $reader->setHeaderRow(5);
                     //$reader->limitColumns(7);
                     $reader->skipColumns($indexSecSem);
@@ -984,26 +970,23 @@ class UploadGradeController extends Controller
             foreach ($request->file as $file) {
 
                 // Get real file name not temp file name
-                $file_name = $file->getClientOriginalName();
-                Log::info("Processing file " . $file_name);
-                $file_type = \File::extension('files/' . $file_name);
-                $file->move('files/', $file_name);
+                list($file_name,$file_type) = $this->storeFile($file);
 
-                $importRow = count(\Excel::load('files/' . $file_name, function ($reader) {
+                $importRow = count(\Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                 })->get());
                 // Check if there are enough header
                 if ($importRow < 5) {
                     $errorArray[] = "File " . $file_name . " is not in correct format.";
                 } else {
                     // Get grades of each student in class
-                    $results = Excel::load('files/' . $file_name, function ($reader) {
+                    $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                         $reader->setHeaderRow(6);
                         $reader->all();
 
                     })->get();
 
                     // Get course ID and formatting it properly
-                    $resultsCourse = Excel::load('files/' . $file_name, function ($reader) {
+                    $resultsCourse = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                         $reader->setHeaderRow(2);
                     })->get();
                     $course_id = $resultsCourse->getHeading()[1];
@@ -1012,13 +995,13 @@ class UploadGradeController extends Controller
                     $course_id = SystemConstant::clean_blank_spaces($course_id);
 
                     // Get grade level
-                    $resultsGradeLevel = Excel::load('files/' . $file_name, function ($reader) {
+                    $resultsGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                         $reader->setHeaderRow(3);
                     })->get();
                     $gradeLevel = $resultsGradeLevel->getHeading()[1];
 
                     // Get academic year
-                    $resultsYear = Excel::load('files/' . $file_name, function ($reader) {
+                    $resultsYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
                         $reader->setHeaderRow(4);
                     })->get();
                     $year = trim($resultsYear->getHeading()[1]);
@@ -1328,5 +1311,24 @@ class UploadGradeController extends Controller
         } else {
             return "Field '$field' is incorrect format at row '$column" . ($row + 7) . "'";
         }
+    }
+
+    /**
+     * @param $file
+     * @return array of [filename , filetype] filename include path as well
+     */
+    private function storeFile($file): array
+    {
+        $file_name = $file->getClientOriginalName();
+        $file_type = \File::extension(SystemConstant::FILE_STORE_DIR . '/' . $file_name);
+        $new_file_name = $file_name;
+        while (\File::exists(SystemConstant::FILE_STORE_DIR . '/' . $new_file_name)) {
+            // Keep changing file until we get the unique name
+            $new_file_name = uniqid() . "_" . $file_name;
+            //Log::info($new_file_name);
+        }
+        $file_name = $new_file_name;
+        $file->move(SystemConstant::FILE_STORE_DIR, $file_name);
+        return [$file_name,$file_type];
     }
 }

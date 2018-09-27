@@ -47,6 +47,8 @@ class SystemConstant
 
     const MIN_TO_ZERO = 0.0001;
 
+    const FILE_STORE_DIR = "files";
+
     // Helper functions
     public static function clean_blank_spaces($str){
         return trim(preg_replace('/\s\s+/', ' ', str_replace("\n", " ", $str)));
