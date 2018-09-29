@@ -1093,8 +1093,6 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
    public function download_all($name)
    {
-
-
          // Define Dir Folder
          $public_dir=public_path();
          // Zip File Name
@@ -1144,14 +1142,17 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
      ->where('classroom_id',$classroom_id)
      ->first();
 
-     $zipFileName = 'elective_course_'.$room->grade_level."0".$room->room."_".$academic_year;
+     $zipFileName = 'elective_course_'.$room->grade_level."0".$room->room."_".$academic_year. '_' . date("Y-m-d-H-i-s");
      $zip = new ZipArchive;
+
+     $zip_output_path = public_path() . '/zipExcel'.'/';
+     if(!File::exists($zip_output_path)) {
+         File::makeDirectory($zip_output_path, $mode = 0777, true, true);
+     }
+     $zipFileName2 = $zipFileName.'.zip';
      // dd(public_path() . '/' . $zipFileName);
-     if ($zip->open(public_path() . '/' . $zipFileName.'.zip', ZipArchive::CREATE) === TRUE) {
-
-
-
-            $folder = $room->grade_level.'0'.$room->room.'_'.$room->academic_year;
+     if ($zip->open($zip_output_path . $zipFileName2, ZipArchive::CREATE) === TRUE) {
+            $folder = $room->grade_level.'0'.$room->room.'_'.$room->academic_year. '_' . date("Y-m-d-H-i-s");
             $path = public_path().'/excelToZip'.'/'.$folder.'/Elective Course' ;
             if(!File::exists($path)) {
               File::makeDirectory($path, $mode = 0777, true, true);
@@ -1174,58 +1175,44 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
                   $excel_name = $subject->course_name.'-'.$academic_year.'.xlsx';
 
-                  $zip->addFile($path . '/' .$excel_name,'Elective_Course/'.$excel_name."sa");
+                  $zip->addFile($path . '/' .$excel_name,'Elective_Course/'.$excel_name);
 
                }
 
-
-
-
-
          $zip->close();
-
-
-
      }
 
      // Set Header
-     $headers = array(
-
-     );
-     $filetopath=public_path().'/fileToZip'.'/'.$zipFileName;
-
+     $headers = array();
+     $filetopath= $zip_output_path . $zipFileName2;
 
         if((file_exists($filetopath))){
-          return response()->download($filetopath,$zipFileName,$headers);
+          return response()->download($filetopath,$zipFileName2,$headers);
         }
 
-
-     // dd($zipFileName);
-
-     return 'Elective Coruse';
 
    }
 
    public function exportAllMainCourse($classroom_id,$academic_year,$curriculum_year){
-
-
-
-
-
-
           $room = Academic_Year::where('academic_year',$academic_year)
           ->where('classroom_id',$classroom_id)
           ->first();
 
-          $zipFileName = 'main_course_'.$room->grade_level."0".$room->room."_".$academic_year;
+          $zipFileName = 'main_course_'.$room->grade_level."0".$room->room."_".$academic_year. '_' . date("Y-m-d-H-i-s");
           $zip = new ZipArchive;
+
+          // Create output path for zip file if it doesn't exists
+          $zip_output_path = public_path() . '/zipExcel'.'/';
+          if(!File::exists($zip_output_path)) {
+              File::makeDirectory($zip_output_path, $mode = 0777, true, true);
+          }
+          $zipFileName2 = $zipFileName.'.zip';
+          //$zip_output_path = public_path() . '/zipExcel' . '/' . $zipFileName.'.zip';
           // dd(public_path() . '/' . $zipFileName);
-          if ($zip->open(public_path() . '/' . $zipFileName.'.zip', ZipArchive::CREATE) === TRUE) {
+          if ($zip->open($zip_output_path . $zipFileName2, ZipArchive::CREATE) === TRUE) {
 
-
-
-                 $folder = $room->grade_level.'0'.$room->room.'_'.$room->academic_year;
-                 $path = public_path().'/excelToZip'.'/'.$folder.'/Main Course' ;
+                 $folder = $room->grade_level.'0'.$room->room.'_'.$room->academic_year. '_' . date("Y-m-d-H-i-s");
+                 $path = public_path().'/excelToZip'.'/'.$folder.'/Main Course';
                  if(!File::exists($path)) {
                    File::makeDirectory($path, $mode = 0777, true, true);
                  }
@@ -1250,32 +1237,22 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
                        $zip->addFile($path . '/' .$excel_name,'Main_Course/'.$excel_name);
 
                     }
-
-
-
-
-
               $zip->close();
-
-
-
           }
 
           // Set Header
-          $headers = array(
+          $headers = array();
+          $filetopath = $zip_output_path . $zipFileName2;
 
-          );
-          $filetopath=public_path().'/fileToZip'.'/'.$zipFileName;
-
-
+          // dd(($filetopath));
              if((file_exists($filetopath))){
-               return response()->download($filetopath,$zipFileName,$headers);
+               return response()->download($filetopath,$zipFileName2,$headers);
              }
 
 
           // dd($zipFileName);
 
-          return 'Main Course ';
+          //return 'Main Course ';
 
 
    }
@@ -1285,13 +1262,19 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
      ->where('classroom_id',$classroom_id)
      ->first();
 
-     $zipFileName = 'extra_'.$room->grade_level."0".$room->room."_".$academic_year;
+     $zipFileName = 'extra_'.$room->grade_level."0".$room->room."_".$academic_year. '_' . date("Y-m-d-H-i-s");
      $zip = new ZipArchive;
      // dd(public_path() . '/' . $zipFileName);
-     if ($zip->open(public_path() . '/' . $zipFileName.'.zip', ZipArchive::CREATE) === TRUE) {
+     $zip_output_path = public_path() . '/zipExcel'.'/';
+     if(!File::exists($zip_output_path)) {
+         File::makeDirectory($zip_output_path, $mode = 0777, true, true);
+     }
+     $zipFileName2 = $zipFileName.'.zip';
+     // dd(public_path() . '/' . $zipFileName);
+     if ($zip->open($zip_output_path . $zipFileName2, ZipArchive::CREATE) === TRUE) {
 
 
-           $folder = $room->grade_level.'0'.$room->room.'_'.$room->academic_year;
+           $folder = $room->grade_level.'0'.$room->room.'_'.$room->academic_year. '_' . date("Y-m-d-H-i-s");
            $path = public_path().'/excelToZip'.'/'.$folder.'/extra' ;
            if(!File::exists($path)) {
              File::makeDirectory($path, $mode = 0777, true, true);
@@ -1316,18 +1299,10 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
    }
 
-   $headers = array(
-
-   );
-   $filetopath=public_path().'/fileToZip'.'/'.$zipFileName;
-
-
+   $headers = array();
+   $filetopath = $zip_output_path . $zipFileName2;
       if((file_exists($filetopath))){
-        return response()->download($filetopath,$zipFileName,$headers);
+        return response()->download($filetopath,$zipFileName2,$headers);
       }
-
-     return 'Activity';
-
-
    }
 }
