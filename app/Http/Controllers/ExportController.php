@@ -120,7 +120,9 @@ class ExportController extends Controller
 
 
   $type='xlsx';
-  $excel = Excel::create($subject->course_name."-".$academic_year->academic_year, function($excel) use($subject,$students,$room,$academic_year) {
+  $course_name= str_replace('/', ' or ',$subject->course_name);
+
+  $excel = Excel::create($course_name."-".$academic_year->academic_year, function($excel) use($subject,$students,$room,$academic_year) {
 
     $excel->sheet('Excel sheet', function($sheet) use($subject,$students,$room,$academic_year) {
 
@@ -259,7 +261,9 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
 
 
   $type='xlsx';
-  $excel = Excel::create('template', function($excel) use($subject,$academic_year) {
+  $course_name= str_replace('/', ' or ',$subject->course_name);
+
+  $excel = Excel::create('template_'.$course_name."-".$academic_year->academic_year, function($excel) use($subject,$academic_year) {
 
     $excel->sheet('Excel sheet', function($sheet) use($subject,$academic_year) {
 
@@ -1171,9 +1175,10 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
                ->get();
 
                foreach ($subjectElecs as $subject ) {
-                  self::exportExcel($classroom_id,$subject->course_id,$curriculum_year,$path);
+                  self::exportElectiveCourseForm($classroom_id,$subject->course_id,$curriculum_year,$path);
+                  $course_name= str_replace('/', ' or ',$subject->course_name);
 
-                  $excel_name = $subject->course_name.'-'.$academic_year.'.xlsx';
+                  $excel_name = 'template_'.$course_name.'-'.$academic_year.'.xlsx';
 
                   $zip->addFile($path . '/' .$excel_name,'Elective_Course/'.$excel_name);
 
@@ -1194,6 +1199,8 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
    }
 
    public function exportAllMainCourse($classroom_id,$academic_year,$curriculum_year){
+
+
           $room = Academic_Year::where('academic_year',$academic_year)
           ->where('classroom_id',$classroom_id)
           ->first();
@@ -1232,11 +1239,14 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
                     foreach ($subjects as $subject ) {
                        self::exportExcel($classroom_id,$subject->course_id,$curriculum_year,$path);
 
-                       $excel_name = $subject->course_name.'-'.$academic_year.'.xlsx';
+                       $course_name= str_replace('/', ' or ',$subject->course_name);
+
+                       $excel_name = $course_name.'-'.$academic_year.'.xlsx';
 
                        $zip->addFile($path . '/' .$excel_name,'Main_Course/'.$excel_name);
 
                     }
+
               $zip->close();
           }
 

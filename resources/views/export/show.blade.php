@@ -35,7 +35,7 @@
         <button class="form-control btn btn-primary" ><a href='/main_course_export_all/{{$academic_year->classroom_id}}/{{$academic_year->academic_year}}/{{$academic_year->curriculum_year}}' style="color:white">Download all</a></button>
         <br>
         @foreach($subjects as $subject)
-          <button class="form-control" ><a href='/export_grade/{{$subject->classroom_id}}/{{$subject->course_id}}/{{$subject->curriculum_year}}'>{{ $subject->course_name}} ( {{$subject->course_id}} )</a></button>
+          <button class="form-control" ><a href='/export_grade/{{$subject->classroom_id}}/{{$subject->course_id}}/{{$subject->curriculum_year}}'>{{ $subject->course_name}} ( {{$subject->semester}} {{$subject->course_id}} ) </a></button>
           <br>
         @endforeach
 
