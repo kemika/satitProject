@@ -404,10 +404,14 @@
                     @else
                         <center><h4 class="heading">SECOND SEMESTER COMMENT</h4></center> <br>
                     @endif
-                    <h5>First Comment</h5> <br>
+                    @if($i%2 == 0)
+                        <h5>First Comment</h5> <br>
+                    @else
+                        <h5>Second Comment</h5> <br>
+                    @endif
                     <h6>Classroom Teacher :
-                        ................................................................................................................................................ </h6>
-                    @if($i < count($teacher_comments) )
+                    </h6>
+                    @if($teacher_comments[$i] != null)
                         <p>{{$teacher_comments[$i]->comment}}</p>
                     @endif
                 </div>

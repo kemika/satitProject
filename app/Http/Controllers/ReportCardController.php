@@ -279,7 +279,7 @@ class ReportCardController extends Controller
             ->groupBy('semester', 'quater')
             ->select(DB::raw('MAX(datetime) as datetime'), 'semester', 'quater');
 
-        $teacher_comments = Teacher_Comment::where('student_id', $student_id)
+        $teacher_comments_results = Teacher_Comment::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
             ->joinSub($latest_comment_keys, 'latest_comments', function ($join) {
                 $join->on('teacher_comments.semester', 'latest_comments.semester');
@@ -290,8 +290,18 @@ class ReportCardController extends Controller
             ->orderBy('semester')
             ->orderBy('quater')
             ->get();
+        // Pack comments to skip empty one (in case there is a skip in comment e.g. no comment for semester 1
+        $teacher_comments = array_fill(0,
+            SystemConstant::TOTAL_SEMESTERS * SystemConstant::TOTAL_QUARTERS,
+            null);;
+        foreach ($teacher_comments_results as $c){
+            // Compute index
+            $i = $c->quater - 1 +
+                ($c->semester - 1) * SystemConstant::TOTAL_QUARTERS;
+            $teacher_comments[$i] = $c;
+        }
 
-        // Get latest comments
+        // Get latest physical record
         // TODO no approval for this yet
         $physical_record_semester1 = Physical_Record::where('student_id', $student_id)
             ->where('physical_records.semester', '1')

@@ -44,25 +44,6 @@ class UploadGradeController extends Controller
     }
 
 
-    // public function import(Request $request)
-    // {
-    //   if($request->hasfFile('file')){getUpload
-    //     $path = $request->file('file')->getRealpath();
-    //     $data = Excel::load($path, function($reader){})->get();
-    //       if (!empty($data) && $data->count()) {
-    //         foreach($variable as $key => $value){
-    //           $waitApprove = new WaitApprove();
-    //           $waitApprove->name = $value->name;
-    //           $waitApprove->email = $value->email;
-    //           $waitApprove->save();
-    //         }
-    //       }
-    //   }
-    //   return back();
-    //
-    // }
-
-
     public function getUploadComments(Request $request)
     {
 
@@ -85,129 +66,134 @@ class UploadGradeController extends Controller
 
             foreach ($request->file as $file) {
 
-                $finalResult = array();
-                $errorDetail = array();
-
-                list($file_name,$file_type) = $this->storeFile($file);
+                list($file_name, $file_type) = $this->storeFile($file);
 
 
-                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(1);
                 })->get();
 
 
-                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(2);
                 })->get();
 
-                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(3);
                 })->get();
 
-                $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                // Read all comments
+                $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(4);
                     $reader->all();
                 })->get();
 
-                $year = $getAcademicYear->getHeading()[1];
-                $gradeLevel = $getGradeLevel->getHeading()[1];
-                $room = $getRoom->getHeading()[1];
+                $year = trim($getAcademicYear->getHeading()[1]);
+                $gradeLevel = trim($getGradeLevel->getHeading()[1]);
+                $room = trim($getRoom->getHeading()[1]);
 
-                /*
-                                $students = Student::all();
-                                $studentsID = Student::Join('student_grade_levels', 'student_grade_levels.student_id', '=', 'students.student_id')
-                                    ->Join('academic_year', 'academic_year.classroom_id', '=', 'student_grade_levels.classroom_id')
-                                    ->where('academic_year.academic_year', $year)
-                                    ->where('academic_year.room', $room)
-                                    ->where('academic_year.grade_level', $gradeLevel)
-                                    ->select('students.student_id', 'students.firstname', 'students.lastname')
-                                    ->get();
-
-                                $checkYear = Academic_Year::where('academic_year.academic_year',$year)->first();
-                                $checkRoom = Academic_Year::where('academic_year.room',$room)->first();
-                                $checkGradeLevel = Academic_Year::where('academic_year.grade_level',$gradeLevel)->first();
-
-
-
-                                if(!is_int($year)){
-                                  $errorDetail["year"] = "Invalid type of Academic Year";
-                                }
-                                else{
-
-                                }*/
-
-                $students = Student::all();
-                $studentsID = Student::Join('student_grade_levels', 'student_grade_levels.student_id', '=', 'students.student_id')
-                    ->Join('academic_year', 'academic_year.classroom_id', '=', 'student_grade_levels.classroom_id')
-                    ->where('academic_year.academic_year', $year)
-                    ->where('academic_year.room', $room)
-                    ->where('academic_year.grade_level', $gradeLevel)
+                // Get all students and and ID in the class
+                $students_query = Academic_Year::where('academic_year', $year)
+                    ->where('grade_level', $gradeLevel)
+                    ->where('room', $room)
+                    ->join('student_grade_levels',
+                        'student_grade_levels.classroom_id',
+                        'academic_year.classroom_id')
+                    ->join('students', 'students.student_id',
+                        'student_grade_levels.student_id')
                     ->select('students.student_id', 'students.firstname', 'students.lastname')
                     ->get();
-
-                $stdArray = array();
-                $stdName = array();
+                $students = array();
+                foreach ($students_query as $r) {
+                    $students[$r->student_id] = $r->firstname . " " . $r->lastname;
+                }
 
                 date_default_timezone_set('Asia/Bangkok');
                 $datetime = date("Y-m-d H:i:s");
 
-                foreach ($studentsID as $studentID) {
-                    $stdArray[] = $studentID->student_id;
-                    $stdName[(String)($studentID->student_id)] = $studentID->firstname . " " . $studentID->lastname;
-                }
+                if (count($results) == 0) {
+                    $errorArray[] = "File" . $file_name . " is empty";
+                } else {
+                    // Set up flag so that we stop when there is any error
+                    $isOK = true;
 
-                for ($i = 0; $i < count($results); $i++) {
-                    if (in_array($results[$i]->students_id, $stdArray)) {
+                    // TODO Check correctness of error message
+                    if ($year == "") {
+                        $isOK = false;
+                        $errorArray[] = $file_name . " Field 'Academic Year' is empty at row '?'";
+                    }
 
-                        if ($stdName[(String)($results[$i]->students_id)] === $results[$i]->students_name) {
-                            for ($j = 1; $j <= 4; $j++) {
-                                $qComment = "quater_" . $j;
-                                if ($j == 1 || $j == 2) {
-                                    $semester = 1;
-                                } else if ($j == 3 || $j == 4) {
-                                    $semester = 2;
-                                }
-                                if ($results[$i]->$qComment != "") {
-                                    $comment = new Teacher_Comment;
-                                    $comment->student_id = $results[$i]->students_id;
-                                    $comment->quater = $j;
-                                    $comment->comment = $results[$i]->$qComment;
-                                    $comment->semester = $semester;
-                                    $comment->academic_year = $year;
-                                    $comment->datetime = $datetime;
-                                    $finalResult[] = $comment;
+                    if ($gradeLevel == "") {
+                        $isOK = false;
+                        $errorArray[] = $file_name . " Field 'Grade Level' is empty at row '?'";
+                    }
+
+                    if ($room == "") {
+                        $isOK = false;
+                        $errorArray[] = $file_name . " Field 'Room' is empty at row '?'";
+                    }
+
+                    //dd($results);
+                    // Loop and check correctness of each result  We need to use index
+                    // because we will remove irrelevant data from result.
+                    for ($i = 0; $i < count($results); $i++) {
+                        //----- Validate Student ID and name-------//
+                        // Get ID and Name and clean up unnecessary spaces
+                        $student_id = trim($results[$i]->students_id);
+                        $results[$i]->students_id = $student_id;
+                        $student_name = SystemConstant::clean_blank_spaces($results[$i]->students_name);
+                        $results[$i]->students_name = $student_name;
+
+                        // Check if name and id are empty or not
+                        if ($student_id == "" && $student_name == "") {
+                            // This is not the line we want to read. Drop it from processing
+                            unset($results[$i]);
+                        } elseif ($student_id == "") {
+                            // Only id is empty.  This should be error
+                            $isOK = false;
+                            $errorArray[] = $file_name . " Field 'Student ID' is empty at row 'A" . ($i + 7) . "'";
+                        } elseif (!isset($students[$student_id])) {
+                            // We have both name and ID
+                            // Check if ID is in database
+                            $isOK = false;
+                            $errorArray[] = $file_name . " 'Student ID' at row 'A" . ($i + 7) . "' is not in database.";
+                        } elseif (strcasecmp($students[$student_id], $student_name) != 0) {
+                            // Check if student name matches with ID
+                            $isOK = false;
+                            $errorArray[] = $file_name . " Field 'Student name' is incorrect at row 'B" . ($i + 7) . "'";
+                        }
+                    }
+
+                    // Add comment when there is no error
+                    if ($isOK) {
+                        foreach ($results as $r) {
+                            $q_count = 1;
+                            for ($semester = 1; $semester <= SystemConstant::TOTAL_SEMESTERS; $semester++) {
+                                for ($quarter = 1; $quarter <= SystemConstant::TOTAL_QUARTERS; $quarter++) {
+                                    $qComment = "quarter_" . $q_count;
+                                    $q_count++;
+                                    // Only add when the comment is not empty
+                                    if(trim($r->$qComment) != ""){
+                                        $comment = new Teacher_Comment;
+                                        $comment->student_id = $r->students_id;
+                                        $comment->quater = $quarter;
+                                        $comment->comment = $r->$qComment;
+                                        $comment->semester = $semester;
+                                        $comment->academic_year = $year;
+                                        $comment->datetime = $datetime;
+                                        $comment->data_status = SystemConstant::DATA_STATUS_WAIT;
+                                        $comment->save();
+                                    }
                                 }
                             }
-                        } else if ($stdName[(String)($results[$i]->students_id)] !== $results[$i]->students_name) {
-                            $errorDetail[(String)($results[$i]->students_id)] = $results[$i]->students_id . " This student ID doesn't match with student name";
                         }
-                    } else if (!in_array($results[$i]->students_id, $stdArray)) {
-                        $errorDetail[(String)($results[$i]->students_id)] = $results[$i]->students_id . " This Student ID doesn't exist in this room";
+                        $errorArray[] = $file_name . " is uploaded successfully.";
                     }
-
                 }
-
-                if (count($errorDetail) <= 0) {
-                    foreach ($finalResult as $result) {
-                        $result->save();
-                    }
-                    $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " success";
-
-                } else {
-                    $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " error";
-                    /*
-                    foreach($errorDetail as $key => $value){
-                      print_r("Student ID : ".$key." got error => ".$value."</br>");
-                    }*/
-
-                }
-                $errorArray[] = $errorDetail;
             }
-
         }
 
-
-        return view('uploadGrade.errorDetail', ['errorDetail' => $errorArray]);
+        return view('uploadGrade.validate', compact('errorArray'));
 
     } // END upload Comment
 
@@ -1032,18 +1018,18 @@ class UploadGradeController extends Controller
                             // Set up flag so that we stop when there is any error
                             $isOK = true;
 
+                            if ($course_id == "") {
+                                $isOK = false;
+                                $errorArray[] = $file_name . " Field 'Course' is empty at row 'B2'";
+                            }
+
+                            if ($year == "") {
+                                $isOK = false;
+                                $errorArray[] = $file_name . " Field 'Academic Year' is empty at row 'B4'";
+                            }
+
                             // Loop and check correctness of each result
                             for ($i = 0; $i < count($results); $i++) {
-
-                                if ($course_id == "") {
-                                    $isOK = false;
-                                    $errorArray[] = $file_name . " Field 'Course' is empty at row 'B2'";
-                                }
-
-                                if ($year == "") {
-                                    $isOK = false;
-                                    $errorArray[] = $file_name . " Field 'Academic Year' is empty at row 'B4'";
-                                }
 
                                 //----- Validate Student ID and name-------//
                                 // Get ID and Name and clean up unnecessary spaces
