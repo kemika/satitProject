@@ -246,7 +246,7 @@ class ReportCardController extends Controller
         // Get latest activities Use the same technique as grades
         $student_latest_act_keys = Activity_Record::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
-            ->where('data_status', 1)
+            //->where('data_status', 1) // TODO Approval of Activity data status is not implemented
             ->groupBy('open_course_id')
             ->select(DB::raw('MAX(datetime) as datetime'), 'open_course_id');
 
