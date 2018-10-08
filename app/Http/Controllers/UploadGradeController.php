@@ -504,43 +504,16 @@ class UploadGradeController extends Controller
 
     public function getUploadAttendance(Request $request)
     {
-
-        // dd($datetime);
-        // dd($studentsID);
-        // var_dump($studentsID);
-        // print_r($studentsID);
-
-
-        //$stdArray = $tempsss->unwrap($studentsID);
-
-        // print_r($arr);
-        //
-        // if (in_array("1111111111", $arr)) {
-        //     echo "Got My";
-        // }
-
         if ($request->hasFile('file')) {
             $errorArray = array();
 
             foreach ($request->file as $file) {
 
                 $finalResult = array();
-                $errorDetail = array();
 
                 list($file_name, $file_type) = $this->storeFile($file);
 
-                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
-                    $reader->setHeaderRow(1);
-                })->get();
-
-
-                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
-                    $reader->setHeaderRow(2);
-                })->get();
-
-                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
-                    $reader->setHeaderRow(3);
-                })->get();
+                list($year, $gradeLevel, $room) = $this->get_room_grade_year($file_name);
 
                 $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(4);
@@ -552,115 +525,171 @@ class UploadGradeController extends Controller
                     $reader->all();
                 })->get();
 
-
-                $year = $getAcademicYear->getHeading()[1];
-                $gradeLevel = $getGradeLevel->getHeading()[1];
-                $room = $getRoom->getHeading()[1];
-
-                $students = Student::all();
-                $studentsID = Student::Join('student_grade_levels', 'student_grade_levels.student_id', '=', 'students.student_id')
-                    ->Join('academic_year', 'academic_year.classroom_id', '=', 'student_grade_levels.classroom_id')
-                    ->where('academic_year.academic_year', $year)
-                    ->where('academic_year.room', $room)
-                    ->where('academic_year.grade_level', $gradeLevel)
-                    ->select('students.student_id', 'students.firstname', 'students.lastname')
-                    ->get();
-
-                $stdArray = array();
-                $stdName = array();
+                // Get all students and and ID in the class
+                $students = $this->get_students_in_class($year, $gradeLevel, $room);
 
                 date_default_timezone_set('Asia/Bangkok');
                 $datetime = date("Y-m-d H:i:s");
 
-                foreach ($studentsID as $studentID) {
-                    $stdArray[] = $studentID->student_id;
-                    $stdName[(String)($studentID->student_id)] = $studentID->firstname . " " . $studentID->lastname;
-                }
+                $isOK = true;
+                $STUDENT_ROW_START = 5;
+                $DATA_START = 1;
 
                 for ($i = 0; $i < count($resultsStudent); $i++) {
-                    if (in_array($resultsStudent[$i]->students_id, $stdArray)) {
 
-                        if ($stdName[(String)($resultsStudent[$i]->students_id)] === $resultsStudent[$i]->students_name) {
-                            $emptyField = false;
-                            $attendance = new Attendance_Record;
-                            $attendance->student_id = $resultsStudent[$i]->students_id;
-                            if (is_float($results[$i + 1]->late)) $attendance->late = $results[$i + 1]->late;
-                            else $emptyField = true;
+                    // Clean up name and id
+                    $student_id = trim($resultsStudent[$i]->students_id);
+                    $student_name = SystemConstant::clean_blank_spaces($resultsStudent[$i]->students_name);
+                    // Check if name and id are empty or not
+                    if ($student_id == "" && $student_name == "") {
+                        // This is not the line we want to read. Skip it
+                    } elseif ($student_id == "") {
+                        // Only id is empty.  This should be error
+                        $isOK = false;
+                        $errorArray[] = $file_name . " Field 'Student ID' is empty at row 'A" . ($i + $STUDENT_ROW_START) . "'";
+                    } elseif (!isset($students[$student_id])) {
+                        // We have both name and ID
+                        // Check if ID is in database
+                        $isOK = false;
+                        $errorArray[] = $file_name . " 'Student ID' at row 'A" . ($i + $STUDENT_ROW_START) . "' is not in database.";
+                    } elseif (strcasecmp($students[$student_id], $student_name) != 0) {
+                        // Check if student name matches with ID
+                        $isOK = false;
+                        $errorArray[] = $file_name . " Field 'Student name' is incorrect at row 'B" . ($i + $STUDENT_ROW_START) . "'";
+                    } else {
 
-                            if (is_float($results[$i + 1]->absent)) $attendance->absent = $results[$i + 1]->absent;
-                            else $emptyField = true;
-
-                            if (is_float($results[$i + 1]->leave)) $attendance->leave = $results[$i + 1]->leave;
-                            else $emptyField = true;
-
-                            if (is_float($results[$i + 1]->sick)) $attendance->sick = $results[$i + 1]->sick;
-                            else $emptyField = true;
-                            //  $attendance->absent = $results[$i + 1]->absent;
-                            //$attendance->leave = $results[$i + 1]->leave;
-                            //  $attendance->sick = $results[$i + 1]->sick;
-                            $attendance->semester = 1;
-                            $attendance->academic_year = $year;
-                            $attendance->datetime = $datetime;
-                            $attendance->data_status = 1;
-                            //  if(!$emptyField) $attendance->save();
-                            if (!$emptyField) $finalResult[] = $attendance;
-                            $emptyField = false;
-                            $attendance = new Attendance_Record;
-                            $attendance->student_id = $resultsStudent[$i]->students_id;
-                            // $attendance->late = $results[$i + 1]->late_s2;
-                            // $attendance->absent = $results[$i + 1]->absent_s2;
-                            // $attendance->leave = $results[$i + 1]->leave_s2;
-                            // $attendance->sick = $results[$i + 1]->sick_s2;
-                            if (is_float($results[$i + 1]->late_s2)) $attendance->late = $results[$i + 1]->late_s2;
-                            else $emptyField = true;
-
-                            if (is_float($results[$i + 1]->absent_s2)) $attendance->absent = $results[$i + 1]->absent_s2;
-                            else $emptyField = true;
-
-                            if (is_float($results[$i + 1]->leave_s2)) $attendance->leave = $results[$i + 1]->leave_s2;
-                            else $emptyField = true;
-
-                            if (is_float($results[$i + 1]->sick_s2)) $attendance->sick = $results[$i + 1]->sick_s2;
-                            else $emptyField = true;
-
-                            $attendance->semester = 2;
-                            $attendance->academic_year = $year;
-                            $attendance->datetime = $datetime;
-                            $attendance->data_status = 1;
-                            //  if(!$emptyField) $attendance->save();
-                            if (!$emptyField) $finalResult[] = $attendance;
-                        } else if ($stdName[(String)($resultsStudent[$i]->students_id)] !== $resultsStudent[$i]->students_name) {
-                            $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This student ID doesn't match with student name";
+                        $attendance = new Attendance_Record;
+                        $attendance->student_id = $student_id;
+                        $data = $results[$i + $DATA_START];
+                        $isNotEmprty = false;
+                        // We are assuming that Excel Parser convert text to number of us
+                        if (is_numeric($data->late)) {
+                            $attendance->late = $data->late;
+                            $isNotEmprty = true;
+                        } elseif
+                        (trim($data->late) == "") {
+                            $attendance->late = 0;
+                        } else {
+                            // This is not OK.  Tell user
+                            $isOK = false;
+                            $errorArray[] = $file_name . " late value is not a number in Row " . ($i + $STUDENT_ROW_START) . "'";
                         }
 
+                        if (is_numeric($data->absent)) {
+                            $attendance->absent = $data->absent;
+                            $isNotEmprty = true;
+                        } elseif
+                        (trim($data->absent) == "") {
+                            $attendance->absent = 0;
+                        } else {
+                            // This is not OK.  Tell user
+                            $isOK = false;
+                            $errorArray[] = $file_name . " absent value is not a number in Row " . ($i + $STUDENT_ROW_START) . "'";
+                        }
 
-                    } else if (!in_array($resultsStudent[$i]->students_id, $stdArray)) {
-                        $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This Student ID doesn't exist in this room";
+                        if (is_numeric($data->leave)) {
+                            $attendance->leave = $data->leave;
+                            $isNotEmprty = true;
+                        } elseif(trim($data->leave) == "") {
+                            $attendance->leave = 0;
+                        } else {
+                            // This is not OK.  Tell user
+                            $isOK = false;
+                            $errorArray[] = $file_name . " leave value is not a number in Row " . ($i + $STUDENT_ROW_START) . "'";
+                        }
+
+                        if (is_numeric($data->sick)) {
+                            $attendance->sick = $data->sick;
+                            $isNotEmprty = true;
+                        } elseif(trim($data->sick) == "") {
+                            $attendance->sick = 0;
+                        } else {
+                            // This is not OK.  Tell user
+                            $isOK = false;
+                            $errorArray[] = $file_name . " sick value is not a number in Row " . ($i + $STUDENT_ROW_START) . "'";
+                        }
+
+                        $attendance->semester = 1;
+                        $attendance->academic_year = $year;
+                        $attendance->datetime = $datetime;
+                        $attendance->data_status = 1;  //TODO Attendance approval is not implemented yet
+
+                        if ($isNotEmprty) {
+                            $finalResult[] = $attendance;
+                        }
+
+                        $isNotEmprty = false;
+                        $attendance = new Attendance_Record;
+                        $attendance->student_id = $student_id;
+                        $data = $results[$i + $DATA_START];
+
+                        // We are assuming that Excel Parser convert text to number of us
+                        if (is_numeric($data->late_s2)) {
+                            $attendance->late = $data->late_s2;
+                            $isNotEmprty = true;
+                        } elseif(trim($data->late_s2) == "") {
+                            $attendance->late = 0;
+                        } else {
+                            // This is not OK.  Tell user
+                            $isOK = false;
+                            $errorArray[] = $file_name . " late value is not a number in Row " . ($i + $STUDENT_ROW_START) . "'";
+                        }
+
+                        if (is_numeric($data->absent_s2)) {
+                            $attendance->absent = $data->absent_s2;
+                            $isNotEmprty = true;
+                        } elseif(trim($data->absent_s2) == "") {
+                            $attendance->absent = 0;
+                        } else {
+                            // This is not OK.  Tell user
+                            $isOK = false;
+                            $errorArray[] = $file_name . " absent value is not a number in Row " . ($i + $STUDENT_ROW_START) . "'";
+                        }
+
+                        if (is_numeric($data->leave_s2)) {
+                            $attendance->leave = $data->leave_s2;
+                            $isNotEmprty = true;
+                        } elseif(trim($data->leave_s2) == "") {
+                            $attendance->leave = 0;
+                        } else {
+                            // This is not OK.  Tell user
+                            $isOK = false;
+                            $errorArray[] = $file_name . " leave value is not a number in Row " . ($i + $STUDENT_ROW_START) . "'";
+                        }
+
+                        if (is_numeric($data->sick_s2)) {
+                            $attendance->sick = $data->sick_s2;
+                            $isNotEmprty = true;
+                        } elseif(trim($data->sick_s2) == "") {
+                            $attendance->sick = 0;
+                        } else {
+                            // This is not OK.  Tell user
+                            $isOK = false;
+                            $errorArray[] = $file_name . " sick value is not a number in Row " . ($i + $STUDENT_ROW_START) . "'";
+                        }
+
+                        $attendance->semester = 2;
+                        $attendance->academic_year = $year;
+                        $attendance->datetime = $datetime;
+                        $attendance->data_status = 1;  //TODO Attendance approval is not implemented yet
+
+                        if ($isNotEmprty) {
+                            $finalResult[] = $attendance;
+                        }
                     }
 
                 }
-                if (count($errorDetail) <= 0) {
+                if ($isOK) {
                     foreach ($finalResult as $result) {
                         $result->save();
                     }
-                    $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " success";
-
-                } else {
-                    $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " error";
-                    /*
-                    foreach($errorDetail as $key => $value){
-                      print_r("Student ID : ".$key." got error => ".$value."</br>");
-                    }*/
+                    $errorArray[] = "Upload file " . $file_name . " Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " success";
 
                 }
-                $errorArray[] = $errorDetail;
-
-
             }
         }
 
-
-        return view('uploadGrade.errorDetail', ['errorDetail' => $errorArray]);
+        return view('uploadGrade.validate', compact('errorArray'));
 
     } // END upload Attendance
 
@@ -798,19 +827,19 @@ class UploadGradeController extends Controller
                             if ($error !== null) {
                                 $isOK = false;
                                 $errorArray[] = $error;
-                            }elseif($gradeRawValue != ""){
+                            } elseif ($gradeRawValue != "") {
                                 // Get grade status
-                                list($dummy,$grade_status) = $this->parseGrade($gradeRawValue);
+                                list($dummy, $grade_status) = $this->parseGrade($gradeRawValue);
 
-                                    $activity = new Activity_Record;
-                                    $activity->student_id = $resultsStudent[$i]->students_id;
-                                    $activity->open_course_id = $courseArr[$id . " 1"];
-                                    $activity->grade_status = $grade_status;
-                                    $activity->semester = 1;
-                                    $activity->academic_year = $year;
-                                    $activity->datetime = $datetime;
-                                    $activity->data_status = SystemConstant::DATA_STATUS_WAIT;
-                                    $finalResult[] = $activity;
+                                $activity = new Activity_Record;
+                                $activity->student_id = $student_id;
+                                $activity->open_course_id = $courseArr[$id . " 1"];
+                                $activity->grade_status = $grade_status;
+                                $activity->semester = 1;
+                                $activity->academic_year = $year;
+                                $activity->datetime = $datetime;
+                                $activity->data_status = SystemConstant::DATA_STATUS_WAIT;
+                                $finalResult[] = $activity;
                             }
                         }
 
@@ -820,9 +849,9 @@ class UploadGradeController extends Controller
                             if ($error !== null) {
                                 $isOK = false;
                                 $errorArray[] = $error;
-                            }elseif($gradeRawValue != ""){
+                            } elseif ($gradeRawValue != "") {
                                 // Get grade status
-                                list($dummy,$grade_status) = $this->parseGrade($gradeRawValue);
+                                list($dummy, $grade_status) = $this->parseGrade($gradeRawValue);
 
                                 $activity = new Activity_Record;
                                 $activity->student_id = $resultsStudent[$i]->students_id;
@@ -841,7 +870,7 @@ class UploadGradeController extends Controller
                     foreach ($finalResult as $result) {
                         $result->save();
                     }
-                    $errorArray[] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " success";
+                    $errorArray[] = "Upload file " . $file_name . " Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " success";
 
                 }
             }
@@ -1153,8 +1182,8 @@ class UploadGradeController extends Controller
             if ($grade_value == "") {
                 // Does nothing if there is no grade
                 return;
-            } else{
-                list($grade->grade,$grade->grade_status) = $this->parseGrade($grade_value);
+            } else {
+                list($grade->grade, $grade->grade_status) = $this->parseGrade($grade_value);
             }
             $grade->data_status = SystemConstant::DATA_STATUS_WAIT;
             $grade->save();
@@ -1164,9 +1193,10 @@ class UploadGradeController extends Controller
     /*
      * Return array of [grade value , grade status]
      * */
-    private function parseGrade($grade_value):array{
+    private function parseGrade($grade_value): array
+    {
         if ($grade_value == "") {
-            return [0,0];
+            return [0, 0];
         } elseif ($grade_value == "I" || $grade_value == "i") {
             return [0, SystemConstant::I_GRADE];
         } elseif ($grade_value == "S" || $grade_value == "s") {
@@ -1174,16 +1204,17 @@ class UploadGradeController extends Controller
         } elseif ($grade_value == "U" || $grade_value == "u") {
             return [0, SystemConstant::U_GRADE];
         } elseif ($grade_value == "0/1") {
-            return [1,SystemConstant::REMEDIAL_GRADE];
+            return [1, SystemConstant::REMEDIAL_GRADE];
         } elseif (strcasecmp($grade_value, SystemConstant::DROP_GRADE_TEXT) == 0) {
             return [0, SystemConstant::DROP_GRADE];
         } elseif ($grade_value[0] == 'I' || $grade_value[0] == 'i') {
             // Case of I/2.3 etc
             return [substr($grade_value, 2), SystemConstant::PASS_I_GRADE];
         } else {
-            return [$grade_value , SystemConstant::HAS_GRADE];
+            return [$grade_value, SystemConstant::HAS_GRADE];
         }
     }
+
     /*
 
     Create function for validating grade. It returns error text if there is
