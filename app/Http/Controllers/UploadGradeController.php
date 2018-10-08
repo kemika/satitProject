@@ -47,20 +47,6 @@ class UploadGradeController extends Controller
     public function getUploadComments(Request $request)
     {
 
-        // dd($datetime);
-        // dd($studentsID);
-        // var_dump($studentsID);
-        // print_r($studentsID);
-
-
-        //$stdArray = $tempsss->unwrap($studentsID);
-
-        // print_r($arr);
-        //
-        // if (in_array("1111111111", $arr)) {
-        //     echo "Got My";
-        // }
-
         if ($request->hasFile('file')) {
             $errorArray = array();
 
@@ -68,19 +54,7 @@ class UploadGradeController extends Controller
 
                 list($file_name, $file_type) = $this->storeFile($file);
 
-
-                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
-                    $reader->setHeaderRow(1);
-                })->get();
-
-
-                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
-                    $reader->setHeaderRow(2);
-                })->get();
-
-                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
-                    $reader->setHeaderRow(3);
-                })->get();
+                list($year, $gradeLevel, $room) = $this->get_room_grade_year($file_name);
 
                 // Read all comments
                 $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
@@ -88,25 +62,8 @@ class UploadGradeController extends Controller
                     $reader->all();
                 })->get();
 
-                $year = trim($getAcademicYear->getHeading()[1]);
-                $gradeLevel = trim($getGradeLevel->getHeading()[1]);
-                $room = trim($getRoom->getHeading()[1]);
-
                 // Get all students and and ID in the class
-                $students_query = Academic_Year::where('academic_year', $year)
-                    ->where('grade_level', $gradeLevel)
-                    ->where('room', $room)
-                    ->join('student_grade_levels',
-                        'student_grade_levels.classroom_id',
-                        'academic_year.classroom_id')
-                    ->join('students', 'students.student_id',
-                        'student_grade_levels.student_id')
-                    ->select('students.student_id', 'students.firstname', 'students.lastname')
-                    ->get();
-                $students = array();
-                foreach ($students_query as $r) {
-                    $students[$r->student_id] = $r->firstname . " " . $r->lastname;
-                }
+                $students = $this->get_students_in_class($year, $gradeLevel, $room);
 
                 date_default_timezone_set('Asia/Bangkok');
                 $datetime = date("Y-m-d H:i:s");
@@ -173,7 +130,7 @@ class UploadGradeController extends Controller
                                     $qComment = "quarter_" . $q_count;
                                     $q_count++;
                                     // Only add when the comment is not empty
-                                    if(trim($r->$qComment) != ""){
+                                    if (trim($r->$qComment) != "") {
                                         $comment = new Teacher_Comment;
                                         $comment->student_id = $r->students_id;
                                         $comment->quater = $quarter;
@@ -200,20 +157,6 @@ class UploadGradeController extends Controller
     public function getUploadHeightAndWeight(Request $request)
     {
 
-        // dd($datetime);
-        // dd($studentsID);
-        // var_dump($studentsID);
-        // print_r($studentsID);
-
-
-        //$stdArray = $tempsss->unwrap($studentsID);
-
-        // print_r($arr);
-        //
-        // if (in_array("1111111111", $arr)) {
-        //     echo "Got My";
-        // }
-
         if ($request->hasFile('file')) {
             $errorArray = array();
 
@@ -222,22 +165,22 @@ class UploadGradeController extends Controller
                 $finalResult = array();
                 $errorDetail = array();
 
-                list($file_name,$file_type) = $this->storeFile($file);
+                list($file_name, $file_type) = $this->storeFile($file);
 
-                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(1);
                 })->get();
 
 
-                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(2);
                 })->get();
 
-                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(3);
                 })->get();
 
-                $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(4);
                     $reader->all();
                 })->get();
@@ -353,22 +296,22 @@ class UploadGradeController extends Controller
 
                 $errorDetail = array();
 
-                list($file_name,$file_type) = $this->storeFile($file);
+                list($file_name, $file_type) = $this->storeFile($file);
 
-                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(1);
                 })->get();
 
 
-                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(2);
                 })->get();
 
-                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(3);
                 })->get();
 
-                $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->skipColumns(2);
                     $reader->setHeaderRow(4);
                     $reader->limitrows(4);
@@ -393,7 +336,7 @@ class UploadGradeController extends Controller
 //                    $reader->all();
 //                })->get();
 
-                $resultsStudent = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $resultsStudent = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(6);
                     $reader->all();
                 })->get();
@@ -447,7 +390,7 @@ class UploadGradeController extends Controller
                     foreach ($behavior_col as $behavior_type => $col_index) {
                         Log::info($col_index);
                         // Read grade of all students for that behavior type
-                        $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) use ($col_index) {
+                        $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) use ($col_index) {
                             $reader->skipColumns($col_index);
                             $reader->limitColumns($col_index + 4);
                             $reader->setHeaderRow(6);
@@ -584,27 +527,27 @@ class UploadGradeController extends Controller
                 $finalResult = array();
                 $errorDetail = array();
 
-                list($file_name,$file_type) = $this->storeFile($file);
+                list($file_name, $file_type) = $this->storeFile($file);
 
-                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(1);
                 })->get();
 
 
-                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(2);
                 })->get();
 
-                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(3);
                 })->get();
 
-                $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(4);
                     $reader->all();
                 })->get();
 
-                $resultsStudent = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $resultsStudent = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(5);
                     $reader->all();
                 })->get();
@@ -724,55 +667,49 @@ class UploadGradeController extends Controller
 
     public function getUploadActivities(Request $request)
     {
-
-        // dd($datetime);
-        // dd($studentsID);
-        // var_dump($studentsID);
-        // print_r($studentsID);
-
-
-        //$stdArray = $tempsss->unwrap($studentsID);
-
-        // print_r($arr);
-        //
-        // if (in_array("1111111111", $arr)) {
-        //     echo "Got My";
-        // }
-
         if ($request->hasFile('file')) {
             $errorArray = array();
 
             foreach ($request->file as $file) {
-                $finalResult = array();
-                $errorDetail = array();
+                list($file_name, $file_type) = $this->storeFile($file);
 
-                list($file_name,$file_type) = $this->storeFile($file);
+                list($year, $gradeLevel, $room) = $this->get_room_grade_year($file_name);
 
-                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
-                    $reader->setHeaderRow(1);
-                })->get();
-
-
-                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
-                    $reader->setHeaderRow(2);
-                })->get();
-
-                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
-                    $reader->setHeaderRow(3);
-                })->get();
-
-                $resultsStudent = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                /* Get array of Student ID and name
+                "students_id" => 2560780994.0
+                "students_name" => "Chanok Waraporn"
+                "1st_semester" => null
+                0 => null
+                "2st_semester" => null
+                */
+                $resultsStudent = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(7);
                     $reader->all();
                 })->get();
 
-
                 $flipped = array_flip($resultsStudent->getHeading());
                 $indexSecSem = $flipped["2st_semester"];
 
-                //  for($i = 0; $i < count($resultsSemester); $i++)
+                /* Get array of following. It should be noted that the real data
+                At index 0 of the array gives Course name -> Course ID mapping
+                "newspaper" => "NSP 1"
+        "shadowing" => "SHW"
+        "yearbook" => "YB 1"
+        "homeroom_5" => "ก 33913"
+        "extra_curricular_activities_5" => "ก 33923"
+        "guidance_and_developmental_skills_5" => "ก 33953"
+        "social_spirit_5" => "ก 33973"
 
-                $resultsFirst = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) use ($indexSecSem) {
+                From index 2 of the array data give grade for each student
+                "newspaper" => null
+        "shadowing" => null
+        "yearbook" => "S"
+        "homeroom_5" => "S"
+        "extra_curricular_activities_5" => "S"
+        "guidance_and_developmental_skills_5" => "S"
+        "social_spirit_5" => null
+                */
+                $resultsFirst = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) use ($indexSecSem) {
                     $reader->setHeaderRow(5);
                     //$reader->limitColumns(7);
                     $reader->limitColumns($indexSecSem);
@@ -780,32 +717,19 @@ class UploadGradeController extends Controller
                     $reader->all();
                 })->get();
 
-                $resultsSecond = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) use ($indexSecSem) {
+                $resultsSecond = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) use ($indexSecSem) {
                     $reader->setHeaderRow(5);
                     //$reader->limitColumns(7);
                     $reader->skipColumns($indexSecSem);
                     $reader->all();
                 })->get();
 
-                //  dd($resultsFirst);
-
+                // Extract course name to course id mapping for each semester
                 $courseIDFirst = array();
                 $courseIDSec = array();
                 foreach ($resultsFirst[0] as $key => $val) {
                     if ($key !== 0) {
-                        /*
-                        //$id = strtoupper($key);
-                        $id = $key;
-                        $id = explode("_", $id);
-                        $slice = array_slice($id, 0,-2);
-                        foreach($slice as $key2 => $str){
-                          $slice[$key2] = ucfirst($str);;
-                        }
-                        $res = join(' ', $slice);
-                        //print_r(array_slice($id, -2));
-              */
                         $courseIDFirst[$key] = $val;
-
                     }
                 }
 
@@ -814,12 +738,6 @@ class UploadGradeController extends Controller
                         $courseIDSec[$key] = $val;
                     }
                 }
-
-
-                //dd($courseIDSec);
-                $year = $getAcademicYear->getHeading()[1];
-                $gradeLevel = $getGradeLevel->getHeading()[1];
-                $room = $getRoom->getHeading()[1];
 
                 $courses = Academic_Year::Join('offered_courses', 'offered_courses.classroom_id', '=', 'academic_year.classroom_id')
                     ->Join('curriculums', function ($join) {
@@ -838,108 +756,98 @@ class UploadGradeController extends Controller
                 foreach ($courses as $course) {
                     $courseArr[$course->course_id . " " . $course->semester] = $course->open_course_id;
                 }
-                //dd($courseArr);
 
-                $students = Student::all();
-                $studentsID = Student::Join('student_grade_levels', 'student_grade_levels.student_id', '=', 'students.student_id')
-                    ->Join('academic_year', 'academic_year.classroom_id', '=', 'student_grade_levels.classroom_id')
-                    ->where('academic_year.academic_year', $year)
-                    ->where('academic_year.room', $room)
-                    ->where('academic_year.grade_level', $gradeLevel)
-                    ->select('students.student_id', 'students.firstname', 'students.lastname')
-                    ->get();
-
-                $gradeStatus = Grade_Status::all();
-                $GStatusArr = array();
-                foreach ($gradeStatus as $status) {
-                    $statusArr[$status->grade_status_text] = $status->grade_status;
-                }
-
-                $stdArray = array();
-                $stdName = array();
-                //$typeStatus = array("U","S","I");
-
+                // Get all students and and ID in the class
+                $students = $this->get_students_in_class($year, $gradeLevel, $room);
 
                 date_default_timezone_set('Asia/Bangkok');
                 $datetime = date("Y-m-d H:i:s");
 
-                foreach ($studentsID as $studentID) {
-                    $stdArray[] = $studentID->student_id;
-                    $stdName[(String)($studentID->student_id)] = $studentID->firstname . " " . $studentID->lastname;
-                }
+                $isOK = true;
+                $finalResult = array();
+
+                $STUDENT_ROW_START = 7;
+                $STUDENT_GRADE_START = 2;
 
                 for ($i = 0; $i < count($resultsStudent); $i++) {
-                    if (in_array($resultsStudent[$i]->students_id, $stdArray)) {
 
-                        if ($stdName[(String)($resultsStudent[$i]->students_id)] === $resultsStudent[$i]->students_name) {
+                    // Clean up name and id
+                    $student_id = trim($resultsStudent[$i]->students_id);
+                    $student_name = SystemConstant::clean_blank_spaces($resultsStudent[$i]->students_name);
 
-                            foreach ($courseIDFirst as $key => $id) {
-                                $resUp = strtoupper($resultsFirst[$i + 2]->$key);
+                    // Check if name and id are empty or not
+                    if ($student_id == "" && $student_name == "") {
+                        // This is not the line we want to read. Skip it
+                    } elseif ($student_id == "") {
+                        // Only id is empty.  This should be error
+                        $isOK = false;
+                        $errorArray[] = $file_name . " Field 'Student ID' is empty at row 'A" . ($i + $STUDENT_ROW_START) . "'";
+                    } elseif (!isset($students[$student_id])) {
+                        // We have both name and ID
+                        // Check if ID is in database
+                        $isOK = false;
+                        $errorArray[] = $file_name . " 'Student ID' at row 'A" . ($i + $STUDENT_ROW_START) . "' is not in database.";
+                    } elseif (strcasecmp($students[$student_id], $student_name) != 0) {
+                        // Check if student name matches with ID
+                        $isOK = false;
+                        $errorArray[] = $file_name . " Field 'Student name' is incorrect at row 'B" . ($i + $STUDENT_ROW_START) . "'";
+                    } else {
+                        foreach ($courseIDFirst as $key => $id) {
+                            $gradeRawValue = preg_replace('/\s+/', '', $resultsFirst[$i + $STUDENT_GRADE_START]->$key);
+                            $error = $this->validateGrade($gradeRawValue, $id, "", $i + $STUDENT_ROW_START);
+                            if ($error !== null) {
+                                $isOK = false;
+                                $errorArray[] = $error;
+                            }elseif($gradeRawValue != ""){
+                                // Get grade status
+                                list($dummy,$grade_status) = $this->parseGrade($gradeRawValue);
 
-                                if (array_key_exists($resUp, $statusArr)) {
                                     $activity = new Activity_Record;
                                     $activity->student_id = $resultsStudent[$i]->students_id;
                                     $activity->open_course_id = $courseArr[$id . " 1"];
-                                    $activity->grade_status = $statusArr[$resUp];
+                                    $activity->grade_status = $grade_status;
                                     $activity->semester = 1;
                                     $activity->academic_year = $year;
                                     $activity->datetime = $datetime;
-                                    $activity->data_status = 1;
-                                    //  $activity->save();
+                                    $activity->data_status = SystemConstant::DATA_STATUS_WAIT;
                                     $finalResult[] = $activity;
-                                } else if ($resUp !== "") {
-                                    $errorDetail[(String)($resultsStudent[$i]->students_id)] = " Please check at this student ID " . $resultsStudent[$i]->students_id . " Grade must be S/U/I";
-                                }
-
                             }
-
-                            foreach ($courseIDSec as $key => $id) {
-                                $resUp = strtoupper($resultsSecond[$i + 2]->$key);
-                                if (array_key_exists($resUp, $statusArr)) {
-                                    $activity = new Activity_Record;
-                                    $activity->student_id = $resultsStudent[$i]->students_id;
-                                    $activity->open_course_id = $courseArr[$id . " 2"];
-                                    $activity->grade_status = $statusArr[$resUp];
-                                    $activity->semester = 2;
-                                    $activity->academic_year = $year;
-                                    $activity->datetime = $datetime;
-                                    $activity->data_status = 1;
-                                    //  $activity->save();
-                                    $finalResult[] = $activity;
-                                } else if ($resUp !== "") {
-                                    $errorDetail[(String)($resultsStudent[$i]->students_id)] = " Please check at this student ID " . $resultsStudent[$i]->students_id . " Grade must be S/U/I";
-                                }
-                            }
-                        } else if ($stdName[(String)($resultsStudent[$i]->students_id)] !== $resultsStudent[$i]->students_name) {
-                            $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This student ID doesn't match with student name";
                         }
 
-                    } else if (!in_array($resultsStudent[$i]->students_id, $stdArray)) {
-                        $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This Student ID doesn't exist in this room";
-                    }
+                        foreach ($courseIDSec as $key => $id) {
+                            $gradeRawValue = preg_replace('/\s+/', '', $resultsSecond[$i + $STUDENT_GRADE_START]->$key);
+                            $error = $this->validateGrade($gradeRawValue, $id, "", $i + $STUDENT_ROW_START);
+                            if ($error !== null) {
+                                $isOK = false;
+                                $errorArray[] = $error;
+                            }elseif($gradeRawValue != ""){
+                                // Get grade status
+                                list($dummy,$grade_status) = $this->parseGrade($gradeRawValue);
 
+                                $activity = new Activity_Record;
+                                $activity->student_id = $resultsStudent[$i]->students_id;
+                                $activity->open_course_id = $courseArr[$id . " 1"];
+                                $activity->grade_status = $grade_status;
+                                $activity->semester = 2;
+                                $activity->academic_year = $year;
+                                $activity->datetime = $datetime;
+                                $activity->data_status = SystemConstant::DATA_STATUS_WAIT;
+                                $finalResult[] = $activity;
+                            }
+                        }
+                    }
                 }
-                if (count($errorDetail) <= 0) {
+                if ($isOK) {
                     foreach ($finalResult as $result) {
                         $result->save();
                     }
-                    $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " success";
-
-                } else {
-                    $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " error";
-                    /*
-                    foreach($errorDetail as $key => $value){
-                      print_r("Student ID : ".$key." got error => ".$value."</br>");
-                    }*/
+                    $errorArray[] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " success";
 
                 }
-                $errorArray[] = $errorDetail;
             }
-
         }
 
-
-        return view('uploadGrade.errorDetail', ['errorDetail' => $errorArray]);
+        return view('uploadGrade.validate', compact('errorArray'));
 
     } // END upload Activity
 
@@ -956,23 +864,23 @@ class UploadGradeController extends Controller
             foreach ($request->file as $file) {
 
                 // Get real file name not temp file name
-                list($file_name,$file_type) = $this->storeFile($file);
+                list($file_name, $file_type) = $this->storeFile($file);
 
-                $importRow = count(\Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                $importRow = count(\Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                 })->get());
                 // Check if there are enough header
                 if ($importRow < 5) {
                     $errorArray[] = "File " . $file_name . " is not in correct format.";
                 } else {
                     // Get grades of each student in class
-                    $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                    $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                         $reader->setHeaderRow(6);
                         $reader->all();
 
                     })->get();
 
                     // Get course ID and formatting it properly
-                    $resultsCourse = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                    $resultsCourse = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                         $reader->setHeaderRow(2);
                     })->get();
                     $course_id = $resultsCourse->getHeading()[1];
@@ -981,13 +889,13 @@ class UploadGradeController extends Controller
                     $course_id = SystemConstant::clean_blank_spaces($course_id);
 
                     // Get grade level
-                    $resultsGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                    $resultsGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                         $reader->setHeaderRow(3);
                     })->get();
                     $gradeLevel = $resultsGradeLevel->getHeading()[1];
 
                     // Get academic year
-                    $resultsYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' .$file_name, function ($reader) {
+                    $resultsYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                         $reader->setHeaderRow(4);
                     })->get();
                     $year = trim($resultsYear->getHeading()[1]);
@@ -1055,7 +963,7 @@ class UploadGradeController extends Controller
                                     // Check if student name matches with ID
                                     $isOK = false;
                                     $errorArray[] = $file_name . " Field 'Student name' is incorrect at row 'B" . ($i + 7) . "'";
-                                }else {
+                                } else {
 
                                     //----- Validate Q1 -------//
                                     // Clean white space
@@ -1121,7 +1029,7 @@ class UploadGradeController extends Controller
 
                             // Add grade when there is no error
                             if ($isOK) {
-                                foreach ($results as $r){
+                                foreach ($results as $r) {
 
                                     // Getting open course ID (Not the same as course ID) for the student
                                     $open_course_id_template = Academic_Year::where('academic_year', $year)
@@ -1242,38 +1150,40 @@ class UploadGradeController extends Controller
          * 7: Drop
         */
         if ($grade_value !== null) {
-            Log::info("Grade " .  $grade_value);
-            if ($grade_value == ""){
+            if ($grade_value == "") {
                 // Does nothing if there is no grade
                 return;
-            } elseif ($grade_value == "I" || $grade_value == "i") {
-                $grade->grade_status = SystemConstant::I_GRADE;
-                $grade->grade = 0;
-            } elseif ($grade_value == "S" || $grade_value == "s") {
-                $grade->grade_status = SystemConstant::S_GRADE;
-                $grade->grade = 0;
-            } elseif ($grade_value == "U" || $grade_value == "u") {
-                $grade->grade_status = SystemConstant::U_GRADE;
-                $grade->grade = 0;
-            } elseif ($grade_value == "0/1") {
-                $grade->grade_status = SystemConstant::REMEDIAL_GRADE;
-                $grade->grade = 1;
-            } elseif (strcasecmp($grade_value,SystemConstant::DROP_GRADE_TEXT) == 0) {
-                $grade->grade_status = SystemConstant::DROP_GRADE;
-                $grade->grade = 0;
-            } elseif ($grade_value[0] == 'I' || $grade_value[0] == 'i') {
-                // Case of I/2.3 etc
-                $grade->grade_status = SystemConstant::PASS_I_GRADE;
-                $grade->grade = substr($grade_value,2);
-            }else{
-                $grade->grade_status = SystemConstant::HAS_GRADE;
-                $grade->grade = $grade_value;
+            } else{
+                list($grade->grade,$grade->grade_status) = $this->parseGrade($grade_value);
             }
             $grade->data_status = SystemConstant::DATA_STATUS_WAIT;
             $grade->save();
         }
     }
 
+    /*
+     * Return array of [grade value , grade status]
+     * */
+    private function parseGrade($grade_value):array{
+        if ($grade_value == "") {
+            return [0,0];
+        } elseif ($grade_value == "I" || $grade_value == "i") {
+            return [0, SystemConstant::I_GRADE];
+        } elseif ($grade_value == "S" || $grade_value == "s") {
+            return [0, SystemConstant::S_GRADE];
+        } elseif ($grade_value == "U" || $grade_value == "u") {
+            return [0, SystemConstant::U_GRADE];
+        } elseif ($grade_value == "0/1") {
+            return [1,SystemConstant::REMEDIAL_GRADE];
+        } elseif (strcasecmp($grade_value, SystemConstant::DROP_GRADE_TEXT) == 0) {
+            return [0, SystemConstant::DROP_GRADE];
+        } elseif ($grade_value[0] == 'I' || $grade_value[0] == 'i') {
+            // Case of I/2.3 etc
+            return [substr($grade_value, 2), SystemConstant::PASS_I_GRADE];
+        } else {
+            return [$grade_value , SystemConstant::HAS_GRADE];
+        }
+    }
     /*
 
     Create function for validating grade. It returns error text if there is
@@ -1315,6 +1225,59 @@ class UploadGradeController extends Controller
         }
         $file_name = $new_file_name;
         $file->move(SystemConstant::FILE_STORE_DIR, $file_name);
-        return [$file_name,$file_type];
+        return [$file_name, $file_type];
+    }
+
+    /**
+     * @param $year
+     * @param $gradeLevel
+     * @param $room
+     */
+    private function get_students_in_class($year, $gradeLevel, $room): array
+    {
+        $students_query = Academic_Year::where('academic_year', $year)
+            ->where('grade_level', $gradeLevel)
+            ->where('room', $room)
+            ->join('student_grade_levels',
+                'student_grade_levels.classroom_id',
+                'academic_year.classroom_id')
+            ->join('students', 'students.student_id',
+                'student_grade_levels.student_id')
+            ->select('students.student_id', 'students.firstname', 'students.lastname')
+            ->get();
+        $students = array();
+        foreach ($students_query as $r) {
+            $students[$r->student_id] = $r->firstname . " " . $r->lastname;
+        }
+
+        return $students;
+    }
+
+    /**
+     * This function get room, Grade level, Acedemic year from the second column
+     * of the first three rows in excel file.
+     * Don't use this if the format is not the same
+     * @param $file_name
+     * @return array
+     */
+    private function get_room_grade_year($file_name): array
+    {
+        $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
+            $reader->setHeaderRow(1);
+        })->get();
+
+
+        $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
+            $reader->setHeaderRow(2);
+        })->get();
+
+        $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
+            $reader->setHeaderRow(3);
+        })->get();
+
+        $year = trim($getAcademicYear->getHeading()[1]);
+        $gradeLevel = trim($getGradeLevel->getHeading()[1]);
+        $room = trim($getRoom->getHeading()[1]);
+        return array($year, $gradeLevel, $room);
     }
 }
