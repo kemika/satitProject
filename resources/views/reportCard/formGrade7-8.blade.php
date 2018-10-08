@@ -236,7 +236,6 @@
         @if($attendance->semester == 1)
         {{$check =1}}
           <tr>
-            <!-- <td>$attendance->present</td> -->
             <td>{{$attendance->total_days}}</td>
             <td>{{$attendance->late}}</td>
             <td>{{$attendance->sick}}</td>
@@ -248,7 +247,6 @@
 
       @if($check == 0)
       <tr>
-        <!-- <td>$attendance->present</td> -->
         <td></td>
         <td></td>
         <td></td>
@@ -271,8 +269,7 @@
         @if($attendance->semester == 2)
         {{$check =1}}
           <tr>
-            <!-- <td>$attendance->present</td> -->
-            <td></td>
+            <td>{{$attendance->total_days}}</td>
             <td>{{$attendance->late}}</td>
             <td>{{$attendance->sick}}</td>
             <td>{{$attendance->leave}}</td>
@@ -283,7 +280,6 @@
 
       @if($check == 0)
       <tr>
-        <!-- <td>$attendance->present</td> -->
         <td></td>
         <td></td>
         <td></td>

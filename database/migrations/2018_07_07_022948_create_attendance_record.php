@@ -20,10 +20,10 @@ class CreateAttendanceRecord extends Migration
            $table->dateTimeTz('datetime');
             $table->timestamps();
 
-           $table->unsignedTinyInteger('late');
-           $table->unsignedTinyInteger('absent');
-           $table->unsignedTinyInteger('leave');
-           $table->unsignedTinyInteger('sick');
+           $table->float('late');
+           $table->float('absent');
+           $table->float('leave');
+           $table->float('sick');
            $table->unsignedTinyInteger('data_status');
 
            $table->primary(['student_id','semester','academic_year','datetime'],'attendance_record_primary');

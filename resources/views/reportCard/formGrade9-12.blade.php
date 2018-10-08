@@ -259,8 +259,7 @@
         @if($attendance->semester == 1)
             {{$check =1}}
             <tr>
-                <!-- <td>$attendance->present</td> -->
-                <td></td>
+                <td>{{$attendance->total_days}}</td>
                 <td>{{$attendance->late}}</td>
                 <td>{{$attendance->sick}}</td>
                 <td>{{$attendance->leave}}</td>
@@ -271,7 +270,6 @@
 
         @if($check == 0)
             <tr>
-                <!-- <td>$attendance->present</td> -->
                 <td></td>
                 <td></td>
                 <td></td>
@@ -294,7 +292,6 @@
         @if($attendance->semester == 2)
             {{$check =1}}
             <tr>
-                <!-- <td>$attendance->present</td> -->
                 <td>{{$attendance->total_days}}</td>
                 <td>{{$attendance->late}}</td>
                 <td>{{$attendance->sick}}</td>
@@ -306,7 +303,6 @@
 
         @if($check == 0)
             <tr>
-                <!-- <td>$attendance->present</td> -->
                 <td></td>
                 <td></td>
                 <td></td>
@@ -424,13 +420,13 @@
             @else
                 <center><h4 class="heading">SECOND SEMESTER COMMENT</h4></center> <br>
             @endif
+
             @if($i%2 == 0)
-            <h5>First Comment</h5> <br>
-                @else
-                    <h5>Second Comment</h5> <br>
-                @endif
-            <h6>Classroom Teacher :
-                </h6>
+                <h5>First Comment</h5> <br>
+            @else
+                <h5>Second Comment</h5> <br>
+            @endif
+            <h6>Classroom Teacher :</h6>
             @if($teacher_comments[$i] != null)
                 <p>{{$teacher_comments[$i]->comment}}</p>
             @endif
