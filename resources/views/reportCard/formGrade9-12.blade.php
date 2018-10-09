@@ -2,7 +2,7 @@
     <title>Report Card</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
     {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>--}}
     {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>--}}
@@ -537,299 +537,295 @@
 <br>
 <div class="boxHeader"><h6>Evaluation :</h6>
     <div class="box"></div>
+    <div class="boxTail">
+        @if($student->grade_level >= 12)
+            <p>to be permitted to graduate in academic year {{$academic_year}}</p>
+        @else
+            <p>to be permitted to {{$student->grade_level + 1}} in academic year {{$academic_year}}</p>
+        @endif
+    </div>
+</div>
+    <div class="boxHeader">
+        <div class="box"></div>
+        <div class="boxTail"><p>to be
+                considered............................................................................................................................................</p>
+        </div>
+        <br>
+        <p></p>
+        <p>
+            .................................................................................................................................................................................................................</p>
+        <p>
+            .................................................................................................................................................................................................................</p>
+        <p>
+            .................................................................................................................................................................................................................</p>
+        <p>
+            .................................................................................................................................................................................................................</p>
 
-    @if($student->grade_level >= 12)
-        <div class="boxTail"><p>to be permitted to graduate in academic year {{$academic_year}}</p>
+        <div>
+            <table style="margin-top:20px;">
+                <tr>
 
-            @else
-                <div class="boxTail"><p>to be permitted to {{$student->grade_level + 1}} in academic
-                        year {{$academic_year}}</p>
-                    @endif
+                    <td>........................................................</td>
+                    <td style="color:white">
+                        ------------------------------------------------------------------------------------------
+                    </td>
+                    <td>........................................................</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">Asst.Prof. Acharapan Corvanich</td>
+                    <td style="color:white">------------------</td>
+                    <td style="text-align: center;" rowspan="2">Classroom teacher</td>
+                </tr>
 
+                <tr>
+                    <td style="text-align: center;">IP Chair</td>
+                    <td style="color:white">------------------</td>
+                </tr>
 
-                </div>
+                <tr>
+                    <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
+                        /<span style="color:white">------</span>/ {{$academic_year}}
+                    </td>
+                    <td></td>
+                    <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
+                        /<span style="color:white">------</span>/ {{$academic_year}}
+                    </td>
+                </tr>
 
-                <div class="boxHeader">
-                    <div class="box"></div>
-                    <div class="boxTail"><p>to be
-                            considered............................................................................................................................................</p>
-                    </div>
-                    <br>
-                    <p></p>
-                    <p>
-                        .................................................................................................................................................................................................................</p>
-                    <p>
-                        .................................................................................................................................................................................................................</p>
-                    <p>
-                        .................................................................................................................................................................................................................</p>
-                    <p>
-                        .................................................................................................................................................................................................................</p>
+            </table>
+        </div>
+        <br><br>
+        <p>Guardian's Acknowledgement :
+            ..............................................................................................................................................................</p>
+        <p>
+            .................................................................................................................................................................................................................</p>
+        <p>
+            .................................................................................................................................................................................................................</p>
+        <p>
+            .................................................................................................................................................................................................................</p>
+        <p>
+            .................................................................................................................................................................................................................</p>
+        <div style="margin-left: 59%;">
+            <table style="margin-top:20px;">
+                <tr>
+                    <th>Signature</th>
+                    <th style="width:200px; border-bottom: 1px solid black;"></th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width:200px; height: 30px; border-bottom: 1px dotted black;">
+                        <span style="color:white">---------------</span>/
+                        <span style="color:white">------</span>/ {{$academic_year}}
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-                    <div>
-                        <table style="margin-top:20px;">
-                            <tr>
-
-                                <td>........................................................</td>
-                                <td style="color:white">
-                                    ------------------------------------------------------------------------------------------
-                                </td>
-                                <td>........................................................</td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: center;">Asst.Prof. Acharapan Corvanich</td>
-                                <td style="color:white">------------------</td>
-                                <td style="text-align: center;" rowspan="2">Classroom teacher</td>
-                            </tr>
-
-                            <tr>
-                                <td style="text-align: center;">IP Chair</td>
-                                <td style="color:white">------------------</td>
-                            </tr>
-
-                            <tr>
-                                <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
-                                    /<span style="color:white">------</span>/ {{$academic_year}}
-                                </td>
-                                <td></td>
-                                <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
-                                    /<span style="color:white">------</span>/ {{$academic_year}}
-                                </td>
-                            </tr>
-
-                        </table>
-                    </div>
-                    <br><br>
-                    <p>Guardian's Acknowledgement :
-                        ..............................................................................................................................................................</p>
-                    <p>
-                        .................................................................................................................................................................................................................</p>
-                    <p>
-                        .................................................................................................................................................................................................................</p>
-                    <p>
-                        .................................................................................................................................................................................................................</p>
-                    <p>
-                        .................................................................................................................................................................................................................</p>
-                    <div style="margin-left: 59%;">
-                        <table style="margin-top:20px;">
-                            <tr>
-                                <th>Signature</th>
-                                <th style="width:200px; border-bottom: 1px solid black;"></th>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td style="width:200px; height: 30px; border-bottom: 1px dotted black;">
-                                    <span style="color:white">---------------</span>/
-                                    <span style="color:white">------</span>/ {{$academic_year}}
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <br><br>
-                    <p>Remark:
-                        ..................................................................................................................................................................................................</p>
-                    <p>
-                        .................................................................................................................................................................................................................</p>
-                    <p>
-                        .................................................................................................................................................................................................................</p>
-                    <p>
-                        .................................................................................................................................................................................................................</p>
+        <br><br>
+        <p>Remark:
+            ..................................................................................................................................................................................................</p>
+        <p>
+            .................................................................................................................................................................................................................</p>
+        <p>
+            .................................................................................................................................................................................................................</p>
+        <p>
+            .................................................................................................................................................................................................................</p>
 
 
-                    <style>
-                        .heading {
-                            margin-top: 30px;
-                            margin-bottom: 0px;
-                        }
+        <style>
+            .heading {
+                margin-top: 30px;
+                margin-bottom: 0px;
+            }
 
-                        .setCenter {
-                            text-align: center;
-                            border-bottom: 1px dotted black;
-                            text-decoration: none;
-                            width: 60%;
-                            margin-left: 10px;
-                            margin-right: 10px;
-                        }
+            .setCenter {
+                text-align: center;
+                border-bottom: 1px dotted black;
+                text-decoration: none;
+                width: 60%;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
 
-                        .setLeft {
-                            text-align: left;
-                        }
+            .setLeft {
+                text-align: left;
+            }
 
-                        .setRight {
-                            text-align: right;
-                        }
+            .setRight {
+                text-align: right;
+            }
 
-                        .setPosition {
-                            margin-top: 10px;
-                            margin-left: 100px;
-                            font-size: 14px;
-                            font-weight: bold;
-                        }
+            .setPosition {
+                margin-top: 10px;
+                margin-left: 100px;
+                font-size: 14px;
+                font-weight: bold;
+            }
 
-                        .nameStyle {
-                            width: 100%;
-                            margin-top: 30px;
-                        }
+            .nameStyle {
+                width: 100%;
+                margin-top: 30px;
+            }
 
-                        .table-bordered {
-                            border-collapse: collapse;
-                        }
+            .table-bordered {
+                border-collapse: collapse;
+            }
 
-                        .table-bordered td {
-                            border: 1px solid black;
-                        }
+            .table-bordered td {
+                border: 1px solid black;
+            }
 
-                        .table-bordered th {
-                            border: 1px solid black;
-                        }
+            .table-bordered th {
+                border: 1px solid black;
+            }
 
-                        .tableStyle {
-                            width: 100%;
-                            margin-top: 20px;
+            .tableStyle {
+                width: 100%;
+                margin-top: 20px;
 
-                        }
+            }
 
-                        .tableStyle2 {
-                            width: 50%;
-                            margin-top: 20px;
-                        }
+            .tableStyle2 {
+                width: 50%;
+                margin-top: 20px;
+            }
 
-                        .tableStyle3 {
-                            width: 70%;
-                            margin-top: 20px;
-                        }
+            .tableStyle3 {
+                width: 70%;
+                margin-top: 20px;
+            }
 
-                        .tableStyle4 {
-                            width: 60%;
-                            margin-top: 5px;
-                        }
+            .tableStyle4 {
+                width: 60%;
+                margin-top: 5px;
+            }
 
-                        .tableStyle5 {
-                            width: 50%;
-                            margin-left: 70px;
-                        }
+            .tableStyle5 {
+                width: 50%;
+                margin-left: 70px;
+            }
 
-                        .classroomStyle {
-                            font-size: 12px;
-                            position: absolute;
-                            right: 1px;
-                            bottom: -50px;
-                        }
+            .classroomStyle {
+                font-size: 12px;
+                position: absolute;
+                right: 1px;
+                bottom: -50px;
+            }
 
-                        th {
-                            text-align: center;
-                            font-size: 10px;
-                            height: -13px;
-                        }
+            th {
+                text-align: center;
+                font-size: 10px;
+                height: -13px;
+            }
 
-                        td {
-                            font-size: 10px;
-                            height: -13px;
-                        }
+            td {
+                font-size: 10px;
+                height: -13px;
+            }
 
-                        tr {
-                            height: -13px;
-                        }
+            tr {
+                height: -13px;
+            }
 
-                        .page-break {
-                            page-break-after: always;
-                        }
+            .page-break {
+                page-break-after: always;
+            }
 
-                        .table td, .table th {
-                            padding: .20rem;
-                            vertical-align: top;
-                        }
+            .table td, .table th {
+                padding: .20rem;
+                vertical-align: top;
+            }
 
-                        .tableStyle5 th {
-                            text-align: left;
-                            font-size: 10px;
-                        }
+            .tableStyle5 th {
+                text-align: left;
+                font-size: 10px;
+            }
 
-                        .tableStyle5 td {
-                            font-size: 10px;
-                        }
+            .tableStyle5 td {
+                font-size: 10px;
+            }
 
-                        .noGrade p {
-                            font-size: 10px;
-                        }
+            .noGrade p {
+                font-size: 10px;
+            }
 
-                        .finalReport td {
-                            text-align: center;
-                        }
+            .finalReport td {
+                text-align: center;
+            }
 
-                        p {
-                            font-size: 12px;
-                        }
+            p {
+                font-size: 12px;
+            }
 
-                        h6 {
-                            font-size: 14px;
-                            font-weight: bold;
-                            margin-top: 10px;
-                            margin-bottom: 10px;
-                        }
+            h6 {
+                font-size: 14px;
+                font-weight: bold;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
 
-                        div.relative {
-                            position: relative;
-                            width: 100%;
-                            padding-top: 0%;
-                            margin-top: -50px;
-                        }
+            div.relative {
+                position: relative;
+                width: 100%;
+                padding-top: 0%;
+                margin-top: -50px;
+            }
 
-                        div.relative2 {
-                            position: relative;
-                            width: 100%;
-                            padding-top: 0%;
-                            margin-top: 0px;
-                        }
+            div.relative2 {
+                position: relative;
+                width: 100%;
+                padding-top: 0%;
+                margin-top: 0px;
+            }
 
-                        div.conduct {
-                            position: absolute;
-                            top: 50px;
-                            right: 5;
-                            width: 150px;
-                        }
+            div.conduct {
+                position: absolute;
+                top: 50px;
+                right: 5;
+                width: 150px;
+            }
 
-                        div.attendance {
-                            position: absolute;
-                            top: 10px;
-                            right: 0;
-                            width: 250px;
-                        }
+            div.attendance {
+                position: absolute;
+                top: 10px;
+                right: 0;
+                width: 250px;
+            }
 
-                        .board {
-                            width: 100%;
-                            height: 97%;
-                            /* border: 1px solid black; */
-                        }
+            .board {
+                width: 100%;
+                height: 97%;
+                /* border: 1px solid black; */
+            }
 
-                        .dotBottom {
-                            height: 40%;
-                            border-bottom: 1.5px dotted black;
-                        }
+            .dotBottom {
+                height: 40%;
+                border-bottom: 1.5px dotted black;
+            }
 
-                        .dotBottom2 {
-                            border-bottom: 1.5px dotted black;
-                        }
+            .dotBottom2 {
+                border-bottom: 1.5px dotted black;
+            }
 
-                        div.boxHeader {
-                            position: relative;
-                            width: 100%;
-                            height: 30px;
-                        }
+            div.boxHeader {
+                position: relative;
+                width: 100%;
+                height: 30px;
+            }
 
-                        div.box {
-                            position: absolute;
-                            top: 0px;
-                            left: 100px;
-                            width: 20px;
-                            height: 20px;
-                            border: 1px solid black;
-                        }
+            div.box {
+                position: absolute;
+                top: 0px;
+                left: 100px;
+                width: 20px;
+                height: 20px;
+                border: 1px solid black;
+            }
 
-                        div.boxTail {
-                            position: absolute;
-                            top: 0px;
-                            left: 130px;
-                            width: 80%;
-                        }
-                    </style>
+            div.boxTail {
+                position: absolute;
+                top: 0px;
+                left: 130px;
+                width: 80%;
+            }
+        </style>
