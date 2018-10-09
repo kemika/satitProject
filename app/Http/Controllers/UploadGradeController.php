@@ -274,42 +274,14 @@ class UploadGradeController extends Controller
 
     public function getUploadBehavior(Request $request)
     {
-
-        // dd($datetime);
-        // dd($studentsID);
-        // var_dump($studentsID);
-        // print_r($studentsID);
-
-
-        //$stdArray = $tempsss->unwrap($studentsID);
-
-        // print_r($arr);
-        //
-        // if (in_array("1111111111", $arr)) {
-        //     echo "Got My";
-        // }
-
         if ($request->hasFile('file')) {
             $errorArray = array();
 
             foreach ($request->file as $file) {
 
-                $errorDetail = array();
-
                 list($file_name, $file_type) = $this->storeFile($file);
 
-                $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
-                    $reader->setHeaderRow(1);
-                })->get();
-
-
-                $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
-                    $reader->setHeaderRow(2);
-                })->get();
-
-                $getRoom = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
-                    $reader->setHeaderRow(3);
-                })->get();
+                list($year, $gradeLevel, $room) = $this->get_room_grade_year($file_name);
 
                 $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->skipColumns(2);
@@ -336,59 +308,63 @@ class UploadGradeController extends Controller
 //                    $reader->all();
 //                })->get();
 
+                // Get the list of students and their ids
+                /*
+                 * "students_id" => 2560780994.0
+        "students_name" => "Chanok Waraporn"
+        "q1" => 3.0
+        "q2" => 3.0
+        "q3" => null
+        "q4" => null
+                */
                 $resultsStudent = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
                     $reader->setHeaderRow(6);
                     $reader->all();
                 })->get();
-//
 
-                $year = $getAcademicYear->getHeading()[1];
-                $gradeLevel = $getGradeLevel->getHeading()[1];
-                $room = $getRoom->getHeading()[1];
+                // Get all students and and ID in the class
+                $students = $this->get_students_in_class($year, $gradeLevel, $room);
 
-                // Get student id and name from database
-                $students = Student::all();
-                $studentsID = Student::Join('student_grade_levels', 'student_grade_levels.student_id', '=', 'students.student_id')
-                    ->Join('academic_year', 'academic_year.classroom_id', '=', 'student_grade_levels.classroom_id')
-                    ->where('academic_year.academic_year', $year)
-                    ->where('academic_year.room', $room)
-                    ->where('academic_year.grade_level', $gradeLevel)
-                    ->select('students.student_id', 'students.firstname', 'students.lastname')
-                    ->get();
+                $STUDENT_ROW_START = 6;
 
-                $validStudents = array();
+                /*
+                Check correctness of ids and name and construct id array
+                that will be null when we want to skip that entry
+                */
+                $total_students = count($resultsStudent);
+                $student_ids = array_fill(0,$total_students,null);
+                $isOK = true;
+                for($i = 0; $i < $total_students; $i++){
+                    $student_id = trim($resultsStudent[$i]->students_id);
+                    $student_name = SystemConstant::clean_blank_spaces($resultsStudent[$i]->students_name);
+
+                    // Check if name and id are empty or not
+                    if ($student_id == "" && $student_name == "") {
+                        // This is not the line we want to read. Drop it from processing by doing nothing
+                    } elseif ($student_id == "") {
+                        // Only id is empty.  This should be error
+                        $isOK = false;
+                        $errorArray[] = $file_name . " Field 'Student ID' is empty at 'A" . ($i + 7) . "'";
+                    } elseif (!isset($students[$student_id])) {
+                        // We have both name and ID
+                        // Check if ID is in database
+                        $isOK = false;
+                        $errorArray[] = $file_name . " 'Student ID' at 'A" . ($i + 7) . "' is not in database.";
+                    } elseif (strcasecmp($students[$student_id], $student_name) != 0) {
+                        // Check if student name matches with ID
+                        $isOK = false;
+                        $errorArray[] = $file_name . " Field 'Student name' is incorrect at 'B" . ($i + 7) . "'";
+                    }
+                }
+
                 date_default_timezone_set('Asia/Bangkok');
                 $datetime = date("Y-m-d H:i:s");
 
-                // Extract id and construct full name from query and create
-                // Lookup table for student name
-                foreach ($studentsID as $studentID) {
-                    $validStudents[(String)($studentID->student_id)] =
-                        $studentID->firstname . " " . $studentID->lastname;
-                }
-                $total_students = count($validStudents);
 
-                $student_list_from_file = array();
-                // Remove empty lines (artifact from Excel that say there exists line with empty content)
-
-                // Copy info from position that does not have empty data
-                // Also check if the name and id are valid
-                for ($i = 0; $i < $total_students && $resultsStudent[$i]->students_id != null; $i++) {
-                    $id = trim((String)$resultsStudent[$i]->students_id);
-                    $name = trim((String)$resultsStudent[$i]->students_name);
-                    if ($validStudents[$id] === $name) {
-                        $student_list_from_file[] = ["id" => $id, "name" => "$name"];
-                    } else {
-                        $errorDetail[$id] = $id . " " . $name . " doesn't exist in this room" . $gradeLevel;
-                    }
-                }
-                Log::info($behavior_col);
-                // Loop for each behavior type
-                if (count($errorDetail) > 0) {
-
-                } else {
+                // Loop for each behavior type if there is no error in name
+                if ($isOK) {
+                    $finalResult = array();
                     foreach ($behavior_col as $behavior_type => $col_index) {
-                        Log::info($col_index);
                         // Read grade of all students for that behavior type
                         $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) use ($col_index) {
                             $reader->skipColumns($col_index);
@@ -396,108 +372,52 @@ class UploadGradeController extends Controller
                             $reader->setHeaderRow(6);
                             $reader->all();
                         })->get();
+
                         // For each students we insert grade for this behavior
                         foreach ($results as $data) {
                             if ($data->students_id != "") {
+                                $i = 1;
                                 for ($semester = 1; $semester <= SystemConstant::TOTAL_SEMESTERS; $semester++) {
-                                    $i = 1;
-                                    for (; $i <= SystemConstant::TOTAL_QUARTERS; $i++) {
-                                        if ($data['q' . $i] !== null) {
+                                    for ($quarter = 1; $quarter <= SystemConstant::TOTAL_QUARTERS; $quarter++) {
+                                        $v = $data['q' . $i];
+                                        if(is_numeric($v) &&
+                                            $v > 0-SystemConstant::MIN_TO_ZERO &&
+                                            $v < 4+SystemConstant::MIN_TO_ZERO){
                                             $behavior = new Behavior_Record;
                                             $behavior->student_id = $data['students_id'];
-                                            $behavior->quater = $i;
+                                            $behavior->quater = $quarter;
                                             $behavior->behavior_type = $behavior_type;
                                             $behavior->grade = $data['q' . $i];
                                             $behavior->semester = $semester;
                                             $behavior->academic_year = $year;
                                             $behavior->datetime = $datetime;
                                             $behavior->data_status = 1; //TODO change when implemented approve behavior
-                                            //dd($behavior);
-                                            $behavior->save();
+                                            $finalResult[] = $behavior;
+                                        }elseif(trim($v) != ""){
+                                            // If this is not empty then something is wrong
+                                            $isOK = false;
+                                            $errorArray[] = $file_name . " score is not a number in Row " . ($i + $STUDENT_ROW_START) . "'";
                                         }
+                                        $i++;
                                     }
                                 }
-                                //$behavior->save();
-                                //$finalResult[] = $behavior;
                             }
 
                         }
                     }
-                    //dd("");
                 }
-                // Loop for each person
-//                for ($i = 0; $i < $total_students; $i++) {
-//                        if ($stdName[(String)($resultsStudent[$i]->students_id)] === $resultsStudent[$i]->students_name) {
-//                            foreach ($headerBehavior as $head => $index) {
-//
-//                                $strCheckType = ucfirst($head);
-//                                $strCheckType = str_replace("_", " ", $strCheckType);
-//                                if (array_key_exists($strCheckType, $behaviorType)) {
-//                                    $results = Excel::load('files/' . $file_name, function ($reader) use ($index) {
-//                                        $reader->setHeaderRow(6);
-//
-//                                        $reader->limitColumns($index + 4);
-//                                        $reader->skipColumns($index);
-//                                        $reader->all();
-//                                    })->get();
-//
-//                                    dd($results);
-//
-//                                    for ($j = 1; $j <= 4; $j++) {
-//                                        $qBehavior = "q" . $j;
-//                                        if ($j == 1 || $j == 2) {
-//                                            $semester = 1;
-//                                        } else if ($j == 3 || $j == 4) {
-//                                            $semester = 2;
-//                                        }
-//                                        if ($results[$i]->$qBehavior != "") {
-//                                            $behavior = new Behavior_Record;
-//                                            $behavior->student_id = $resultsStudent[$i]->students_id;
-//                                            $behavior->quater = $j;
-//                                            $behavior->behavior_type = $behaviorType[$strCheckType];
-//                                            $behavior->grade = $results[$i]->$qBehavior;
-//                                            $behavior->semester = $semester;
-//                                            $behavior->academic_year = $year;
-//                                            $behavior->datetime = $datetime;
-//                                            $behavior->data_status = 1;
-//                                            //$behavior->save();
-//                                            $finalResult[] = $behavior;
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        } else if ($stdName[(String)($resultsStudent[$i]->students_id)] !== $resultsStudent[$i]->students_name) {
-//                            $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This student ID doesn't match with student name";
-//                        }
-//
-//
-//                    } else if (!in_array($resultsStudent[$i]->students_id, $stdArray)) {
-//                        $errorDetail[(String)($resultsStudent[$i]->students_id)] = $resultsStudent[$i]->students_id . " This Student ID doesn't exist in this room";
-//                    }
-//
-//                }
-                if (count($errorDetail) <= 0) {
-//                    foreach ($finalResult as $result) {
-//                        $result->save();
-//                    }
-                    $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " success";
 
-                } else {
-                    $errorDetail["Status"] = "upload file Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " error";
-                    /*
-                    foreach($errorDetail as $key => $value){
-                      print_r("Student ID : ".$key." got error => ".$value."</br>");
-                    }*/
+                if ($isOK) {
+                    foreach ($finalResult as $result) {
+                        $result->save();
+                    }
+                    $errorArray[] = "Upload file " . $file_name . " Academic_Year : " . $year . " Grade Level : " . $gradeLevel . " Room : " . $room . " success";
 
                 }
-                $errorArray[] = $errorDetail;
-
-
             }
-
         }
 
-        return view('uploadGrade.errorDetail', ['errorDetail' => $errorArray]);
+        return view('uploadGrade.validate', compact('errorArray'));
 
     } // END upload Behavior
 
