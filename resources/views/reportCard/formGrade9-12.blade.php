@@ -3,9 +3,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
+    {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>--}}
+    {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>--}}
 </head>
 
 <center><h4 class="heading">FIRST SEMESTER REPORT</h4></center>
@@ -197,7 +197,7 @@
     <tr>
         <th scope="col">Student Name</th>
         <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
-        <th scope="col" class="setLeft">Grade</th>
+        <th scope="col" class="setLeft">Grade {{ $student->grade_level."/".$student->room}}</th>
     </tr>
 </table>
 <p class="setPosition">Social Skills and Personal Conduct</p>
@@ -671,28 +671,37 @@
                             margin-top: 30px;
                         }
 
+                        .table-bordered {
+                            border-collapse: collapse;
+                        }
+
+                        .table-bordered td {
+                            border: 1px solid black;
+                        }
+
+                        .table-bordered th {
+                            border: 1px solid black;
+                        }
+
                         .tableStyle {
                             width: 100%;
                             margin-top: 20px;
-                            border: 1px solid black;
+
                         }
 
                         .tableStyle2 {
                             width: 50%;
                             margin-top: 20px;
-                            border: 1px solid black;
                         }
 
                         .tableStyle3 {
                             width: 70%;
                             margin-top: 20px;
-                            border: 1px solid black;
                         }
 
                         .tableStyle4 {
                             width: 60%;
                             margin-top: 5px;
-                            border: 1px solid black;
                         }
 
                         .tableStyle5 {
@@ -705,10 +714,6 @@
                             position: absolute;
                             right: 1px;
                             bottom: -50px;
-                        }
-
-                        .table-bordered th {
-                            border: 1px solid black;
                         }
 
                         th {
@@ -724,10 +729,6 @@
 
                         tr {
                             height: -13px;
-                        }
-
-                        .table-bordered td, .table-bordered th {
-                            border: 1px solid black;
                         }
 
                         .page-break {
