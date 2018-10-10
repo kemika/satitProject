@@ -357,16 +357,17 @@ class ReportCardController extends Controller
                 $join->on('school_days.semester', 'attendace_records.semester');
                 $join->on('school_days.academic_year', 'attendace_records.academic_year');
             })
-            ->select('attendace_records.*', 'school_days.total_days')
+            ->where('school_days.grade_level', $grade_level->grade_level)
+            ->select('attendace_records.*', 'school_days.total_days','school_days.total_days as presence')
             ->orderBy('semester', 'asc')
             ->get();
 
         // Subtrace school day if there are attendances record
         foreach ($attendances as $att) {
-            $att->total_days -= $att->late;
-            $att->total_days -= $att->sick;
-            $att->total_days -= $att->leave;
-            $att->total_days -= $att->absent;
+            $att->presence -= $att->late;
+            $att->presence -= $att->sick;
+            $att->presence -= $att->leave;
+            $att->presence -= $att->absent;
         }
 
         $student = Student::where('students.student_id', $student_id)
@@ -579,7 +580,11 @@ class ReportCardController extends Controller
                     } else {
                         $grade = $x['semester_grade'] / (SystemConstant::TOTAL_QUARTERS + 1);
                     }
-                    $x['semester_grade'] = round($grade, 1);
+                    if($grade_level < 7) {
+                        $x['semester_grade'] = round($grade, 1);
+                    }else{
+                        $x['semester_grade'] = self::academic_evaluation_cart_2($grade);
+                    }
                 }
                 $result[$key] = $x;
             }

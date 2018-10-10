@@ -40,16 +40,16 @@
                 <td>{{$grade['course_name']}}</td>
                 <td>{{$grade['course_id']}}</td>
                 @if($grade['credits'] != 0)
-                    <td>{{ $grade['credits']}}</td>
+                    <td class="center-cell">{{ $grade['credits']}}</td>
                 @else
                     <td></td>
                 @endif
 
 
-                <td>{{ $grade['quater1']}}</td>
-                <td>{{ $grade['quater2']}}</td>
-                <td>{{ $grade['quater3']}}</td>
-                <td>{{  $grade['semester_grade'] }}</td>
+                <td class="center-cell">{{ $grade['quater1']}}</td>
+                <td class="center-cell">{{ $grade['quater2']}}</td>
+                <td class="center-cell">{{ $grade['quater3']}}</td>
+                <td class="center-cell">{{  $grade['semester_grade'] }}</td>
 
             </tr>
 
@@ -71,7 +71,7 @@
         @foreach($activity_semester1 as $grade)
             <tr>
                 <td>{{ $grade->course_name }}</td>
-                <td>{{ $grade->grade_status_text }}</td>
+                <td class="center-cell">{{ $grade->grade_status_text }}</td>
             </tr>
         @endforeach
         @for ($i = count($activity_semester1); $i < 5; $i++)
@@ -121,16 +121,16 @@
                 <td>{{$grade['course_name']}}</td>
                 <td>{{$grade['course_id']}}</td>
                 @if($grade['credits'] != 0)
-                    <td>{{ $grade['credits']}}</td>
+                    <td class="center-cell">{{ $grade['credits']}}</td>
                 @else
                     <td></td>
                 @endif
 
 
-                <td>{{ $grade['quater1']}}</td>
-                <td>{{ $grade['quater2']}}</td>
-                <td>{{ $grade['quater3']}}</td>
-                <td>{{ $grade['semester_grade']}}</td>
+                <td class="center-cell">{{ $grade['quater1']}}</td>
+                <td class="center-cell">{{ $grade['quater2']}}</td>
+                <td class="center-cell">{{ $grade['quater3']}}</td>
+                <td class="center-cell">{{ $grade['semester_grade']}}</td>
             </tr>
 
         @endforeach
@@ -150,11 +150,11 @@
             <tr>
                 <td>{{$selected_elective['course_name']}}</td>
                 <td>{{$selected_elective['course_id']}}</td>
-                <td>{{ $selected_elective['credits']}}</td>
-                <td>{{ $selected_elective['quater1']}}</td>
-                <td>{{ $selected_elective['quater2']}}</td>
-                <td>{{ $selected_elective['quater3']}}</td>
-                <td>{{ $selected_elective['semester_grade']}}</td>
+                <td class="center-cell">{{ $selected_elective['credits']}}</td>
+                <td class="center-cell">{{ $selected_elective['quater1']}}</td>
+                <td class="center-cell">{{ $selected_elective['quater2']}}</td>
+                <td class="center-cell">{{ $selected_elective['quater3']}}</td>
+                <td class="center-cell">{{ $selected_elective['semester_grade']}}</td>
             </tr>
         @endif
 
@@ -174,7 +174,7 @@
         @foreach($activity_semester2 as $grade)
             <tr>
                 <td>{{ $grade->course_name }}</td>
-                <td>{{ $grade->grade_status_text }}</td>
+                <td class="center-cell">{{ $grade->grade_status_text }}</td>
             </tr>
         @endforeach
         @for ($i = count($activity_semester2); $i < 5; $i++)
@@ -220,10 +220,10 @@
         @foreach ($behavior_records as $behavior_record)
             <tr>
                 <td>{{ $behavior_record->behavior_type_text}}</td>
-                <td>{{$behavior_record->sem1_q1}}</td>
-                <td>{{$behavior_record->sem1_q2}}</td>
-                <td>{{$behavior_record->sem2_q1}}</td>
-                <td>{{$behavior_record->sem2_q2}}</td>
+                <td class="center-cell">{{$behavior_record->sem1_q1}}</td>
+                <td class="center-cell">{{$behavior_record->sem1_q2}}</td>
+                <td class="center-cell">{{$behavior_record->sem2_q1}}</td>
+                <td class="center-cell">{{$behavior_record->sem2_q2}}</td>
             </tr>
 
         @endforeach
@@ -247,67 +247,71 @@
 <div class="relative2">
     <table class="table table-bordered tableStyle4">
         <tr>
-            <td scope="col" rowspan="2">1st Sem Total School Days</td>
-            <td scope="col">Present</td>
-            <td scope="col">Late</td>
-            <td scope="col">Sick</td>
-            <td scope="col">Leave</td>
-            <td scope="col">Absent</td>
+            <th scope="col">1st Sem Total School Days</th>
+            <th scope="col">Present</th>
+            <th scope="col">Late</th>
+            <th scope="col">Sick</th>
+            <th scope="col">Leave</th>
+            <th scope="col">Absent</th>
         </tr>
         {{ $check = 0 }}
         @foreach ($attendances as $attendance):
         @if($attendance->semester == 1)
             {{$check =1}}
-            <tr>
-                <td>{{$attendance->total_days}}</td>
-                <td>{{$attendance->late}}</td>
-                <td>{{$attendance->sick}}</td>
-                <td>{{$attendance->leave}}</td>
-                <td>{{$attendance->absent}}</td>
+            <tr class="center-cell">
+                <td >{{$attendance->total_days}}</td>
+                <td >{{$attendance->presence}}</td>
+                <td >{{$attendance->late}}</td>
+                <td >{{$attendance->sick}}</td>
+                <td >{{$attendance->leave}}</td>
+                <td >{{$attendance->absent}}</td>
             </tr>
         @endif
         @endforeach;
 
         @if($check == 0)
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+            <tr class="center-cell">
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
             </tr>
 
         @endif
 
         <tr>
-            <td scope="col" rowspan="2">2nd Sem Total School Days</td>
-            <td scope="col">Present</td>
-            <td scope="col">Late</td>
-            <td scope="col">Sick</td>
-            <td scope="col">Leave</td>
-            <td scope="col">Absent</td>
+            <th scope="col">2nd Sem Total School Days</th>
+            <th scope="col">Present</th>
+            <th scope="col">Late</th>
+            <th scope="col">Sick</th>
+            <th scope="col">Leave</th>
+            <th scope="col">Absent</th>
         </tr>
         {{ $check = 0 }}
         @foreach ($attendances as $attendance):
         @if($attendance->semester == 2)
             {{$check =1}}
-            <tr>
-                <td>{{$attendance->total_days}}</td>
-                <td>{{$attendance->late}}</td>
-                <td>{{$attendance->sick}}</td>
-                <td>{{$attendance->leave}}</td>
-                <td>{{$attendance->absent}}</td>
+            <tr class="center-cell">
+                <td >{{$attendance->total_days}}</td>
+                <td >{{$attendance->presence}}</td>
+                <td >{{$attendance->late}}</td>
+                <td >{{$attendance->sick}}</td>
+                <td >{{$attendance->leave}}</td>
+                <td >{{$attendance->absent}}</td>
             </tr>
         @endif
         @endforeach;
 
         @if($check == 0)
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+            <tr class="center-cell">
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
             </tr>
 
         @endif
@@ -318,27 +322,27 @@
         <table>
             <tr>
                 <td></td>
-                <td>Height (cm.)</td>
-                <td>Weight (kg.)</td>
+                <td class="center-cell">Height (cm.)</td>
+                <td class="center-cell">Weight (kg.)</td>
             </tr>
             <tr>
                 <td>1st Sem</td>
                 @if ($physical_record_semester1)
-                    <td>{{$physical_record_semester1->height}}</td>
-                    <td>{{$physical_record_semester1->weight}}</td>
+                    <td class="center-cell">{{$physical_record_semester1->height}}</td>
+                    <td class="center-cell">{{$physical_record_semester1->weight}}</td>
                 @else
-                    <td>0.00</td>
-                    <td>0.00</td>
+                    <td class="center-cell">-</td>
+                    <td class="center-cell">-</td>
                 @endif
             </tr>
             <tr>
                 <td>2nd Sem</td>
                 @if ($physical_record_semester2)
-                    <td>{{$physical_record_semester2->height}}</td>
-                    <td>{{$physical_record_semester2->weight}}</td>
+                    <td class="center-cell">{{$physical_record_semester2->height}}</td>
+                    <td class="center-cell">{{$physical_record_semester2->weight}}</td>
                 @else
-                    <td>0.00</td>
-                    <td>0.00</td>
+                    <td class="center-cell">-</td>
+                    <td class="center-cell">-</td>
                 @endif
             </tr>
         </table>
@@ -700,10 +704,28 @@
                 margin-top: 5px;
             }
 
+            .tableStyle4 th {
+                font-size: 9px;
+            }
+
+            .tableStyle4 td {
+                font-size: 9px;
+            }
+
             .tableStyle5 {
                 width: 50%;
                 margin-left: 70px;
             }
+
+            .tableStyle5 th {
+                text-align: left;
+                font-size: 10px;
+            }
+
+            .tableStyle5 td {
+                font-size: 10px;
+            }
+
 
             .classroomStyle {
                 font-size: 12px;
@@ -712,14 +734,18 @@
                 bottom: -50px;
             }
 
+            .center-cell {
+                text-align: center;
+            }
+
             th {
                 text-align: center;
-                font-size: 10px;
+                font-size: 11px;
                 height: -13px;
             }
 
             td {
-                font-size: 10px;
+                font-size: 11px;
                 height: -13px;
             }
 
@@ -734,15 +760,6 @@
             .table td, .table th {
                 padding: .20rem;
                 vertical-align: top;
-            }
-
-            .tableStyle5 th {
-                text-align: left;
-                font-size: 10px;
-            }
-
-            .tableStyle5 td {
-                font-size: 10px;
             }
 
             .noGrade p {
@@ -788,7 +805,7 @@
             div.attendance {
                 position: absolute;
                 top: 10px;
-                right: 0;
+                right: -30;
                 width: 250px;
             }
 

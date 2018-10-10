@@ -15,10 +15,11 @@ class CreateAcademicYear extends Migration
     {
         Schema::create('school_days', function (Blueprint $table) {
                       $table->unsignedSmallInteger('academic_year');
+                      $table->unsignedTinyInteger('grade');
                       $table->unsignedTinyInteger('semester');
                       $table->unsignedSmallInteger('total_days');
 
-                      $table->primary(['academic_year','semester']);
+                      $table->primary(['academic_year','grade_level','semester']);
         });
     }
 
