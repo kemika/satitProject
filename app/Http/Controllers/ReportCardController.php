@@ -389,7 +389,7 @@ class ReportCardController extends Controller
             $teacher_names[] = $t->name_title . " " . $t->firstname . " " . $t->lastname;
         }
 
-        $director_full_name = Information::select('director_full_name')->first();
+        $director_full_name = Information::pluck('director_full_name')[0];
 
 // Pack data for view
         $view_data = ['academic_year' => $academic_year,
