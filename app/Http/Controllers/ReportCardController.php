@@ -19,6 +19,7 @@ use App\Homeroom;
 use App\Grade;
 use App\Activity_Record;
 use App\Grade_Status;
+use App\Information;
 use App\Physical_Record;
 use App\Behavior_Type;
 use App\Behavior_Record;
@@ -102,7 +103,7 @@ class ReportCardController extends Controller
         if ($zip->open($zip_output_path . $zipFileName, ZipArchive::CREATE) === TRUE) {
 
             foreach ($students as $student) {
-                if($zip->addFile($path . $student->student_id . '.pdf',$student->student_id . '.pdf')){
+                if($zip->addFile($path . $student->student_id . '.pdf',$student->firstname . "_" . $student->lastname ."_". $student->student_id . '.pdf')){
                  //   Log::info("Adding ".$path . $student->student_id . '.pdf'. " to zip");
                 }else{
                     Log::error("Problem adding ".$path . $student->student_id);
@@ -388,6 +389,8 @@ class ReportCardController extends Controller
             $teacher_names[] = $t->name_title . " " . $t->firstname . " " . $t->lastname;
         }
 
+        $director_full_name = Information::select('director_full_name')->first();
+
 // Pack data for view
         $view_data = ['academic_year' => $academic_year,
             'grade_semester1' => $grade_semester1,
@@ -406,7 +409,8 @@ class ReportCardController extends Controller
             'teacher_comments' => $teacher_comments,
             'behavior_types' => $behavior_types,
             'behavior_records' => $behavior_records,
-            'teacher_names' => $teacher_names];
+            'teacher_names' => $teacher_names,
+            'director_full_name' => $director_full_name];
 
         // Export to pdf
         PDF::setOptions(['isHtml5ParserEnabled' => true]);

@@ -22,16 +22,16 @@
 <center>
     <table class="table table-bordered tableStyle">
         <tr>
-            <th scope="col" rowspan="2">Course</th>
-            <th scope="col" rowspan="2">Code</th>
-            <th scope="col" rowspan="2">Credit</th>
+            <th scope="col" rowspan="2" class="courseCell">Course</th>
+            <th scope="col" rowspan="2" class="codeCell">Code</th>
+            <th scope="col" rowspan="2" class="creditCell">Credit</th>
             <th scope="col" colspan="4" align="center">1st Semester Grade</th>
         </tr>
         <tr>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-            <th>Semester Grade</th>
+            <th class="gradeCell">1</th>
+            <th class="gradeCell">2</th>
+            <th class="gradeCell">3</th>
+            <th class="semCell">Semester Grade</th>
         </tr>
         @foreach($grade_semester1 as $key => $grade )
 
@@ -103,16 +103,16 @@
 <center>
     <table class="table table-bordered tableStyle">
         <tr>
-            <th scope="col" rowspan="2">Course</th>
-            <th scope="col" rowspan="2">Code</th>
-            <th scope="col" rowspan="2">Credit</th>
-            <th scope="col" colspan="4" align="center">2nd Semester Grade</th>
+            <th scope="col" rowspan="2" class="courseCell">Course</th>
+            <th scope="col" rowspan="2" class="codeCell">Code</th>
+            <th scope="col" rowspan="2" class="creditCell">Credit</th>
+            <th scope="col" colspan="4" align="center">1st Semester Grade</th>
         </tr>
         <tr>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-            <th>Semester Grade</th>
+            <th class="gradeCell">1</th>
+            <th class="gradeCell">2</th>
+            <th class="gradeCell">3</th>
+            <th class="semCell">Semester Grade</th>
         </tr>
         @foreach($grade_semester2 as $key => $grade )
 
@@ -576,7 +576,7 @@
                     <td>........................................................</td>
                 </tr>
                 <tr>
-                    <td style="text-align: center;">Asst.Prof. Acharapan Corvanich</td>
+                    <td style="text-align: center;">{{$director_full_name}}</td>
                     <td style="color:white">------------------</td>
                     <td style="text-align: center;" rowspan="2">Classroom teacher</td>
                 </tr>
@@ -844,5 +844,32 @@
                 top: 0px;
                 left: 130px;
                 width: 80%;
+            }
+
+            .courseCell{
+                vertical-align: center;
+            }
+            .codeCell{
+                width: 2.2cm;
+                vertical-align: center;
+            }
+            .gradeCell{
+                width: 1cm;
+                vertical-align: center;
+            }
+            .creditCell {
+                width: 1.2cm;
+                vertical-align: center;
+            }
+            .semCell{
+                width: 19mm;
+            }
+            .gradeCell{
+                width: 1cm;
+                vertical-align: center;
+            }
+            .creditCell{
+                width: 1.2cm;
+                vertical-align: center;
             }
         </style>
