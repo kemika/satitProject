@@ -46,13 +46,6 @@
         <th class="gradeCell">Sem. Grade</th>
     </tr>
 
-
-    <?php
-    $total_credit = 0;
-    $GPA_sem1 = 0;
-    $GPA_sem2 = 0;
-    $GPA_total = 0;
-    ?>
     @foreach($grade_semester1 as $key => $grade )
         <tr>
             <td>{{$grade['course_name']}}</td>

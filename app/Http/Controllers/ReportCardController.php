@@ -420,7 +420,6 @@ class ReportCardController extends Controller
             $view_data['grade_semester1'] = $grade_semester1_6;
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade1-6', $view_data);
-            // return $pdf->download('reportCard.pdf');
         } elseif ($grade_level->grade_level <= 8) {
             $public_dir = public_path();
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
@@ -696,8 +695,6 @@ class ReportCardController extends Controller
         $total_sem2_credit = 0;
         $semester_1_gpa = 0;
         $semester_2_gpa = 0;
-        $total_sem1_subject = 0;
-        $total_sem2_subject = 0;
         $gpa = 0;
 
         // Semester 1 computation
@@ -716,9 +713,8 @@ class ReportCardController extends Controller
                     if ($year_grade != "-") {
                         $gpa += $year_grade * $credit;
                     }
-                } else {
-                    $semester_1_gpa += $semester_grade * $credit;
                 }
+                $semester_1_gpa += $semester_grade * $credit;
             }
         }
 
@@ -732,9 +728,6 @@ class ReportCardController extends Controller
         } else {
             $gpa = $semester_1_gpa;
         }
-//        if($grade_level <=6){
-//            $semester_1_gpa = round($semester_1_gpa / $total_sem1_subject, 2);
-//        }else {
 
         if ($total_sem1_credit < SystemConstant::MIN_TO_ZERO) {
             $semester_1_gpa = 0;
@@ -800,7 +793,6 @@ class ReportCardController extends Controller
         $view_data['total_sem1_credit'] = $total_sem1_credit;
         $view_data['total_sem2_credit'] = $total_sem2_credit;
         $view_data['total_credit'] = $total_credit;
-
         return $view_data;
     }
 

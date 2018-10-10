@@ -129,7 +129,6 @@ class UploadGradeController extends Controller
                                 for ($quarter = 1; $quarter <= SystemConstant::TOTAL_QUARTERS; $quarter++) {
                                     $qComment = "quater_" . $q_count;
                                     $q_count++;
-                                    Log::info("See ".$r->$qComment);
                                     // Only add when the comment is not empty
                                     if (trim($r[$qComment]) != "") {
                                         $comment = new Teacher_Comment;
@@ -536,9 +535,9 @@ class UploadGradeController extends Controller
                         $attendance->datetime = $datetime;
                         $attendance->data_status = 1;  //TODO Attendance approval is not implemented yet
 
-                        if ($isNotEmprty) {
+//                        if ($isNotEmprty) {
                             $finalResult[] = $attendance;
-                        }
+//                        }
 
                         $isNotEmprty = false;
                         $attendance = new Attendance_Record;
@@ -595,9 +594,9 @@ class UploadGradeController extends Controller
                         $attendance->datetime = $datetime;
                         $attendance->data_status = 1;  //TODO Attendance approval is not implemented yet
 
-                        if ($isNotEmprty) {
+//                        if ($isNotEmprty) {
                             $finalResult[] = $attendance;
-                        }
+//                        }
                     }
 
                 }
@@ -1218,7 +1217,6 @@ class UploadGradeController extends Controller
         $getAcademicYear = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
             $reader->setHeaderRow(1);
         })->get();
-
 
         $getGradeLevel = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
             $reader->setHeaderRow(2);
