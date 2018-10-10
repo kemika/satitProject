@@ -759,7 +759,7 @@
 
             .table td, .table th {
                 padding: .20rem;
-                vertical-align: top;
+                vertical-align: middle;
             }
 
             .noGrade p {
@@ -847,29 +847,21 @@
             }
 
             .courseCell{
-                vertical-align: center;
             }
+
             .codeCell{
                 width: 2.2cm;
-                vertical-align: center;
-            }
-            .gradeCell{
-                width: 1cm;
-                vertical-align: center;
             }
             .creditCell {
                 width: 1.2cm;
-                vertical-align: center;
             }
             .semCell{
                 width: 19mm;
             }
             .gradeCell{
                 width: 1cm;
-                vertical-align: center;
             }
             .creditCell{
                 width: 1.2cm;
-                vertical-align: center;
             }
         </style>

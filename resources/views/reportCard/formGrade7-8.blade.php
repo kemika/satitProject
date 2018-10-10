@@ -222,12 +222,12 @@
 <div class="relative2">
     <table class="table table-bordered tableStyle4">
         <tr>
-            <td scope="col">1st Sem Total School Days</td>
-            <td scope="col">Present</td>
-            <td scope="col">Late</td>
-            <td scope="col">Sick</td>
-            <td scope="col">Leave</td>
-            <td scope="col">Absent</td>
+            <th scope="col">1st Sem Total School Days</th>
+            <th scope="col">Present</th>
+            <th scope="col">Late</th>
+            <th scope="col">Sick</th>
+            <th scope="col">Leave</th>
+            <th scope="col">Absent</th>
         </tr>
         {{ $check = 0 }}
         @foreach ($attendances as $attendance):
@@ -257,12 +257,12 @@
         @endif
 
         <tr>
-            <td scope="col">2nd Sem Total School Days</td>
-            <td scope="col">Present</td>
-            <td scope="col">Late</td>
-            <td scope="col">Sick</td>
-            <td scope="col">Leave</td>
-            <td scope="col">Absent</td>
+            <th scope="col">2nd Sem Total School Days</th>
+            <th scope="col">Present</th>
+            <th scope="col">Late</th>
+            <th scope="col">Sick</th>
+            <th scope="col">Leave</th>
+            <th scope="col">Absent</th>
         </tr>
         {{ $check = 0 }}
         @foreach ($attendances as $attendance):
@@ -707,6 +707,7 @@
 
                         th {
                             text-align: center;
+
                             font-size: 11px;
                             height: -10px;
                         }
@@ -730,7 +731,7 @@
 
                         .table td, .table th {
                             padding: .20rem;
-                            vertical-align: top;
+                            vertical-align: middle;
                         }
 
                         .noGrade p {

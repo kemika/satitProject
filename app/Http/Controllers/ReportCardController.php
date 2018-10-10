@@ -416,7 +416,7 @@ class ReportCardController extends Controller
         PDF::setOptions(['isHtml5ParserEnabled' => true]);
         if ($grade_level->grade_level <= 6) {
 
-            $grade_semester1_6 = self::getGradeToFrom1_6($grade_semester1_raw, $grade_semester2_raw);
+            $grade_semester1_6 = self::getGradeToFrom1_6($grade_semester1, $grade_semester2);
             $view_data['grade_semester1'] = $grade_semester1_6;
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade1-6', $view_data);
@@ -607,7 +607,11 @@ class ReportCardController extends Controller
 
         // Combine two grades into one and compute year grade
         foreach ($grade_sem1 as $course_id => $s1) {
-            $s2 = $grade_sem2[$course_id];
+            if(array_key_exists($course_id,$grade_sem2)){
+                $s2 = $grade_sem2[$course_id];
+            }else{
+                $s2 = null;
+            }
 
             $grade['course_name'] = $s1['course_name'];
             $grade['course_id'] = $s1['course_id'];
@@ -616,10 +620,18 @@ class ReportCardController extends Controller
             $grade['practice'] = $s1['practice'];
             for ($i = 1; $i <= SystemConstant::TOTAL_QUARTERS + 1; $i++) {
                 $grade['quater' . $i . '_sem1'] = $s1['quater' . $i];
-                $grade['quater' . $i . '_sem2'] = $s2['quater' . $i];
+                if($s2 != null) {
+                    $grade['quater' . $i . '_sem2'] = $s2['quater' . $i];
+                }else{
+                    $grade['quater' . $i . '_sem2'] = "";
+                }
             }
             $grade['semester1_grade'] = $s1['semester_grade'];
-            $grade['semester2_grade'] = $s1['semester_grade'];
+            if($s2 != null) {
+                $grade['semester2_grade'] = $s2['semester_grade'];
+            }else{
+                $grade['semester2_grade'] = "-";
+            }
 
             // Compute year grade when possible
             if ($grade['semester1_grade'] != "-" && $grade['semester2_grade'] != "-") {

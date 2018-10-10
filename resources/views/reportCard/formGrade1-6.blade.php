@@ -25,25 +25,25 @@
 </div>
 <table class="table table-bordered tableStyle">
     <tr>
-        <th scope="col" rowspan="2" style="width: 120px;">Course</th>
-        <th scope="col" rowspan="2" style="width: 70px;">Code</th>
+        <th scope="col" rowspan="2" style="">Course</th>
+        <th scope="col" rowspan="2" style="width: 1.8cm;">Code</th>
         <th scope="col" colspan="2" align="center">Periods/Week</th>
-        <th scope="col" rowspan="2" style="width:10px;">Credit Hour</th>
+        <th scope="col" rowspan="2" style="width: .7cm;">Credit Hour</th>
         <th scope="col" colspan="4" align="center">1st Semester Grade</th>
         <th scope="col" colspan="4" align="center">2nd Semester Grade</th>
-        <th scope="col" rowspan="2" style="width:10px;">Year Grade</th>
+        <th scope="col" rowspan="2" style="width:.7cm;">Year Grade</th>
     </tr>
     <tr>
-        <th style="width:10px;">In class</th>
-        <th style="width:10px;">Practice</th>
-        <th>1</th>
-        <th>2</th>
-        <th>3</th>
-        <th style="width:10px;">Sem. Grade</th>
-        <th>1</th>
-        <th>2</th>
-        <th>3</th>
-        <th style="width:10px;">Sem. Grade</th>
+        <th class="periodCell" style="font-size: 6px">In class</th>
+        <th class="periodCell" style="font-size: 6px">Practice</th>
+        <th class="gradeCell">1</th>
+        <th class="gradeCell">2</th>
+        <th class="gradeCell">3</th>
+        <th class="gradeCell">Sem. Grade</th>
+        <th class="gradeCell">1</th>
+        <th class="gradeCell">2</th>
+        <th class="gradeCell">3</th>
+        <th class="gradeCell">Sem. Grade</th>
     </tr>
 
 
@@ -226,12 +226,12 @@
         <div class="relative2">
             <table class="table table-bordered tableStyle4">
                 <tr>
-                    <td scope="col" rowspan="2">1st Sem Total School Days</td>
-                    <td scope="col">Present</td>
-                    <td scope="col">Late</td>
-                    <td scope="col">Sick</td>
-                    <td scope="col">Leave</td>
-                    <td scope="col">Absent</td>
+                    <th scope="col">1st Sem Total School Days</th>
+                    <th scope="col">Present</th>
+                    <th scope="col">Late</th>
+                    <th scope="col">Sick</th>
+                    <th scope="col">Leave</th>
+                    <th scope="col">Absent</th>
                 </tr>
                 {{ $check = 0 }}
                 @foreach ($attendances as $attendance):
@@ -261,12 +261,12 @@
                 @endif
 
                 <tr>
-                    <td scope="col">2nd Sem Total School Days</td>
-                    <td scope="col">Present</td>
-                    <td scope="col">Late</td>
-                    <td scope="col">Sick</td>
-                    <td scope="col">Leave</td>
-                    <td scope="col">Absent</td>
+                    <th scope="col">2nd Sem Total School Days</th>
+                    <th scope="col">Present</th>
+                    <th scope="col">Late</th>
+                    <th scope="col">Sick</th>
+                    <th scope="col">Leave</th>
+                    <th scope="col">Absent</th>
                 </tr>
                 {{ $check = 0 }}
                 @foreach ($attendances as $attendance):
@@ -307,21 +307,21 @@
                     <tr>
                         <td>1st Sem</td>
                         @if ($physical_record_semester1)
-                            <td>{{$physical_record_semester1->height}}</td>
-                            <td>{{$physical_record_semester1->weight}}</td>
+                            <td class="center-cell">{{$physical_record_semester1->height}}</td>
+                            <td class="center-cell">{{$physical_record_semester1->weight}}</td>
                         @else
-                            <td>0.00</td>
-                            <td>0.00</td>
+                            <td class="center-cell">-</td>
+                            <td class="center-cell">-</td>
                         @endif
                     </tr>
                     <tr>
                         <td>2nd Sem</td>
                         @if ($physical_record_semester2)
-                            <td>{{$physical_record_semester2->height}}</td>
-                            <td>{{$physical_record_semester2->weight}}</td>
+                            <td class="center-cell">{{$physical_record_semester2->height}}</td>
+                            <td class="center-cell">{{$physical_record_semester2->weight}}</td>
                         @else
-                            <td>0.00</td>
-                            <td>0.00</td>
+                            <td class="center-cell">-</td>
+                            <td class="center-cell">-</td>
                         @endif
                     </tr>
                 </table>
@@ -499,7 +499,7 @@
 
             .table td, .table th {
                 padding: .35rem;
-                vertical-align: top;
+                vertical-align: middle;
             }
 
             th {
@@ -521,6 +521,10 @@
                 width: 100%;
                 margin-top: 20px;
                 border: 1px solid black;
+            }
+
+            .tableStyle th{
+                font-size: 9px;
             }
 
             .tableStyle2 {
@@ -653,6 +657,7 @@
                 top: 10px;
                 right: -30;
                 width: 250px;
+                font-size: 10px;
             }
 
             .setPosition {
@@ -678,9 +683,17 @@
             }
 
             .tableStyle4 {
-                width: 60%;
+                width: 65%;
                 margin-top: 5px;
                 border: 1px solid black;
+            }
+
+            .tableStyle4 th {
+                font-size: 9px;
+            }
+
+            .tableStyle4 td {
+                font-size: 9px;
             }
 
             .tableStyle5 {
@@ -708,5 +721,12 @@
                 margin-bottom: 0px;
             }
 
-
+            .gradeCell{
+                width: 5mm;
+                font-size: 9px;
+            }
+            .periodCell{
+                width: 5mm;
+                font-size: 6px;
+            }
         </style>

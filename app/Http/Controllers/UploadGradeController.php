@@ -127,10 +127,11 @@ class UploadGradeController extends Controller
                             $q_count = 1;
                             for ($semester = 1; $semester <= SystemConstant::TOTAL_SEMESTERS; $semester++) {
                                 for ($quarter = 1; $quarter <= SystemConstant::TOTAL_QUARTERS; $quarter++) {
-                                    $qComment = "quarter_" . $q_count;
+                                    $qComment = "quater_" . $q_count;
                                     $q_count++;
+                                    Log::info("See ".$r->$qComment);
                                     // Only add when the comment is not empty
-                                    if (trim($r->$qComment) != "") {
+                                    if (trim($r[$qComment]) != "") {
                                         $comment = new Teacher_Comment;
                                         $comment->student_id = $r->students_id;
                                         $comment->quater = $quarter;
@@ -140,6 +141,7 @@ class UploadGradeController extends Controller
                                         $comment->datetime = $datetime;
                                         $comment->data_status = SystemConstant::DATA_STATUS_WAIT;
                                         $comment->save();
+                                        Log::info("Add ".$r);
                                     }
                                 }
                             }
