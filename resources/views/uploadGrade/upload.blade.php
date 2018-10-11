@@ -64,7 +64,7 @@
         {{csrf_field()}}
         <input type="file" name="file[]" multiple>
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="submit" class="btn btn-primary mb-2" value="upload">
+        <input type="submit" class="btn btn-primary mb-2" value="upload"> Note: Maximum of 50 files.
       </form>
 
 

@@ -90,7 +90,6 @@ class UploadGradeController extends Controller
                         $errorArray[] = $file_name . " Field 'Room' is empty at row '?'";
                     }
 
-                    //dd($results);
                     // Loop and check correctness of each result  We need to use index
                     // because we will remove irrelevant data from result.
                     for ($i = 0; $i < count($results); $i++) {
@@ -113,11 +112,11 @@ class UploadGradeController extends Controller
                             // We have both name and ID
                             // Check if ID is in database
                             $isOK = false;
-                            $errorArray[] = $file_name . " 'Student ID' at row 'A" . ($i + 7) . "' is not in database.";
+                            $errorArray[] = $file_name . " 'Student ID' ".$student_id." at row 'A" . ($i + 7) . "' is not in database.";
                         } elseif (strcasecmp($students[$student_id], $student_name) != 0) {
                             // Check if student name matches with ID
                             $isOK = false;
-                            $errorArray[] = $file_name . " Field 'Student name' is incorrect at row 'B" . ($i + 7) . "'";
+                            $errorArray[] = $file_name . " Field 'Student name' ".$students[$student_id]." is incorrect at row 'B" . ($i + 7) . "'";
                         }
                     }
 
@@ -140,7 +139,7 @@ class UploadGradeController extends Controller
                                         $comment->datetime = $datetime;
                                         $comment->data_status = SystemConstant::DATA_STATUS_WAIT;
                                         $comment->save();
-                                        Log::info("Add ".$r);
+                                    //    Log::info("Add ".$r);
                                     }
                                 }
                             }
@@ -820,7 +819,7 @@ class UploadGradeController extends Controller
                 })->get());
                 // Check if there are enough header
                 if ($importRow < 5) {
-                    $errorArray[] = "File " . $file_name . " is not in correct format.";
+                    $errorArray[] = "File " . $file_name . " is not in correct format. Try copy data to a new grade file downloaded from Export Form.";
                 } else {
                     // Get grades of each student in class
                     $results = Excel::load(SystemConstant::FILE_STORE_DIR . '/' . $file_name, function ($reader) {
@@ -908,20 +907,19 @@ class UploadGradeController extends Controller
                                     // We have both name and ID
                                     // Check if ID is in database
                                     $isOK = false;
-                                    $errorArray[] = $file_name . " 'Student ID' at row 'A" . ($i + 7) . "' is not in database.";
+                                    $errorArray[] = $file_name . " 'Student ID' ".$student_id." at row 'A" . ($i + 7) . "' is not in database.";
                                 } elseif (strcasecmp($students[$student_id], $student_name) != 0) {
                                     // Check if student name matches with ID
                                     $isOK = false;
-                                    $errorArray[] = $file_name . " Field 'Student name' is incorrect at row 'B" . ($i + 7) . "'";
+                                    $errorArray[] = $file_name . " Field 'Student name' ".$students[$student_id]." is incorrect at row 'B" . ($i + 7) . "'";
                                 } else {
-
                                     //----- Validate Q1 -------//
                                     // Clean white space
                                     $results[$i]->q1 = preg_replace('/\s+/', '', $results[$i]->q1);
                                     $error = $this->validateGrade($results[$i]->q1, "Q1", "C", $i);
                                     if ($error !== null) {
                                         $isOK = false;
-                                        $errorArray[] = $error;
+                                        $errorArray[] = $file_name .":". $error;
                                     }
 
                                     //----- Validate Q2 -------//
@@ -930,7 +928,7 @@ class UploadGradeController extends Controller
                                     $error = $this->validateGrade($results[$i]->q2, "Q2", "D", $i);
                                     if ($error !== null) {
                                         $isOK = false;
-                                        $errorArray[] = $error;
+                                        $errorArray[] = $file_name .":". $error;
                                     }
 
 
@@ -941,7 +939,7 @@ class UploadGradeController extends Controller
                                     $error = $this->validateGrade($results[$i]->sum_1, "SUM 1", "E", $i);
                                     if ($error !== null) {
                                         $isOK = false;
-                                        $errorArray[] = $error;
+                                        $errorArray[] = $file_name .":". $error;
                                     }
 
 
@@ -951,7 +949,7 @@ class UploadGradeController extends Controller
                                     $error = $this->validateGrade($results[$i]->q3, "Q3", "G", $i);
                                     if ($error !== null) {
                                         $isOK = false;
-                                        $errorArray[] = $error;
+                                        $errorArray[] = $file_name .":". $error;
                                     }
 
 
@@ -962,7 +960,7 @@ class UploadGradeController extends Controller
                                     $error = $this->validateGrade($results[$i]->q4, "Q4", "H", $i);
                                     if ($error !== null) {
                                         $isOK = false;
-                                        $errorArray[] = $error;
+                                        $errorArray[] = $file_name .":". $error;
                                     }
 
                                     //----- Validate SUM2 -------//
@@ -972,7 +970,7 @@ class UploadGradeController extends Controller
                                     $error = $this->validateGrade($results[$i]->sum_2, "SUM 2", "I", $i);
                                     if ($error !== null) {
                                         $isOK = false;
-                                        $errorArray[] = $error;
+                                        $errorArray[] = $file_name .":". $error;
                                     }
                                 }
                             }
@@ -1157,7 +1155,7 @@ class UploadGradeController extends Controller
             // Ok return null;
             return null;
         } else {
-            return "Field '$field' is incorrect format at row '$column" . ($row + 7) . "'";
+            return "Field '$field' value ".$data." is incorrect format at row '$column" . ($row + 7) . "'";
         }
     }
 

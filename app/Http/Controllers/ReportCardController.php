@@ -74,8 +74,6 @@ class ReportCardController extends Controller
 
         // Create output path for pdf file if it doesn't exists
         $path = public_path() . '/fileToZip' . '/' . $folder_name. '/';
-        // dd($path);
-        // dd(File::exists($path));
         if (!File::exists($path)) {
             File::makeDirectory($path, $mode = 0777, true, true);
         }
@@ -88,7 +86,6 @@ class ReportCardController extends Controller
 
         foreach ($students as $student) {
             self::exportPDF($student->student_id, $academic_year, 1, $folder_name);
-           // Log::info("Report for ".$student->student_id." is done.");
         }
 
 //         for($i =0 ; $i < 3;$i ++){
@@ -218,16 +215,12 @@ class ReportCardController extends Controller
             ->get();
 
         $grade_semester1 = self::getGradeToFrom($grade_semester1_raw, $grade_level->grade_level);
-        //dd($grade_semester1);
-
-//        $grade_avg_sem1 = self::getAvg($grade_semester1);
 
         // Get grades for semester 2
         $grade_semester2_raw = (clone $grade)->where('offered_courses.semester', '2')
             ->where('offered_courses.is_elective', '0')
             ->get();
         $grade_semester2 = self::getGradeToFrom($grade_semester2_raw, $grade_level->grade_level);
-//        $grade_avg_sem2 = self::getAvg($grade_semester2);
 
         // Get elective grades
         $elective_grades = (clone $grade)->where('offered_courses.is_elective', '1')->get();
@@ -365,7 +358,7 @@ class ReportCardController extends Controller
 
         // Subtrace school day if there are attendances record
         foreach ($attendances as $att) {
-            $att->presence -= $att->late;
+//            $att->presence -= $att->late;  //Late does not count as absent
             $att->presence -= $att->sick;
             $att->presence -= $att->leave;
             $att->presence -= $att->absent;
@@ -516,7 +509,6 @@ class ReportCardController extends Controller
     {
         $result = array();
         foreach ($arr as $x) {
-
             if (!array_key_exists($x->course_id, $result)) {
 
                 $element = array('course_name' => $x->course_name,
@@ -821,59 +813,4 @@ class ReportCardController extends Controller
 
         return 4;
     }
-
-    // public function download_all($folder_name, $students)
-    // {
-    //       // Define Dir Folder
-    //       $public_dir=public_path();
-    //       // Zip File Name
-    //         $zipFileName = $folder_name.'.zip';
-    //
-    //         // Create ZipArchive Obj
-    //         $zip = new ZipArchive;
-    //         if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
-    //
-    //
-    //            foreach($students as $student){
-    //             $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$student->student_id.'.pdf',$folder_name.'/'.$student->student_id.'.pdf');
-    //
-    //            }
-    //            // dd($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[0]->student_id.'.pdf');
-    //            // for($i = 0 ; $i < 3 ; $i ++){
-    //            //  $zip->addFile($public_dir . '/'.'fileToZip/' .$folder_name.'/'.$students[$i]->student_id.'.pdf',$folder_name.'/'.$students[$i]->student_id.'.pdf');
-    //            //
-    //            // }
-    //
-    //             // $zip->renameName('img','mumu');
-    //             // dd($zip->statIndex( 0 ));
-    //
-    //             $zip->close();
-    //         }
-    //
-    //         // Set Header
-    //         $headers = array(
-    //
-    //         );
-    //         $filetopath=$public_dir.'/'.$zipFileName;
-    //
-    //         // dd($filetopath);
-    //         // Create Download Response
-    //         // dd($filetopath,file_exists($filetopath));
-    //         if((file_exists($filetopath))){
-    //           //dd('aaa');
-    //           //return 'bbb';
-    //           // response()->download($filetopath,$zipFileName,$headers)
-    //           return response()->download($filetopath,$zipFileName,$headers);
-    //         }
-    //        return 'SUCSESS';
-    //
-    // }
-
-    // public function test()
-    // {
-    //   //dd('test');
-    //     return $this->'bbb';
-    // }
-
-
 }

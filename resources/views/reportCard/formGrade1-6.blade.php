@@ -18,9 +18,11 @@
     </div>
     <div class="square2">
         <h6> Classroom Teachers </h6>
-        @foreach($teacher_names as $name)
-            <p> {{$name}} </p>
-        @endforeach
+            <p style="line-height: 1.5em; ">
+                @foreach($teacher_names as $name)
+                 {{$name}} <br/>
+                @endforeach
+            </p>
     </div>
 </div>
 <table class="table table-bordered tableStyle">
