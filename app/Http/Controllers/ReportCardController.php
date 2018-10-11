@@ -550,8 +550,10 @@ class ReportCardController extends Controller
                 case SystemConstant::DROP_GRADE:
                     // Set credit to zero to drop class from student record
                     $element['credits'] = 0;
-                default:
                     $element['quater' . $x->quater] = $x->grade_status_text;
+                    break;
+                default:
+                    $element['grade_count']++;
             }
             $result[$x->course_id] = $element;
         }
