@@ -33,6 +33,7 @@ class SystemConstant
     const DATA_STATUS_WAIT = 0;
 
     const DROP_GRADE_TEXT = "DROP";
+    const ERASE_GRADE_TEXT = "-";
 
     // 2 quaters exclude final  This is total quarter for each semester.
     const TOTAL_QUARTERS = 2;

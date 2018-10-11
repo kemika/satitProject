@@ -1129,7 +1129,9 @@ class UploadGradeController extends Controller
         } elseif ($grade_value[0] == 'I' || $grade_value[0] == 'i') {
             // Case of I/2.3 etc
             return [substr($grade_value, 2), SystemConstant::PASS_I_GRADE];
-        } else {
+        } elseif (strcasecmp($grade_value, SystemConstant::ERASE_GRADE_TEXT) == 0) {
+            return [0, SystemConstant::NO_GRADE];
+        } else{
             return [$grade_value, SystemConstant::HAS_GRADE];
         }
     }
@@ -1149,6 +1151,7 @@ class UploadGradeController extends Controller
             || $data == "I" || $data == "i"
             || $data == "0/1"
             || strcasecmp($data, SystemConstant::DROP_GRADE_TEXT) == 0
+            || strcasecmp($data, SystemConstant::ERASE_GRADE_TEXT) == 0
             // Match normal grade value or I/Grade
             || (preg_match("/^([Ii]\/)?(([0-3][\.][0-9]*)|([0-4])|(4\.0*))$/", $data))
         ) {
