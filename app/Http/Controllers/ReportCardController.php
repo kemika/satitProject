@@ -411,6 +411,7 @@ class ReportCardController extends Controller
 
             $grade_semester1_6 = self::getGradeToFrom1_6($grade_semester1, $grade_semester2);
             $view_data['grade_semester1'] = $grade_semester1_6;
+            $view_data['activity'] = self::getActivityToFrom1_6($activity_semester1,$activity_semester2);
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade1-6', $view_data);
         } elseif ($grade_level->grade_level <= 8) {
@@ -643,6 +644,24 @@ class ReportCardController extends Controller
 
     }
 
+    private static function getActivityToFrom1_6($activity_sem1,$activity_sem2){
+        $activity = array();
+
+        // Create look up for activity semester 2
+        $activity_sem2_lookup = array();
+        foreach ($activity_sem2 as $grade){
+            $activity_sem2_lookup[$grade->course_id] = $grade;
+        }
+
+        foreach ($activity_sem1 as $grade){
+            $grade->sem_1_grade_status_text = $grade->grade_status_text;
+            if(array_key_exists($grade->course_id, $activity_sem2_lookup)){
+                $grade->sem_2_grade_status_text = $activity_sem2_lookup[$grade->course_id]->grade_status_text;
+            }
+            $activity[] = $grade;
+        }
+        return $activity;
+    }
 
     public
     function index()

@@ -13,7 +13,7 @@
     <tr>
         <th scope="col">Student Name</th>
         <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
-        <th scope="col" class="setLeft">Grade {{ $student->grade_level."/".$student->room}}</th>
+        <th scope="col" class="setLeft">Grade {{ $student->grade_level}}</th>
 
     </tr>
 </table>
@@ -74,13 +74,6 @@
                 <td class="center-cell">{{ $grade->grade_status_text }}</td>
             </tr>
         @endforeach
-        @for ($i = count($activity_semester1); $i < 5; $i++)
-            <tr>
-                <td></td>
-                <td></td>
-
-            </tr>
-        @endfor
 
 
     </table>
@@ -95,7 +88,7 @@
     <tr>
         <th scope="col">Student Name</th>
         <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
-        <th scope="col" class="setLeft">Grade {{ $student->grade_level."/".$student->room}}</th>
+        <th scope="col" class="setLeft">Grade {{ $student->grade_level}}</th>
     </tr>
 </table>
 
@@ -177,13 +170,6 @@
                 <td class="center-cell">{{ $grade->grade_status_text }}</td>
             </tr>
         @endforeach
-        @for ($i = count($activity_semester2); $i < 5; $i++)
-            <tr>
-                <td></td>
-                <td></td>
-
-            </tr>
-        @endfor
 
     </table>
     <p class="classroomStyle">Classroom signature................................................</p>
@@ -197,7 +183,7 @@
     <tr>
         <th scope="col">Student Name</th>
         <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
-        <th scope="col" class="setLeft">Grade {{ $student->grade_level."/".$student->room}}</th>
+        <th scope="col" class="setLeft">Grade {{ $student->grade_level}}</th>
     </tr>
 </table>
 <p class="setPosition">Social Skills and Personal Conduct</p>

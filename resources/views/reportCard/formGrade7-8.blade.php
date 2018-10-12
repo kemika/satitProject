@@ -13,7 +13,7 @@
     <tr>
         <th scope="col">Student Name</th>
         <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
-        <th scope="col" class="setLeft">Grade {{ $student->grade_level."/".$student->room}}</th>
+        <th scope="col" class="setLeft">Grade {{ $student->grade_level}}</th>
 
     </tr>
 </table>
@@ -93,7 +93,7 @@
     <tr>
         <th scope="col">Student Name</th>
         <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
-        <th scope="col" class="setLeft">Grade {{ $student->grade_level."/".$student->room}}</th>
+        <th scope="col" class="setLeft">Grade {{ $student->grade_level}}</th>
     </tr>
 </table>
 
@@ -172,7 +172,7 @@
     <tr>
         <th scope="col">Student Name</th>
         <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
-        <th scope="col" class="setLeft">Grade {{ $student->grade_level."/".$student->room}}</th>
+        <th scope="col" class="setLeft">Grade {{ $student->grade_level}}</th>
     </tr>
 </table>
 <p class="setPosition">Social Skills and Personal Conduct</p>
@@ -476,8 +476,6 @@
         <td class="dotBottom2">{{$total_sem1_credit}}</td>
         <td>CE</td>
         <td class="dotBottom2">{{$total_sem1_credit}}</td>
-        {{--<td>Sum</td>--}}
-        {{--<td class="dotBottom2">{{number_format($semester_1_gpa,2)}}</td>--}}
         <td>GPA</td>
         <td class="dotBottom2">{{number_format($semester_1_gpa,2)}}</td>
     </tr>

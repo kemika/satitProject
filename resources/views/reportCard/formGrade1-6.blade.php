@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    {{--<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">--}}
     {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">--}}
     {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
     {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>--}}
@@ -12,22 +12,22 @@
 
 <div class="container">
     <div class="square1">
-        <h6> Grade {{$student->grade_level}} / {{$student->room}} : {{$student->academic_year}}    </h6>
+        <h6> Grade {{$student->grade_level}} : {{$student->academic_year}}    </h6>
         <h6> Student Name : {{$student->firstname}} {{$student->lastname}} </h6>
         <h6> Student ID : {{$student->student_id}} </h6>
     </div>
     <div class="square2">
-        <h6> Classroom Teachers </h6>
-            <p style="line-height: 1.5em; ">
-                @foreach($teacher_names as $name)
-                 {{$name}} <br/>
-                @endforeach
-            </p>
+        <h6 style="margin-bottom: 0.25em;"> Classroom Teachers </h6>
+        <p style="line-height: 1.5em; ">
+            @foreach($teacher_names as $name)
+                {{$name}} <br/>
+            @endforeach
+        </p>
     </div>
 </div>
 <table class="table table-bordered tableStyle">
     <tr>
-        <th scope="col" rowspan="2" style="">Course</th>
+        <th rowspan="2" style="">Course</th>
         <th scope="col" rowspan="2" style="width: 1.8cm;">Code</th>
         <th scope="col" colspan="2" align="center">Periods/Week</th>
         <th scope="col" rowspan="2" style="width: .7cm;">Credit Hour</th>
@@ -70,56 +70,45 @@
     @endforeach
     <tr>
         <th scope="col" colspan="4">Total</th>
-        <th scope="col">{{$total_credit}}</th>
+        <th scope="col" style="font-size: 10px">{{$total_credit}}</th>
         <th scope="col" colspan="3" style="font-weight: normal;">1st Semester GPA</th>
-        <th scope="col">{{$semester_1_gpa}}</th>
+        <th scope="col" style="font-size: 10px">{{number_format((float)$semester_1_gpa, 2, '.', '')}}</th>
         <th scope="col" colspan="3" style="font-weight: normal;">2nd Semester GPA</th>
-        <th scope="col">{{$semester_2_gpa }}</th>
-        <th scope="col">{{$gpa}}</th>
+        <th scope="col" style="font-size: 10px">{{number_format((float)$semester_2_gpa, 2, '.', '')}}</th>
+        <th scope="col" style="font-size: 10px">{{number_format((float)$gpa, 2, '.', '')}}</th>
     </tr>
 </table>
-
 <div class="relative3">
     <table class="table table-bordered tableStyle2">
         <tr>
-            <th scope="col">Activity</th>
-            <th scope="col">S/U</th>
+            <th scope="col">Activity (S/U)</th>
+            <th scope="col">1<sup>st</sup> Sem</th>
+            <th scope="col">2<sup>nd</sup> Sem</th>
         </tr>
-        @foreach($activity_semester1 as $grade)
+        @foreach($activity as $grade)
             <tr>
                 <td>{{ $grade->course_name }}</td>
-                <td class="center-cell">{{ $grade->grade_status_text }}</td>
+                <td class="center-cell">{{ $grade->sem_1_grade_status_text}}</td>
+                <td class="center-cell">{{ $grade->sem_2_grade_status_text}}</td>
             </tr>
         @endforeach
-        @for ($i = count($activity_semester1); $i < 5; $i++)
-            <tr>
-                <td></td>
-                <td></td>
-
-            </tr>
-        @endfor
-
 
     </table>
 
     <div class="absolute3"><p class="classroomStyle">Classroom
             signature................................................</p></div>
-    <div class="absolute4"><p>Cumulative GPA/{{$total_credit}} = {{$gpa}}</p></div>
+    <div class="absolute4"><p>Cumulative GPA/{{$total_credit}} = {{number_format((float)$gpa, 2, '.', '')}}</p></div>
 </div>
-
-<div class="page-break"></div>
-
-<br>
 <div class="boxHeader"><h6>Evaluation :</h6>
     <div class="box"></div>
-    <div class="boxTail"><p>to be permitted to grade {{$student->grade_level + 1}} in academic
-            year {{$student->academic_year}}</p>
+    <div class="boxTail">to be permitted to grade {{$student->grade_level + 1}} in academic
+        year {{$student->academic_year + 1}}
     </div>
-
+</div>
     <div class="boxHeader">
         <div class="box"></div>
-        <div class="boxTail"><p>to be
-                considered.......................................................................................................................................</p>
+        <div class="boxTail">to be
+            considered..............................................................................................
         </div>
         <br>
 
@@ -160,10 +149,6 @@
             ..................................................................................................................................................................................................</p>
         <p>
             .................................................................................................................................................................................................................</p>
-        <p>
-            .................................................................................................................................................................................................................</p>
-        <p>
-            .................................................................................................................................................................................................................</p>
 
         <div class="page-break"></div>
 
@@ -171,7 +156,7 @@
             <tr>
                 <th scope="col">Student Name</th>
                 <th scope="col" colspan="5" class="setCenter">{{ $student->firstname." ".$student->lastname}}</th>
-                <th scope="col" class="setLeft">Grade</th>
+                <th scope="col" class="setLeft">Grade {{$student->grade_level}}</th>
             </tr>
         </table>
         <p class="setPosition">Social Skills and Personal Conduct</p>
@@ -234,7 +219,7 @@
                     {{$check =1}}
                     <tr class="center-cell">
                         <td>{{$attendance->total_days}}</td>
-                        <td >{{$attendance->presence}}</td>
+                        <td>{{$attendance->presence}}</td>
                         <td>{{$attendance->late}}</td>
                         <td>{{$attendance->sick}}</td>
                         <td>{{$attendance->leave}}</td>
@@ -269,7 +254,7 @@
                     {{$check =1}}
                     <tr class="center-cell">
                         <td>{{$attendance->total_days}}</td>
-                        <td >{{$attendance->presence}}</td>
+                        <td>{{$attendance->presence}}</td>
                         <td>{{$attendance->late}}</td>
                         <td>{{$attendance->sick}}</td>
                         <td>{{$attendance->leave}}</td>
@@ -405,8 +390,7 @@
                     @else
                         <h5>Second Comment</h5> <br>
                     @endif
-                    <h6>Classroom Teacher :
-                    </h6>
+                    <h6>Classroom Teacher :</h6>
                     @if($teacher_comments[$i] != null)
                         <p>{{$teacher_comments[$i]->comment}}</p>
                     @endif
@@ -460,7 +444,11 @@
         @endfor
 
 
-        <style media="screen">
+        <style>
+            html * {
+                font-family: "Times New Roman", Times, serif;
+            }
+
             .page-break {
                 page-break-after: always;
             }
@@ -480,8 +468,8 @@
                 margin-bottom: 10px;
             }
 
-            .table thead th {
-                /* border-bottom: 1px solid black; */
+            table {
+                border-collapse: collapse;
             }
 
             .table-bordered th {
@@ -515,10 +503,9 @@
             .tableStyle {
                 width: 100%;
                 margin-top: 20px;
-                border: 1px solid black;
             }
 
-            .tableStyle th{
+            .tableStyle th {
                 font-size: 9px;
             }
 
@@ -557,6 +544,7 @@
                 position: absolute;
                 top: 0px;
                 left: 130px;
+                height: 20px;
                 width: 80%;
             }
 
@@ -569,6 +557,7 @@
                 position: relative;
                 width: 100%;
                 height: 200px;
+                margin-top: 10px;
             }
 
             div.absolute3 {
@@ -593,19 +582,21 @@
                 float: left;
                 margin: 1pt;
                 width: 64%;
-                height: 72pt;
+                height: auto;
             }
 
             .square2 {
-                float: left;
+                float: right;
                 margin: 1pt;
                 width: 35%;
                 height: auto;
             }
 
             .container {
-                width: 100%;
-                height: 100pt;
+                margin: 0pt;
+                padding: 0pt;
+                /*width: 100%;*/
+                height: 6em;
             }
 
             .nameStyle {
@@ -716,12 +707,14 @@
                 margin-bottom: 0px;
             }
 
-            .gradeCell{
+            .gradeCell {
                 width: 5mm;
                 font-size: 9px;
             }
-            .periodCell{
+
+            .periodCell {
                 width: 5mm;
-                font-size: 6px;
+                background-color: rgba(128,128,128,.25);
             }
+
         </style>
