@@ -553,6 +553,8 @@ class ReportCardController extends Controller
                     $element['quater' . $x->quater] = $x->grade_status_text;
                     break;
                 default:
+                    $element['quater' . $x->quater] = $x->grade_status_text;
+                    $element['semester_grade'] += $x->grade;
                     $element['grade_count']++;
             }
             $result[$x->course_id] = $element;
@@ -571,7 +573,7 @@ class ReportCardController extends Controller
                     $x['semester_grade'] = "-";
 
                 } else {
-                    if ($x['quater' . SystemConstant::FINAL_Q] == "") {
+                    if ($x['quater' . SystemConstant::FINAL_Q] === "") {
                         // There is no final just average grade without
                         $grade = $x['semester_grade'] / SystemConstant::TOTAL_QUARTERS;
                     } else {
