@@ -415,7 +415,6 @@ class ReportCardController extends Controller
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade1-6', $view_data);
         } elseif ($grade_level->grade_level <= 8) {
-            $public_dir = public_path();
             $view_data = self::computeCumulative($view_data, $grade_level->grade_level);
             $pdf = PDF::loadView('reportCard.formGrade7-8', $view_data);
         } else { //If not it can only be grade 9-12
@@ -556,7 +555,9 @@ class ReportCardController extends Controller
                 default:
                     $element['quater' . $x->quater] = $x->grade_status_text;
                     $element['semester_grade'] += $x->grade;
-                    $element['grade_count']++;
+                    if ($x->quater < SystemConstant::FINAL_Q) {
+                        $element['grade_count']++;
+                    }
             }
             $result[$x->course_id] = $element;
         }
