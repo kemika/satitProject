@@ -22,7 +22,7 @@
 <link rel="shortcut icon" href="img/satitLogo.gif" />
 
 
-<h1> Manage Curriculum Year <?php echo $curricula->first()->year; ?></h1>
+<h1> Manage Curriculum Year <?php echo $curricula->first()->curriculum_year; ?></h1>
 
 <center>
 <div class="row" style="width: 120rem;">
@@ -31,11 +31,11 @@
     <table class="table table-hover" id="table" style="width: 120rem;">
       <thead>
         <tr>
-          <th scope="col">Code</th>
+          <th scope="col">Course ID</th>
           <th scope="col">Name</th>
           <th scope="col">Min grade level</th>
           <th scope="col">Max grade level</th>
-          <th scope="col">Status</th>
+          <th scope="col">Activity</th>
           <th scope="col">Action</th>
 
         </tr>
@@ -43,18 +43,19 @@
       <tbody>
         <?php $c=0; ?>
         @foreach ($curricula as $curriculum)
-          @if (isset($curriculum->code))
+          @if (isset($curriculum->course_id))
           <?php $c+=1 ?>
         <tr>
-          <td>{{ $curriculum->code }}</td>
-          <td>{{ $curriculum->name }}</td>
-          <td>{{ $curriculum->min }}</td>
-          <td>{{ $curriculum->max}}</td>
-          @if ($curriculum->status === 1)
-          <td>Enable</td>
+          <td>{{ $curriculum->course_id }}</td>
+          <td>{{ $curriculum->course_name }}</td>
+          <td>{{ $curriculum->min_grade_level }}</td>
+          <td>{{ $curriculum->max_grade_level}}</td>
+          @if ($curriculum->is_activity === 1)
+          <td>Yes</td>
           @else
-          <td>Disable</td>
+          <td>No</td>
           @endif
+
           <td><button type="button" class="btn btn-primary" data-toggle='modal' data-target='#{{$c}}'>Edit
   </button>
       </td>
@@ -70,7 +71,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
               <div class="modal-body">
-                <p>{{$curriculum->name }} {{$curriculum->code }}</p>
+                <p>{{$curriculum->course_name }} {{$curriculum->course_id }}</p>
                 <form class="form-inline" action="/manageCurriculum/editSubject" method="post">
                   @csrf
 
@@ -81,35 +82,35 @@
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label text-right">Year :</label>
                     <div class="col-sm-5">
-                      <input type="text" class="form-control"  name="year" value='{{ $curriculum->year }}' readonly>
+                      <input type="text" class="form-control"  name="year" value='{{ $curriculum->curriculum_year }}' readonly>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label text-right">Code :</label>
                     <div class="col-sm-5">
-                      <input type="text" class="form-control"  name="code" value='{{ $curriculum->code }}' required>
+                      <input type="text" class="form-control"  name="code" value='{{ $curriculum->course_id }}' required>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label text-right">Name :</label>
                     <div class="col-sm-5">
-                      <input type="text" class="form-control" name="name" value='{{ $curriculum->name }}' required>
+                      <input type="text" class="form-control" name="name" value='{{ $curriculum->course_name }}' required>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label text-right">Min grade level :</label>
                     <div class="col-sm-5">
-                      <input type="text" class="form-control" name="min" value='{{ $curriculum->min }}' required>
+                      <input type="text" class="form-control" name="min" value='{{ $curriculum->min_grade_level }}' required>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label text-right">Max grade level :</label>
                     <div class="col-sm-5">
-                      <input type="text" class="form-control" name="max" value='{{ $curriculum->max }}' required>
+                      <input type="text" class="form-control" name="max" value='{{ $curriculum->max_grade_level }}' required>
                     </div>
                   </div>
 
@@ -161,7 +162,7 @@
   <div class="col ">
     <form class="form-inline" action="/manageCurriculum/importFromPrevious" method="post">
       @csrf
-      <input hidden type="text" name="year" value='{{ $curricula->first()->year }}'>
+      <input hidden type="text" name="year" value='{{ $curricula->first()->curriculum_year }}'>
       <button type="submit"  class="btn btn-info">Import from previous curriculum</button>
     </form>
   </div>
@@ -201,7 +202,7 @@
           <div class="form-group">
             <label class="col-sm-6 col-form-label text-right">Year :</label>
             <div class="col-sm-6">
-              <input type="text" class="form-control"  name="year"  value='{{$curricula->first()->year}}' readonly>
+              <input type="text" class="form-control"  name="year"  value='{{$curricula->first()->curriculum_year}}' readonly>
             </div>
           </div>
         </div>
@@ -281,7 +282,7 @@
             <div class="form-group">
               <label class="col-sm-6 col-form-label text-right">Year :</label>
               <div class="col-sm-5">
-                <input type="text" class="form-control"  name="year"  value='$curricula->first()->year' readonly>
+                <input type="text" class="form-control"  name="year"  value='$curricula->first()->curriculum_year' readonly>
               </div>
             </div>
             </div>
@@ -345,7 +346,7 @@
           <div class="form-group row">
             <label class="col-sm-3 col-form-label">Year :</label>
             <div class="col-sm-5">
-              <input type="text" class="form-control"  name="year"  value='{{$curricula->first()->year}}' readonly>
+              <input type="text" class="form-control"  name="year"  value='{{$curricula->first()->curriculum_year}}' readonly>
             </div>
           </div>
 

@@ -11,7 +11,7 @@ class ManageCurriculumController extends Controller
   public function index(){
   //  $curricula  = Curriculum::all();
   //  $curricula  = DB::table('Curricula')->select('year',DB::raw('count(*) as total'))->groupBy('year')->get();
-    $curricula  = Curriculum::orderBy('curriculum_year', 'asc')->get();
+    $curricula  = Curriculum::orderBy('curriculum_year', 'asc')->groupBy('curriculum_year')->get();
     return view('manageCurriculum.index' , ['curricula' => $curricula]);
   }
 
@@ -230,17 +230,14 @@ class ManageCurriculumController extends Controller
       return view('manageCurriculum.curriculumTable' , ['curricula' => $curricula]);
   }
   */
-  $curriculum  = Curriculum::where('year', $year)->first();
+  $curriculum  = Curriculum::where('curriculum_year', $year)->first();
   if($curriculum === null) {
     return redirect('manageCurriculum');
   }
-  $curricula  = Curriculum::where('year', $year)
-                ->join('subjects','curriculums.id','=','subjects.curriculum_id')
-                ->select('curriculums.year','subjects.id','curriculums.adjust','subjects.curriculum_id','subjects.code','subjects.name','subjects.min'
-                ,'subjects.max','subjects.status')
-                ->get();
+  $curricula  = Curriculum::where('curriculums.curriculum_year',$year)
+              ->get();
   if(isset($curricula[0]) === false) {
-    $curricula  = Curriculum::where('year', $year)->get();
+    $curricula  = Curriculum::where('curriculum_year', $year)->get();
     $curricula[0]->curriculum_id = $curricula[0]->id;
     return view('manageCurriculum.curriculumTable' , ['curricula' => $curricula]);
   }
