@@ -85,6 +85,10 @@ Route::put('/viewGrade/result', 'ViewGradeController@result');
 
 
 Route::get('/transcript', 'TranscriptController@index');
+Route::get('/transcript/room/{classroom_id}','TranscriptController@studentList');
+Route::get('/exportTranscript/{student_id}','TranscriptController@exportTranscript');
+Route::get('/transcript/pdf','TranscriptController@exportTranscriptPDF');
+
 
 
 
@@ -121,3 +125,5 @@ Route::get('/manageDirector', 'ManageDirectorController@index');
 Route::put('/manageDirector/update', 'ManageDirectorController@update');
 
 Route::get('/download_all', 'ExportController@download_all')->name('create-zip');
+Route::get('/api', 'ViewGradeController@api');
+Route::get('/api2', 'ViewGradeController@api2');
