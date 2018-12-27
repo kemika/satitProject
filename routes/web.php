@@ -52,6 +52,7 @@ Route::put('/manageTeachers/update', 'ManageTeachersController@update');
 
 
 Route::get('/manageAcademic', 'ManageAcademicController@index');
+Route::get('/editCurrentAcademic', 'ManageAcademicController@editAcademicYear');
 
 Auth::routes();
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Curriculum;
-use App\Subject;
+
 class ManageCurriculumController extends Controller
 {
   public function index(){

@@ -1,4 +1,3 @@
-@extends('layouts.web')
 <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
 
@@ -6,7 +5,6 @@
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <!-- <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script> -->
-<!-- {{ $curricula }} -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!-- add later -->
@@ -18,94 +16,65 @@
 
 
 
-
+<link rel="stylesheet" href="/css/nav.css">
 <link href="{{ asset('bootstrap/css/studentCSS.css') }}" rel="stylesheet">
+<head>
+  <title>Satit Kaset</title>
+  <link rel="shortcut icon" href="img/satitLogo.gif" />
+  <div id='cssmenu'>
+  <ul>
+     <li ><a href='/main'>SatitKaset</a></li>
+     <li><a href='/manageStudents'>Manage Students</a></li>
+     <li><a href='/manageTeachers'>Manage Teachers</a></li>
+     <li><a href='/upload'>Upload Grade</a></li>
+     <li><a href='/approveGrade'>Approve Grade</a></li>
+     <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
+                onclick="event.preventDefault();
+                              document.getElementById('logout-form').submit();">
+                 {{ __('Logout') }}
+             </a>
 
+             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                 @csrf
+             </form></li>
+
+             <li style="float:right"><a href='#'>{{ auth::user()->firstname.' '.auth::user()->lastname}}</a></li>
+  </ul>
+
+  </div>
+
+</head>
 
 <h1> Manage Academic</h1>
 <center>
 <div class="row" style="width: 120rem;">
-  <!-- <div class="col-1"></div> -->
-  <!-- <div class="col-8"> -->
     <table class="table table-hover" id="table" style="width: 120rem;">
       <thead>
         <tr>
-          <th scope="col">No.</th>
-          <th scope="col">Year</th>
-          <th scope="col">Action</th>
+          <th scope="col">Grade</th>
+          <th scope="col">Room</th>
+          <th scope="col">Grade/Room</th>
+          <th scope="col">Students</th>
+          <th scope="col">Subjets</th>
         </tr>
       </thead>
       <tbody>
-        <?php $c=0; ?>
-        @foreach ($curricula as $curriculum)
-          <?php $c+=1 ?>
-        <tr>
-          <td>{{ $loop->iteration }}</td>
-          <td>@if($curriculum->adjust == 1)
-              ปรับปรุง
-            @endif
-            {{ $curriculum->year }}</td>
-          <?php if($curriculum->adjust == 0){
-            $url = url("manageCurriculum/$curriculum->year");
-          }
-          else{
-            $url = url("manageCurriculum/ปรับปรุง$curriculum->year");
-          }?>
-          <td><button type="button" class="btn btn-primary" onclick='location.href="{{ $url }}"'>Edit
-  </button>
-</td>
-<!--
-          <td><form class="form-inline" action="/manageCurriculum/edit" method="post">
-            @csrf
 
-            <input hidden type="text" name="year" value='{{ $curriculum->year }}'>
-
-
-
-
-
-              <button type="submit"  class="btn btn-primary" >edit</button>
-          </form></td> -->
-        </tr>
-        <!-- Modal -->
-        <!--
-        <div class="modal fade" id={{$c}} role="dialog">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title" style="margin-left:10px;">Edit</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </div>
-              <div class="modal-body">
-                <p>{{$curriculum->year}}</p>
-                <form class="form-inline" action="/manageCurriculum/edit" method="post">
-                  @csrf
-
-                  <input hidden type="text" name="id" value='{{ $curriculum->year }}'>
-                  <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Year</label>
-                    <div class="col-sm-5">
-                      <input type="text" class="form-control"  name="year" value='{{ $curriculum->year }}' disabled>
-                    </div>
-                  </div>
-
-
-               <select class="form-control" name="projid" >
-                            <option value="Active">Active</option>
-                            <option value="Inactive" >Inactive</option>
-                            <option value="Graduated" >Graduated</option>
-                  </select>
-              <div class="modal-footer">
-                    <button type="submit"  class="btn btn-default" >edit</button>
-                </form>
-
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div> -->
-        @endforeach
-
+        @for ($room = 1; $room <= 12; $room++)
+          @for ($grade = 1; $grade <= 12; $grade++)
+          <tr>
+            <td>{{ $grade }}</td>
+            <td>{{ $room }}</td>
+            <td>{{ $grade }}/{{ $room }}</td>
+            <td><button type="button" class="btn btn-primary" >
+              <span class="glyphicon glyphicon-user"></span>&nbsp;Edit</button>
+            </td>
+            <td><button type="button" class="btn btn-primary" >
+              <span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit</button>
+            </td>
+          </tr>
+        @endfor
+      @endfor
 
       </tbody>
     </table>
@@ -113,50 +82,6 @@
 </div>
 
 </center>
-
-<div class="row" style="margin-top: 30px; margin-bottom: 30px;">
-  <div class="col-5">
-  </div>
-  <div class="col col-xl-1">
-    <button class="btn btn-primary" data-toggle='modal' data-target='#NewCur'>New curriculum</button>
-  </div>
-  <div class="col col-xl-2">
-    <button class="btn btn-danger" onclick="window.location.href='/main'">Back to main</button>
-  </div>
-</div>
-<center>
-<div class="modal fade" id="NewCur" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" style="margin-left:10px;">Create New Curriculum</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      <div class="modal-body">
-
-        <form class="form-inline" action="/manageCurriculum/createNewYear" method="post">
-          @csrf
-          <input hidden type="text" name="id" value='Hello'>
-          <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Year : </label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control"  name="year" placeholder='Enter year' >
-            </div>
-          </div>
-</div>
-
-      <div class="modal-footer">
-            <button type="submit"  class="btn btn-success" >Create New Curriculum</button>
-        </form>
-
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-</center>
-
 
 <script>
   $(document).ready(function() {
