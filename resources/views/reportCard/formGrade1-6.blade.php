@@ -3,11 +3,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    {{--<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">--}}
-    {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">--}}
-    {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
-    {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>--}}
-    {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>--}}
 </head>
 
 <div class="container">
@@ -27,55 +22,55 @@
 </div>
 <table class="table table-bordered tableStyle">
     <tr>
-        <th rowspan="2" style="">Course</th>
-        <th scope="col" rowspan="2" style="width: 1.8cm;">Code</th>
+        <th rowspan="2" style="border:2px solid black;">Course</th>
+        <th scope="col" rowspan="2" style="width: 1.8cm; border-bottom:2px solid black;">Code</th>
         <th scope="col" colspan="2" align="center">Periods/Week</th>
-        <th scope="col" rowspan="2" style="width: .7cm;">Credit Hour</th>
-        <th scope="col" colspan="4" align="center">1st Semester Grade</th>
+        <th scope="col" rowspan="2" style="width: .7cm; border-bottom:2px solid black; border-right:2px solid black;">Credit Hour</th>
+        <th scope="col" colspan="4" align="center" style="border-right:2px solid black;">1st Semester Grade</th>
         <th scope="col" colspan="4" align="center">2nd Semester Grade</th>
-        <th scope="col" rowspan="2" style="width:.7cm;">Year Grade</th>
+        <th scope="col" rowspan="2" style="width:.7cm; border-bottom:2px solid black; border-left:2px solid black;">Year Grade</th>
     </tr>
     <tr>
-        <th class="periodCell" style="font-size: 6px">In class</th>
-        <th class="periodCell" style="font-size: 6px">Practice</th>
-        <th class="gradeCell">1</th>
-        <th class="gradeCell">2</th>
-        <th class="gradeCell">3</th>
-        <th class="gradeCell">Sem. Grade</th>
-        <th class="gradeCell">1</th>
-        <th class="gradeCell">2</th>
-        <th class="gradeCell">3</th>
-        <th class="gradeCell">Sem. Grade</th>
+        <th class="periodCell" style="font-size: 6px; border-bottom:2px solid black;">In class</th>
+        <th class="periodCell" style="font-size: 6px; border-bottom:2px solid black;">Practice</th>
+        <th class="gradeCell" style="border-bottom:2px solid black;">1</th>
+        <th class="gradeCell" style="border-bottom:2px solid black;">2</th>
+        <th class="gradeCell" style="border-bottom:2px solid black;">3</th>
+        <th class="gradeCell" style="border-bottom:2px solid black; border-right:2px solid black;">Sem. Grade</th>
+        <th class="gradeCell" style="border-bottom:2px solid black;">1</th>
+        <th class="gradeCell" style="border-bottom:2px solid black;">2</th>
+        <th class="gradeCell" style="border-bottom:2px solid black;">3</th>
+        <th class="gradeCell" style="border-bottom:2px solid black;">Sem. Grade</th>
     </tr>
 
     @foreach($grade_semester1 as $key => $grade )
         <tr>
-            <td>{{$grade['course_name']}}</td>
+            <td style="border-right:2px solid black;">{{$grade['course_name']}}</td>
             <td>{{$grade['course_id']}}</td>
             <td class="center-cell">{{$grade['inclass']}}</td>
             <td class="center-cell">{{$grade['practice']}}</td>
-            <td class="center-cell">{{$grade['credits']}}</td>
+            <td class="center-cell" style="border-right:2px solid black;">{{$grade['credits']}}</td>
 
             <td class="center-cell">{{$grade['quater1_sem1']}}</td>
             <td class="center-cell">{{$grade['quater2_sem1']}}</td>
             <td class="center-cell">{{$grade['quater3_sem1']}}</td>
 
-            <td class="center-cell">{{$grade['semester1_grade']}}</td>
+            <td class="center-cell" style="border-right:2px solid black;">{{$grade['semester1_grade']}}</td>
             <td class="center-cell">{{$grade['quater1_sem2']}}</td>
             <td class="center-cell">{{$grade['quater2_sem2']}}</td>
             <td class="center-cell">{{$grade['quater3_sem2']}}</td>
             <td class="center-cell">{{$grade['semester2_grade']}}</td>
-            <td class="center-cell">{{$grade['year_grade']}}</td>
+            <td class="center-cell" style="border-left:2px solid black;">{{$grade['year_grade']}}</td>
         </tr>
     @endforeach
-    <tr>
+    <tr style="border-bottom: 2px solid black;">
         <th scope="col" colspan="4">Total</th>
-        <th scope="col" style="font-size: 10px">{{$total_credit}}</th>
+        <th scope="col" style="font-size: 10px; border-right:2px solid black;">{{$total_credit}}</th>
         <th scope="col" colspan="3" style="font-weight: normal;">1st Semester GPA</th>
-        <th scope="col" style="font-size: 10px">{{number_format((float)$semester_1_gpa, 2, '.', '')}}</th>
+        <th scope="col" style="font-size: 10px; border-right:2px solid black;">{{number_format((float)$semester_1_gpa, 2, '.', '')}}</th>
         <th scope="col" colspan="3" style="font-weight: normal;">2nd Semester GPA</th>
         <th scope="col" style="font-size: 10px">{{number_format((float)$semester_2_gpa, 2, '.', '')}}</th>
-        <th scope="col" style="font-size: 10px">{{number_format((float)$gpa, 2, '.', '')}}</th>
+        <th scope="col" style="font-size: 10px; border-left:2px solid black;">{{number_format((float)$gpa, 2, '.', '')}}</th>
     </tr>
 </table>
 <div class="relative3">
@@ -99,13 +94,13 @@
             signature................................................</p></div>
     <div class="absolute4"><p>Cumulative GPA/{{$total_credit}} = {{number_format((float)$gpa, 2, '.', '')}}</p></div>
 </div>
-<div class="boxHeader"><h6>Evaluation :</h6>
+<div class="boxHeader" style="border-color: red;"><h6>Evaluation :</h6>
     <div class="box"></div>
     <div class="boxTail">to be permitted to grade {{$student->grade_level + 1}} in academic
         year {{$student->academic_year + 1}}
     </div>
 </div>
-    <div class="boxHeader">
+    <div class="boxHeader2">
         <div class="box"></div>
         <div class="boxTail">to be
             considered..............................................................................................
@@ -468,8 +463,18 @@
                 margin-bottom: 10px;
             }
 
+            /* .table, th, td {
+              border: 1px solid black;
+              padding: .35rem;
+
+            }*/
             table {
-                border-collapse: collapse;
+              border-collapse: collapse;
+            }
+
+            .tableStyle, tr
+            {
+                border:2px solid black;
             }
 
             .table-bordered th {
@@ -477,7 +482,7 @@
             }
 
             .table-bordered td, .table-bordered th {
-                border: 1px solid black;
+                 border: 1px solid black;
             }
 
             .table td, .table th {
@@ -528,7 +533,14 @@
             div.boxHeader {
                 position: relative;
                 width: 100%;
-                height: 30px;
+                height: 25px;
+                margin-top: -40px;
+            }
+
+            div.boxHeader2 {
+                position: relative;
+                width: 100%;
+                height: 25px;
             }
 
             div.box {
@@ -716,5 +728,9 @@
                 width: 5mm;
                 background-color: rgba(128,128,128,.25);
             }
+
+
+
+
 
         </style>

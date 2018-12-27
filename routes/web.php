@@ -46,7 +46,7 @@ Route::post('/manageCurriculum/createNewSubject', 'ManageCurriculumController@cr
 
 //Route::post('/manageCurriculum/edit', 'ManageCurriculumController@edit');
 Route::get('/manageCurriculum/{year}', 'ManageCurriculumController@editWithYear');
-
+Route::post('/manageCurriculumTest', 'ManageCurriculumController@importTest');
 Route::get('/manageTeachers', 'ManageTeachersController@index');
 Route::put('/manageTeachers/update', 'ManageTeachersController@update');
 
