@@ -2,305 +2,367 @@
     <title>Report Card</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
-    {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>--}}
-    {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>--}}
 </head>
+
+
+
 
 <center><h4 class="heading">Transcript Grade 1-3 </h4></center>
 <table class="nameStyle">
     <tr>
-        <th scope="col">Student Name</th>
-        <th scope="col" colspan="5" class="setCenter"></th>
-        <th scope="col" class="setLeft">Grade/th>
+        <th scope="col">STUDENT NAME</th>
+        <th scope="col" colspan="5" class="setFont14">{{ $student['firstname']}} {{$student['lastname']}}</th>
+        <th scope="col" class="setLeft">ID NO.</th>
+        <th scope="col" colspan="5" class="setFont14">{{$student['student_id']}} </th>
 
     </tr>
 </table>
 
 
 <center>
-    <table class="table table-bordered tableStyle">
+    <table class="tableStyle setCollapse">
         <tr>
-            <th scope="col" rowspan="2" class="courseCell">Course</th>
-            <th scope="col" rowspan="2" class="codeCell">Code</th>
-            <th scope="col" rowspan="2" class="creditCell">Credit</th>
-            <th scope="col" colspan="4" align="center">1st Semester Grade</th>
-        </tr>
-        <tr>
-            <th class="gradeCell">1</th>
-            <th class="gradeCell">2</th>
-            <th class="gradeCell">3</th>
-            <th class="semCell">Semester Grade</th>
+          <th scope="col" colspan="12" align="center" class="setFont14 setTableBorder" style="border-bottom: 2px solid black;">SATIT KASET IP BANGKOK THAILAND</th>
         </tr>
 
+        <tr class="setTableBorder">
+          <td scope="col" align="center" class="setFont14 setBorderBL" colspan="2">Code / Courses</td>
+          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
+          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Grade</p></td>
+          <td scope="col" align="center" class="setFont14 setBorderBL" colspan="2">Code / Courses</td>
+          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
+          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Grade</p></td>
+          <td scope="col" align="center" class="setFont14 setBorderBL" colspan="2">Code / Courses</td>
+          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
+          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setBorderLast"><p style="padding: 0px">Grade</p></td>
+        </tr>
+
+        <tr>
+          <th class="setUnderline setBorderLeft" colspan="2"> Grade {{$grade_column1['grade_level']}}/{{$grade_column1['year']}} </th>
+          <td class="setDotLR" align="center" ></td>
+          <td class="setDotLR" align="center" > </td>
+          <th class="setUnderline setBorderLeft" colspan="2"> Grade {{$grade_column2['grade_level']}}/{{$grade_column2['year']}} </th>
+          <td class="setDotLR" align="center" ></td>
+          <td class="setDotLR" align="center" > </td>
+          <th class="setUnderline setBorderLeft" colspan="2"> Grade {{$grade_column3['grade_level']}}/{{$grade_column3['year']}} </th>
+          <td class="setDotLR" align="center" ></td>
+          <td class="setBorderRight" align="center" ></td>
+        </tr>
+
+        <!-- ใส่วิชาตรงนี้ -->
 
 
+        @for ($i = 0; $i < $count; $i++)
+        <tr>
+          <td class="setBorderLeft"> {{$grade_column1['grade'][$i]['course_id']}}  </td>
+          <td > {{$grade_column1['grade'][$i]['course_name']}} </td>
+          <td class="setDotLR" align="center" > {{$grade_column1['grade'][$i]['credits']}} </td>
+          <!-- <td class="setDotLR" align="center" > {{$grade_column1['grade'][$i]['sem_grade']}} </td> -->
+          <td class="setDotLR" align="center" > [HOUR]</td>
+
+
+          <td class="setBorderLeft"> {{$grade_column2['grade'][$i]['course_id']}}  </td>
+          <td > {{$grade_column2['grade'][$i]['course_name']}} </td>
+          <td class="setDotLR" align="center" > {{$grade_column2['grade'][$i]['credits']}} </td>
+          <!-- <td class="setDotLR" align="center" > {{$grade_column2['grade'][$i]['sem_grade']}} </td> -->
+          <td class="setDotLR" align="center" > [HOUR] </td>
+
+
+          <td class="setBorderLeft"> {{$grade_column3['grade'][$i]['course_id']}}  </td>
+          <td > {{$grade_column3['grade'][$i]['course_name']}} </td>
+          <td class="setDotLR" align="center" > {{$grade_column3['grade'][$i]['credits']}} </td>
+          <!-- <td class="setDotLR" align="center" > {{$grade_column3['grade'][$i]['sem_grade']}} </td> -->
+          <td class="setDotLR" align="center" > [HOUR] </td>
+
+        </tr>
+
+        @endfor
+
+
+        @for ($i = 0; $i < $count_ac; $i++)
+        @if($i == 0){
+
+        <tr>
+          <td class="setBorderLeft setDotTop" colspan="2"> {{$grade_column1['activity'][$i]['course_name']}} </td>
+          <td class="setDotLR setDotTop" align="center"  > - </td>
+          <td class="setDotLR setDotTop" align="center" > {{$grade_column1['activity'][$i]['grade_status_text']}} </td>
+
+          <td class="setBorderLeft setDotTop" colspan="2" > {{$grade_column2['activity'][$i]['course_name']}} </td>
+          <td class="setDotLR setDotTop" align="center" > - </td>
+          <td class="setDotLR setDotTop" align="center" > {{$grade_column2['activity'][$i]['grade_status_text']}} </td>
+
+          <td class="setBorderLeft setDotTop" colspan="2"> {{$grade_column3['activity'][$i]['course_name']}} </td>
+          <td class="setDotLR setDotTop" align="center" > - </td>
+          <td class="setDotLR setDotTop" align="center" > {{$grade_column3['activity'][$i]['grade_status_text']}} </td>
+        </tr>
+          @else
             <tr>
-                <td>boom</td>
-                <td>boom2</td>
+              <td class="setBorderLeft" colspan="2"> {{$grade_column1['activity'][$i]['course_name']}} </td>
+              <td class="setDotLR" align="center" > - </td>
+              <td class="setDotLR" align="center" > {{$grade_column1['activity'][$i]['grade_status_text']}} </td>
 
+              <td class="setBorderLeft" colspan="2"> {{$grade_column2['activity'][$i]['course_name']}} </td>
+              <td class="setDotLR" align="center" > - </td>
+              <td class="setDotLR" align="center" > {{$grade_column2['activity'][$i]['grade_status_text']}} </td>
 
-
-                <td class="center-cell">1</td>
-                <td class="center-cell">2</td>
-                <td class="center-cell">3</td>
-                <td class="center-cell">4</td>
-
+              <td class="setBorderLeft" colspan="2"> {{$grade_column3['activity'][$i]['course_name']}} </td>
+              <td class="setDotLR" align="center" > - </td>
+              <td class="setBorderRight" align="center" > {{$grade_column3['activity'][$i]['grade_status_text']}} </td>
             </tr>
 
+          @endif
+
+        @endfor
 
 
+
+        <!-- วิชาที่ไม่มีเกรด -->
+        <!-- บรรทัดแรกของวิชา -->
+        <!-- <tr>
+          <td class="setBorderLeft setDotTop"> Grade 10/2016 </td>
+          <td class="setDotLR setDotTop" align="center" > - </td>
+          <td class="setDotLR setDotTop" align="center" > S </td>
+          <td class="setBorderLeft setDotTop"> Grade 10/2016 </td>
+          <td class="setDotLR setDotTop" align="center" > - </td>
+          <td class="setDotLR setDotTop" align="center" > S </td>
+          <td class="setBorderLeft setDotTop"> Grade 10/2016 </td>
+          <td class="setDotLR setDotTop" align="center" > - </td>
+          <td class="setBorderRight setDotTop" align="center" > S </td>
+        </tr> -->
+
+        <!-- บรรทัดถัดมา -->
+        <!-- <tr>
+          <td class="setBorderLeft"> Grade 10/2016 </td>
+          <td class="setDotLR" align="center" > - </td>
+          <td class="setDotLR" align="center" > S </td>
+          <td class="setBorderLeft"> Grade 10/2016 </td>
+          <td class="setDotLR" align="center" > - </td>
+          <td class="setDotLR" align="center" > S </td>
+          <td class="setBorderLeft"> Grade 10/2016 </td>
+          <td class="setDotLR" align="center" > - </td>
+          <td class="setBorderRight" align="center" > S </td>
+        </tr> -->
+
+        <!-- Credit Registered -->
         <tr>
-            <th scope="col" colspan="2">Total</th>
-            <th scope="col"></th>
-            <th scope="col" colspan="3" class="setRight">GPA</th>
-            <th scope="col">
-    </table>
+          <td class="setBorderTop" colspan="2"> Total </td>
+          <td class="setDotLRB setBorderTop" align="center" > {{$grade_column1['total_credits']}} </td>
+          <td class="setBorderTop setDotBT"></td>
 
-    <table class="table table-bordered tableStyle2">
-        <tr>
-            <th scope="col">Activity</th>
-            <th scope="col">S/U</th>
+
+          <td class=" setBorderTop" colspan="2">  </td>
+          <td  class="setDotLRB setBorderTop" align="center" > {{$grade_column2['total_credits']}} </td>
+          <td class="setBorderTop setDotBT"></td>
+
+          <td class="setBorderTop" colspan="2">  </td>
+          <td class="setDotLRB setBorderTop" align="center" > {{$grade_column3['total_credits']}} </td>
+          <td class="setBorderTop setDotBT"></td>
         </tr>
 
+        <!-- Credit Earned -->
+        <tr>
+          <td colspan="2"> Cumulative </td>
+          <!-- <td colspan="2" class="setDotLRB" align="center" > {{$grade_column1['cumulative']}} </td> -->
+          <td colspan="2" class="setDotLRB" align="center" > [SEM x HOUR] </td>
+
+          <td class="setDotLR" colspan="2">  </td>
+          <!-- <td colspan="2" class="setDotLRB" align="center" > {{$grade_column2['cumulative']}} </td> -->
+          <td colspan="2" class="setDotLRB" align="center" > [SEM x HOUR] </td>
+
+          <td colspan="2">  </td>
+          <!-- <td colspan="2" class="setDotLRB" align="center" > {{$grade_column3['cumulative']}} </td> -->
+          <td colspan="2" class="setDotLRB" align="center" > [SEM x HOUR] </td>
+
+        </tr>
+
+        <!-- Grade Point Average -->
+        <tr>
+          <td colspan="2"> GPA </th>
+          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column1['avg_grade']}} </td>
+          <td class="setDotLR" colspan="2">  </td>
+          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column2['avg_grade']}} </td>
+          <td colspan="2">  </td>
+          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column3['avg_grade']}} </td>
+        </tr>
+
+        <!-- GPAX -->
+        <tr>
+          <th colspan="12" class="setFont12"> GPAX  =  {{$gpax}} </th>
+        </tr>
+    </table>
+
+
+    <!-- Grading System -->
+    <table class="tableStyle2 setCollapse" align="center">
+      <tr>
+        <th colspan="14" align="center">Grading System</th>
+      </tr>
+      <tr>
+        <td align="center"> 4 </td>
+        <td align="center"> A </td>
+        <td> Excellent </td>
+        <td align="center"> 3 </td>
+        <td align="center"> B </td>
+        <td> Good </td>
+        <td align="center"> 2 </td>
+        <td align="center"> C </td>
+        <td> Average </td>
+        <td align="center"> 1 </td>
+        <td align="center"> D </td>
+        <td> Pass </td>
+        <td align="center"> S </td>
+        <td> Satisfactory </td>
+      </tr>
+
+      <tr>
+        <td align="center"> 3.5 </td>
+        <td align="center"> B+ </td>
+        <td> Very Good </td>
+        <td align="center"> 2.5 </td>
+        <td align="center"> C+ </td>
+        <td> Above Average </td>
+        <td align="center"> 1.5 </td>
+        <td align="center"> D+ </td>
+        <td> Fair </td>
+        <td align="center"> 0 </td>
+        <td align="center"> F </td>
+        <td> Fail </td>
+        <td align="center"> U </td>
+        <td> Unsatisfactory </td>
+      </tr>
 
 
     </table>
-    <p class="classroomStyle">Classroom signature................................................</p>
+
+    <!-- Teacher's name -->
+    <table class="tableStyle setCollapse" align="center">
+      <tr>
+        <td align="center">(DR. PAKAMAS NANTAJEEWARAWAT)</td>
+        <td align="center">(ASSOC. PROF. DR. PRANEE POTISOOK)</td>
+        <td align="center">(MRS. KAMONWADEE BOONRIBSONG)</td>
+      </tr>
+      <tr>
+        <td align="center">DIRECTOR</td>
+        <td align="center">IP CHAIR </td>
+        <td align="center">IP REGISTRAR</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td align="center">......./......./.......</td>
+      </tr>
+
+
+
+
+    </table>
 
 </center>
-
-<div class="page-break"></div>
 
 
 
 <style>
-    .heading {
-        margin-top: 30px;
-        margin-bottom: 0px;
-    }
+  th {
+      font-size: 12px;
+  }
 
-    .setCenter {
-        text-align: center;
-        border-bottom: 1px dotted black;
-        text-decoration: none;
-        width: 60%;
-        margin-left: 10px;
-        margin-right: 10px;
-    }
+  td {
+      font-size: 11px;
+      height: -13px;
+  }
 
-    .setLeft {
-        text-align: left;
-    }
+  tr {
+      height: -13px;
+  }
 
-    .setRight {
-        text-align: right;
-    }
+  .nameStyle {
+      width: 100%;
+      margin-top: 30px;
+  }
 
-    .setPosition {
-        margin-top: 10px;
-        margin-left: 100px;
-        font-size: 14px;
-        font-weight: bold;
-    }
+  .setFont14{
+    font-size: 14px;
+  }
+  .setFont12{
+    font-size: 14px;
+  }
 
-    .nameStyle {
-        width: 100%;
-        margin-top: 30px;
-    }
+  .tableStyle {
+      width: 100%;
+      margin-top: 20px;
+  }
 
-    .table-bordered {
-        border-collapse: collapse;
-    }
+  .tableStyle2 {
+      width: 90%;
+      margin-top: 0px;
+  }
 
-    .table-bordered td {
-        border: 1px solid black;
-    }
+  .setCollapse{
+      border-collapse: collapse;
+  }
 
-    .table-bordered th {
-        border: 1px solid black;
-    }
+  .setTableBorder{
+    border: 2px solid black;
+  }
 
-    .tableStyle {
-        width: 100%;
-        margin-top: 20px;
+  .setTableBorderBottom{
+    border-bottom: 2px solid black;
+  }
 
-    }
+  .setBorderBL{
+    border-bottom: 2px solid black;
+    border-left: 2px solid black;
+  }
 
-    .tableStyle2 {
-        width: 50%;
-        margin-top: 20px;
-    }
+  .setBorderLeft{
+    border-left: 2px solid black;
+  }
 
-    .tableStyle3 {
-        width: 70%;
-        margin-top: 20px;
-    }
+  .setBorderRight{
+    border-right: 2px solid black;
+  }
+  .setBorderLast{
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+  }
+  .setBorderTop{
+    border-top: 2px solid black;
+  }
 
-    .tableStyle4 {
-        width: 60%;
-        margin-top: 5px;
-    }
+  .setDotLR{
+    border-left: 2px dotted black;
+    border-right: 2px dotted black;
+  }
+  .setDotLRB{
+    border-left: 2px dotted black;
+    border-right: 2px dotted black;
+    border-bottom: 2px dotted black;
+  }
+  .setDotBT{
+    border-bottom: 2px dotted black;
+  }
 
-    .tableStyle4 th {
-        font-size: 9px;
-    }
-
-    .tableStyle4 td {
-        font-size: 9px;
-    }
-
-    .tableStyle5 {
-        width: 50%;
-        margin-left: 70px;
-    }
-
-    .tableStyle5 th {
-        text-align: left;
-        font-size: 10px;
-    }
-
-    .tableStyle5 td {
-        font-size: 10px;
-    }
+  .setDotTop{
+    border-top: 2px dotted black;
+  }
 
 
-    .classroomStyle {
-        font-size: 12px;
-        position: absolute;
-        right: 1px;
-        bottom: -50px;
-    }
+.vertical-text p {
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  margin-left: 15px;
+  /* background-color: yellow; */
+  -ms-transform: rotate(270deg); /* IE 9 */
+  -webkit-transform: rotate(270deg); /* Safari 3-8 */
+  transform: rotate(270deg);
+}
 
-    .center-cell {
-        text-align: center;
-    }
+.setUnderline{
+  text-decoration: underline;
+  }
 
-    th {
-        text-align: center;
-        font-size: 11px;
-        height: -13px;
-    }
 
-    td {
-        font-size: 11px;
-        height: -13px;
-    }
 
-    tr {
-        height: -13px;
-    }
 
-    .page-break {
-        page-break-after: always;
-    }
-
-    .table td, .table th {
-        padding: .20rem;
-        vertical-align: middle;
-    }
-
-    .noGrade p {
-        font-size: 10px;
-    }
-
-    .finalReport td {
-        text-align: center;
-    }
-
-    p {
-        font-size: 12px;
-    }
-
-    h6 {
-        font-size: 14px;
-        font-weight: bold;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-
-    div.relative {
-        position: relative;
-        width: 100%;
-        padding-top: 0%;
-        margin-top: -50px;
-    }
-
-    div.relative2 {
-        position: relative;
-        width: 100%;
-        padding-top: 0%;
-        margin-top: 0px;
-    }
-
-    div.conduct {
-        position: absolute;
-        top: 50px;
-        right: 5;
-        width: 150px;
-    }
-
-    div.attendance {
-        position: absolute;
-        top: 10px;
-        right: -30;
-        width: 250px;
-    }
-
-    .board {
-        width: 100%;
-        height: 97%;
-        /* border: 1px solid black; */
-    }
-
-    .dotBottom {
-        height: 40%;
-        border-bottom: 1.5px dotted black;
-    }
-
-    .dotBottom2 {
-        border-bottom: 1.5px dotted black;
-    }
-
-    div.boxHeader {
-        position: relative;
-        width: 100%;
-        height: 30px;
-    }
-
-    div.box {
-        position: absolute;
-        top: 0px;
-        left: 100px;
-        width: 20px;
-        height: 20px;
-        border: 1px solid black;
-    }
-
-    div.boxTail {
-        position: absolute;
-        top: 0px;
-        left: 130px;
-        width: 80%;
-    }
-
-    .courseCell{
-    }
-
-    .codeCell{
-        width: 2.2cm;
-    }
-    .creditCell {
-        width: 1.2cm;
-    }
-    .semCell{
-        width: 19mm;
-    }
-    .gradeCell{
-        width: 1cm;
-    }
-    .creditCell{
-        width: 1.2cm;
-    }
 </style>

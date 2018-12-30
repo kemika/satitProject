@@ -7,7 +7,7 @@
 
 
 
-<center><h4 class="heading">Transcript Grade 10-12 </h4></center>
+<center><h4 class="heading">Transcript Grade 7-9 Chi </h4></center>
 <table class="nameStyle">
     <tr>
         <th scope="col">STUDENT NAME</th>
@@ -139,32 +139,38 @@
 
         <!-- Credit Registered -->
         <tr>
-          <td class="setBorderTop" colspan="2"> Credit Registered </td>
-          <td colspan="2" class="setDotLRB setBorderTop" align="center" > {{$grade_column1['total_credits']}} </td>
-          <td class="setDotLR setBorderTop" colspan="2">  </td>
-          <td colspan="2" class="setDotLRB setBorderTop" align="center" > {{$grade_column2['total_credits']}} </td>
+          <td class="setBorderTop" colspan="2"> Total </td>
+          <td class="setDotLRB setBorderTop" align="center" > {{$grade_column1['total_credits']}} </td>
+          <td class="setBorderTop setDotBT"></td>
+
+
+          <td class=" setBorderTop" colspan="2">  </td>
+          <td  class="setDotLRB setBorderTop" align="center" > {{$grade_column2['total_credits']}} </td>
+          <td class="setBorderTop setDotBT"></td>
+
           <td class="setBorderTop" colspan="2">  </td>
-          <td colspan="2" class="setDotLRB setBorderTop" align="center" > {{$grade_column3['total_credits']}} </td>
+          <td class="setDotLRB setBorderTop" align="center" > {{$grade_column3['total_credits']}} </td>
+          <td class="setBorderTop setDotBT"></td>
         </tr>
 
         <!-- Credit Earned -->
         <tr>
-          <td colspan="2"> Credit Earned </td>
-          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column1['total_credits']}} </td>
+          <td colspan="2"> Cumulative </td>
+          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column1['cumulative']}} </td>
           <td class="setDotLR" colspan="2">  </td>
-          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column2['total_credits']}} </td>
+          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column2['cumulative']}} </td>
           <td colspan="2">  </td>
-          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column3['total_credits']}} </td>
+          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column3['cumulative']}} </td>
         </tr>
 
         <!-- Grade Point Average -->
         <tr>
-          <th colspan="2"> Grade Point Average </th>
-          <th colspan="2" class="setDotLRB" align="center" > {{$grade_column1['avg_grade']}} </th>
-          <th class="setDotLR" colspan="2">  </td>
-          <th colspan="2" class="setDotLRB" align="center" > {{$grade_column2['avg_grade']}} </th>
-          <th colspan="2">  </td>
-          <th colspan="2" class="setDotLRB" align="center" > {{$grade_column3['avg_grade']}} </th>
+          <td colspan="2"> GPA </th>
+          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column1['avg_grade']}} </td>
+          <td class="setDotLR" colspan="2">  </td>
+          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column2['avg_grade']}} </td>
+          <td colspan="2">  </td>
+          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column3['avg_grade']}} </td>
         </tr>
 
         <!-- GPAX -->
@@ -318,6 +324,9 @@
   .setDotLRB{
     border-left: 2px dotted black;
     border-right: 2px dotted black;
+    border-bottom: 2px dotted black;
+  }
+  .setDotBT{
     border-bottom: 2px dotted black;
   }
 
