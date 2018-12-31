@@ -1,5 +1,5 @@
 <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-
+<link href="{{ asset('bootstrap/css/academicCSS.css') }}" rel="stylesheet">
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
@@ -56,7 +56,7 @@
 
 <div class="container">
   <div class="row justify-content-md-center setBtn">
-      <button class="btn btn-outline-secondary" onlick="window.location.href='/editCurrentAcademic'" type="button">Edit Current Academic Year</button>
+      <button class="btn btn-outline-secondary" onclick="window.location.href='/editCurrentAcademic'" type="button">Edit Current Academic Year</button>
   </div>
 
   <div class="row justify-content-md-center setBtn">

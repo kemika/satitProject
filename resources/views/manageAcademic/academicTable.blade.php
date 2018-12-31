@@ -45,7 +45,7 @@
 
 </head>
 
-<h1> Manage Academic</h1>
+<h1> Manage Academic {{ $cur_year }}</h1>
 <center>
 <div class="row" style="width: 120rem;">
     <table class="table table-hover" id="table" style="width: 120rem;">
@@ -64,12 +64,17 @@
           @for ($grade = 1; $grade <= 12; $grade++)
           <tr>
             <td>{{ $grade }}</td>
-            <td>{{ $room }}</td>
-            <td>{{ $grade }}/{{ $room }}</td>
-            <td><button type="button" class="btn btn-primary" >
+            @if ($room === 0 )
+              <td>All Room</td>
+              <td>{{ $grade }}  -  All Room</td>
+            @else
+                <td>{{ $room }}</td>
+                <td>{{ $grade }}/{{ $room }}</td>
+            @endif
+            <td><button type="button" onclick="window.location.href='assignStudent/{{$grade}}/{{$room}}'" class="btn btn-primary" >
               <span class="glyphicon glyphicon-user"></span>&nbsp;Edit</button>
             </td>
-            <td><button type="button" class="btn btn-primary" >
+            <td><button type="button" onclick="window.location.href='assignSubject/{{$grade}}/{{$room}}'" class="btn btn-primary" >
               <span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit</button>
             </td>
           </tr>
@@ -87,4 +92,7 @@
   $(document).ready(function() {
     $('#table').DataTable();
 } );
- </script>
+
+
+
+</script>
