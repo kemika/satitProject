@@ -12,9 +12,19 @@ use App\Grade;
 class ViewGradeController extends Controller
 {
   public function index(){
+    $grades = Grade::join('offered_courses','grades.open_course_id','offered_courses.open_course_id')
+    ->select('offered_courses.*','grades.*')
+    ->get();
+    $grades = $grades->toArray();
 
+    $boom = array();
+    $boom = $grades;
 
-    return view('grade.list');
+    // for ($i = 0 ;$i< 10 ; $i ++){
+    //   array_push($boom,$grades[$i]);
+    // }
+    // dd($grades->toArray());
+    return view('grade.list',['grades_all'=>$boom]);
 
   }
 
@@ -28,71 +38,140 @@ class ViewGradeController extends Controller
       }
 
       return view('grade.index' , ['curriculums' => $curriculums]);
+
   }
 
 
 
   public function api(Request $request){
-    $filter= $_GET['filter'];
-    $datas = self::getData($filter);
-    return $datas;
-  }
-
-  public function getData($filter){
-    $age1 = array("name"=>"Boom", "age"=>"10" , 'total' => 'Anaphat');
-    $age2 = array("name"=>"Boom2", "age"=>"12" , 'total' => 'Insuwan');
-    $age3 = array("name"=>"Boom3", "age"=>"13", 'total' => 'Kemika');
-
-
-
-
-
-
-    $datas =array($age1,$age2,$age3);
-    $realData = array();
-    foreach ($datas as $data) {
-      $check = true;
-      foreach ($data as $key => $value) {
-        $strCheck = $filter[$key];
-        array_push($datas,['KEYS' => $strCheck]);
-
-        if($strCheck){
-          array_push($datas,['ME KEY' => $strCheck , 'VALUE' => $value,'BOOLEAN' => strpos('Boom2', 'Bo') !== false]);
-            if( strpos( $value, $strCheck ) !== false ){
-                    array_push($datas,['CHECK_STR' => $strCheck,'DATA',$data]);
-            }
-            else{
-              $check = false;
-              break;
-
-            }
-        }
-      }
-      if($check && !in_array($realData,$data)){
-        array_push($realData,$data);
-      }
-    }
+    // $filter= $_GET['filter'];
+    // $datas = self::getData($filter);
     $grades = Grade::join('offered_courses','grades.open_course_id','offered_courses.open_course_id')
-    ->select('offered_courses.*','grades.*')
+    ->select('grades.grade','grades.student_id','offered_courses.course_id','grades.semester','grades.quater')
+    ->join('students','students.student_id','grades.student_id')
+    ->select('grades.grade','grades.student_id','offered_courses.course_id','grades.semester','grades.quater','students.firstname','students.lastname')
+    ->join('curriculums','curriculums.course_id','offered_courses.course_id')
+    ->select('grades.grade','grades.student_id','offered_courses.course_id','grades.semester','grades.quater','students.firstname','students.lastname','curriculums.course_name')
+    ->join('student_grade_levels','student_grade_levels.student_id','grades.student_id')
+    ->join('academic_year','academic_year.classroom_id','student_grade_levels.classroom_id')
+    ->select('grades.grade','grades.student_id','offered_courses.course_id','grades.semester','grades.quater','students.firstname','students.lastname','curriculums.course_name','academic_year.room','academic_year.grade_level','academic_year.academic_year')
+
     ->get();
 
 
-    $array = array();
-    for($i = 0 ; $i < 5 ; $i++){
-      array_push($array,$grades[$i]);
+
+
+
+    $boom = $grades->toArray();
+
+
+    foreach ($boom as $key => $value) {
+      $boom[$key]['student_name'] = $value['firstname'].' '.$value['lastname'];
+    }
+    $filter= $_GET['filter'];
+    // $filter = ['grade' => '0','course_id' => 'ART','student_id' => '','semester'=>'','firstname'=>'','lastname'=>'','course_name'=>'','quater'=>''];
+    $check = true;
+    foreach ($filter as $key => $value) {
+      if($value){
+          $check = false;
+      }
+
+
+    }
+    if($check){
+      return $boom;
     }
 
-    $grades = $grades->toArray();
-    $actualData = array("data"=>$array,'itemsCount'=>10 ,'pageSize'=>10 , 'pageIndex'=>1,'pageButtonCount' => 5);
+
+
+    $b = array();
+      foreach ($boom as $data) {
+
+        $check = true;
+        foreach ($data as $key => $value) {
+          $strCheck = $filter[$key];
+
+
+          if($strCheck != ''){
+
+            if(strpos($data[$key], $filter[$key]) !== false || $data[$key] == $filter[$key] ){
+
+
+              $check = false;
+            }
+            else{
+              $check = true;
+              break;
+            }
 
 
 
+              }
+          }
+          if(!$check){
+            array_push($b,$data);
 
-    // array_push($actualData,['GRADE' => $grades[0],'REALDATA' => $realData[0]]);
+          }
+        }
 
-    return $actualData;
 
+
+    return $b;
   }
+
+  // public function getData($filter){
+  //   $age1 = array("name"=>"Boom", "age"=>"10" , 'total' => 'Anaphat');
+  //   $age2 = array("name"=>"Boom2", "age"=>"12" , 'total' => 'Insuwan');
+  //   $age3 = array("name"=>"Boom3", "age"=>"13", 'total' => 'Kemika');
+  //
+  //
+  //
+  //
+  //
+  //
+  //   $datas =array($age1,$age2,$age3);
+  //   $realData = array();
+  //   foreach ($datas as $data) {
+  //     $check = true;
+  //     foreach ($data as $key => $value) {
+  //       $strCheck = $filter[$key];
+  //
+  //       if($strCheck){
+  //
+  //                   array_push($datas,['CHECK_STR' => $strCheck,'DATA',$data]);
+  //           }
+  //           else{
+  //             $check = false;
+  //             break;
+  //
+  //           }
+  //       }
+  //     }
+  //     if($check && !in_array($realData,$data)){
+  //       array_push($realData,$data);
+  //     }
+  //   }
+  //   $grades = Grade::join('offered_courses','grades.open_course_id','offered_courses.open_course_id')
+  //   ->select('offered_courses.*','grades.*')
+  //   ->get();
+  //
+  //
+  //   $array = array();
+  //   for($i = 0 ; $i < 5 ; $i++){
+  //     array_push($array,$grades[$i]);
+  //   }
+  //
+  //   $grades = $grades->toArray();
+  //   $actualData = array("data"=>$array,'itemsCount'=>10 ,'pageSize'=>10 , 'pageIndex'=>1,'pageButtonCount' => 5);
+  //
+  //
+  //
+  //
+  //   // array_push($actualData,['GRADE' => $grades[0],'REALDATA' => $realData[0]]);
+  //
+  //   return $actualData;
+  //
+  // }
 
 
   public function api2(Request $request){
