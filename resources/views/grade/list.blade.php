@@ -88,7 +88,9 @@ var js_lang = {!! json_encode($grades_all) !!};
          { name: "course_id",title:'Course ID', type: "text", width: 150 },
          { name: "course_name",title:'Course Name', type: "text", width: 150 },
          { name: "student_id",title:'Student ID', type: "text", width: 150 },
-         { name: "student_name",title:'Student Name', type: "text", width: 150 },
+         { name: "firstname",title:'Academic Year', type: "text", width: 150 },
+         { name: "lastname",title:'Academic Year', type: "text", width: 150 },
+
          { name: "grade",title:'Grade', type: "text", width: 70 },
          { name: "grade_level",title:'Grade Level', type: "text", width: 70 },
          { name: "room",title:'Room', type: "text", width: 65 },

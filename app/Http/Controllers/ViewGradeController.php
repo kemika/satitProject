@@ -65,9 +65,9 @@ class ViewGradeController extends Controller
     $boom = $grades->toArray();
 
 
-    foreach ($boom as $key => $value) {
-      $boom[$key]['student_name'] = $value['firstname'].' '.$value['lastname'];
-    }
+    // foreach ($boom as $key => $value) {
+    //   $boom[$key]['student_name'] = $value['firstname'].' '.$value['lastname'];
+    // }
     $filter= $_GET['filter'];
     // $filter = ['grade' => '0','course_id' => 'ART','student_id' => '','semester'=>'','firstname'=>'','lastname'=>'','course_name'=>'','quater'=>''];
     $check = true;
