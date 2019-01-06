@@ -35,12 +35,7 @@ var js_lang = {!! json_encode($grades_all) !!};
 
 
 
-   var countries = [
-       { Name: "", Id: 0 },
-       { Name: "United States", Id: 1 },
-       { Name: "Canada", Id: 2 },
-       { Name: "United Kingdom", Id: 3 }
-   ];
+
 
    $("#jsGrid").jsGrid({
      height: "auto",
@@ -56,7 +51,7 @@ var js_lang = {!! json_encode($grades_all) !!};
                console.log(filter);
                var path = '/api';
 
-               var boom =  $.ajax({
+               var data =  $.ajax({
                    type: "GET",
                    url: path,
                    data: {'filter': filter},
@@ -68,14 +63,14 @@ var js_lang = {!! json_encode($grades_all) !!};
 
 
 
-                 boom.done(function(msg) {
+                 data.done(function(msg) {
                    console.log('MSG');
                    console.log( msg );
 
                  });
 
 
-                 return boom
+                 return data
              },
            },
 
@@ -88,9 +83,7 @@ var js_lang = {!! json_encode($grades_all) !!};
          { name: "course_id",title:'Course ID', type: "text", width: 150 },
          { name: "course_name",title:'Course Name', type: "text", width: 150 },
          { name: "student_id",title:'Student ID', type: "text", width: 150 },
-         { name: "firstname",title:'Academic Year', type: "text", width: 150 },
-         { name: "lastname",title:'Academic Year', type: "text", width: 150 },
-
+         { name: "student_name",title:'Student', type: "text", width: 150 },
          { name: "grade",title:'Grade', type: "text", width: 70 },
          { name: "grade_level",title:'Grade Level', type: "text", width: 70 },
          { name: "room",title:'Room', type: "text", width: 65 },
