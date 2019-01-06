@@ -80,10 +80,11 @@
         <tr>
           <th scope="col">Course ID</th>
           <th scope="col">Course Name</th>
+          <th scope="col">Semester</th>
           <th scope="col">Credits</th>
           <th scope="col">Elective</th>
-          <th scope="col">Semester</th>
-          <th scope="col">Active</th>
+
+
         </tr>
       </thead>
       <tbody>
@@ -92,6 +93,7 @@
           <tr>
             <td>{{ $sub->course_id }}</td>
             <td>{{ $sub->course_name }}</td>
+            <td>{{ $sub->semester }}</td>
             <td>{{ $sub->credits }}</td>
 
             @if ($sub->is_elective === 1)
@@ -99,11 +101,8 @@
             @else
               <td>No</td>
             @endif
-            <td>{{ $sub->semester }}</td>
-            <td>
-              <input type="checkbox" id="{{ $sub->course_id }}" onclick="changeTextBox(this.id);">
-              <span id='{{ $sub->course_id }}span'></span></input>
-            </td>
+
+
           </tr>
       @endforeach
 
@@ -125,8 +124,7 @@
 
       <div class="modal-body">
 
-        <form class="form-inline"  method="post">
-          @csrf
+
           <div class="container">
             <table class="table table-hover" id="tableAddSub" style="width:74rem;">
               <thead>
@@ -148,7 +146,7 @@
                         Not Add
                       </button> -->
 
-                      <button type="button" class="btn btn-primary" data-toggle='modal' data-target='#{{$c}}'>Edit
+                      <button type="button" class="btn btn-primary" data-toggle='modal' data-target='#{{$c}}'>Add
                         </button>
                       <!--  <input onclick="changeBtn(this.id)" type="button" value="0" class="btn btn-danger" id="{{ $sub->course_id }}" /> -->
                     </td>
@@ -157,13 +155,16 @@
                     <div class="modal-dialog modal-lg">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h4 class="modal-title" style="margin-left:10px;">Edit</h4>
+                          <h4 class="modal-title" style="margin-left:10px;">Add Subject</h4>
                           <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
                           <p>{{$sub->course_name }} {{$sub->course_id }}</p>
-                          <form class="form-inline" action="/manageCurriculum/editSubject" method="post">
+                          <form class="form-inline" id='form{{$c}}' >
                             @csrf
+                            <input hidden type="text" name="grade" value={{$grade}}>
+                            <input hidden type="text" name="room" value={{$room}}>
+
                             <div class="form-group row">
                               <label class="col-sm-3 col-form-label text-right">Year :</label>
                               <div class="col-sm-5">
@@ -174,12 +175,44 @@
                             <div class="form-group row">
                               <label class="col-sm-3 col-form-label text-right">Course ID :</label>
                               <div class="col-sm-5">
-                                <input type="text" class="form-control"  name="course_id" value='{{ $sub->course_id }}' required>
+                                <input type="text" class="form-control"  name="course_id" value='{{ $sub->course_id }}' readonly>
+                              </div>
+                            </div>
+
+                            <div class="form-group row">
+                              <label class="col-sm-3 col-form-label text-right">Course Name :</label>
+                              <div class="col-sm-5">
+                                <input type="text" class="form-control"  name="course_name" value='{{ $sub->course_name }}' readonly>
+                              </div>
+                            </div>
+
+                            <div class="form-group row">
+                              <label class="col-sm-3 col-form-label text-right">Semester :</label>
+                              <div class="col-sm-5">
+                                <input type="text" class="form-control"  name="semester"  required>
+                              </div>
+                            </div>
+
+                            <div class="form-group row">
+                              <label class="col-sm-3 col-form-label text-right">Credit :</label>
+                              <div class="col-sm-5">
+                                <input type="text" class="form-control"  name="credit"  required>
+                              </div>
+                            </div>
+
+                            <div class="form-group row">
+                              <label class="col-sm-3 col-form-label text-right">Elective :</label>
+                              <div class="col-sm-5">
+                                <select name="elective" class="form-control" style="height: 35px" required>
+                                  <option value="1" >Yes</option>
+                                  <option value="0" selected>No</option>
+
+                                </select>
                               </div>
                             </div>
 
                         <div class="modal-footer">
-                              <button type="submit"  class="btn btn-success" >Edit</button>
+                              <button type="button"  class="btn btn-success" onclick="addSubject(this.id)" id="btn{{$c}}" >Add</button>
                           </form>
 
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -203,8 +236,8 @@
                     <option value="Graduated" >Graduated</option>
           </select> -->
       <div class="modal-footer">
-            <button type="submit"  class="btn btn-success" >Add Subject</button>
-        </form>
+
+
 
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
@@ -225,7 +258,7 @@
 
       <div class="modal-body">
 
-        <form class="form-inline"  method="post">
+        <form class="form-inline" >
           @csrf
           <div class="container">
             <div class="container">
@@ -280,7 +313,7 @@
                     <option value="Graduated" >Graduated</option>
           </select> -->
       <div class="modal-footer">
-            <button type="submit"  class="btn btn-success" >Add Subject</button>
+            <button type="button"  class="btn btn-success" >Add Subject</button>
         </form>
 
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -320,24 +353,35 @@
 
 </div>
 </center>
-
+<meta name="csrf-token" content="{{ csrf_token() }}" />
+<meta name="grade_data" content="{{ $grade }}" />
+<meta name="room_data" content="{{ $room }}" />
 
 
 <script>
   $(document).ready(function() {
     $('#table').DataTable();
     $('#tableAddSub').DataTable();
+
     jQuery.noConflict();
 
   });
-  var myTable = $('#table').DataTable();
 
-  function changeTextBox(id){
-    if ($('#ch'+id).is(':checked')) {
-      $('#'+id +"+span").html('Active');
-    }else{
-      $('#'+id+ "+span").html('Not Active');
-    }
+  function addSubject(id){
+    var myForm = $("#form"+id.replace('btn',''));
+    var data = myForm.serializeArray().reduce(function(obj, item) {
+    obj[item.name] = item.value;
+    return obj;
+}, {});
+
+    $.ajax({
+       type:'POST',
+       url:'/assignSubject/add',
+       data:data,
+       success:function(data){
+          alert(data.Status);
+       }
+    });
   }
 
   function changeBtn(id){

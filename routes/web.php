@@ -55,6 +55,7 @@ Route::get('/editCurrentAcademic', 'ManageAcademicController@editAcademicYear');
 Route::get('/assignSubject/{grade}/{room}', 'ManageAcademicController@assignSubject');
 Route::get('/assignStudent/{grade}/{room}', 'ManageAcademicController@assignStudent');
 Route::post('/assignSubject/changeSelYear', 'ManageAcademicController@changeCurYear');
+Route::post('/assignSubject/add', 'ManageAcademicController@addSubject');
 Route::post('/assignStudent/add', 'ManageAcademicController@addStudent');
 
 Auth::routes();

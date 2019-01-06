@@ -155,7 +155,6 @@
 </div>
 </center>
 <meta name="csrf-token" content="{{ csrf_token() }}" />
-<meta name="curri_year" content="{{ $cur_year }}" />
 <meta name="grade_data" content="{{ $grade }}" />
 <meta name="room_data" content="{{ $room }}" />
 
@@ -170,14 +169,13 @@
 
   function addStdBtn(id){
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-    var curr_year = $('meta[name="curri_year"]').attr('content');
     var grade1 = $('meta[name="grade_data"]').attr('content');
     var room1 = $('meta[name="room_data"]').attr('content');
     var std_id1 = id.replace('btnAdd','');
     $.ajax({
        type:'POST',
        url:'/assignStudent/add',
-       data:{_token: CSRF_TOKEN,year:curr_year,std_id:std_id1,grade:grade1,room:room1},
+       data:{_token: CSRF_TOKEN,std_id:std_id1,grade:grade1,room:room1},
        success:function(data){
           alert(data.Status);
        }

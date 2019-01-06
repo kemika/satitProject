@@ -142,11 +142,64 @@ class ManageAcademicController extends Controller
                               ->where('grade_level',$grade)
                               ->where('room',$room)
                               ->get();
-
+    try{
     $createStuClass = new Student_Grade_Level;
     $createStuClass->classroom_id = $checkAca[0]->classroom_id;
     $createStuClass->student_id = $std_id;
     $createStuClass->save();
+    }
+    catch(\Exception $e){
+       // do task when error
+       return response()->json(['Status' => $e->getMessage()], 200);
+
+    }
+
+    return response()->json(['Status' => 'success'], 200);
+  }
+
+
+  public function addSubject(Request $request){
+    $room = $request->input('room');
+    $grade = $request->input('grade');
+    $inCurYear = $request->input('year');
+
+    $curYear = Curriculum::orderBy('curriculum_year', 'desc')->groupBy('curriculum_year')->get();
+    $academic  = Academic_Year::orderBy('academic_year', 'desc')->groupBy('academic_year')->first();
+    $year = $academic->academic_year;
+    $checkAca =  Academic_Year::where('academic_year',$year)
+                              ->where('grade_level',$grade)
+                              ->where('room',$room)
+                              ->get();
+
+    if(!isset($checkAca[0])){ // No classroom
+      $createAca = new Academic_Year;
+      $createAca->academic_year = $year;
+      $createAca->grade_level = $grade;
+      $createAca->room = $room;
+      $createAca->curriculum_year = $inCurYear;
+      $createAca->save();
+    }
+
+    $checkAca =  Academic_Year::where('academic_year',$year)
+                              ->where('grade_level',$grade)
+                              ->where('room',$room)
+                              ->get();
+
+    try{
+      $createStuClass = new Offered_Courses;
+      $createStuClass->classroom_id = $checkAca[0]->classroom_id;
+      $createStuClass->semester = $request->input('semester');
+      $createStuClass->credits = $request->input('credit');
+      $createStuClass->is_elective = $request->input('elective');
+      $createStuClass->course_id = $request->input('course_id');
+      $createStuClass->curriculum_year = $inCurYear;
+      $createStuClass->save();
+    }catch(\Exception $e){
+       // do task when error
+       return response()->json(['Status' => $e->getMessage()], 200);
+
+    }
+
 
     return response()->json(['Status' => 'success'], 200);
   }
