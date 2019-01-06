@@ -27,14 +27,14 @@
 
         <tr class="setTableBorder">
           <td scope="col" align="center" class="setFont14 setBorderBL" colspan="2">Code / Courses</td>
-          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
-          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Grade</p></td>
+          <td scope="col" align="center" width="1px" class="setFont14 vertical-text setDotLR setTableBorderBottom" style="font-size: 8px;"><p style="padding: 0px">Hours/Year</p></td>
+          <td scope="col" align="center" width="1px" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Grade</p></td>
           <td scope="col" align="center" class="setFont14 setBorderBL" colspan="2">Code / Courses</td>
-          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
-          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Grade</p></td>
+          <td scope="col" align="center" width="1px" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
+          <td scope="col" align="center" width="1px" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Grade</p></td>
           <td scope="col" align="center" class="setFont14 setBorderBL" colspan="2">Code / Courses</td>
-          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
-          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setBorderLast"><p style="padding: 0px">Grade</p></td>
+          <td scope="col" align="center" width="1px" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
+          <td scope="col" align="center" width="1px" class="setFont14 vertical-text setBorderLast"><p style="padding: 0px">Grade</p></td>
         </tr>
 
         <tr>
@@ -57,22 +57,22 @@
           <td class="setBorderLeft"> {{$grade_column1['grade'][$i]['course_id']}}  </td>
           <td > {{$grade_column1['grade'][$i]['course_name']}} </td>
           <td class="setDotLR" align="center" > {{$grade_column1['grade'][$i]['credits']}} </td>
-          <!-- <td class="setDotLR" align="center" > {{$grade_column1['grade'][$i]['sem_grade']}} </td> -->
-          <td class="setDotLR" align="center" > [HOUR]</td>
+          <td class="setDotLR" align="center" > {{$grade_column1['grade'][$i]['sem_grade']}} </td>
+          <!-- <td class="setDotLR" align="center" > [HOUR]</td> -->
 
 
           <td class="setBorderLeft"> {{$grade_column2['grade'][$i]['course_id']}}  </td>
           <td > {{$grade_column2['grade'][$i]['course_name']}} </td>
           <td class="setDotLR" align="center" > {{$grade_column2['grade'][$i]['credits']}} </td>
-          <!-- <td class="setDotLR" align="center" > {{$grade_column2['grade'][$i]['sem_grade']}} </td> -->
-          <td class="setDotLR" align="center" > [HOUR] </td>
+          <td class="setDotLR" align="center" > {{$grade_column2['grade'][$i]['sem_grade']}} </td>
+          <!-- <td class="setDotLR" align="center" > [HOUR] </td> -->
 
 
           <td class="setBorderLeft"> {{$grade_column3['grade'][$i]['course_id']}}  </td>
           <td > {{$grade_column3['grade'][$i]['course_name']}} </td>
           <td class="setDotLR" align="center" > {{$grade_column3['grade'][$i]['credits']}} </td>
-          <!-- <td class="setDotLR" align="center" > {{$grade_column3['grade'][$i]['sem_grade']}} </td> -->
-          <td class="setDotLR" align="center" > [HOUR] </td>
+          <td class="setBorderRight" align="center" > {{$grade_column3['grade'][$i]['sem_grade']}} </td>
+          <!-- <td class="setBorderRight" align="center" > [HOUR] </td> -->
 
         </tr>
 
@@ -93,7 +93,7 @@
 
           <td class="setBorderLeft setDotTop" colspan="2"> {{$grade_column3['activity'][$i]['course_name']}} </td>
           <td class="setDotLR setDotTop" align="center" > - </td>
-          <td class="setDotLR setDotTop" align="center" > {{$grade_column3['activity'][$i]['grade_status_text']}} </td>
+          <td class="setBorderRight setDotTop" align="center" > {{$grade_column3['activity'][$i]['grade_status_text']}} </td>
         </tr>
           @else
             <tr>
@@ -162,16 +162,16 @@
         <!-- Credit Earned -->
         <tr>
           <td colspan="2"> Cumulative </td>
-          <!-- <td colspan="2" class="setDotLRB" align="center" > {{$grade_column1['cumulative']}} </td> -->
-          <td colspan="2" class="setDotLRB" align="center" > [SEM x HOUR] </td>
+          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column1['cumulative']}} </td>
+          <!-- <td colspan="2" class="setDotLRB" align="center" > [SEM x HOUR] </td> -->
 
           <td class="setDotLR" colspan="2">  </td>
-          <!-- <td colspan="2" class="setDotLRB" align="center" > {{$grade_column2['cumulative']}} </td> -->
-          <td colspan="2" class="setDotLRB" align="center" > [SEM x HOUR] </td>
+          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column2['cumulative']}} </td>
+          <!-- <td colspan="2" class="setDotLRB" align="center" > [SEM x HOUR] </td> -->
 
           <td colspan="2">  </td>
-          <!-- <td colspan="2" class="setDotLRB" align="center" > {{$grade_column3['cumulative']}} </td> -->
-          <td colspan="2" class="setDotLRB" align="center" > [SEM x HOUR] </td>
+          <td colspan="2" class="setDotLRB" align="center" > {{$grade_column3['cumulative']}} </td>
+          <!-- <td colspan="2" class="setDotLRB" align="center" > [SEM x HOUR] </td> -->
 
         </tr>
 
@@ -351,11 +351,13 @@
   width: 25px;
   height: 25px;
   text-align: center;
+
   margin-left: 15px;
-  /* background-color: yellow; */
+  background-color: yellow;
   -ms-transform: rotate(270deg); /* IE 9 */
   -webkit-transform: rotate(270deg); /* Safari 3-8 */
   transform: rotate(270deg);
+
 }
 
 .setUnderline{

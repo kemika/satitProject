@@ -67,7 +67,7 @@
           <td class="setBorderLeft"> {{$grade_column3['grade'][$i]['course_id']}}  </td>
           <td > {{$grade_column3['grade'][$i]['course_name']}} </td>
           <td class="setDotLR" align="center" > {{$grade_column3['grade'][$i]['credits']}} </td>
-          <td class="setDotLR" align="center" > {{$grade_column3['grade'][$i]['sem_grade']}} </td>
+          <td class="setBorderRight" align="center" > {{$grade_column3['grade'][$i]['sem_grade']}} </td>
         </tr>
 
         @endfor
@@ -87,7 +87,7 @@
 
           <td class="setBorderLeft setDotTop" colspan="2"> {{$grade_column3['activity'][$i]['course_name']}} </td>
           <td class="setDotLR setDotTop" align="center" > - </td>
-          <td class="setDotLR setDotTop" align="center" > {{$grade_column3['activity'][$i]['grade_status_text']}} </td>
+          <td class="setBorderRight setDotTop" align="center" > {{$grade_column3['activity'][$i]['grade_status_text']}} </td>
         </tr>
           @else
             <tr>

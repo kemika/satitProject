@@ -186,7 +186,7 @@ class TranscriptController extends Controller
         return $pdf->stream();
     } else {
         $file_name = $student->student_id;
-    
+
         $pdf->save(public_path('transript_file_to_zip/' . $folder_name . '/' . $file_name . '.pdf', true));
 
     }
@@ -571,7 +571,7 @@ class TranscriptController extends Controller
     }
 
     if($total_credit != 0){
-      return $total_point / $total_credit;
+      return sprintf('%.2f', $total_point / $total_credit);
     }
     return '';
 

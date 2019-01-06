@@ -27,10 +27,10 @@
 
         <tr class="setTableBorder">
           <td scope="col" align="center" class="setFont14 setBorderBL" colspan="2">Code / Courses</td>
-          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
+          <td  scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px;">Hours/Year</p></td>
           <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Grade</p></td>
           <td scope="col" align="center" class="setFont14 setBorderBL" colspan="2">Code / Courses</td>
-          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
+          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px;">Hours/Year</p></td>
           <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Grade</p></td>
           <td scope="col" align="center" class="setFont14 setBorderBL" colspan="2">Code / Courses</td>
           <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
@@ -67,7 +67,7 @@
           <td class="setBorderLeft"> {{$grade_column3['grade'][$i]['course_id']}}  </td>
           <td > {{$grade_column3['grade'][$i]['course_name']}} </td>
           <td class="setDotLR" align="center" > {{$grade_column3['grade'][$i]['credits']}} </td>
-          <td class="setDotLR" align="center" > {{$grade_column3['grade'][$i]['sem_grade']}} </td>
+          <td class="setBorderRight" align="center" > {{$grade_column3['grade'][$i]['sem_grade']}} </td>
         </tr>
 
         @endfor
@@ -87,7 +87,7 @@
 
           <td class="setBorderLeft setDotTop" colspan="2"> {{$grade_column3['activity'][$i]['course_name']}} </td>
           <td class="setDotLR setDotTop" align="center" > - </td>
-          <td class="setDotLR setDotTop" align="center" > {{$grade_column3['activity'][$i]['grade_status_text']}} </td>
+          <td class="setBorderRight setDotTop" align="center" > {{$grade_column3['activity'][$i]['grade_status_text']}} </td>
         </tr>
           @else
             <tr>
@@ -336,11 +336,22 @@
 
 
 .vertical-text p {
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 40px;
   text-align: center;
-  margin-left: 15px;
-  /* background-color: yellow; */
+  margin-left: 25px;
+
+  -ms-transform: rotate(270deg); /* IE 9 */
+  -webkit-transform: rotate(270deg); /* Safari 3-8 */
+  transform: rotate(270deg);
+}
+
+.vertical-text2 {
+  width: 20px;
+  height: 40px;
+  text-align: center;
+  margin-left: 25px;
+  background-color: yellow;
   -ms-transform: rotate(270deg); /* IE 9 */
   -webkit-transform: rotate(270deg); /* Safari 3-8 */
   transform: rotate(270deg);
