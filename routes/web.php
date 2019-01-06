@@ -51,6 +51,7 @@ Route::put('/manageTeachers/update', 'ManageTeachersController@update');
 
 
 Route::get('/manageAcademic', 'ManageAcademicController@index');
+Route::post('/manageAcademic/createNewAcademic', 'ManageAcademicController@createNewAcademic');
 Route::get('/editCurrentAcademic', 'ManageAcademicController@editAcademicYear');
 Route::get('/assignSubject/{grade}/{room}', 'ManageAcademicController@assignSubject');
 Route::get('/assignStudent/{grade}/{room}', 'ManageAcademicController@assignStudent');

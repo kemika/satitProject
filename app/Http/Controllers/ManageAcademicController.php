@@ -158,6 +158,26 @@ class ManageAcademicController extends Controller
   }
 
 
+  public function createNewAcademic(Request $request){
+    $academic  = Academic_Year::orderBy('academic_year', 'desc')->groupBy('academic_year')->first();
+    $year = $academic->academic_year;
+
+    try{
+      $temp = $academic->replicate();
+      $temp->academic_year = $year+1;
+      $temp->classroom_id = null;
+      $temp->save();
+
+    }
+    catch(\Exception $e){
+       // do task when error
+       return response()->json(['Status' => $e->getMessage()], 200);
+
+    }
+    return response()->json(['Status' => 'success'], 200);
+  }
+
+
   public function addSubject(Request $request){
     $room = $request->input('room');
     $grade = $request->input('grade');

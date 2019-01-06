@@ -60,7 +60,7 @@
   </div>
 
   <div class="row justify-content-md-center setBtn">
-      <button class="btn btn-outline-secondary" type="submit">New Academic Year</button>
+      <button class="btn btn-outline-secondary" type="button" onclick="createNewAcademic()">New Academic Year</button>
   </div>
 </div>
 
@@ -71,3 +71,30 @@
     <h4>Once new Academic Year is created, you cannot make change to the past Academic Year</h4>
   </div>
 </div>
+<meta name="csrf-token" content="{{ csrf_token() }}" />
+<script>
+
+function createNewAcademic(){
+  var re = confirm("Are you sure you would like to create new Acadamic Year. You cannot make change to the past Academic Year?");
+  if(re == true){
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+
+    $.ajax({
+       type:'POST',
+       url:'/manageAcademic/createNewAcademic',
+       data:{_token: CSRF_TOKEN},
+       success:function(data){
+         if(data.Status === 'success'){
+           alert(data.Status);
+          location.reload();
+         }
+         else{
+           alert('fail');
+         }
+       }
+    });
+
+  }
+}
+</script>
