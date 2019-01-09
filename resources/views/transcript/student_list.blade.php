@@ -17,7 +17,7 @@
           <p>Studentlist :</p>
         </div>
         <div class="col-sm" style="text-align: right;">
-          <a href="/exportReportCardDownloadAll/{{$room->classroom_id}}/{{$room->academic_year}}" class="btn btn-info" role="button">Download All</a>
+          <a href="/transcript/pdf_all/{{$room->classroom_id}}/{{$room->academic_year}}" class="btn btn-info" role="button" >Download All</a>
         </div>
       </div>
     </div>
@@ -27,7 +27,7 @@
       @foreach($students as $student)
       <div class="card">
         <center>
-        <p class="mt-2"><a href='/exportTranscript/{{$student->student_id}}'>{{$student->student_id." ".$student->firstname." ".$student->lastname }}</a></p>
+        <p class="mt-2"><a href='/exportTranscript/{{$student->student_id}}/0/null'>{{$student->student_id." ".$student->firstname." ".$student->lastname }}</a></p>
       </center>
       </div>
       @endforeach

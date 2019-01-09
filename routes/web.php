@@ -91,8 +91,9 @@ Route::put('/viewGrade/result', 'ViewGradeController@result');
 
 Route::get('/transcript', 'TranscriptController@index');
 Route::get('/transcript/room/{classroom_id}','TranscriptController@studentList');
-Route::get('/exportTranscript/{student_id}','TranscriptController@exportTranscript');
+Route::get('/exportTranscript/{student_id}/{download_all}/{folder_name}','TranscriptController@exportTranscript');
 Route::get('/transcript/pdf','TranscriptController@exportTranscriptPDF');
+Route::get('/transcript/pdf_all/{classroom_id}/{academic_year}','TranscriptController@exportPDFAll');
 
 
 

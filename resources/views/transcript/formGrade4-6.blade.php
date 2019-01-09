@@ -7,7 +7,7 @@
 
 
 
-<center><h4 class="heading">Transcript Grade 1-3 </h4></center>
+<center><h4 class="heading">Transcript Grade 4-6 </h4></center>
 <table class="nameStyle">
     <tr>
         <th scope="col">STUDENT NAME</th>
@@ -27,14 +27,14 @@
 
         <tr class="setTableBorder">
           <td scope="col" align="center" class="setFont14 setBorderBL" colspan="2">Code / Courses</td>
-          <td scope="col" align="center" width="1px" class="setFont14 vertical-text setDotLR setTableBorderBottom" style="font-size: 8px;"><p style="padding: 0px">Hours/Year</p></td>
-          <td scope="col" align="center" width="1px" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Grade</p></td>
+          <td  scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px;">Hours/Year</p></td>
+          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Grade</p></td>
           <td scope="col" align="center" class="setFont14 setBorderBL" colspan="2">Code / Courses</td>
-          <td scope="col" align="center" width="1px" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
-          <td scope="col" align="center" width="1px" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Grade</p></td>
+          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px;">Hours/Year</p></td>
+          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Grade</p></td>
           <td scope="col" align="center" class="setFont14 setBorderBL" colspan="2">Code / Courses</td>
-          <td scope="col" align="center" width="1px" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
-          <td scope="col" align="center" width="1px" class="setFont14 vertical-text setBorderLast"><p style="padding: 0px">Grade</p></td>
+          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setDotLR setTableBorderBottom"><p style="padding: 0px">Hours/Year</p></td>
+          <td scope="col" align="center" width="1%" class="setFont14 vertical-text setBorderLast"><p style="padding: 0px">Grade</p></td>
         </tr>
 
         <tr>
@@ -58,22 +58,16 @@
           <td > {{$grade_column1['grade'][$i]['course_name']}} </td>
           <td class="setDotLR" align="center" > {{$grade_column1['grade'][$i]['credits']}} </td>
           <td class="setDotLR" align="center" > {{$grade_column1['grade'][$i]['sem_grade']}} </td>
-          <!-- <td class="setDotLR" align="center" > [HOUR]</td> -->
-
 
           <td class="setBorderLeft"> {{$grade_column2['grade'][$i]['course_id']}}  </td>
           <td > {{$grade_column2['grade'][$i]['course_name']}} </td>
           <td class="setDotLR" align="center" > {{$grade_column2['grade'][$i]['credits']}} </td>
           <td class="setDotLR" align="center" > {{$grade_column2['grade'][$i]['sem_grade']}} </td>
-          <!-- <td class="setDotLR" align="center" > [HOUR] </td> -->
-
 
           <td class="setBorderLeft"> {{$grade_column3['grade'][$i]['course_id']}}  </td>
           <td > {{$grade_column3['grade'][$i]['course_name']}} </td>
           <td class="setDotLR" align="center" > {{$grade_column3['grade'][$i]['credits']}} </td>
           <td class="setBorderRight" align="center" > {{$grade_column3['grade'][$i]['sem_grade']}} </td>
-          <!-- <td class="setBorderRight" align="center" > [HOUR] </td> -->
-
         </tr>
 
         @endfor
@@ -163,16 +157,10 @@
         <tr>
           <td colspan="2"> Cumulative </td>
           <td colspan="2" class="setDotLRB" align="center" > {{$grade_column1['cumulative']}} </td>
-          <!-- <td colspan="2" class="setDotLRB" align="center" > [SEM x HOUR] </td> -->
-
           <td class="setDotLR" colspan="2">  </td>
           <td colspan="2" class="setDotLRB" align="center" > {{$grade_column2['cumulative']}} </td>
-          <!-- <td colspan="2" class="setDotLRB" align="center" > [SEM x HOUR] </td> -->
-
           <td colspan="2">  </td>
           <td colspan="2" class="setDotLRB" align="center" > {{$grade_column3['cumulative']}} </td>
-          <!-- <td colspan="2" class="setDotLRB" align="center" > [SEM x HOUR] </td> -->
-
         </tr>
 
         <!-- Grade Point Average -->
@@ -348,16 +336,25 @@
 
 
 .vertical-text p {
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 40px;
   text-align: center;
+  margin-left: 25px;
 
-  margin-left: 15px;
+  -ms-transform: rotate(270deg); /* IE 9 */
+  -webkit-transform: rotate(270deg); /* Safari 3-8 */
+  transform: rotate(270deg);
+}
+
+.vertical-text2 {
+  width: 20px;
+  height: 40px;
+  text-align: center;
+  margin-left: 25px;
   background-color: yellow;
   -ms-transform: rotate(270deg); /* IE 9 */
   -webkit-transform: rotate(270deg); /* Safari 3-8 */
   transform: rotate(270deg);
-
 }
 
 .setUnderline{
