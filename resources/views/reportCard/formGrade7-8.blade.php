@@ -104,7 +104,7 @@
             <th scope="col" rowspan="2" class="courseCell">Course</th>
             <th scope="col" rowspan="2" class="codeCell">Code</th>
             <th scope="col" rowspan="2" class="creditCell">Credit</th>
-            <th scope="col" colspan="4" align="center">1st Semester Grade</th>
+            <th scope="col" colspan="4" align="center">2nd Semester Grade</th>
         </tr>
         <tr>
             <th class="gradeCell">1</th>

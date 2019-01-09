@@ -776,10 +776,11 @@ class ReportCardController extends Controller
             } else {  // Grade 9-12
 
                 // Add selected elective
-                $credit = $view_data['selected_elective']['credit'];
+                $credit = $view_data['selected_elective']['credits'];
                 $total_sem2_credit += $credit;
-                $grade = $view_data['selected_elective']['semester_grade'];
-                $semester_2_gpa += $grade * $credit;
+                $semester_grade = $view_data['selected_elective']['semester_grade'];
+                if ($semester_grade != "-") {
+                    $semester_2_gpa += $semester_grade * $credit;
                 $total_credit += $total_sem2_credit;
             }
             $gpa += $semester_2_gpa;
