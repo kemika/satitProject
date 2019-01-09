@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Curriculum;
-use App\Subject;
+
 class ManageCurriculumController extends Controller
 {
   public function index(){
@@ -159,8 +159,7 @@ class ManageCurriculumController extends Controller
 
   public function importFromPrevious(Request $request)
   {
-    dd($request->input('year'));
-    return response()->json(['year' => $request->input('year')], 200);
+
       //
       /*
       $year_pre = ($request->input('year'))-1;
@@ -178,48 +177,31 @@ class ManageCurriculumController extends Controller
       }
       */
 
-      $year_pre = ($request->input('year'))-1;
-      $previous  = Curriculum::where('curriculum_year',$year_pre)
+
+            $year_pre = ($request->input('year'))-1;
+            $previous  = Curriculum::where('curriculum_year',$year_pre)
+                            ->first();
+
+            if($previous === null){
+                return response()->json(['Status' => 'fail'], 200);
+            }
+
+            $subs = Curriculum::where('curriculum_year',$year_pre)->get();
+
+
+            foreach ($subs as $sub){
+              $re = $sub->replicate();
+              $re->curriculum_year = $request->input('year');
+              $temp = Curriculum::where('curriculum_year',$request->input('year'))
+                      ->where('course_id',$re->course_id)
                       ->first();
-
-      if($previous === null){
-          $redi  = "manageCurriculum/";
-          return redirect($redi);
-      }
-
-
-      $subs = Curriculum::where('curriculum_year',$year_pre)->get();
+              if($temp === null && $re->course_name !== 'Create First Course'){
+                $re->save();
+              }
+            }
 
 
-
-      foreach ($subs as $sub){
-        $re = $sub->replicate();
-        $re->curriculum_year = $request->input('year');
-        $re->save();
-      }
-
-
-      /*
-      $subs = Subject::where('curriculum_id',$previous->id)->get();
-      $cur_id  = Curriculum::where('year',$request->input('year'))
-                      ->first();
-      foreach ($subs as $sub){
-        $addSub = new Subject;
-        $addSub->code = $sub->code;
-        $addSub->name = $sub->name;
-        $addSub->min = $sub->min;
-        $addSub->max = $sub->max;
-        $addSub->credit = $sub->credit;
-        $addSub->status = $sub->status;
-        $addSub->elective = $sub->elective;
-        $addSub->semester = $sub->semester;
-        $addSub->curriculum_id = $cur_id->id;
-        $addSub->save();
-
-      }*/
-
-      $redi  = "manageCurriculum/".$request->input('year');
-      return redirect($redi);
+            return response()->json(['Status' => 'success'], 200);
 
   }
 

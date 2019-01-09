@@ -46,12 +46,18 @@ Route::post('/manageCurriculum/createNewSubject', 'ManageCurriculumController@cr
 
 //Route::post('/manageCurriculum/edit', 'ManageCurriculumController@edit');
 Route::get('/manageCurriculum/{year}', 'ManageCurriculumController@editWithYear');
-Route::post('/manageCurriculumTest', 'ManageCurriculumController@importTest');
 Route::get('/manageTeachers', 'ManageTeachersController@index');
 Route::put('/manageTeachers/update', 'ManageTeachersController@update');
 
 
 Route::get('/manageAcademic', 'ManageAcademicController@index');
+Route::post('/manageAcademic/createNewAcademic', 'ManageAcademicController@createNewAcademic');
+Route::get('/editCurrentAcademic', 'ManageAcademicController@editAcademicYear');
+Route::get('/assignSubject/{grade}/{room}', 'ManageAcademicController@assignSubject');
+Route::get('/assignStudent/{grade}/{room}', 'ManageAcademicController@assignStudent');
+Route::post('/assignSubject/changeSelYear', 'ManageAcademicController@changeCurYear');
+Route::post('/assignSubject/add', 'ManageAcademicController@addSubject');
+Route::post('/assignStudent/add', 'ManageAcademicController@addStudent');
 
 Auth::routes();
 

@@ -470,7 +470,7 @@ function getMessage(){
 
     $.ajax({
        type:'POST',
-       url:'/manageCurriculumTest',
+       url:'/manageCurriculum/importFromPrevious',
        data:{_token: CSRF_TOKEN,year:curr_year},
        success:function(data){
          $("#Waiting").modal('hide');
