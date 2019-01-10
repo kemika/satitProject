@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Curriculum;
-use App\Subject;
+
 class ManageCurriculumController extends Controller
 {
   public function index(){
   //  $curricula  = Curriculum::all();
   //  $curricula  = DB::table('Curricula')->select('year',DB::raw('count(*) as total'))->groupBy('year')->get();
-    $curricula  = Curriculum::orderBy('curriculum_year', 'asc')->get();
+    $curricula  = Curriculum::orderBy('curriculum_year', 'asc')->groupBy('curriculum_year')->get();
     return view('manageCurriculum.index' , ['curricula' => $curricula]);
   }
 
@@ -21,18 +21,27 @@ class ManageCurriculumController extends Controller
   public function editSubject(Request $request) // edit subject
   {
       //
-      $subject  = Subject::where('id', $request->input('id'))->first();
-      $redi  = "manageCurriculum/".$request->input('year');
+      $curriculum  = Curriculum::where('curriculum_year', $request->input('year'))
+                          ->where('course_id', $request->input('old_course_id'))
+                          ->update(array(
+                              'course_id' => $request->input('course_id'),
+                              'course_name' => $request->input('name'),
+                              'min_grade_level' => $request->input('min'),
+                              'max_grade_level' => $request->input('max'),
+                              'is_activity' => $request->input('activity')
+                              ));
 
-      if($subject === null){
+      $redi  = "manageCurriculum/".$request->input('year');
+/*
+      if($curriculum === null){
         return redirect($redi);
       }
-      $subject->code = $request->input('code');
-      $subject->name = $request->input('name');
-      $subject->min = $request->input('min');
-      $subject->max = $request->input('max');
-      $subject->status = $request->input('status');
-      $subject->save();
+      $curriculum->course_id = $request->input('course_id');
+      $curriculum->course_name = $request->input('name');
+      $curriculum->min_grade_level = $request->input('min');
+      $curriculum->max_grade_level = $request->input('max');
+      $curriculum->is_activity = $request->input('activity');
+      $curriculum->save();*/
       return redirect($redi);
   }
 
@@ -105,17 +114,52 @@ class ManageCurriculumController extends Controller
       //
 
       $curriculum  = new Curriculum;
-      $curriculum->year = $request->input('year');
-      $curriculum->adjust = 0;
+      $curriculum->curriculum_year = $request->input('year');
+      $curriculum->course_id = "Create ".$request->input('year');
+      $curriculum->course_name = "Create First Course";
+      $curriculum->min_grade_level = "0";
+      $curriculum->max_grade_level = "0";
+      $curriculum->is_activity = "0";
       $curriculum->save();
-
 
       $redi  = "manageCurriculum/".$request->input('year');
       return redirect($redi);
   }
 
+  public function importTest(Request $request)
+  {
+
+
+      $year_pre = ($request->input('year'))-1;
+      $previous  = Curriculum::where('curriculum_year',$year_pre)
+                      ->first();
+
+      if($previous === null){
+          return response()->json(['Status' => 'fail'], 200);
+      }
+
+      $subs = Curriculum::where('curriculum_year',$year_pre)->get();
+
+
+      foreach ($subs as $sub){
+        $re = $sub->replicate();
+        $re->curriculum_year = $request->input('year');
+        $temp = Curriculum::where('curriculum_year',$request->input('year'))
+                ->where('course_id',$re->course_id)
+                ->first();
+        if($temp === null && $re->course_name !== 'Create First Course'){
+          $re->save();
+        }
+      }
+
+
+      return response()->json(['Status' => 'success'], 200);
+
+  }
+
   public function importFromPrevious(Request $request)
   {
+
       //
       /*
       $year_pre = ($request->input('year'))-1;
@@ -133,40 +177,38 @@ class ManageCurriculumController extends Controller
       }
       */
 
-      $year_pre = ($request->input('year'))-1;
-      $previous  = Curriculum::where('year',$year_pre)
-                      ->first();
-      if($previous === null){
-          $redi  = "manageCurriculum/";
-          return redirect($redi);
-      }
 
-      $subs = Subject::where('curriculum_id',$previous->id)->get();
-      $cur_id  = Curriculum::where('year',$request->input('year'))
-                      ->first();
-      foreach ($subs as $sub){
-        $addSub = new Subject;
-        $addSub->code = $sub->code;
-        $addSub->name = $sub->name;
-        $addSub->min = $sub->min;
-        $addSub->max = $sub->max;
-        $addSub->credit = $sub->credit;
-        $addSub->status = $sub->status;
-        $addSub->elective = $sub->elective;
-        $addSub->semester = $sub->semester;
-        $addSub->curriculum_id = $cur_id->id;
-        $addSub->save();
-      }
+            $year_pre = ($request->input('year'))-1;
+            $previous  = Curriculum::where('curriculum_year',$year_pre)
+                            ->first();
 
-      $redi  = "manageCurriculum/".$request->input('year');
-      return redirect($redi);
+            if($previous === null){
+                return response()->json(['Status' => 'fail'], 200);
+            }
+
+            $subs = Curriculum::where('curriculum_year',$year_pre)->get();
+
+
+            foreach ($subs as $sub){
+              $re = $sub->replicate();
+              $re->curriculum_year = $request->input('year');
+              $temp = Curriculum::where('curriculum_year',$request->input('year'))
+                      ->where('course_id',$re->course_id)
+                      ->first();
+              if($temp === null && $re->course_name !== 'Create First Course'){
+                $re->save();
+              }
+            }
+
+
+            return response()->json(['Status' => 'success'], 200);
 
   }
 
   public function createNewSubject(Request $request)
   {
 
-
+/*
       $subject  = new Subject;
 
       $subject->curriculum_id = $request->input('cur_id');
@@ -180,6 +222,16 @@ class ManageCurriculumController extends Controller
       $subject->elective = 0;
       $subject->credit = 0;
       $subject->save();
+*/
+
+      $curriculum  = new Curriculum;
+      $curriculum->curriculum_year = $request->input('year');
+      $curriculum->course_id = $request->input('course_id');
+      $curriculum->course_name = $request->input('name');
+      $curriculum->min_grade_level = $request->input('min');
+      $curriculum->max_grade_level = $request->input('max');
+      $curriculum->is_activity = $request->input('activity');
+      $curriculum->save();
 
 
       $redi  = "manageCurriculum/".$request->input('year');
@@ -230,20 +282,19 @@ class ManageCurriculumController extends Controller
       return view('manageCurriculum.curriculumTable' , ['curricula' => $curricula]);
   }
   */
-  $curriculum  = Curriculum::where('year', $year)->first();
+  $curriculum  = Curriculum::where('curriculum_year', $year)->first();
   if($curriculum === null) {
     return redirect('manageCurriculum');
   }
-  $curricula  = Curriculum::where('year', $year)
-                ->join('subjects','curriculums.id','=','subjects.curriculum_id')
-                ->select('curriculums.year','subjects.id','curriculums.adjust','subjects.curriculum_id','subjects.code','subjects.name','subjects.min'
-                ,'subjects.max','subjects.status')
-                ->get();
+  $curricula  = Curriculum::where('curriculums.curriculum_year',$year)
+              ->where('course_name','!=','Create First Course')
+              ->get();
   if(isset($curricula[0]) === false) {
-    $curricula  = Curriculum::where('year', $year)->get();
-    $curricula[0]->curriculum_id = $curricula[0]->id;
-    return view('manageCurriculum.curriculumTable' , ['curricula' => $curricula]);
+    /*
+    $curricula  = Curriculum::where('curriculum_year', $year)->get();
+    $curricula[0]->curriculum_year = $year;*/
+    return view('manageCurriculum.curriculumTable' , ['curricula' => $curricula,'cur_year'=>$year]);
   }
-  return view('manageCurriculum.curriculumTable' , ['curricula' => $curricula]);
+  return view('manageCurriculum.curriculumTable' , ['curricula' => $curricula,'cur_year'=>$year]);
 }
 }

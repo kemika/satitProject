@@ -46,12 +46,18 @@ Route::post('/manageCurriculum/createNewSubject', 'ManageCurriculumController@cr
 
 //Route::post('/manageCurriculum/edit', 'ManageCurriculumController@edit');
 Route::get('/manageCurriculum/{year}', 'ManageCurriculumController@editWithYear');
-
 Route::get('/manageTeachers', 'ManageTeachersController@index');
 Route::put('/manageTeachers/update', 'ManageTeachersController@update');
 
 
 Route::get('/manageAcademic', 'ManageAcademicController@index');
+Route::post('/manageAcademic/createNewAcademic', 'ManageAcademicController@createNewAcademic');
+Route::get('/editCurrentAcademic', 'ManageAcademicController@editAcademicYear');
+Route::get('/assignSubject/{grade}/{room}', 'ManageAcademicController@assignSubject');
+Route::get('/assignStudent/{grade}/{room}', 'ManageAcademicController@assignStudent');
+Route::post('/assignSubject/changeSelYear', 'ManageAcademicController@changeCurYear');
+Route::post('/assignSubject/add', 'ManageAcademicController@addSubject');
+Route::post('/assignStudent/add', 'ManageAcademicController@addStudent');
 
 Auth::routes();
 
@@ -84,6 +90,11 @@ Route::put('/viewGrade/result', 'ViewGradeController@result');
 
 
 Route::get('/transcript', 'TranscriptController@index');
+Route::get('/transcript/room/{classroom_id}','TranscriptController@studentList');
+Route::get('/exportTranscript/{student_id}/{download_all}/{folder_name}','TranscriptController@exportTranscript');
+Route::get('/transcript/pdf','TranscriptController@exportTranscriptPDF');
+Route::get('/transcript/pdf_all/{classroom_id}/{academic_year}','TranscriptController@exportPDFAll');
+
 
 
 
@@ -120,3 +131,5 @@ Route::get('/manageDirector', 'ManageDirectorController@index');
 Route::put('/manageDirector/update', 'ManageDirectorController@update');
 
 Route::get('/download_all', 'ExportController@download_all')->name('create-zip');
+Route::get('/api', 'ViewGradeController@api');
+Route::get('/api2', 'ViewGradeController@api2');

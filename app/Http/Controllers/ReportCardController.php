@@ -47,8 +47,6 @@ class ReportCardController extends Controller
     {
         $academic_years = Academic_Year::groupBy('academic_year')->distinct('academic_year')->orderBy('academic_year')->get();
         $rooms = Academic_Year::orderBy('grade_level')->get();
-
-
         return view('reportCard.index2', ['academic_years' => $academic_years, 'rooms' => $rooms]);
 
     }

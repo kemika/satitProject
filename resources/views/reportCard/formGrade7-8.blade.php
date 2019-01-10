@@ -2,10 +2,6 @@
     <title>Report Card</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
-    {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>--}}
-    {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>--}}
 </head>
 
 <center><h4 class="heading">FIRST SEMESTER REPORT</h4></center>
@@ -22,24 +18,24 @@
 <center>
     <table class="table table-bordered tableStyle">
         <tr>
-            <th scope="col" rowspan="2" class="courseCell">Course</th>
-            <th scope="col" rowspan="2" class="codeCell">Code</th>
-            <th scope="col" rowspan="2" class="creditCell">Credit</th>
+            <th scope="col" rowspan="2" class="courseCell" style="border:2px solid black;">Course</th>
+            <th scope="col" rowspan="2" class="codeCell"  style="border-bottom:2px solid black;">Code</th>
+            <th scope="col" rowspan="2" class="creditCell" style="width: .7cm; border-bottom:2px solid black; border-right:2px solid black;">Credit</th>
             <th scope="col" colspan="4" align="center">1st Semester Grade</th>
         </tr>
         <tr>
-            <th class="gradeCell">1</th>
-            <th class="gradeCell">2</th>
-            <th class="gradeCell">3</th>
-            <th class="semCell">Semester Grade</th>
+            <th class="gradeCell" style="border-bottom:2px solid black;">1</th>
+            <th class="gradeCell" style="border-bottom:2px solid black;">2</th>
+            <th class="gradeCell" style="border-bottom:2px solid black;">3</th>
+            <th class="semCell" style="border-bottom:2px solid black;">Semester Grade</th>
         </tr>
         @foreach($grade_semester1 as $key => $grade )
 
 
             <tr>
-                <td>{{$grade['course_name']}}</td>
+                <td style="border-right:2px solid black;">{{$grade['course_name']}}</td>
                 <td>{{$grade['course_id']}}</td>
-                <td class="center-cell">{{ $grade['credits']}}</td>
+                <td class="center-cell" style="border-right:2px solid black;">{{ $grade['credits']}}</td>
                 <td class="center-cell">{{ $grade['quater1']}}</td>
                 <td class="center-cell">{{ $grade['quater2']}}</td>
                 <td class="center-cell">{{ $grade['quater3']}}</td>
@@ -55,7 +51,7 @@
 
         <tr>
             <th scope="col" colspan="2">Total</th>
-            <th scope="col">{{$total_sem1_credit}}</th>
+            <th scope="col" style="border-right:2px solid black;">{{$total_sem1_credit}}</th>
             <th scope="col" colspan="3" class="setRight">GPA</th>
             <th scope="col">{{ $semester_1_gpa }}</th>
         </tr>
@@ -101,24 +97,24 @@
 <center>
     <table class="table table-bordered tableStyle">
         <tr>
-            <th scope="col" rowspan="2" class="courseCell">Course</th>
-            <th scope="col" rowspan="2" class="codeCell">Code</th>
-            <th scope="col" rowspan="2" class="creditCell">Credit</th>
-            <th scope="col" colspan="4" align="center">2nd Semester Grade</th>
+          <th scope="col" rowspan="2" class="courseCell" style="border:2px solid black;">Course</th>
+          <th scope="col" rowspan="2" class="codeCell"  style="border-bottom:2px solid black;">Code</th>
+          <th scope="col" rowspan="2" class="creditCell" style="width: .7cm; border-bottom:2px solid black; border-right:2px solid black;">Credit</th>
+          <th scope="col" colspan="4" align="center">2nd Semester Grade</th>
         </tr>
         <tr>
-            <th class="gradeCell">1</th>
-            <th class="gradeCell">2</th>
-            <th class="gradeCell">3</th>
-            <th class="semCell">Semester Grade</th>
+          <th class="gradeCell" style="border-bottom:2px solid black;">1</th>
+          <th class="gradeCell" style="border-bottom:2px solid black;">2</th>
+          <th class="gradeCell" style="border-bottom:2px solid black;">3</th>
+          <th class="semCell" style="border-bottom:2px solid black;">Semester Grade</th>
         </tr>
         @foreach($grade_semester2 as $key => $grade )
 
 
             <tr>
-                <td>{{$grade['course_name']}}</td>
+                <td style="border-right:2px solid black;">{{$grade['course_name']}}</td>
                 <td>{{$grade['course_id']}}</td>
-                <td class="center-cell">{{ $grade['credits']}}</td>
+                <td class="center-cell"  style="border-right:2px solid black;">{{ $grade['credits']}}</td>
                 <td class="center-cell">{{ $grade['quater1']}}</td>
                 <td class="center-cell">{{ $grade['quater2']}}</td>
                 <td class="center-cell">{{ $grade['quater3']}}</td>
@@ -135,7 +131,7 @@
 
         <tr>
             <th scope="col" colspan="2">Total</th>
-            <th scope="col">{{$total_sem2_credit}}</th>
+            <th scope="col" style="border-right:2px solid black;">{{$total_sem2_credit}}</th>
             <th scope="col" colspan="3" class="setRight">GPA</th>
             <th scope="col">{{$semester_2_gpa}}</th>
         </tr>
@@ -527,7 +523,7 @@
                     <div class="boxTail"><p>to be
                             considered............................................................................................................................................</p>
                     </div>
-                    <br>
+                    <br><br>
                     <p></p>
                     <p>
                         .................................................................................................................................................................................................................</p>
@@ -645,7 +641,10 @@
                         .tableStyle {
                             width: 100%;
                             margin-top: 20px;
-                            border: 1px solid black;
+                        }
+
+                        .tableStyle th {
+                            font-size: 9px;
                         }
 
                         .tableStyle2 {
@@ -699,8 +698,16 @@
                             border: 1px solid black;
                         }
 
+                        .table-bordered td, .table-bordered th {
+                            border: 1px solid black;
+                        }
+
                         .center-cell {
                             text-align: center;
+                        }
+
+                        table {
+                            border-collapse: collapse;
                         }
 
                         th {
@@ -719,8 +726,9 @@
                             height: -10px;
                         }
 
-                        .table-bordered td, .table-bordered th {
-                            border: 1px solid black;
+                        .tableStyle, tr
+                        {
+                            border:2px solid black;
                         }
 
                         .page-break {
@@ -728,7 +736,7 @@
                         }
 
                         .table td, .table th {
-                            padding: .20rem;
+                            padding: .35rem;
                             vertical-align: middle;
                         }
 
@@ -847,5 +855,9 @@
                         .creditCell {
                             width: 1.2cm;
                             vertical-align: center;
+                        }
+
+                        .boarderBold{
+                          border-bottom: 2px solid black;
                         }
                     </style>
