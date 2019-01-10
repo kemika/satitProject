@@ -779,6 +779,7 @@ class ReportCardController extends Controller
                 $semester_grade = $view_data['selected_elective']['semester_grade'];
                 if ($semester_grade != "-") {
                     $semester_2_gpa += $semester_grade * $credit;
+                }
                 $total_credit += $total_sem2_credit;
             }
             $gpa += $semester_2_gpa;
@@ -814,8 +815,7 @@ class ReportCardController extends Controller
     // This method take floating grade number from 0.0 to 4.0 and output
     // Grade according to academic evaluation chart 2
     // The input is expected to be a float.
-    static public function academic_evaluation_cart_2($grade)
-    {
+    static public function academic_evaluation_cart_2($grade){
         // Round number to two decimal points
         $grade = round($grade, 2);
         if ($grade < 1.00) {
