@@ -224,18 +224,25 @@ class ManageCurriculumController extends Controller
       $subject->save();
 */
 
-      $curriculum  = new Curriculum;
-      $curriculum->curriculum_year = $request->input('year');
-      $curriculum->course_id = $request->input('course_id');
-      $curriculum->course_name = $request->input('name');
-      $curriculum->min_grade_level = $request->input('min');
-      $curriculum->max_grade_level = $request->input('max');
-      $curriculum->is_activity = $request->input('activity');
-      $curriculum->save();
-
-
-      $redi  = "manageCurriculum/".$request->input('year');
-      return redirect($redi);
+      $check = Curriculum::where('curriculum_year',$request->input('year'))
+                          ->where('course_id',$request->input('course_id'))
+                          ->first();
+      if($check !== null){
+        return response()->json(['Status' => 'exist'], 200);
+      }
+      try{
+        $curriculum  = new Curriculum;
+        $curriculum->curriculum_year = $request->input('year');
+        $curriculum->course_id = $request->input('course_id');
+        $curriculum->course_name = $request->input('name');
+        $curriculum->min_grade_level = $request->input('min');
+        $curriculum->max_grade_level = $request->input('max');
+        $curriculum->is_activity = $request->input('activity');
+        $curriculum->save();
+      }catch(\Exception $e){
+        return response()->json(['Status' => $e->getMessage()], 200);
+      }
+      return response()->json(['Status' => 'success'], 200);
   }
 
   public function editWithYear($year,Request $request)

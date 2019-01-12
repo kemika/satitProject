@@ -131,16 +131,23 @@
 
 </center>
 
-<div class="row" style="margin-top: 30px; margin-bottom: 30px;">
-  <div class="col-5">
+<center>
+<div class="row" style="margin-top: 30px; margin-bottom: 30px; ">
+  <div class="col ">
   </div>
-  <div class="col col-xl-1">
+  <div class="col ">
     <button class="btn btn-primary" data-toggle='modal' data-target='#NewCur'>New curriculum</button>
   </div>
-  <div class="col col-xl-2">
+
+  <div class="col ">
     <button class="btn btn-danger" onclick="window.location.href='/main'">Back to main</button>
   </div>
+  <div class="col ">
+  </div>
 </div>
+</center>
+
+
 <center>
 <div class="modal fade" id="NewCur" role="dialog">
   <div class="modal-dialog modal-lg">

@@ -110,7 +110,7 @@
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label text-right">Course ID :</label>
                     <div class="col-sm-5">
-                      <input type="text" class="form-control"  name="course_id" value='{{ $curriculum->course_id }}' required>
+                      <input type="text" class="form-control"  name="course_id" value='{{ $curriculum->course_id }}' readonly>
                     </div>
                   </div>
 
@@ -173,6 +173,7 @@
 </div>
 
 </center>
+
 <center>
 <div class="row" style="margin-top: 30px; margin-bottom: 30px; width: 120rem;">
 
@@ -204,235 +205,56 @@
 </center>
 
 
-
-<center>
-<div class="modal fade" id="AddSub" role="dialog">
-  <div class="modal-dialog modal-lg">
+<div class="modal fade" id="AddSub" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" style="margin-left:10px;">Add Subject</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h5 class="modal-title" id="exampleModalLabel">Add Subject</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-
       <div class="modal-body">
-
-        <form action="/manageCurriculum/createNewSubject" class="form-inline"  method="post">
+        <form  id="formAddSub" >
           @csrf
-          <div class="container">
-
-          <div class="row">
           <div class="form-group">
-            <label class="col-sm-6 col-form-label text-right">Year :</label>
-            <div class="col-sm-6">
-              <input type="text" class="form-control"  name="year"  value='{{$cur_year}}' readonly>
-            </div>
+            <label  class="col-form-label ">Year :</label>
+            <input type="text" class="form-control"  name="year"  value='{{$cur_year}}' readonly>
           </div>
-        </div>
-        <div class="row">
-          &nbsp
-        </div>
-        <div class="row">
           <div class="form-group">
-            <label class="col-sm-6 col-form-label text-righ">Course ID :</label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control" name="course_id" placeholder="Enter Subject Code" required>
-            </div>
+            <label class="col-form-label ">Course ID :</label>
+            <input type="text" class="form-control" name="course_id" placeholder="Enter Subject Code" required>
           </div>
-        </div>
-        <div class="row">
-          &nbsp
-        </div>
-        <div class="row">
           <div class="form-group">
-            <label class="col-sm-6 col-form-label text-righ">Course Name :</label>
-            <div class="col-sm-5">
+            <label class="col-form-label">Course Name :</label>
               <input type="text" class="form-control" name="name" placeholder="Enter Subject Name" required>
-            </div>
           </div>
-        </div>
-        <div class="row">
-          &nbsp
-        </div>
-        <div class="row">
           <div class="form-group">
-            <label class="col-sm-5 col-form-label text-righ">Min grade level :</label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control" name="min" placeholder="Enter Min grade level" required>
-            </div>
+            <label class="col-form-label">Min grade level :</label>
+            <input type="text" class="form-control" name="min" placeholder="Enter Min grade level" required>
           </div>
-        </div>
-        <div class="row">
-          &nbsp
-        </div>
-        <div class="row">
           <div class="form-group">
-            <label class="col-sm-5 col-form-label text-righ">Max grade level :</label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control" name="max" placeholder="Enter Max grade level" required>
-            </div>
+            <label class="col-form-label">Max grade level :</label>
+            <input type="text" class="form-control" name="max" placeholder="Enter Max grade level" required>
           </div>
-        </div>
-        <div class="row">
-          &nbsp
-        </div>
-        <div class="row">
           <div class="form-group">
-              <label class="col-sm-6 col-form-label text-righ">Activity :</label>
-            <div class="col-sm-5">
-              <select name="activity" class="form-control" style="height: 35px">
-                <option value="1" selected>Yes</option>
-                <option value="0">No</option>
-
-              </select>
-            </div>
+            <label class="col-form-label">Activity :</label>
+            <select name="activity" class="form-control" style="height: 35px">
+              <option value="1" selected>Yes</option>
+              <option value="0">No</option>
+            </select>
           </div>
-        </div>
-
-</div>
-
-
-
-
-
-
-
-
-
-          <!--
-          <div class="container">
-            <div class="row" >
-            <div class="form-group">
-              <label class="col-sm-6 col-form-label text-right">Year :</label>
-              <div class="col-sm-5">
-                <input type="text" class="form-control"  name="year"  value='$curricula->first()->curriculum_year' readonly>
-              </div>
-            </div>
-            </div>
-
-            <div class="row">
-            <div class="form-group">
-              <label class="col-sm-6 col-form-label text-right">Code :</label>
-              <div class="col-sm-5">
-                <input type="text" class="form-control"  name="code"  placeholder="Enter Subject Code">
-              </div>
-            </div>
-            </div>
-
-            <div class="row">
-            <div class="form-group">
-              <label class="col-sm-6 col-form-label text-right">Name :</label>
-              <div class="col-sm-5">
-                <input type="text" class="form-control" name="name" placeholder="Enter Subject name">
-              </div>
-            </div>
-            </div>
-
-            <div class="row" >
-            <div class="form-group">
-              <label class="col-sm-6 col-form-label text-right">Min grade level :</label>
-              <div class="col-sm-5">
-                <input type="text" class="form-control" name="min" placeholder="Enter Min grade level">
-              </div>
-            </div>
-            </div>
-
-            <div class="row">
-            <div class="form-group">
-              <label class="col-sm-6 col-form-label text-right">Max grade level :</label>
-              <div class="col-sm-5">
-                <input type="text" class="form-control" name="max" placeholder="Enter Max grade level" >
-              </div>
-            </div>
-            </div>
-
-
-            <div class="row form-group">
-              <label class="col-sm-6 col-form-label text-right">Status :</label>
-              <div class="col-sm-5">
-                <select name="status" class="form-control" style="height: 35px">
-
-                    <option value="1"selected>Enable</option>
-                    <option value="0" >Disable</option>
-
-                </select>
-              </div>
-            </div>
-
-
-
-
-          </div> -->
-
-          <!-- <input hidden type="text" name="id" value=' $curriculum->id '> -->
-<!--
-          <div class="form-group row">
-            <label class="col-sm-3 col-form-label">Year :</label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control"  name="year"  value='{{$cur_year}}' readonly>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-sm-3 col-form-label">Code :</label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control"  name="code"  placeholder="Enter Subject Code">
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-sm-3 col-form-label">Name :</label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control" name="name" placeholder="Enter Subject name">
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-sm-3 col-form-label">Min grade level :</label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control" name="min" placeholder="Enter Min grade level">
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-sm-3 col-form-label">Max grade level :</label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control" name="max" placeholder="Enter Max grade level" >
-            </div>
-          </div>
-
-
-          <div class="form-group row">
-            <label class="col-sm-3 col-form-label">Status :</label>
-            <div class="col-sm-5">
-              <select name="status" class="form-control" style="height: 35px">
-
-                  <option value="1"selected>Enable</option>
-                  <option value="0" >Disable</option>
-
-              </select>
-            </div>
-          </div>
--->
-
-
-</div>
-
-        <!-- <select class="form-control" name="projid" >
-                    <option value="Active">Active</option>
-                    <option value="Inactive" >Inactive</option>
-                    <option value="Graduated" >Graduated</option>
-          </select> -->
-      <div class="modal-footer">
-            <button type="submit"  class="btn btn-success" >Add Subject</button>
-        </form>
-
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
-
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success" >Add</button>
+        </form>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
 </div>
-</div>
-</center>
+
+
 
 
 
@@ -444,20 +266,69 @@
         <h4 class="modal-title" style="text-align:center;font-size: 60px;">Please Wait Untill Finish</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
-
-
     </div>
   </div>
 </div>
 </center>
+
+<center>
+<div class="modal fade" id="alertAddSub" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="textAddSub" style="text-align:center;font-size: 60px;">Please Wait Untill Finish</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+    </div>
+  </div>
+</div>
+</center>
+
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <meta name="curri_year" content="{{ $cur_year }}" />
 
 <script>
+  var checkAdd = false;
   $(document).ready(function() {
     $('#table').DataTable();
     jQuery.noConflict();
+    $('#AddSub').on('hide.bs.modal', function (e) {
+      if(checkAdd){
+        location.reload();
+      }
+    });
+    $('#formAddSub').submit( function () {
+      var myForm = $("#formAddSub");
+      var data = myForm.serializeArray().reduce(function(obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+    }, {});
 
+      $.ajax({
+         type:'POST',
+         url:'/manageCurriculum/createNewSubject',
+         data:data,
+         success:function(data){
+           if(data.Status === "success"){
+             //alert("SUCCESS!!");
+             document.getElementById("textAddSub").innerHTML = "SUCCESS!";
+             $("#alertAddSub").modal("toggle");
+             checkAdd = true;
+           }
+           else if(data.Status === "exist"){
+             //alert("This Course already existed in this curriculu year!");
+             document.getElementById("textAddSub").innerHTML = "This Course already existed in this curriculu year!!";
+             $("#alertAddSub").modal("toggle");
+           }
+           else{
+              //alert(data.Status);
+              document.getElementById("textAddSub").innerHTML = data.Status;
+           }
+
+         }
+      });
+			return false;
+		});
 
 } );
 
@@ -478,7 +349,7 @@ function getMessage(){
           location.reload();
          }
          else{
-           alert('fail');
+           alert('No previous curriculum year!');
          }
        }
     });
@@ -488,5 +359,36 @@ function getMessage(){
 
 }
 
+function addSubject(){
+
+  var myForm = $("#formAddSub");
+  var data = myForm.serializeArray().reduce(function(obj, item) {
+  obj[item.name] = item.value;
+  return obj;
+}, {});
+
+  $.ajax({
+     type:'POST',
+     url:'/manageCurriculum/createNewSubject',
+     data:data,
+     success:function(data){
+       if(data.Status === "success"){
+         //alert("SUCCESS!!");
+         document.getElementById("textAddSub").innerHTML = "SUCCESS!";
+         $("#alertAddSub").modal("toggle");
+       }
+       else if(data.Status === "exist"){
+         //alert("This Course already existed in this curriculu year!");
+         document.getElementById("textAddSub").innerHTML = "This Course already existed in this curriculu year!!";
+         $("#alertAddSub").modal("toggle");
+       }
+       else{
+          //alert(data.Status);
+          document.getElementById("textAddSub").innerHTML = data.Status;
+       }
+
+     }
+  });
+}
 
 </script>
