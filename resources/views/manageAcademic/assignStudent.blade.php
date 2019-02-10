@@ -55,6 +55,7 @@
           <th scope="col">Student ID</th>
           <th scope="col">First Name</th>
           <th scope="col">Last Name</th>
+          <th scope="col">Remove</th>
         </tr>
       </thead>
       <tbody>
@@ -64,6 +65,7 @@
             <td>{{ $std->student_id}}</td>
             <td>{{ $std->firstname }}</td>
             <td>{{ $std->lastname }}</td>
+            <td><button type="button" onclick="" class="btn btn-danger" >Remove</button></td>
           </tr>
       @endforeach
 

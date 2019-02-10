@@ -18,9 +18,12 @@ class ManageAcademicController extends Controller
   }
 
   public function editAcademicYear(){
-    $academic  = Academic_Year::orderBy('academic_year', 'desc')->groupBy('academic_year')->first();
+    $academicYear  = Academic_Year::orderBy('academic_year', 'desc')->groupBy('academic_year')->first();
+    $year = $academicYear->academic_year;
+    $academicDetail = Academic_Year::where('academic_year', $year)->orderBy('grade_level', 'asc')->get();
+    $academicAbove  = Academic_Year::orderBy('academic_year', 'desc')->groupBy('academic_year')->where('academic_year',">=",$year)->get();
     $curriculum  = Curriculum::orderBy('curriculum_year', 'asc')->groupBy('curriculum_year')->get();
-    return view('manageAcademic.academicTable' , ['cur_year' => $academic->academic_year]);
+    return view('manageAcademic.academicTable' , ['cur_year' => $year,'sel_year' => $academicAbove,'academicDetail'=>$academicDetail]);
   }
 
 
@@ -113,6 +116,50 @@ class ManageAcademicController extends Controller
                       ->get();
     return view('manageAcademic.assignStudent' , ['cur_year' => $year,'grade'=>$grade,'room'=>$room,'stds'=>$std_in,'curricula'=>$curricula_year
                 ,'allStd'=>$allStd]);
+  }
+
+  public function addRoom(Request $request){
+    $grade = $request->input('grade');
+    $year = $request->input('year');
+    $academic  = Academic_Year::where('academic_year',$year)->where('grade_level',$grade)->orderBy('room', 'desc')->first();
+    $room = $academic->room;
+
+
+    try{
+    $createNewRoom = new Academic_Year;
+    $createNewRoom->academic_year = $year;
+    $createNewRoom->grade_level = $grade;
+    $createNewRoom->room = $room+1;
+    $createNewRoom->curriculum_year = $academic->curriculum_year;
+    $createNewRoom->save();
+    }
+    catch(\Exception $e){
+       // do task when error
+       return response()->json(['Status' => $e->getMessage()], 200);
+
+    }
+
+    return response()->json(['Status' => 'success'], 200);
+  }
+
+  public function removeRoom(Request $request){
+    $grade = $request->input('grade');
+    $year = $request->input('year');
+
+
+
+    try{
+      $academic  = Academic_Year::where('academic_year',$year)->where('grade_level',$grade)->orderBy('room', 'desc')->first();
+      $room = $academic->room;
+      Academic_Year::where('academic_year',$year)->where('grade_level',$grade)->where('room', $room)->delete();
+    }
+    catch(\Exception $e){
+       // do task when error
+       return response()->json(['Status' => $e->getMessage()], 200);
+
+    }
+
+    return response()->json(['Status' => 'success'], 200);
   }
 
   public function addStudent(Request $request){
