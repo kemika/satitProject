@@ -53,22 +53,23 @@
       <form class="form-inline" action="/assignSubject/changeSelYear" id="changeCurYearForm" method="post">
         @csrf
         <div class="form-group row">
-          <label class="col-sm-3 col-form-label text-right">Year :</label>
-          <div class="col-sm-6" >
-            <select class="form-control" style="height: 30px" name="selCur">
-              <option>---</option>
-              @foreach ($curricula as $curriculum)
-                @if ($selCur === $curriculum->curriculum_year)
-                  <option selected>{{$curriculum->curriculum_year}}</option>
-                @else
-                  <option>{{$curriculum->curriculum_year}}</option>
-                @endif
-              @endforeach
-            </select>
-          </div>
-          <input hidden type="text" name="grade" value=' {{$grade}}'>
-          <input hidden type="text" name="room" value=' {{$room}}'>
+          <label class="col-sm col-form-label text-right">Year :</label>
+
         </div>
+        <div class="col-sm" >
+          <select class="form-control" style="height: 30px" name="selCur">
+            <option>---</option>
+            @foreach ($curricula as $curriculum)
+              @if ($selCur === $curriculum->curriculum_year)
+                <option selected>{{$curriculum->curriculum_year}}</option>
+              @else
+                <option>{{$curriculum->curriculum_year}}</option>
+              @endif
+            @endforeach
+          </select>
+        </div>
+        <input hidden type="text" name="grade" value=' {{$grade}}'>
+        <input hidden type="text" name="room" value=' {{$room}}'>
         <button type="submit" onclick="return confirm('If you change curriculum year, all subjects will be removed?');" class="btn btn-danger" >Change Curriculum Year</button>
       </form>
 
