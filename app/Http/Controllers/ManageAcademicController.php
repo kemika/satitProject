@@ -87,7 +87,7 @@ class ManageAcademicController extends Controller
                                 ->where('grade_level', $grade)
                                 ->get();
     }
-    else if($room >= 1 and $room <= 12){
+    else {
       $academic  = Academic_Year::where('academic_year', $year)
                                 ->where('room', $room)
                                 ->where('grade_level', $grade)
@@ -103,19 +103,25 @@ class ManageAcademicController extends Controller
               ->Join('students','student_grade_levels.student_id','students.student_id')
               ->select('students.firstname','students.lastname','students.student_id')
               ->get();
-
-
     }
     $temp = Academic_Year::where('academic_year', $year)
                           ->pluck('classroom_id');
-
+    foreach ($std_in as $std) {
+      $in[] = $std->student_id;
+    }
+    /*
     $allStd = Student::where('student_status',0)
                       ->leftJoin('student_grade_levels','student_grade_levels.student_id','students.student_id')
-
+                      ->leftJoin('academic_year','student_grade_levels.classroom_id','academic_year.classroom_id')
+                      ->where('student_grade_levels.classroom_id','!=',$academic[0]->classroom_id)
                       ->select('students.student_id','students.firstname','students.lastname')
                       ->get();
+    */
+    $allStd = Student::where('student_status',0)
+                      ->whereNotIn('student_id',$in)
+                      ->get();
     return view('manageAcademic.assignStudent' , ['cur_year' => $year,'grade'=>$grade,'room'=>$room,'stds'=>$std_in,'curricula'=>$curricula_year
-                ,'allStd'=>$allStd]);
+                ,'allStd'=>$allStd,'class_id'=>$academic[0]->classroom_id]);
   }
 
   public function addRoom(Request $request){
@@ -189,11 +195,47 @@ class ManageAcademicController extends Controller
                               ->where('grade_level',$grade)
                               ->where('room',$room)
                               ->get();
+
+    $checkStdExistYear =  Student_Grade_Level::where('student_id',$std_id)
+                                              ->leftJoin('academic_year','student_grade_levels.classroom_id','academic_year.classroom_id')
+                                              ->where('academic_year.academic_year',$year)
+                                              ->first();
+    if($checkStdExistYear != null){
+      return response()->json(['Status' => 'student already in grade '.$checkStdExistYear->grade_level.' room '.$checkStdExistYear->room], 200);
+    }
     try{
     $createStuClass = new Student_Grade_Level;
     $createStuClass->classroom_id = $checkAca[0]->classroom_id;
     $createStuClass->student_id = $std_id;
     $createStuClass->save();
+    }
+    catch(\Exception $e){
+       // do task when error
+       return response()->json(['Status' => $e->getMessage()], 200);
+
+    }
+
+    return response()->json(['Status' => 'success'], 200);
+  }
+
+  public function removeStudent(Request $request){
+    $room = $request->input('room');
+    $grade = $request->input('grade');
+    $std_id = $request->input('std_id');
+    $curYear = Curriculum::orderBy('curriculum_year', 'desc')->groupBy('curriculum_year')->get();
+    $academic  = Academic_Year::orderBy('academic_year', 'desc')->groupBy('academic_year')->first();
+    $year = $academic->academic_year;
+
+
+
+
+    try{
+      $checkStdExistYear =  Student_Grade_Level::where('student_id',$std_id)
+                                                ->leftJoin('academic_year','student_grade_levels.classroom_id','academic_year.classroom_id')
+                                                ->where('academic_year.academic_year',$year)
+                                                ->where('academic_year.room',$room)
+                                                ->where('academic_year.grade_level',$grade)
+                                                ->delete();
     }
     catch(\Exception $e){
        // do task when error

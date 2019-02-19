@@ -65,7 +65,7 @@
             <td>{{ $std->student_id}}</td>
             <td>{{ $std->firstname }}</td>
             <td>{{ $std->lastname }}</td>
-            <td><button type="button" onclick="" class="btn btn-danger" >Remove</button></td>
+            <td><button type="button" class="btn btn-danger" onclick="removeStd(this.id)"   id="btnAdd{{ $std->student_id }}">Remove</button></td>
           </tr>
       @endforeach
 
@@ -102,7 +102,7 @@
                 <?php $c=0; ?>
                 @foreach ($allStd as $std)
                 <?php $c+=1 ?>
-                  <tr>
+                  <tr id="rowID{{ $std->student_id }}">
                     <td>{{ $std->student_id }}</td>
                     <td>{{ $std->firstname }}</td>
                     <td>{{ $std->lastname }}</td>
@@ -146,12 +146,12 @@
   </div>
 
   <div class="col ">
-    <button class="btn btn-danger" onclick="window.location.href='editCurrentAcademic'">Back to edit current academic year</button>
+    <button class="btn btn-secondary" onclick="window.location.href='editCurrentAcademic'">Back to edit current academic year</button>
   </div>
 
 
   <div class="col ">
-    <button class="btn btn-danger" onclick="window.location.href='/main'">Back to main</button>
+    <button class="btn btn-secondary" onclick="window.location.href='/main'">Back to main</button>
   </div>
 
 </div>
@@ -159,29 +159,95 @@
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <meta name="grade_data" content="{{ $grade }}" />
 <meta name="room_data" content="{{ $room }}" />
+<meta name="year_data" content="{{ $cur_year }}" />
 
 
 <script>
+  var checkAdd = false;
   $(document).ready(function() {
     $('#table').DataTable();
     $('#tableAddStd').DataTable();
     jQuery.noConflict();
-
+    $('#showStd').on('hide.bs.modal', function (e) {
+      if(checkAdd){
+        location.reload();
+      }
+    });
   });
 
   function addStdBtn(id){
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     var grade1 = $('meta[name="grade_data"]').attr('content');
     var room1 = $('meta[name="room_data"]').attr('content');
+    var year1 = $('meta[name="year_data"]').attr('content');
     var std_id1 = id.replace('btnAdd','');
-    $.ajax({
-       type:'POST',
-       url:'/assignStudent/add',
-       data:{_token: CSRF_TOKEN,std_id:std_id1,grade:grade1,room:room1},
-       success:function(data){
-          alert(data.Status);
-       }
-    });
+    if (document.getElementById(id).value == '0') {
+      $.ajax({
+         type:'POST',
+         url:'/assignStudent/add',
+         data:{_token: CSRF_TOKEN,std_id:std_id1,grade:grade1,room:room1},
+         success:function(data){
+            alert(data.Status);
+            if(data.Status === "success"){
+              document.getElementById(id).className = "btn btn-danger";
+              document.getElementById(id).innerHTML = "Remove";
+              document.getElementById(id).value = 1;
+              checkAdd = true;
+            }
+         }
+      });
+    }else{
+      var re = confirm("Are you sure you would like to remove this student from "+grade1+"/"+room1+"?");
+      if(re == true){
+        $.ajax({
+           type:'POST',
+           url:'/assignStudent/remove',
+           data:{_token: CSRF_TOKEN,std_id:std_id1,grade:grade1,room:room1},
+           success:function(data){
+              alert(data.Status);
+              if(data.Status === "success"){
+                document.getElementById(id).className = "btn btn-info";
+                document.getElementById(id).innerHTML = "Add";
+                document.getElementById(id).value = 0;
+              }
+           }
+        });
+      }
+
+    }
+
+    /*
+    if (document.getElementById(id).value == '0') {
+      document.getElementById(id).className = "btn btn-success";
+      document.getElementById(id).innerHTML = "Add";
+      document.getElementById(id).value = 1;
+    }else{
+      document.getElementById(id).className = "btn btn-danger";
+      document.getElementById(id).innerHTML = "Not Add";
+      document.getElementById(id).value = 0;
+    }*/
+  }
+
+  function removeStd(id){
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    var grade1 = $('meta[name="grade_data"]').attr('content');
+    var room1 = $('meta[name="room_data"]').attr('content');
+    var std_id1 = id.replace('btnAdd','');
+    var re = confirm("Are you sure you would like to remove this student from "+grade1+"/"+room1+"?");
+    if(re == true){
+
+      $.ajax({
+         type:'POST',
+         url:'/assignStudent/remove',
+         data:{_token: CSRF_TOKEN,std_id:std_id1,grade:grade1,room:room1},
+         success:function(data){
+            alert(data.Status);
+            if(data.Status === "success"){
+              location.reload();
+            }
+         }
+      });
+    }
     /*
     if (document.getElementById(id).value == '0') {
       document.getElementById(id).className = "btn btn-success";
