@@ -146,6 +146,15 @@
   </div>
 
   <div class="col ">
+    <form class="form-inline"  method="post">
+      <!--action="/manageCurriculum/importFromPrevious" -->
+      @csrf
+
+      <button type="button" onclick="importStd()" class="btn btn-info">Import from previous year</button>
+    </form>
+  </div>
+
+  <div class="col ">
     <button class="btn btn-secondary" onclick="window.location.href='editCurrentAcademic'">Back to edit current academic year</button>
   </div>
 
@@ -260,6 +269,37 @@
     }*/
   }
 
+  function importStd(){
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    var grade1 = $('meta[name="grade_data"]').attr('content');
+    var room1 = $('meta[name="room_data"]').attr('content');
+    var year1 = {{$cur_year}}
+    var re = confirm("Are you sure you would like to remove this student from "+grade1+"/"+room1+"?");
+    if(re == true){
+
+      $.ajax({
+         type:'POST',
+         url:'/assignStudent/importFromPrevious',
+         data:{_token: CSRF_TOKEN,year:year1,grade:grade1,room:room1},
+         success:function(data){
+            alert(data.Status);
+            if(data.Status === "success"){
+              location.reload();
+            }
+         }
+      });
+    }
+    /*
+    if (document.getElementById(id).value == '0') {
+      document.getElementById(id).className = "btn btn-success";
+      document.getElementById(id).innerHTML = "Add";
+      document.getElementById(id).value = 1;
+    }else{
+      document.getElementById(id).className = "btn btn-danger";
+      document.getElementById(id).innerHTML = "Not Add";
+      document.getElementById(id).value = 0;
+    }*/
+  }
 
 
  </script>
