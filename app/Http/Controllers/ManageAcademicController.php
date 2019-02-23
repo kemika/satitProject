@@ -168,6 +168,47 @@ class ManageAcademicController extends Controller
     return response()->json(['Status' => 'success'], 200);
   }
 
+
+  public function importStdFromPrevious(Request $request){
+    $room = $request->input('room');
+    $grade = $request->input('grade');
+    $year = $request->input('year');
+
+    $checkAca =  Academic_Year::where('academic_year',$year-1)
+                              ->where('grade_level',$grade)
+                              ->where('room',$room)
+                              ->first();
+
+    if($checkAca === null){ // No classroom
+      return response()->json(['Status' => 'No previous year student, Can not import', 200]);
+    }
+
+    $checkStdExistYear =  Student_Grade_Level::where('classroom_id',$checkAca->classroom_id)
+                                              ->get();
+
+    $curClassID =  Academic_Year::where('academic_year',$year)
+                              ->where('grade_level',$grade)
+                              ->where('room',$room)
+                              ->first();
+
+
+    $del = Student_Grade_Level::where('classroom_id',$curClassID->classroom_id)
+                                ->delete();
+    try{
+      $temp = $checkStdExistYear->replicate();
+      $temp->classroom_id = $curClassID->classroom_id;
+      $temp->save();
+    }
+    catch(\Exception $e){
+       // do task when error
+       return response()->json(['Status' => $e->getMessage()], 200);
+
+    }
+
+    return response()->json(['Status' => 'success'], 200);
+  }
+
+
   public function addStudent(Request $request){
     $room = $request->input('room');
     $grade = $request->input('grade');
