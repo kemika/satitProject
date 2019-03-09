@@ -14,9 +14,9 @@ use App\Information;
 class ManageAcademicController extends Controller
 {
   private function getCurrentActiveYear(){ // Function get active year from Information table
-    $info  = Information::where('director_full_name','like', '%' . "Current_Academic" . '%')->first();
-    $year = explode(":", $info->director_full_name);
-    return $year[1];
+    $info  = Information::first();
+    $year = $info->active_year;
+    return $year;
   }
 
   private function checkAvailableYear($year){
@@ -80,11 +80,8 @@ class ManageAcademicController extends Controller
 
   public function activeAcademicYear(Request $request){
     try{
-
-      $info  = Information::where('director_full_name','like', '%' . "Current_Academic" . '%')->first();
-      $year = explode(":", $info->director_full_name);
-      $year[1] = $request->input('year');
-      $info->director_full_name = implode(":",$year);
+      $info  = Information::first();
+      $info->active_year = $request->input('year');
       $info->save();
     }
     catch(\Exception $e){
@@ -118,14 +115,19 @@ class ManageAcademicController extends Controller
 
 
 
-  public function assignSubject($grade,$room,Request $request){
-    if(!($room >= 1 && $room <= 12) || !($grade >= 1 && $grade <= 12)){
-      $redi  = "editCurrentAcademic";
+  public function assignSubject($year,$grade,$room,Request $request){
+    $academicCheck = Academic_Year::where('academic_year', $year)
+                              ->where('room', $room)
+                              ->where('grade_level', $grade)
+                              ->first();
+    if($academicCheck == null){
+      $redi  = "editAcademic/".$this->getCurrentActiveYear();
       return redirect($redi);
     }
+
     $curricula_year  = Curriculum::orderBy('curriculum_year', 'asc')->groupBy('curriculum_year')->get();
     $academic  = Academic_Year::orderBy('academic_year', 'desc')->groupBy('academic_year')->first();
-    $year = $academic->academic_year;
+
     if($room === 0){
       $academic  = Academic_Year::where('academic_year', $year)
                                 ->where('grade_level', $grade)
@@ -489,6 +491,80 @@ class ManageAcademicController extends Controller
     return response()->json(['Status' => 'success'], 200);
   }
 
+  public function importSubFromPrevious(Request $request){
+
+
+    try{
+
+    if(!$this->checkAvailableYear()){
+      return response()->json(['Status' => "Academic Year ".$year." could not edit"], 200);
+    }
+    $subs =  Student_Grade_Level::where('academic_year',$year-1)
+                              ->leftJoin('academic_year','academic_year.classroom_id','student_grade_levels.classroom_id')
+                              ->get();
+                              /*
+    if($checkAca === null){ // No classroom
+      return response()->json(['Status' => 'No previous year student, Can not import', 200]);
+    }*/
+
+
+      $checkStdExistYear =  Student_Grade_Level::leftJoin('academic_year','student_grade_levels.classroom_id','academic_year.classroom_id')
+                                                ->where('academic_year.academic_year',$year)
+                                                ->delete();
+    }
+    catch(\Exception $e){
+       // do task when error
+       return response()->json(['Status' => $e->getMessage()], 200);
+
+    }
+
+    try{
+    $class_temp = -1;
+    foreach ($stds as $std) {
+      if($class_temp != $std->classroom_id){
+        $class_temp = $std->classroom_id;
+
+        $checkAca =  Academic_Year::where('academic_year',$year)
+                                  ->where('grade_level',$std->grade_level)
+                                  ->where('room',$std->room)
+                                  ->first();
+
+        if($checkAca == null){ // No classroom
+          $createAca = new Academic_Year;
+          $createAca->academic_year = $year;
+          $createAca->grade_level = $std->grade_level;
+          $createAca->room = $std->room;
+          $createAca->curriculum_year = $std->curriculum_year;
+          $createAca->save();
+        }
+
+
+      }
+      $this_class_id =  Academic_Year::where('academic_year',$year)
+                                  ->where('grade_level',$std->grade_level)
+                                  ->where('room',$std->room)
+                                  ->first();
+
+
+        $addStd = new Student_Grade_Level;
+        $addStd->student_id = $std->student_id;
+        $addStd->classroom_id = $this_class_id->classroom_id;
+        $addStd->save();
+      }
+
+
+    }
+    catch(\Exception $e){
+       // do task when error
+       return response()->json(['Status' => $e->getMessage()], 200);
+
+    }
+
+
+
+
+    return response()->json(['Status' => 'success'], 200);
+  }
 
   public function changeCurYear(Request $request){
     $room = $request->input('room');

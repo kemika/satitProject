@@ -84,13 +84,14 @@
           <th scope="col">Semester</th>
           <th scope="col">Credits</th>
           <th scope="col">Elective</th>
-
+          <th scope="col">Edit</th>
 
         </tr>
       </thead>
       <tbody>
-
+        <?php $c=0; ?>
         @foreach ($subs as $sub)
+        <?php $c+=1 ?>
           <tr>
             <td>{{ $sub->course_id }}</td>
             <td>{{ $sub->course_name }}</td>
@@ -102,9 +103,75 @@
             @else
               <td>No</td>
             @endif
-
+            <td><button type="button" onclick="" class="btn btn-primary" data-toggle='modal' data-target='#{{$c}}'>
+              <span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit</button>
+            </td>
 
           </tr>
+
+
+
+        <!-- Modal -->
+
+        <div class="modal fade" id={{$c}} role="dialog">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" style="margin-left:10px;">Edit</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <p>{{$curriculum->course_name }} {{$curriculum->course_id }}</p>
+                <form class="form-inline" action="/manageCurriculum/editSubject" method="post">
+                  @csrf
+
+
+
+                  <input hidden type="text" name="old_course_id" value='{{ $curriculum->course_id }}'>
+                  <input hidden type="text" name="cur_year" value='{{ $curriculum->curriculum_year }}'>
+
+
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label text-right">Course ID :</label>
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control"  name="course_id" value='{{ $sub->course_id }}' readonly>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label text-right">Name :</label>
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control" name="name" value='{{ $sub->course_name }}' required>
+                    </div>
+                  </div>
+
+
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label text-right">Activity :</label>
+                    <div class="col-sm-5">
+                      <select name="activity" class="form-control" style="height: 35px">
+                        @if($sub->is_elective=== 1)
+                        <option value="1" selected>Yes</option>
+                        <option value="0">No</option>
+                        @else
+                        <option value="1" >Yes</option>
+                        <option value="0"selected>No</option>
+                        @endif
+                      </select>
+                    </div>
+                  </div>
+
+
+              <div class="modal-footer">
+                    <button type="submit"  class="btn btn-success" >Edit</button>
+                </form>
+
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
       @endforeach
 
       </tbody>
@@ -147,12 +214,12 @@
                         Not Add
                       </button> -->
 
-                      <button type="button" class="btn btn-primary" data-toggle='modal' data-target='#{{$c}}'>Add
+                      <button type="button" class="btn btn-primary" data-toggle='modal' data-target='#add{{$c}}'>Add
                         </button>
                       <!--  <input onclick="changeBtn(this.id)" type="button" value="0" class="btn btn-danger" id="{{ $sub->course_id }}" /> -->
                     </td>
                   </tr>
-                  <div class="modal fade" id={{$c}} role="dialog">
+                  <div class="modal fade" id=add{{$c}} role="dialog">
                     <div class="modal-dialog modal-lg">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -190,14 +257,14 @@
                             <div class="form-group row">
                               <label class="col-sm-3 col-form-label text-right">Semester :</label>
                               <div class="col-sm-5">
-                                <input type="text" class="form-control"  name="semester"  required>
+                                <input type="number" class="form-control"  name="semester" value="1" min="1" max="4" required>
                               </div>
                             </div>
 
                             <div class="form-group row">
                               <label class="col-sm-3 col-form-label text-right">Credit :</label>
                               <div class="col-sm-5">
-                                <input type="text" class="form-control"  name="credit"  required>
+                                <input type="number" class="form-control"  name="credit" placeholder="Enter Credits" min="1" max="6" required>
                               </div>
                             </div>
 
@@ -298,10 +365,6 @@
             &nbsp
           </div>
 
-
-
-
-
         </div>
 
           </div>
@@ -332,17 +395,10 @@
   <div class="col">
     <button class="btn btn-success" data-toggle='modal' data-target='#showSub'>Add Subject</button>
   </div>
-  <div class="col ">
-    <form class="form-inline"  method="post">
-      <!--action="/manageCurriculum/importFromPrevious" -->
-      @csrf
 
-      <button type="button" onclick="getMessage()" class="btn btn-info">Import from previous curriculum</button>
-    </form>
-  </div>
 
   <div class="col ">
-    <button class="btn btn-danger" onclick="window.location.href='manageCurriculum'">Back to select curriculum year page</button>
+    <button class="btn btn-danger" onclick="window.location.href='/editAcademic/{{$cur_year}}'">Back to edit academic year</button>
   </div>
 
 
@@ -354,6 +410,20 @@
 
 </div>
 </center>
+
+<center>
+<div class="modal fade" id="Waiting" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style="text-align:center;font-size: 60px;">Please Wait Untill Finish</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+    </div>
+  </div>
+</div>
+</center>
+
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <meta name="grade_data" content="{{ $grade }}" />
 <meta name="room_data" content="{{ $room }}" />
@@ -384,6 +454,8 @@
        }
     });
   }
+
+
 
   function changeBtn(id){
     if (document.getElementById(id).value == '0') {
