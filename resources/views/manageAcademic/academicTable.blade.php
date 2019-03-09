@@ -160,7 +160,16 @@
     <!--action="/manageCurriculum/importFromPrevious" -->
     @csrf
 
-    <button type="button" onclick="importStd()" class="btn btn-info">Import student from previous year</button>
+    <button type="button" onclick="importStd()" class="btn btn-info">Import students from previous year</button>
+  </form>
+  </div>
+
+  <div class="col">
+  <form class="form-inline"  method="post">
+    <!--action="/manageCurriculum/importFromPrevious" -->
+    @csrf
+
+    <button type="button" onclick="importSubject()" class="btn btn-info">Import courses from previous year</button>
   </form>
   </div>
 
@@ -250,7 +259,7 @@
   }
 
   function importStd(){
-    var re = confirm("Are you sure you would like to import student from previous year?");
+    var re = confirm("Are you sure you would like to import student from previous year?\nAll this year student data will be deleted before import!!!");
     if(re == true){
       $("#Waiting").modal({backdrop: 'static', keyboard: false});
       var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -268,6 +277,33 @@
            else{
               alert(data.Status);
              //alert('No previous curriculum year!');
+           }
+         }
+      });
+
+    }
+
+
+  }
+
+  function importSubject(){
+    var re = confirm("Are you sure you would like to import course from previous year?\nAll this year course data will be deleted before import!!!");
+    if(re == true){
+      $("#Waiting").modal({backdrop: 'static', keyboard: false});
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+      var curr_year = $('meta[name="curri_year"]').attr('content');
+
+      $.ajax({
+         type:'POST',
+         url:'/assignSubject/importFromPrevious',
+         data:{_token: CSRF_TOKEN,year:curr_year},
+         success:function(data){
+           $("#Waiting").modal('hide');
+           if(data.Status === 'success'){
+            location.reload();
+           }
+           else{
+             alert('No previous curriculum year!');
            }
          }
       });
