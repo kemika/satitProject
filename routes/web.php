@@ -52,9 +52,13 @@ Route::put('/manageTeachers/update', 'ManageTeachersController@update');
 
 Route::get('/manageAcademic', 'ManageAcademicController@index');
 Route::post('/manageAcademic/createNewAcademic', 'ManageAcademicController@createNewAcademic');
-Route::get('/editCurrentAcademic', 'ManageAcademicController@editAcademicYear');
-Route::get('/assignSubject/{grade}/{room}', 'ManageAcademicController@assignSubject');
-Route::get('/assignStudent/{grade}/{room}', 'ManageAcademicController@assignStudent');
+Route::post('/manageAcademic/changeSelYear', 'ManageAcademicController@changeEditAcademicYear');
+Route::post('/manageAcademic/addNewAca', 'ManageAcademicController@addNewAcademic');
+Route::post('/manageAcademic/activeAcademicYear', 'ManageAcademicController@activeAcademicYear');
+Route::get('/editCurrentAcademic', 'ManageAcademicController@editCurAcademicYear');
+Route::get('/editAcademic/{year}', 'ManageAcademicController@editAcademicYear');
+Route::get('/assignSubject/{year}/{grade}/{room}', 'ManageAcademicController@assignSubject');
+Route::get('/assignStudent/{year}/{grade}/{room}', 'ManageAcademicController@assignStudent');
 Route::post('/assignSubject/changeSelYear', 'ManageAcademicController@changeCurYear');
 Route::post('/assignSubject/add', 'ManageAcademicController@addSubject');
 Route::post('/assignStudent/add', 'ManageAcademicController@addStudent');

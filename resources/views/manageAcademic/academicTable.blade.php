@@ -49,16 +49,16 @@
 <center>
 <div class="row" style="width: 120rem;">
   <div class="form-group">
-    <form class="form-inline" action="/assignSubject/changeSelYear" id="changeCurYearForm" method="post">
+    <form class="form-inline" action="/manageAcademic/changeSelYear" id="changeCurYearForm" method="post">
       @csrf
       <div class="form-group row">
         <label class="col-sm col-form-label text-right">Academic Year :</label>
       </div>
       <div class="col-sm" >
-        <select class="form-control col-sm" style="height: 30px" name="selCur">
-          <option>---</option>
+        <select class="form-control col-sm" style="height: 30px" id="selYear" name="selYear">
+
           @foreach ($sel_year as $sel_years)
-            @if ($cur_year === $sel_years->academic_year)
+            @if ($cur_year == $sel_years->academic_year)
               <option selected>{{$sel_years->academic_year}}</option>
             @else
               <option>{{$sel_years->academic_year}}</option>
@@ -66,7 +66,8 @@
           @endforeach
         </select>
       </div>
-      <button type="submit" onclick="return confirm('If you change curriculum year, all subjects will be removed?');" class="btn btn-danger" >Add new academic year</button>
+      <button type="button" onclick="changeYear();" class="btn btn-info" >Change Select Year</button>
+      <button type="button" onclick="addNewAca();" class="btn btn-success" >Add new academic year</button>
     </form>
 
 
@@ -98,10 +99,10 @@
             <td><button type="button" onclick="" class="btn btn-primary" >
               <span class="glyphicon glyphicon-user"></span>&nbsp;Edit</button>
             </td>
-            <td><button type="button" onclick="window.location.href='assignStudent/{{$detail->grade_level}}/{{$detail->room}}'" class="btn btn-primary" >
+            <td><button type="button" onclick="window.location.href='/assignStudent/{{$detail->academic_year}}/{{$detail->grade_level}}/{{$detail->room}}'" class="btn btn-primary" >
               <span class="glyphicon glyphicon-user"></span>&nbsp;Edit</button>
             </td>
-            <td><button type="button" onclick="window.location.href='assignSubject/{{$detail->grade_level}}/{{$detail->room}}'" class="btn btn-primary" >
+            <td><button type="button" onclick="window.location.href='/assignSubject/{{$detail->academic_year}}/{{$detail->grade_level}}/{{$detail->room}}'" class="btn btn-primary" >
               <span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit</button>
             </td>
           </tr>
@@ -112,7 +113,18 @@
     </table>
   <!-- </div> -->
 
-  <div class="form-group">
+
+
+</div>
+
+
+
+
+</center>
+
+<center>
+<div class="row" style="margin-top: 30px; margin-bottom: 30px; width: 120rem;">
+  <div class="form-group ">
     <form class="form-inline"  id="changeCurYearForm" method="post">
       @csrf
       <div class="row">
@@ -140,16 +152,51 @@
 
     </form>
 
+  </div>
 
 
+  <div class="col">
+  <form class="form-inline"  method="post">
+    <!--action="/manageCurriculum/importFromPrevious" -->
+    @csrf
+
+    <button type="button" onclick="importStd()" class="btn btn-info">Import student from previous year</button>
+  </form>
+  </div>
+
+  @if($active_year != $cur_year)
+  <div class="col">
+  <form class="form-inline"  method="post">
+    <!--action="/manageCurriculum/importFromPrevious" -->
+    @csrf
+
+    <button type="button" onclick="activeAcademicYear();" class="btn btn-danger">Active this year</button>
+  </form>
+  </div>
+  @endif
+
+</div>
+</center>
+
+<center>
+<div class="modal fade" id="Waiting" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style="text-align:center;font-size: 60px;">Please Wait Untill Finish</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+    </div>
   </div>
 </div>
-
 </center>
+
+
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <script>
   $(document).ready(function() {
     $('#table').DataTable();
+    jQuery.noConflict();
 } );
   function addRoom(){
 
@@ -180,7 +227,7 @@
   function removeRoom(){
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     var grade = document.getElementById("selGrade").value;
-    
+
     $.ajax({
        type:'POST',
        url:'/manageRoom/remove',
@@ -201,5 +248,72 @@
       document.getElementById(id).value = 0;
     }*/
   }
+
+  function importStd(){
+    var re = confirm("Are you sure you would like to import student from previous year?");
+    if(re == true){
+      $("#Waiting").modal({backdrop: 'static', keyboard: false});
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+      var curr_year = {{$cur_year}}
+
+      $.ajax({
+         type:'POST',
+         url:'/assignStudent/importFromPrevious',
+         data:{_token: CSRF_TOKEN,year:curr_year},
+         success:function(data){
+           $("#Waiting").modal('hide');
+           if(data.Status === 'success'){
+             alert(data.Status);
+           }
+           else{
+              alert(data.Status);
+             //alert('No previous curriculum year!');
+           }
+         }
+      });
+
+    }
+
+
+  }
+
+  function changeYear(){
+    var e = document.getElementById("selYear");
+    var strYear = e.options[e.selectedIndex].text;
+    window.location.href = "/editAcademic/"+strYear;
+
+  }
+
+  function activeAcademicYear(){
+    var re = confirm("Are you sure you would like to active this academic year?\nYou could not change previous academic year!!!!!");
+    if(re == true){
+
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+
+      $.ajax({
+         type:'POST',
+         url:'/manageAcademic/activeAcademicYear',
+         data:{_token: CSRF_TOKEN,year:{{$cur_year}}},
+         success:function(data){
+           if(data.Status === 'success'){
+             alert("Active This Academic year!");
+             location.reload();
+           }
+           else{
+             alert(data.Status);
+           }
+         }
+      });
+    }
+
+  }
+
+    function addNewAca(){
+
+
+
+    }
+
 
 </script>
