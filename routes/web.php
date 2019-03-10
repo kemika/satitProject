@@ -61,6 +61,8 @@ Route::get('/assignSubject/{year}/{grade}/{room}', 'ManageAcademicController@ass
 Route::get('/assignStudent/{year}/{grade}/{room}', 'ManageAcademicController@assignStudent');
 Route::post('/assignSubject/changeSelYear', 'ManageAcademicController@changeCurYear');
 Route::post('/assignSubject/add', 'ManageAcademicController@addSubject');
+Route::post('/assignSubject/edit', 'ManageAcademicController@editSubject');
+Route::post('/assignSubject/remove', 'ManageAcademicController@removeSubject');
 Route::post('/assignSubject/importFromPrevious', 'ManageAcademicController@importSubFromPrevious');
 Route::post('/assignStudent/add', 'ManageAcademicController@addStudent');
 Route::post('/assignStudent/remove', 'ManageAcademicController@removeStudent');

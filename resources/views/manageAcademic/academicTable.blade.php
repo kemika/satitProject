@@ -203,8 +203,10 @@
 
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <script>
+  var checkAdd = false;
   $(document).ready(function() {
     $('#table').DataTable();
+    
     jQuery.noConflict();
 } );
   function addRoom(){
@@ -296,14 +298,14 @@
       $.ajax({
          type:'POST',
          url:'/assignSubject/importFromPrevious',
-         data:{_token: CSRF_TOKEN,year:curr_year},
+         data:{_token: CSRF_TOKEN,year:{{$cur_year}}},
          success:function(data){
            $("#Waiting").modal('hide');
            if(data.Status === 'success'){
             location.reload();
            }
            else{
-             alert('No previous curriculum year!');
+             alert(data.Status);
            }
          }
       });
