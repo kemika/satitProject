@@ -358,7 +358,6 @@
 
       var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-
       $.ajax({
          type:'POST',
          url:'/manageAcademic/activeAcademicYear',
@@ -378,7 +377,21 @@
   }
 
     function addNewAca(){
-
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+         type:'POST',
+         url:'/manageAcademic/addNewAca',
+         data:{_token: CSRF_TOKEN},
+         success:function(data){
+           if(data.Status === 'success'){
+             alert("Create new Academic year succeed");
+             location.reload();
+           }
+           else{
+             alert(data.Status);
+           }
+         }
+      });
 
 
     }
