@@ -2,7 +2,8 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Validate</title>
+    <title>Satit Kaset</title>
+    <link rel="shortcut icon" href="img/satitLogo.gif" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
@@ -19,16 +20,16 @@
     <table class="table table-striped table-dark" style="width: 40%;">
       <thead>
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">Validate</th>
+          <th scope="col">Results</th>
         </tr>
       </thead>
       <tbody>
-        @foreach($arrayValidates as $arrayValidate)
+        @foreach($errorArray as $msg)
+        @if($msg != "")
         <tr>
-          <td>{{ $loop->iteration }}</td>
-          <td>{{ $arrayValidate }}</td>
+          <td>{{ $msg }}</td>
         </tr>
+        @endif
         @endforeach
 
       </tbody>
@@ -39,7 +40,7 @@
         <div class="col-5">
         </div>
         <div class="col col-xl-2">
-          <button class="btn btn-danger" onclick="window.location.href='/uploadGrade'">Back to Upload</button>
+          <button class="btn btn-danger" onclick="window.location.href='/upload'">Back to Upload</button>
         </div>
       </div>
   </body>

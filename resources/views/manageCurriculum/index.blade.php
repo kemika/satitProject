@@ -16,12 +16,35 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
 
 
-
-
+<link rel="stylesheet" href="/css/nav.css">
 <link href="{{ asset('bootstrap/css/studentCSS.css') }}" rel="stylesheet">
+<head>
+  <title>Satit Kaset</title>
+  <link rel="shortcut icon" href="img/satitLogo.gif" />
+  <div id='cssmenu'>
+  <ul>
+     <li ><a href='/main'>SatitKaset</a></li>
+     <li><a href='/manageStudents'>Manage Students</a></li>
+     <li><a href='/manageTeachers'>Manage Teachers</a></li>
+     <li><a href='/upload'>Upload Grade</a></li>
+     <li><a href='/approveGrade'>Approve Grade</a></li>
+     <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
+                onclick="event.preventDefault();
+                              document.getElementById('logout-form').submit();">
+                 {{ __('Logout') }}
+             </a>
 
+             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                 @csrf
+             </form></li>
 
-<h1> Manage Curricula</h1>
+             <li style="float:right"><a href='#'>{{ auth::user()->firstname.' '.auth::user()->lastname}}</a></li>
+  </ul>
+
+  </div>
+
+</head>
+<h1> Manage Curriculum</h1>
 <center>
 <div class="row" style="width: 120rem;">
   <!-- <div class="col-1"></div> -->
@@ -40,16 +63,11 @@
           <?php $c+=1 ?>
         <tr>
           <td>{{ $loop->iteration }}</td>
-          <td>@if($curriculum->adjust == 1)
-              ปรับปรุง
-            @endif
-            {{ $curriculum->year }}</td>
-          <?php if($curriculum->adjust == 0){
-            $url = url("manageCurriculum/$curriculum->year");
-          }
-          else{
-            $url = url("manageCurriculum/ปรับปรุง$curriculum->year");
-          }?>
+          <td>
+            {{ $curriculum->curriculum_year }}</td>
+          <?php
+            $url = url("manageCurriculum/$curriculum->curriculum_year");?>
+
           <td><button type="button" class="btn btn-primary" onclick='location.href="{{ $url }}"'>Edit
   </button>
 </td>
@@ -113,16 +131,23 @@
 
 </center>
 
-<div class="row" style="margin-top: 30px; margin-bottom: 30px;">
-  <div class="col-5">
+<center>
+<div class="row" style="margin-top: 30px; margin-bottom: 30px; ">
+  <div class="col ">
   </div>
-  <div class="col col-xl-1">
+  <div class="col ">
     <button class="btn btn-primary" data-toggle='modal' data-target='#NewCur'>New curriculum</button>
   </div>
-  <div class="col col-xl-2">
+
+  <div class="col ">
     <button class="btn btn-danger" onclick="window.location.href='/main'">Back to main</button>
   </div>
+  <div class="col ">
+  </div>
 </div>
+</center>
+
+
 <center>
 <div class="modal fade" id="NewCur" role="dialog">
   <div class="modal-dialog modal-lg">

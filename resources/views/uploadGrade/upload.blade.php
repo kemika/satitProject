@@ -13,12 +13,15 @@
 <link rel="stylesheet" href="/css/nav.css">
 
 <head>
+  <title>Satit Kaset</title>
+  <link rel="shortcut icon" href="img/satitLogo.gif" />
   <div id='cssmenu'>
   <ul>
      <li ><a href='/main'>SatitKaset</a></li>
-     <li><a href='/manageStudents'>Manage Student</a></li>
-     <li class='active'><a href='#'>Grade</a></li>
-     <li><a href='#'>About</a></li>
+     <li><a href='/manageStudents'>Manage Students</a></li>
+     <li><a href='/manageTeachers'>Manage Teachers</a></li>
+     <li class='active'><a href='#'>Upload Grade</a></li>
+     <li><a href='/approveGrade'>Approve Grade</a></li>
      <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
                 onclick="event.preventDefault();
                               document.getElementById('logout-form').submit();">
@@ -29,18 +32,76 @@
                  @csrf
              </form></li>
 
+
              <li style="float:right"><a href='#'>{{ auth::user()->firstname.' '.auth::user()->lastname}}</a></li>
   </ul>
 
   </div>
 
 </head>
+
     <h1 style="margin: 25px 50px 75px 100px;"> Upload </h1>
+
     <div style="margin-left:150px">
+      @if(isset($errorDetail))
+        @foreach ($errorDetail as $error)
+          {{$error["Status"]}}
+          </br>
+          </br>
+          @if(strpos($error["Status"], 'error') !== false)
+            @foreach ($error as $key => $val)
+              @if($key !== "Status")
+                {{$val}}
+                </br>
+              @endif
+            @endforeach
+          @endif
+          </br>
+          </br>
+        @endforeach
+      @endif
       <form action="/getUpload" method="post" enctype="multipart/form-data" class="form-inline">
         {{csrf_field()}}
-        <input type="file" name="file">
+        <input type="file" name="file[]" multiple>
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="submit" class="btn btn-primary mb-2" value="upload">
+        <input type="submit" class="btn btn-primary mb-2" value="upload"> Note: Maximum of 50 files.
+      </form>
+
+
+      <form action="/getUploadComments" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+
+        <input type="file" name="file[]" multiple>
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-primary mb-2" value="upload Comments">
+
+      </form>
+
+      <form action="/getUploadHeightAndWeight" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+        <input type="file" name="file[]" multiple>
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-primary mb-2" value="upload Height And Weight">
+      </form>
+
+      <form action="/getUploadBehavior" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+        <input type="file" name="file[]" multiple>
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-primary mb-2" value="upload Behavior">
+      </form>
+
+      <form action="/getUploadAttendance" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+        <input type="file" name="file[]" multiple>
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-primary mb-2" value="upload Attendance">
+      </form>
+
+      <form action="/getUploadActivities" method="post" enctype="multipart/form-data" class="form-inline">
+        {{csrf_field()}}
+        <input type="file" name="file[]" multiple>
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="submit" class="btn btn-primary mb-2" value="upload Activities">
       </form>
     </div>

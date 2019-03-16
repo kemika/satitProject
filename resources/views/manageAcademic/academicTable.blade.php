@@ -5,7 +5,6 @@
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <!-- <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script> -->
-<!-- {{ $curricula }} -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!-- add later -->
@@ -17,139 +16,193 @@
 
 
 
-
+<link rel="stylesheet" href="/css/nav.css">
 <link href="{{ asset('bootstrap/css/studentCSS.css') }}" rel="stylesheet">
+<head>
+  <title>Satit Kaset</title>
+  <link rel="shortcut icon" href="img/satitLogo.gif" />
+  <div id='cssmenu'>
+  <ul>
+     <li ><a href='/main'>SatitKaset</a></li>
+     <li><a href='/manageStudents'>Manage Students</a></li>
+     <li><a href='/manageTeachers'>Manage Teachers</a></li>
+     <li><a href='/upload'>Upload Grade</a></li>
+     <li><a href='/approveGrade'>Approve Grade</a></li>
+     <li style="float:right">        <a class="dropdown-item" href="{{ route('logout') }}"
+                onclick="event.preventDefault();
+                              document.getElementById('logout-form').submit();">
+                 {{ __('Logout') }}
+             </a>
 
+             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                 @csrf
+             </form></li>
 
-<h1> Manage Academic</h1>
+             <li style="float:right"><a href='#'>{{ auth::user()->firstname.' '.auth::user()->lastname}}</a></li>
+  </ul>
+
+  </div>
+
+</head>
+
+<h1> Manage Academic {{ $cur_year }}</h1>
 <center>
 <div class="row" style="width: 120rem;">
-  <!-- <div class="col-1"></div> -->
-  <!-- <div class="col-8"> -->
+  <div class="form-group">
+    <form class="form-inline" action="/manageAcademic/changeSelYear" id="changeCurYearForm" method="post">
+      @csrf
+      <div class="form-group row">
+        <label class="col-sm col-form-label text-right">Academic Year :</label>
+      </div>
+      <div class="col-sm" >
+        <select class="form-control col-sm" style="height: 30px" id="selYear" name="selYear">
+
+          @foreach ($sel_year as $sel_years)
+            @if ($cur_year == $sel_years->academic_year)
+              <option selected>{{$sel_years->academic_year}}</option>
+            @else
+              <option>{{$sel_years->academic_year}}</option>
+            @endif
+          @endforeach
+        </select>
+      </div>
+      <button type="button" onclick="changeYear();" class="btn btn-info" >Change Select Year</button>
+      <button type="button" onclick="addNewAca();" class="btn btn-success" >Add new academic year</button>
+    </form>
+
+
+
+  </div>
     <table class="table table-hover" id="table" style="width: 120rem;">
       <thead>
         <tr>
-          <th scope="col">No.</th>
-          <th scope="col">Year</th>
-          <th scope="col">Action</th>
+          <th scope="col">Grade</th>
+          <th scope="col">Room</th>
+          <th scope="col">Grade/Room</th>
+          <th scope="col">Teachers</th>
+          <th scope="col">Students</th>
+          <th scope="col">Courses</th>
         </tr>
       </thead>
       <tbody>
-        <?php $c=0; ?>
-        @foreach ($curricula as $curriculum)
-          <?php $c+=1 ?>
-        <tr>
-          <td>{{ $loop->iteration }}</td>
-          <td>@if($curriculum->adjust == 1)
-              ปรับปรุง
+
+        @foreach ($academicDetail as $detail)
+          <tr>
+            <td>{{ $detail->grade_level }}</td>
+            @if ($detail->room === 0 )
+              <td>All Room</td>
+              <td>{{ $detail->grade_level }}  -  All Room</td>
+            @else
+                <td>{{ $detail->room }}</td>
+                <td>{{ $detail->grade_level }}/{{ $detail->room }}</td>
             @endif
-            {{ $curriculum->year }}</td>
-          <?php if($curriculum->adjust == 0){
-            $url = url("manageCurriculum/$curriculum->year");
-          }
-          else{
-            $url = url("manageCurriculum/ปรับปรุง$curriculum->year");
-          }?>
-          <td><button type="button" class="btn btn-primary" onclick='location.href="{{ $url }}"'>Edit
-  </button>
-</td>
-<!--
-          <td><form class="form-inline" action="/manageCurriculum/edit" method="post">
-            @csrf
+            <td><button type="button" onclick="window.location.href='/assignTeacher/{{$detail->academic_year}}/{{$detail->grade_level}}/{{$detail->room}}'" class="btn btn-primary" >
+              <span class="glyphicon glyphicon-user"></span>&nbsp;Edit</button>
+            </td>
+            <td><button type="button" onclick="window.location.href='/assignStudent/{{$detail->academic_year}}/{{$detail->grade_level}}/{{$detail->room}}'" class="btn btn-primary" >
+              <span class="glyphicon glyphicon-user"></span>&nbsp;Edit</button>
+            </td>
+            <td><button type="button" onclick="window.location.href='/assignSubject/{{$detail->academic_year}}/{{$detail->grade_level}}/{{$detail->room}}'" class="btn btn-primary" >
+              <span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit</button>
+            </td>
+          </tr>
 
-            <input hidden type="text" name="year" value='{{ $curriculum->year }}'>
-
-
-
-
-
-              <button type="submit"  class="btn btn-primary" >edit</button>
-          </form></td> -->
-        </tr>
-        <!-- Modal -->
-        <!--
-        <div class="modal fade" id={{$c}} role="dialog">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title" style="margin-left:10px;">Edit</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </div>
-              <div class="modal-body">
-                <p>{{$curriculum->year}}</p>
-                <form class="form-inline" action="/manageCurriculum/edit" method="post">
-                  @csrf
-
-                  <input hidden type="text" name="id" value='{{ $curriculum->year }}'>
-                  <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Year</label>
-                    <div class="col-sm-5">
-                      <input type="text" class="form-control"  name="year" value='{{ $curriculum->year }}' disabled>
-                    </div>
-                  </div>
-
-
-               <select class="form-control" name="projid" >
-                            <option value="Active">Active</option>
-                            <option value="Inactive" >Inactive</option>
-                            <option value="Graduated" >Graduated</option>
-                  </select>
-              <div class="modal-footer">
-                    <button type="submit"  class="btn btn-default" >edit</button>
-                </form>
-
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div> -->
-        @endforeach
-
+      @endforeach
 
       </tbody>
     </table>
   <!-- </div> -->
+
+
+
 </div>
+
+
+
 
 </center>
 
-<div class="row" style="margin-top: 30px; margin-bottom: 30px;">
-  <div class="col-5">
-  </div>
-  <div class="col col-xl-1">
-    <button class="btn btn-primary" data-toggle='modal' data-target='#NewCur'>New curriculum</button>
-  </div>
-  <div class="col col-xl-2">
-    <button class="btn btn-danger" onclick="window.location.href='/main'">Back to main</button>
-  </div>
-</div>
 <center>
-<div class="modal fade" id="NewCur" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" style="margin-left:10px;">Create New Curriculum</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+<div class="row" style="margin-top: 30px; margin-bottom: 30px; width: 120rem;">
+  <div class="form-group ">
+    <form class="form-inline"  id="changeCurYearForm" method="post">
+      @csrf
+      <div class="row">
+        <label class="col-sm col-form-label text-right">To grade :</label>
+      </div>
+      <div class="col-sm" >
+        <select id="selGrade" class="form-control" style="height: 30px" name="selCur">
+          <option selected>1</option>
+          @for ($c = 2;$c<=12;$c++)
+            <option>{{$c}}</option>
+          @endfor
+        </select>
+      </div>
+      <div class="col-sm">
+        <div class="row" >
+          <button  type="button" onclick="addRoom()" class="btn btn-primary" >Add a room</button>
+        </div>
+        <div class="row" >
+          &nbsp;
+        </div>
+        <div class="row" >
+          <button type="button" onclick="removeRoom()" class="btn btn-danger" >Remove room</button>
+        </div>
       </div>
 
-      <div class="modal-body">
+    </form>
 
-        <form class="form-inline" action="/manageCurriculum/createNewYear" method="post">
-          @csrf
-          <input hidden type="text" name="id" value='Hello'>
-          <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Year : </label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control"  name="year" placeholder='Enter year' >
-            </div>
-          </div>
+  </div>
+
+
+  <div class="col">
+  <form class="form-inline"  method="post">
+    <!--action="/manageCurriculum/importFromPrevious" -->
+    @csrf
+
+    <button type="button" onclick="importTeacher()" class="btn btn-info">Import teachers from previous year</button>
+  </form>
+  </div>
+
+  <div class="col">
+  <form class="form-inline"  method="post">
+    <!--action="/manageCurriculum/importFromPrevious" -->
+    @csrf
+
+    <button type="button" onclick="importStd()" class="btn btn-info">Import students from previous year</button>
+  </form>
+  </div>
+
+  <div class="col">
+  <form class="form-inline"  method="post">
+    <!--action="/manageCurriculum/importFromPrevious" -->
+    @csrf
+
+    <button type="button" onclick="importSubject()" class="btn btn-info">Import courses from previous year</button>
+  </form>
+  </div>
+
+  @if($active_year != $cur_year)
+  <div class="col">
+  <form class="form-inline"  method="post">
+    <!--action="/manageCurriculum/importFromPrevious" -->
+    @csrf
+
+    <button type="button" onclick="activeAcademicYear();" class="btn btn-danger">Active this year</button>
+  </form>
+  </div>
+  @endif
+
 </div>
+</center>
 
-      <div class="modal-footer">
-            <button type="submit"  class="btn btn-success" >Create New Curriculum</button>
-        </form>
-
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+<center>
+<div class="modal fade" id="Waiting" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style="text-align:center;font-size: 60px;">Please Wait Untill Finish</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
     </div>
   </div>
@@ -157,8 +210,178 @@
 </center>
 
 
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 <script>
+  var checkAdd = false;
   $(document).ready(function() {
     $('#table').DataTable();
+
+    jQuery.noConflict();
 } );
- </script>
+  function addRoom(){
+
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    var grade = document.getElementById("selGrade").value;
+
+    $.ajax({
+       type:'POST',
+       url:'/manageRoom/add',
+       data:{_token: CSRF_TOKEN,grade:grade,year:{{$cur_year}}},
+       success:function(data){
+          alert(data.Status);
+          location.reload();
+       }
+    });
+    /*
+    if (document.getElementById(id).value == '0') {
+      document.getElementById(id).className = "btn btn-success";
+      document.getElementById(id).innerHTML = "Add";
+      document.getElementById(id).value = 1;
+    }else{
+      document.getElementById(id).className = "btn btn-danger";
+      document.getElementById(id).innerHTML = "Not Add";
+      document.getElementById(id).value = 0;
+    }*/
+  }
+
+  function removeRoom(){
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    var grade = document.getElementById("selGrade").value;
+
+    $.ajax({
+       type:'POST',
+       url:'/manageRoom/remove',
+       data:{_token: CSRF_TOKEN,grade:grade,year:{{$cur_year}}},
+       success:function(data){
+          alert(data.Status);
+          location.reload();
+       }
+    });
+    /*
+    if (document.getElementById(id).value == '0') {
+      document.getElementById(id).className = "btn btn-success";
+      document.getElementById(id).innerHTML = "Add";
+      document.getElementById(id).value = 1;
+    }else{
+      document.getElementById(id).className = "btn btn-danger";
+      document.getElementById(id).innerHTML = "Not Add";
+      document.getElementById(id).value = 0;
+    }*/
+  }
+
+  function importTeacher(){
+    var re = confirm("Are you sure you would like to import teacher from previous year?\nAll this year teacher data will be deleted before import!!!");
+    if(re == true){
+      $("#Waiting").modal({backdrop: 'static', keyboard: false});
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+      var curr_year = {{$cur_year}}
+      $.ajax({
+         type:'POST',
+         url:'/assignTeacher/importFromPrevious',
+         data:{_token: CSRF_TOKEN,year:curr_year},
+         success:function(data){
+           $("#Waiting").modal('hide');
+           if(data.Status === 'success'){
+             alert(data.Status);
+           }
+           else{
+              alert(data.Status);
+             //alert('No previous curriculum year!');
+           }
+         }
+      });
+    }
+  }
+
+  function importStd(){
+    var re = confirm("Are you sure you would like to import student from previous year?\nAll this year student data will be deleted before import!!!");
+    if(re == true){
+      $("#Waiting").modal({backdrop: 'static', keyboard: false});
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+      var curr_year = {{$cur_year}}
+
+      $.ajax({
+         type:'POST',
+         url:'/assignStudent/importFromPrevious',
+         data:{_token: CSRF_TOKEN,year:curr_year},
+         success:function(data){
+           $("#Waiting").modal('hide');
+           if(data.Status === 'success'){
+             alert(data.Status);
+           }
+           else{
+              alert(data.Status);
+             //alert('No previous curriculum year!');
+           }
+         }
+      });
+    }
+  }
+
+  function importSubject(){
+    var re = confirm("Are you sure you would like to import course from previous year?\nAll this year course data will be deleted before import!!!");
+    if(re == true){
+      $("#Waiting").modal({backdrop: 'static', keyboard: false});
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+      var curr_year = $('meta[name="curri_year"]').attr('content');
+
+      $.ajax({
+         type:'POST',
+         url:'/assignSubject/importFromPrevious',
+         data:{_token: CSRF_TOKEN,year:{{$cur_year}}},
+         success:function(data){
+           $("#Waiting").modal('hide');
+           if(data.Status === 'success'){
+            location.reload();
+           }
+           else{
+             alert(data.Status);
+           }
+         }
+      });
+
+    }
+
+
+  }
+
+  function changeYear(){
+    var e = document.getElementById("selYear");
+    var strYear = e.options[e.selectedIndex].text;
+    window.location.href = "/editAcademic/"+strYear;
+
+  }
+
+  function activeAcademicYear(){
+    var re = confirm("Are you sure you would like to active this academic year?\nYou could not change previous academic year!!!!!");
+    if(re == true){
+
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+
+      $.ajax({
+         type:'POST',
+         url:'/manageAcademic/activeAcademicYear',
+         data:{_token: CSRF_TOKEN,year:{{$cur_year}}},
+         success:function(data){
+           if(data.Status === 'success'){
+             alert("Active This Academic year!");
+             location.reload();
+           }
+           else{
+             alert(data.Status);
+           }
+         }
+      });
+    }
+
+  }
+
+    function addNewAca(){
+
+
+
+    }
+
+
+</script>

@@ -15,11 +15,14 @@ class CreateOfferedCourse extends Migration
     {
         Schema::create('Offered_Courses', function (Blueprint $table) {
                       $table->unsignedInteger('classroom_id');
+                      $table->unsignedSmallInteger('semester');
                       $table->unsignedSmallInteger('curriculum_year');
                       $table->string('course_id',20);
                       $table->unsignedInteger('open_course_id')->unique()->autoIncrement();
                       $table->boolean('is_elective');
                       $table->float('credits');
+                      $table->string('in_class',10);
+                      $table->string('practice',10);
                        $table->timestamps();
 
                       $table->foreign('classroom_id')
@@ -30,7 +33,7 @@ class CreateOfferedCourse extends Migration
                       ->references(['curriculum_year','course_id'])
                       ->on('Curriculums');
 
-                        $table->unique(['classroom_id','curriculum_year','course_id']);
+                        $table->unique(['classroom_id','semester','curriculum_year','course_id'],'classtoom_id_unique');
 
         });
     }

@@ -17,8 +17,9 @@ class ApproveGradeController extends Controller
   public function __construct() {
     $this->middleware('auth');
   }
-  
+
   public function index($year,$semester,Request $request){
+    /*
     $courses  = Academic_Year::Join('offered_courses','offered_courses.classroom_id','=','academic_year.classroom_id')
             ->Join('curriculums', function($join)
                          {
@@ -34,22 +35,28 @@ class ApproveGradeController extends Controller
                     ,'curriculums.course_name','data_status.data_status_text','grades.datetime','offered_courses.semester','offered_courses.is_elective')
             ->orderBy('course_id','asc')
             ->orderBy('datetime','desc')
-            ->get();
+            ->get();*/
 
-    /*
 
-    $courses  = Offered_Courses::leftJoin('grades','grades.open_course_id','=','offered_courses.open_course_id')
-          ->Join('curriculums','offered_courses.course_id','=','curriculums.course_id')
-          ->Join('academic_year','offered_courses.classroom_id','=','academic_year.classroom_id')
-          ->leftJoin('data_status','grades.data_status','=','data_status.data_status')
-          ->where('offered_courses.curriculum_year', $request->input('year'))
-          ->where('offered_courses.semester',$request->input('semester'))
-          ->groupBy('grades.datetime','grades.open_course_id')
-          ->select('offered_courses.open_course_id','offered_courses.curriculum_year','offered_courses.course_id','academic_year.grade_level','grades.grade','grades.quater'
-                  ,'curriculums.course_name','data_status.data_status_text','grades.datetime','grades.semester','offered_courses.is_elective')
-          ->orderBy('course_id','asc')
-          ->orderBy('datetime','desc')
-          ->get();*/
+   $courses  = Academic_Year::Join('offered_courses','offered_courses.classroom_id','=','academic_year.classroom_id')
+           ->Join('curriculums', function($join)
+                        {
+                            $join->on('curriculums.course_id', '=', 'offered_courses.course_id');
+                            $join->on('curriculums.curriculum_year','=', 'offered_courses.curriculum_year');
+                        })
+           ->leftJoin('grades','grades.open_course_id','=','offered_courses.open_course_id')
+           ->leftJoin('data_status','grades.data_status','=','data_status.data_status')
+           ->where('academic_year.academic_year', $year)
+           ->where('offered_courses.semester',$semester)
+           ->where('curriculums.is_activity',false)
+           ->groupBy('grades.datetime','offered_courses.open_course_id','grades.quater')
+           ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quater'
+                   ,'curriculums.course_name','data_status.data_status_text','grades.datetime','offered_courses.semester','offered_courses.is_elective')
+           ->orderBy('course_id','asc')
+           ->orderBy('datetime','desc')
+           ->get();
+
+
 
     $check = 0;
     $checkQuater = 0;
@@ -113,10 +120,10 @@ class ApproveGradeController extends Controller
     ->get();
     return view('approveGrade.index' , ['courses' => $tempCourse,'yearInfo' => $yearInfo]);
   }
+  // End index
 
 
-
-
+/*
   public function testPage(Request $request){
 
 
@@ -137,18 +144,7 @@ class ApproveGradeController extends Controller
             ->orderBy('datetime','desc')
             ->get();
 
-/*
-    $courses  = Offered_Courses::leftJoin('grades','grades.open_course_id','=','offered_courses.open_course_id')
-          ->Join('curriculums','offered_courses.course_id','=','curriculums.course_id')
-          ->Join('academic_year','offered_courses.classroom_id','=','academic_year.classroom_id')
-          ->leftJoin('data_status','grades.data_status','=','data_status.data_status')
 
-          ->groupBy('grades.datetime','grades.open_course_id')
-          ->select('offered_courses.open_course_id','offered_courses.curriculum_year','offered_courses.course_id','academic_year.grade_level','grades.quater'
-                  ,'curriculums.course_name','offered_courses.semester','data_status.data_status_text')
-          ->orderBy('course_id','asc')
-          ->orderBy('datetime','desc')
-          ->get();*/
 
           $check = 0;
           $count = 0;
@@ -187,15 +183,7 @@ class ApproveGradeController extends Controller
             unset($tempCourse[$num]);
           }
           $tempCourse = array_values($tempCourse);
-          /*
-          $saveUnset = array_unique($saveUnset);
-          $temp = $courses->all();
 
-
-          unset($temp[0]);
-          $temp = array_values($temp);
-
-      */
 
           if(!isset($tempCourse[0])){
             $tempCourse = array();
@@ -211,13 +199,8 @@ class ApproveGradeController extends Controller
           return view('approveGrade.index' , ['courses' => $tempCourse,'yearInfo' => $yearInfo]);
 
 
-    /*
-      $yearInfo  = Offered_Courses::select('curriculum_year')
-                ->get();
-      $courses = [];
-      return view('approveGrade.index' , ['courses' => $courses,'yearInfo' => $yearInfo]);
-      */
-  }
+
+  }*/
 
 
   public function getApprovePage(Request $request){
@@ -227,7 +210,11 @@ class ApproveGradeController extends Controller
               ->first();
 
   $redi  = "approveGrade/".$year->academic_year."/3";
+
+
   return redirect($redi);
+
+  /*
               $courses  = Academic_Year::Join('offered_courses','offered_courses.classroom_id','=','academic_year.classroom_id')
                       ->Join('curriculums', function($join)
                                    {
@@ -245,20 +232,6 @@ class ApproveGradeController extends Controller
                       ->orderBy('datetime','desc')
                       ->get();
 
-              /*
-    $courses  = Offered_Courses::leftJoin('grades','grades.open_course_id','=','offered_courses.open_course_id')
-          ->Join('curriculums','offered_courses.course_id','=','curriculums.course_id')
-          ->Join('academic_year','offered_courses.classroom_id','=','academic_year.classroom_id')
-          ->leftJoin('data_status','grades.data_status','=','data_status.data_status')
-          ->where('offered_courses.curriculum_year', $year->curriculum_year)
-          ->where('offered_courses.semester', 3)
-          ->groupBy('grades.datetime','grades.open_course_id')
-          ->select('offered_courses.open_course_id','offered_courses.curriculum_year','offered_courses.course_id','academic_year.grade_level','grades.quater'
-                  ,'curriculums.course_name','data_status.data_status_text','grades.datetime','offered_courses.semester','offered_courses.is_elective')
-          ->orderBy('course_id','asc')
-          ->orderBy('datetime','desc')
-          ->get();
-*/
           $check = 0;
           $count = 0;
           $saveUnset = array();
@@ -296,15 +269,8 @@ class ApproveGradeController extends Controller
             unset($tempCourse[$num]);
           }
           $tempCourse = array_values($tempCourse);
-          /*
-          $saveUnset = array_unique($saveUnset);
-          $temp = $courses->all();
 
 
-          unset($temp[0]);
-          $temp = array_values($temp);
-
-      */
 
       if(!isset($tempCourse[0])){
         $tempCourse = array();
@@ -320,12 +286,7 @@ class ApproveGradeController extends Controller
           return view('approveGrade.index' , ['courses' => $tempCourse,'yearInfo' => $yearInfo]);
 
 
-    /*
-      $yearInfo  = Offered_Courses::select('curriculum_year')
-                ->get();
-      $courses = [];
-      return view('approveGrade.index' , ['courses' => $courses,'yearInfo' => $yearInfo]);
-      */
+  */
   }
 
   public function postApprovePage(Request $request){
@@ -333,6 +294,7 @@ class ApproveGradeController extends Controller
 
     $redi  = "approveGrade/".$request->input('year')."/".$request->input('semester');
     return redirect($redi);
+    /*
     $courses  = Academic_Year::Join('offered_courses','offered_courses.classroom_id','=','academic_year.classroom_id')
             ->Join('curriculums', function($join)
                          {
@@ -350,20 +312,7 @@ class ApproveGradeController extends Controller
             ->orderBy('datetime','desc')
             ->get();
 
-    /*
 
-    $courses  = Offered_Courses::leftJoin('grades','grades.open_course_id','=','offered_courses.open_course_id')
-          ->Join('curriculums','offered_courses.course_id','=','curriculums.course_id')
-          ->Join('academic_year','offered_courses.classroom_id','=','academic_year.classroom_id')
-          ->leftJoin('data_status','grades.data_status','=','data_status.data_status')
-          ->where('offered_courses.curriculum_year', $request->input('year'))
-          ->where('offered_courses.semester',$request->input('semester'))
-          ->groupBy('grades.datetime','grades.open_course_id')
-          ->select('offered_courses.open_course_id','offered_courses.curriculum_year','offered_courses.course_id','academic_year.grade_level','grades.grade','grades.quater'
-                  ,'curriculums.course_name','data_status.data_status_text','grades.datetime','grades.semester','offered_courses.is_elective')
-          ->orderBy('course_id','asc')
-          ->orderBy('datetime','desc')
-          ->get();*/
 
     $check = 0;
     $count = 0;
@@ -402,15 +351,6 @@ class ApproveGradeController extends Controller
       unset($tempCourse[$num]);
     }
     $tempCourse = array_values($tempCourse);
-    /*
-    $saveUnset = array_unique($saveUnset);
-    $temp = $courses->all();
-
-
-    unset($temp[0]);
-    $temp = array_values($temp);
-
-*/
 
 if(!isset($tempCourse[0])){
   $tempCourse = array();
@@ -424,19 +364,13 @@ $yearInfo  = Academic_Year::select('academic_year')
 ->groupBy('academic_year')
 ->get();
     return view('approveGrade.index' , ['courses' => $tempCourse,'yearInfo' => $yearInfo]);
+    */
   }
 
   public function acceptAll(Request $request){
     $year = $request->input('year');
     $semseter = $request->input('semester');
-/*
-    $grade  = Grade::where('academic_year',$year)
-                  ->where('semester',$semseter)
-                  ->where('data_status',0)
-                  ->groupBy('datetime','open_course_id')
-                  ->orderBy('datetime','desc')
-                  ->update(['data_status' => 1]);
-                  */
+
 
     $grade  = Grade::join('offered_courses','grades.open_course_id','=','offered_courses.open_course_id')
                   ->where('grades.academic_year',$year)
@@ -509,7 +443,7 @@ $yearInfo  = Academic_Year::select('academic_year')
 
     $redi  = "approveGrade/".$request->input('year')."/".$request->input('semester');;
     return redirect($redi)->with('status', 'Approve!');
-  }
+  } // End Accept
 
   public function cancelAll(Request $request){
     $year = $request->input('year');
@@ -568,7 +502,7 @@ $yearInfo  = Academic_Year::select('academic_year')
 
         $redi  = "approveGrade/".$request->input('year')."/".$request->input('semester');;
         return redirect($redi)->with('status', 'Cancel!');
-  }
+  }// End Cancel All
 
   public function cancel(Request $request){
     $openID = $request->input('open_course_id');
@@ -585,7 +519,7 @@ $yearInfo  = Academic_Year::select('academic_year')
 
     $redi  = "approveGrade/".$request->input('year')."/".$request->input('semester');;
     return redirect($redi)->with('status', 'Cancel!');
-  }
+  } // End Cancel
 
   public function Download(Request $request)
   {
@@ -629,12 +563,12 @@ $yearInfo  = Academic_Year::select('academic_year')
         $sheet->setCellValue('D2', 'automatically. You are only required to fill in the highlighted sections.');
         $sheet->setCellValue('D3', 'High school teachers, hover here for a special note');
         $sheet->setCellValue('D6', 'Q2');
-        $sheet->setCellValue('E6', 'Sum 1');
+        $sheet->setCellValue('E6', 'Final');
         $sheet->setCellValue('F6', 'Sem 1');
         $sheet->setCellValue('G5', '2nd Semester');
-        $sheet->setCellValue('G6', 'Q3');
-        $sheet->setCellValue('H6', 'Q4');
-        $sheet->setCellValue('I6', 'Sum 2');
+        $sheet->setCellValue('G6', 'Q1');
+        $sheet->setCellValue('H6', 'Q2');
+        $sheet->setCellValue('I6', 'Final');
         $sheet->setCellValue('J6', 'Sem 2');
         $sheet->setCellValue('K5', 'Grade');
         $sheet->setCellValue('K6', 'Average');
@@ -681,17 +615,23 @@ $yearInfo  = Academic_Year::select('academic_year')
         });
 
         $colGrade = '';
-        if($request->input('quater') === '1'){
+        if($request->input('quater') === '1' && $request->input('semester') === '1'){
           $colGrade = 'C';
         }
-        else if($request->input('quater') === '2'){
+        else if($request->input('quater') === '2' && $request->input('semester') === '1'){
           $colGrade = 'D';
         }
-        else if($request->input('quater') === '3'){
+        else if($request->input('quater') === '3' && $request->input('semester') === '1'){
+          $colGrade = 'E';
+        }
+        else if($request->input('quater') === '1' && $request->input('semester') === '2'){
           $colGrade = 'G';
         }
-        else if($request->input('quater') === '4'){
+        else if($request->input('quater') === '2' && $request->input('semester') === '2'){
           $colGrade = 'H';
+        }
+        else if($request->input('quater') === '3' && $request->input('semester') === '2'){
+          $colGrade = 'I';
         }
 
 

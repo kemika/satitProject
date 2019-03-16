@@ -46,12 +46,37 @@ Route::post('/manageCurriculum/createNewSubject', 'ManageCurriculumController@cr
 
 //Route::post('/manageCurriculum/edit', 'ManageCurriculumController@edit');
 Route::get('/manageCurriculum/{year}', 'ManageCurriculumController@editWithYear');
-
 Route::get('/manageTeachers', 'ManageTeachersController@index');
 Route::put('/manageTeachers/update', 'ManageTeachersController@update');
 
 
 Route::get('/manageAcademic', 'ManageAcademicController@index');
+Route::post('/manageAcademic/createNewAcademic', 'ManageAcademicController@createNewAcademic');
+Route::post('/manageAcademic/changeSelYear', 'ManageAcademicController@changeEditAcademicYear');
+Route::post('/manageAcademic/addNewAca', 'ManageAcademicController@addNewAcademic');
+Route::post('/manageAcademic/activeAcademicYear', 'ManageAcademicController@activeAcademicYear');
+Route::get('/editCurrentAcademic', 'ManageAcademicController@editCurAcademicYear');
+Route::get('/editAcademic/{year}', 'ManageAcademicController@editAcademicYear');
+// Subject Mangement
+Route::get('/assignSubject/{year}/{grade}/{room}', 'ManageAcademicController@assignSubject');
+Route::post('/assignSubject/changeSelYear', 'ManageAcademicController@changeCurYear');
+Route::post('/assignSubject/add', 'ManageAcademicController@addSubject');
+Route::post('/assignSubject/edit', 'ManageAcademicController@editSubject');
+Route::post('/assignSubject/remove', 'ManageAcademicController@removeSubject');
+Route::post('/assignSubject/importFromPrevious', 'ManageAcademicController@importSubFromPrevious');
+// Student Mangement
+Route::get('/assignStudent/{year}/{grade}/{room}', 'ManageAcademicController@assignStudent');
+Route::post('/assignStudent/add', 'ManageAcademicController@addStudent');
+Route::post('/assignStudent/remove', 'ManageAcademicController@removeStudent');
+Route::post('/assignStudent/importFromPrevious', 'ManageAcademicController@importStdFromPrevious');
+// Teacher Mangement
+Route::get('/assignTeacher/{year}/{grade}/{room}', 'ManageAcademicController@assignTeacher');
+Route::post('/assignTeacher/add', 'ManageAcademicController@addTeacher');
+Route::post('/assignTeacher/remove', 'ManageAcademicController@removeTeacher');
+Route::post('/assignTeacher/importFromPrevious', 'ManageAcademicController@importTeacherFromPrevious');
+
+Route::post('/manageRoom/add', 'ManageAcademicController@addRoom');
+Route::post('/manageRoom/remove', 'ManageAcademicController@removeRoom');
 
 Auth::routes();
 
@@ -61,6 +86,21 @@ Route::get('export-file/{type}', 'UploadGradeController@exportExcel')->name('exp
 Route::post('/uploadGrade/import', 'UploadGradeController@import');
 Route::get('/upload', 'UploadGradeController@upload');
 Route::post('/getUpload', 'UploadGradeController@getUpload');
+Route::post('/getUploadComments', 'UploadGradeController@getUploadComments');
+Route::post('/getUploadHeightAndWeight', 'UploadGradeController@getUploadHeightAndWeight');
+Route::post('/getUploadBehavior', 'UploadGradeController@getUploadBehavior');
+Route::post('/getUploadAttendance', 'UploadGradeController@getUploadAttendance');
+Route::post('/getUploadActivities', 'UploadGradeController@getUploadActivities');
+//Route::post('/uploadErrorDetail', 'UploadGradeController@getUploadBehavior');
+
+
+
+
+Route::get('export-height/{type}', 'UploadGradeController@exportHeight')->name('export.height');
+Route::get('export-comments/{type}', 'UploadGradeController@exportComments')->name('export.comments');
+Route::get('export-behavior/{type}', 'UploadGradeController@exportBehavior')->name('export.behavior');
+Route::get('export-attandance/{type}', 'UploadGradeController@exportAttandance')->name('export.attandance');
+Route::get('export-activities/{type}', 'UploadGradeController@exportActivities')->name('export.activities');
 
 Route::get('/viewGrade', 'ViewGradeController@index');
 Route::put('/viewGrade/result', 'ViewGradeController@result');
@@ -69,14 +109,46 @@ Route::put('/viewGrade/result', 'ViewGradeController@result');
 
 
 Route::get('/transcript', 'TranscriptController@index');
+Route::get('/transcript/room/{classroom_id}','TranscriptController@studentList');
+Route::get('/exportTranscript/{student_id}/{download_all}/{folder_name}','TranscriptController@exportTranscript');
+Route::get('/transcript/pdf','TranscriptController@exportTranscriptPDF');
+Route::get('/transcript/pdf_all/{classroom_id}/{academic_year}','TranscriptController@exportPDFAll');
+
+
+
+
+Route::get('porbar','ReportCardController@index2');
 
 
 
 Route::get('/export','ExportController@index');
+Route::get('/export/room/{academic_year}/{semester}/{grade_level}/{room}','ExportController@show');
+Route::get('/exportHeight/{classroom_id}/{curriculum_year}','ExportController@exportHeight');
+Route::get('/exportComments/{classroom_id}/{curriculum_year}','ExportController@exportComments');
+Route::get('/exportBehavior/{classroom_id}/{curriculum_year}','ExportController@exportBehavior');
+Route::get('/exportAttandance/{classroom_id}/{curriculum_year}','ExportController@exportAttandance');
+Route::get('/exportActivities/{classroom_id}/{curriculum_year}','ExportController@exportActivities');
+// Route::get('/export2/{academic_year}/{semester}//','ExportController@show');
+Route::get('/export_menu','ExportController@index2');
 
 
-Route::get('/reportCard', 'ReportCardController@index');
+Route::get('/reportCard', 'ReportCardController@index2');
 Route::get('/report_card/room/{classroom_id}','ReportCardController@Room');
-Route::get('/exportReportCard/{student_id}/{academic_year}', 'ReportCardController@exportPDF')->name('export.pdf');
+Route::get('/exportReportCard/{student_id}/{academic_year}/{download_all}/{folder_name}', 'ReportCardController@exportPDF')->name('export.pdf');
 Route::get('/export_grade/{classroom_id}/{course_id}/{curriculum_year}','ExportController@exportExcel');
 Route::get('/export_elective_course/{classroom_id}/{course_id}/{curriculum_year}','ExportController@exportElectiveCourseForm');
+Route::get('/exportReportCardDownloadAll/{classroom_id}/{academic_year}','ReportCardController@exportPDFAll');
+
+
+
+Route::get('/exportForm', 'ReportCardController@exportForm');
+Route::get('/exportGrade1', 'ReportCardController@exportGrade1');
+Route::get('/exportGrade2', 'ReportCardController@exportGrade2');
+Route::get('/exportGrade3', 'ReportCardController@exportGrade3');
+
+Route::get('/manageDirector', 'ManageDirectorController@index');
+Route::put('/manageDirector/update', 'ManageDirectorController@update');
+
+Route::get('/download_all', 'ExportController@download_all')->name('create-zip');
+Route::get('/api', 'ViewGradeController@api');
+Route::get('/api2', 'ViewGradeController@api2');

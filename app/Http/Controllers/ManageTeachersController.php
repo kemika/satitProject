@@ -8,7 +8,11 @@ use App\Teacher;
 class ManageTeachersController extends Controller
 {
   public function index(){
-    $teachers  = Teacher::all();
+    $teachers  = Teacher::join('teacher_status','teachers.teacher_status','=','teacher_status.teacher_status')
+    ->select('teachers.teacher_id','teachers.firstname','teachers.lastname','teacher_status.teacher_status_text')
+    ->orderBy('teachers.teacher_id','asc')
+    ->get();
+    //dd($teachers);
 
     return view('manageTeachers.index' , ['teachers' => $teachers]);
   }
@@ -17,17 +21,17 @@ class ManageTeachersController extends Controller
   {
       //
 
-      $teacher  = Teacher::all()->where('id', $request->input('id'))->first();
+      $teacher  = Teacher::all()->where('teacher_id', $request->input('teacherID'))->first();
       $teacher->firstname=$request->input('firstname');
       $teacher->lastname=$request->input('lastname');
-      $teacher->nationality=$request->input('nationality');
-      $teacher->status=$request->input('status');
-
-
+      $teacher->teacher_status=$request->input('status');
 
       $teacher->save();
 
-      $teachers  = Teacher::all();
+      $teachers  = Teacher::join('teacher_status','teachers.teacher_status','=','teacher_status.teacher_status')
+      ->select('teachers.teacher_id','teachers.firstname','teachers.lastname','teacher_status.teacher_status_text')
+      ->orderBy('teachers.teacher_id','asc')
+      ->get();
       return view('manageTeachers.index' , ['teachers' => $teachers]);
   }
 

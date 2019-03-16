@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Grade extends Model
 {
-  public $table  = 'Grades';
+  public $table  = 'grades';
     //
 }

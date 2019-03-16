@@ -102,7 +102,7 @@
 
 <div class="page-break"></div>
 
-<center><h4 class="heading">SEOND SEMESTER REPORT</h4></center>
+<center><h4 class="heading">SECOND SEMESTER REPORT</h4></center>
 <table class="nameStyle">
     <tr>
       <th scope="col">Student Name</th>
@@ -846,7 +846,7 @@
 
 
 .classroomStyle{
-  font-size: 14px;
+  font-size: 12px;
   position: absolute;
   right: 1px;
   bottom: -50px;
