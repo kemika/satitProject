@@ -94,7 +94,9 @@ class ManageAcademicController extends Controller
   }
 
   public function addNewAcademic(){
-    $academic  = Academic_Year::orderBy('academic_year', 'desc')->get();
+
+    $getYear  = Academic_Year::orderBy('academic_year', 'desc')->first();
+    $academic  = Academic_Year::where('academic_year', $getYear->academic_year)->get();
 
       try{
         foreach ($academic as $aca) {
