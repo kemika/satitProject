@@ -45,14 +45,14 @@
 
 </head>
 
-<h1> Assign Student to {{ $grade }}/{{ $room }} {{ $cur_year }} </h1>
+<h1> Assign Teacher to {{ $grade }}/{{ $room }} {{ $cur_year }} </h1>
 
 <center>
 <div class="row" style="width: 120rem;">
     <table class="table table-hover" id="table" style="width: 120rem;">
       <thead>
         <tr>
-          <th scope="col">Student ID</th>
+          <th scope="col">Teacher ID</th>
           <th scope="col">First Name</th>
           <th scope="col">Last Name</th>
           <th scope="col">Remove</th>
@@ -60,12 +60,12 @@
       </thead>
       <tbody>
 
-        @foreach ($stds as $std)
+        @foreach ($teachers as $teacher)
           <tr>
-            <td>{{ $std->student_id}}</td>
-            <td>{{ $std->firstname }}</td>
-            <td>{{ $std->lastname }}</td>
-            <td><button type="button" class="btn btn-danger" onclick="removeStd(this.id)"   id="btnAdd{{ $std->student_id }}">Remove</button></td>
+            <td>{{ $teacher->teacher_id}}</td>
+            <td>{{ $teacher->firstname }}</td>
+            <td>{{ $teacher->lastname }}</td>
+            <td><button type="button" class="btn btn-danger" onclick="removeTeacher(this.id)"   id="btnAdd{{ $teacher->teacher_id }}">Remove</button></td>
           </tr>
       @endforeach
 
@@ -77,11 +77,11 @@
 </center>
 
 <center>
-<div class="modal fade" id="showStd" role="dialog">
+<div class="modal fade" id="showTeacher" role="dialog">
   <div class="modal-dialog modal-lg" >
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" style="margin-left:10px;">Add Students</h4>
+        <h4 class="modal-title" style="margin-left:10px;">Add Teachers</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
@@ -89,10 +89,10 @@
 
 
           <div class="container">
-            <table class="table table-hover" id="tableAddStd" style="width:74rem;">
+            <table class="table table-hover" id="tableAddTeacher" style="width:74rem;">
               <thead>
                 <tr>
-                  <th scope="col">Student ID</th>
+                  <th scope="col">Teacher ID</th>
                   <th scope="col">First Name</th>
                   <th scope="col">Last Name</th>
                   <th scope="col">Add</th>
@@ -100,14 +100,14 @@
               </thead>
               <tbody>
                 <?php $c=0; ?>
-                @foreach ($allStd as $std)
+                @foreach ($allTeacher as $teacher)
                 <?php $c+=1 ?>
-                  <tr id="rowID{{ $std->student_id }}">
-                    <td>{{ $std->student_id }}</td>
-                    <td>{{ $std->firstname }}</td>
-                    <td>{{ $std->lastname }}</td>
+                  <tr id="rowID{{ $teacher->teacher_id }}">
+                    <td>{{ $teacher->teacher_id }}</td>
+                    <td>{{ $teacher->firstname }}</td>
+                    <td>{{ $teacher->lastname }}</td>
                     <td>
-                      <button type="button" class="btn btn-info" onclick="addStdBtn(this.id)"  value="0" id="btnAdd{{ $std->student_id }}">
+                      <button type="button" class="btn btn-info" onclick="addTeacherBtn(this.id)"  value="0" id="btnAdd{{ $teacher->teacher_id }}">
                         Add
                       </button>
 
@@ -142,7 +142,7 @@
 
 
   <div class="col">
-    <button class="btn btn-success" data-toggle='modal' data-target='#showStd'>Add Student</button>
+    <button class="btn btn-success" data-toggle='modal' data-target='#showTeacher'>Add Teacher</button>
   </div>
 
 
@@ -170,26 +170,29 @@
   var checkAdd = false;
   $(document).ready(function() {
     $('#table').DataTable();
-    $('#tableAddStd').DataTable();
+    $('#tableAddTeacher').DataTable();
     jQuery.noConflict();
-    $('#showStd').on('hide.bs.modal', function (e) {
+    $('#showTeacher').on('hide.bs.modal', function (e) {
       if(checkAdd){
         location.reload();
       }
     });
   });
 
-  function addStdBtn(id){
+  function addTeacherBtn(id){
+
+
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     var grade1 = $('meta[name="grade_data"]').attr('content');
     var room1 = $('meta[name="room_data"]').attr('content');
     var year1 = $('meta[name="year_data"]').attr('content');
-    var std_id1 = id.replace('btnAdd','');
+    var teacher_id1 = id.replace('btnAdd','');
+
     if (document.getElementById(id).value == '0') {
       $.ajax({
          type:'POST',
-         url:'/assignStudent/add',
-         data:{_token: CSRF_TOKEN,std_id:std_id1,grade:grade1,room:room1,year:{{$cur_year}}},
+         url:'/assignTeacher/add',
+         data:{_token: CSRF_TOKEN,teacher_id:teacher_id1,grade:grade1,room:room1,year:{{$cur_year}}},
          success:function(data){
             alert(data.Status);
             if(data.Status === "success"){
@@ -201,12 +204,12 @@
          }
       });
     }else{
-      var re = confirm("Are you sure you would like to remove this student from "+grade1+"/"+room1+"?");
+      var re = confirm("Are you sure you would like to remove this teacher from "+grade1+"/"+room1+"?");
       if(re == true){
         $.ajax({
            type:'POST',
-           url:'/assignStudent/remove',
-           data:{_token: CSRF_TOKEN,std_id:std_id1,grade:grade1,room:room1,year:{{$cur_year}}},
+           url:'/assignTeacher/remove',
+           data:{_token: CSRF_TOKEN,teacher_id:teacher_id1,grade:grade1,room:room1,year:{{$cur_year}}},
            success:function(data){
               alert(data.Status);
               if(data.Status === "success"){
@@ -232,18 +235,18 @@
     }*/
   }
 
-  function removeStd(id){
+  function removeTeacher(id){
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     var grade1 = $('meta[name="grade_data"]').attr('content');
     var room1 = $('meta[name="room_data"]').attr('content');
-    var std_id1 = id.replace('btnAdd','');
-    var re = confirm("Are you sure you would like to remove this student from "+grade1+"/"+room1+"?");
+    var teacher_id1 = id.replace('btnAdd','');
+    var re = confirm("Are you sure you would like to remove this teacher from "+grade1+"/"+room1+"?");
     if(re == true){
 
       $.ajax({
          type:'POST',
-         url:'/assignStudent/remove',
-         data:{_token: CSRF_TOKEN,std_id:std_id1,grade:grade1,room:room1,year:{{$cur_year}}},
+         url:'/assignTeacher/remove',
+         data:{_token: CSRF_TOKEN,teacher_id:teacher_id1,grade:grade1,room:room1,year:{{$cur_year}}},
          success:function(data){
             alert(data.Status);
             if(data.Status === "success"){

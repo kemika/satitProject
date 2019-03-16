@@ -96,7 +96,7 @@
                 <td>{{ $detail->room }}</td>
                 <td>{{ $detail->grade_level }}/{{ $detail->room }}</td>
             @endif
-            <td><button type="button" onclick="" class="btn btn-primary" >
+            <td><button type="button" onclick="window.location.href='/assignTeacher/{{$detail->academic_year}}/{{$detail->grade_level}}/{{$detail->room}}'" class="btn btn-primary" >
               <span class="glyphicon glyphicon-user"></span>&nbsp;Edit</button>
             </td>
             <td><button type="button" onclick="window.location.href='/assignStudent/{{$detail->academic_year}}/{{$detail->grade_level}}/{{$detail->room}}'" class="btn btn-primary" >
@@ -160,6 +160,15 @@
     <!--action="/manageCurriculum/importFromPrevious" -->
     @csrf
 
+    <button type="button" onclick="importTeacher()" class="btn btn-info">Import teachers from previous year</button>
+  </form>
+  </div>
+
+  <div class="col">
+  <form class="form-inline"  method="post">
+    <!--action="/manageCurriculum/importFromPrevious" -->
+    @csrf
+
     <button type="button" onclick="importStd()" class="btn btn-info">Import students from previous year</button>
   </form>
   </div>
@@ -206,7 +215,7 @@
   var checkAdd = false;
   $(document).ready(function() {
     $('#table').DataTable();
-    
+
     jQuery.noConflict();
 } );
   function addRoom(){
@@ -260,6 +269,30 @@
     }*/
   }
 
+  function importTeacher(){
+    var re = confirm("Are you sure you would like to import teacher from previous year?\nAll this year teacher data will be deleted before import!!!");
+    if(re == true){
+      $("#Waiting").modal({backdrop: 'static', keyboard: false});
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+      var curr_year = {{$cur_year}}
+      $.ajax({
+         type:'POST',
+         url:'/assignTeacher/importFromPrevious',
+         data:{_token: CSRF_TOKEN,year:curr_year},
+         success:function(data){
+           $("#Waiting").modal('hide');
+           if(data.Status === 'success'){
+             alert(data.Status);
+           }
+           else{
+              alert(data.Status);
+             //alert('No previous curriculum year!');
+           }
+         }
+      });
+    }
+  }
+
   function importStd(){
     var re = confirm("Are you sure you would like to import student from previous year?\nAll this year student data will be deleted before import!!!");
     if(re == true){
@@ -282,10 +315,7 @@
            }
          }
       });
-
     }
-
-
   }
 
   function importSubject(){

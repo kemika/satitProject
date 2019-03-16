@@ -8,6 +8,7 @@ use App\Curriculum;
 use App\Offered_Courses;
 use App\Student_Grade_level;
 use App\Homeroom;
+use App\Teacher;
 use App\Student;
 use App\Information;
 
@@ -351,7 +352,9 @@ class ManageAcademicController extends Controller
     //$academic  = Academic_Year::orderBy('academic_year', 'desc')->groupBy('academic_year')->first();
     //$year = $academic->academic_year;
     $year = $request->input('year');
-
+    if(!$this->checkAvailableYearRoomLevel($year,$grade,$room)){
+      return response()->json(['Status' => "Could not add to this academic year or grade_level/room does not exist"], 200);
+    }
 
 
 
@@ -428,6 +431,246 @@ class ManageAcademicController extends Controller
 
     return response()->json(['Status' => 'success'], 200);
   }
+
+  // Teacher
+
+
+    public function assignTeacher($year,$grade,$room,Request $request){
+      $academicCheck = Academic_Year::where('academic_year', $year)
+                                ->where('room', $room)
+                                ->where('grade_level', $grade)
+                                ->first();
+      if(!$this->checkAvailableYearRoomLevel($year,$grade,$room)){
+        $redi  = "editAcademic/".$this->getCurrentActiveYear();
+        return redirect($redi);
+      }
+
+      $curricula_year  = Curriculum::orderBy('curriculum_year', 'asc')->groupBy('curriculum_year')->get();
+      $academic  = Academic_Year::orderBy('academic_year', 'desc')->groupBy('academic_year')->first();
+
+      if($room === 0){
+        $academic  = Academic_Year::where('academic_year', $year)
+                                  ->where('grade_level', $grade)
+                                  ->get();
+      }
+      else {
+        $academic  = Academic_Year::where('academic_year', $year)
+                                  ->where('room', $room)
+                                  ->where('grade_level', $grade)
+                                  ->get();
+      }
+      $selCur = 0;
+      if(!isset($academic[0])){ // No classroom id
+        $courses = [];
+        $teacher_in = [];
+      }
+      else{
+        $teacher_in  = Homeroom::where('classroom_id', $academic[0]->classroom_id)
+                ->Join('teachers','homeroom.teacher_id','teachers.teacher_id')
+                ->select('teachers.name_title','teachers.firstname','teachers.lastname','teachers.teacher_id')
+                ->get();
+      }
+      $teacher_cannot_add  = Homeroom::Join('academic_year','homeroom.classroom_id','academic_year.classroom_id')
+                                ->where('academic_year.academic_year', $year)
+                                ->get();
+
+      $temp = Academic_Year::where('academic_year', $year)
+                            ->pluck('classroom_id');
+      $in = array();
+      foreach ($teacher_cannot_add as $teacher) {
+        $in[] = $teacher->teacher_id;
+      }
+      /*
+      $allteacher = Teacher::where('teacher_status',0)
+                        ->leftJoin('teacher_grade_levels','teacher_grade_levels.teacher_id','teachers.teacher_id')
+                        ->leftJoin('academic_year','teacher_grade_levels.classroom_id','academic_year.classroom_id')
+                        ->where('teacher_grade_levels.classroom_id','!=',$academic[0]->classroom_id)
+                        ->select('teachers.teacher_id','teachers.firstname','teachers.lastname')
+                        ->get();
+      */
+      $allTeacher = Teacher::where('teacher_status',0)
+                        ->whereNotIn('teacher_id',$in)
+                        ->get();
+      return view('manageAcademic.assignTeacher' , ['cur_year' => $year,'grade'=>$grade,'room'=>$room,'teachers'=>$teacher_in,'curricula'=>$curricula_year
+                  ,'allTeacher'=>$allTeacher,'class_id'=>$academic[0]->classroom_id]);
+    }
+
+    public function addTeacher(Request $request){
+      try{
+
+
+      $room = $request->input('room');
+      $grade = $request->input('grade');
+      $teacher_id = $request->input('teacher_id');
+      $curYear = Curriculum::orderBy('curriculum_year', 'desc')->groupBy('curriculum_year')->get();
+      //$academic  = Academic_Year::orderBy('academic_year', 'desc')->groupBy('academic_year')->first();
+      //$year = $academic->academic_year;
+      $year = $request->input('year');
+      if(!$this->checkAvailableYearRoomLevel($year,$grade,$room)){
+        return response()->json(['Status' => "Could not add to this academic year or grade/room does not exist"], 200);
+      }
+
+
+
+      $checkAca =  Academic_Year::where('academic_year',$year)
+                                ->where('grade_level',$grade)
+                                ->where('room',$room)
+                                ->get();
+
+      if(!isset($checkAca[0])){ // No classroom
+        $createAca = new Academic_Year;
+        $createAca->academic_year = $year;
+        $createAca->grade_level = $grade;
+        $createAca->room = $room;
+        $createAca->curriculum_year = $curYear[0]->curriculum_year;
+        $createAca->save();
+
+
+      }
+      $checkAca =  Academic_Year::where('academic_year',$year)
+                                ->where('grade_level',$grade)
+                                ->where('room',$room)
+                                ->get();
+
+      $checkTeacherExistYear =  Homeroom::where('teacher_id',$teacher_id)
+                                                ->leftJoin('academic_year','homeroom.classroom_id','academic_year.classroom_id')
+                                                ->where('academic_year.academic_year',$year)
+                                                ->first();
+      if($checkTeacherExistYear != null){
+        return response()->json(['Status' => 'teacher already in grade '.$checkTeacherExistYear->grade_level.' room '.$checkTeacherExistYear->room], 200);
+      }
+    }// end try
+    catch(\Exception $e){
+       // do task when error
+       return response()->json(['Status' => $e->getMessage()], 200);
+
+    }
+      try{
+      $createTeacherClass = new Homeroom;
+      $createTeacherClass->classroom_id = $checkAca[0]->classroom_id;
+      $createTeacherClass->teacher_id = $teacher_id;
+      $createTeacherClass->save();
+      }
+      catch(\Exception $e){
+         // do task when error
+         return response()->json(['Status' => $e->getMessage()], 200);
+
+      }
+
+      return response()->json(['Status' => 'success'], 200);
+    }
+
+    public function removeTeacher(Request $request){
+      $room = $request->input('room');
+      $grade = $request->input('grade');
+      $teacher_id = $request->input('teacher_id');
+      $curYear = Curriculum::orderBy('curriculum_year', 'desc')->groupBy('curriculum_year')->get();
+      $academic  = Academic_Year::orderBy('academic_year', 'desc')->groupBy('academic_year')->first();
+      $year = $request->input('year');
+
+      if(!$this->checkAvailableYearRoomLevel($year,$grade,$room)){
+        return response()->json(['Status' => "Could not add to this academic year or grade_level/room does not exist"], 200);
+      }
+
+
+
+
+      try{
+        $checkteacherExistYear =  Homeroom::where('teacher_id',$teacher_id)
+                                                  ->leftJoin('academic_year','homeroom.classroom_id','academic_year.classroom_id')
+                                                  ->where('academic_year.academic_year',$year)
+                                                  ->where('academic_year.room',$room)
+                                                  ->where('academic_year.grade_level',$grade)
+                                                  ->delete();
+      }
+      catch(\Exception $e){
+         // do task when error
+         return response()->json(['Status' => $e->getMessage()], 200);
+
+      }
+
+      return response()->json(['Status' => 'success'], 200);
+    }
+
+    public function importTeacherFromPrevious(Request $request){
+      try{
+      $activeYear = $this->getCurrentActiveYear();
+
+      $year = $request->input('year');
+      if($year < $activeYear){
+        return response()->json(['Status' => "Academic Year ".$year." could not edit"], 200);
+      }
+      $teachers =  Homeroom::where('academic_year',$year-1)
+                                ->leftJoin('academic_year','academic_year.classroom_id','homeroom.classroom_id')
+                                ->get();
+                                /*
+      if($checkAca === null){ // No classroom
+        return response()->json(['Status' => 'No previous year teacher, Can not import', 200]);
+      }*/
+
+
+        $checkTeacherExistYear =  Homeroom::leftJoin('academic_year','homeroom.classroom_id','academic_year.classroom_id')
+                                                  ->where('academic_year.academic_year',$year)
+                                                  ->delete();
+      }
+      catch(\Exception $e){
+         // do task when error
+         return response()->json(['Status' => $e->getMessage()], 200);
+
+      }
+
+      try{
+      $class_temp = -1;
+      foreach ($teachers as $teacher) {
+        if($class_temp != $teacher->classroom_id){
+          $class_temp = $teacher->classroom_id;
+
+          $checkAca =  Academic_Year::where('academic_year',$year)
+                                    ->where('grade_level',$teacher->grade_level)
+                                    ->where('room',$teacher->room)
+                                    ->first();
+
+          if($checkAca == null){ // No classroom
+            $createAca = new Academic_Year;
+            $createAca->academic_year = $year;
+            $createAca->grade_level = $teacher->grade_level;
+            $createAca->room = $teacher->room;
+            $createAca->curriculum_year = $teacher->curriculum_year;
+            $createAca->save();
+          }
+
+
+        }
+        $this_class_id =  Academic_Year::where('academic_year',$year)
+                                    ->where('grade_level',$teacher->grade_level)
+                                    ->where('room',$teacher->room)
+                                    ->first();
+
+
+          $addteacher = new Homeroom;
+          $addteacher->teacher_id = $teacher->teacher_id;
+          $addteacher->classroom_id = $this_class_id->classroom_id;
+          $addteacher->save();
+        }
+
+
+      }
+      catch(\Exception $e){
+         // do task when error
+         return response()->json(['Status' => $e->getMessage()], 200);
+
+      }
+
+
+
+
+      return response()->json(['Status' => 'success'], 200);
+    }
+
+
+
+
+  // End Teacher
 
 
   public function createNewAcademic(Request $request){
