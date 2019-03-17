@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Academic_Year;
 use App\Curriculum;
 use App\Offered_Courses;
-use App\Student_Grade_level;
+use App\Student_Grade_Level;
 use App\Homeroom;
 use App\Teacher;
 use App\Student;
@@ -913,7 +913,7 @@ class ManageAcademicController extends Controller
       $class_id = $checkAca[0]->classroom_id;
       $temp = Offered_Courses::where('classroom_id',$class_id)->delete();
       $temp = Homeroom::where('classroom_id',$class_id)->delete();
-      $temp = Student_Grade_level::where('classroom_id',$class_id)->delete();
+      $temp = Student_Grade_Level::where('classroom_id',$class_id)->delete();
 
       $checkAca =  Academic_Year::where('academic_year',$year)
                                 ->where('grade_level',$grade)
