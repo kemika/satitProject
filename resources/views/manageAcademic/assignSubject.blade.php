@@ -70,6 +70,7 @@
         </div>
         <input hidden type="text" name="grade" value=' {{$grade}}'>
         <input hidden type="text" name="room" value=' {{$room}}'>
+        <input hidden type="text" name="year" value=' {{$cur_year}}'>
         <button type="submit" onclick="return confirm('If you change curriculum year, all subjects will be removed?');" class="btn btn-danger" >Change Curriculum Year</button>
       </form>
 

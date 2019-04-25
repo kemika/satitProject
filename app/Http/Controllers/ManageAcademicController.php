@@ -280,6 +280,7 @@ class ManageAcademicController extends Controller
     }
     $stds =  Student_Grade_Level::where('academic_year',$year-1)
                               ->leftJoin('academic_year','academic_year.classroom_id','student_grade_levels.classroom_id')
+                              ->where('grade_level','<>',12)
                               ->get();
                               /*
     if($checkAca === null){ // No classroom
@@ -320,7 +321,7 @@ class ManageAcademicController extends Controller
 
       }
       $this_class_id =  Academic_Year::where('academic_year',$year)
-                                  ->where('grade_level',$std->grade_level)
+                                  ->where('grade_level',($std->grade_level)+1)
                                   ->where('room',$std->room)
                                   ->first();
 
@@ -853,6 +854,11 @@ class ManageAcademicController extends Controller
         $this_class_id =  Academic_Year::where('academic_year',$year)
                                     ->where('grade_level',$sub->grade_level)
                                     ->where('room',$sub->room)
+                                    ->update(['curriculum_year' => $sub->curriculum_year]);
+
+        $this_class_id =  Academic_Year::where('academic_year',$year)
+                                    ->where('grade_level',$sub->grade_level)
+                                    ->where('room',$sub->room)
                                     ->first();
 
       }
@@ -890,13 +896,14 @@ class ManageAcademicController extends Controller
     $room = $request->input('room');
     $grade = $request->input('grade');
     $curYear = $request->input('selCur');
-    if($curYear === "---"){
-      $redi  = "assignSubject/".$grade."/".$room;
+    $year = $request->input('year');
+    $checkCurriculum = Curriculum::where('curriculum_year',$curYear)->first();
+    if($checkCurriculum == null){
+      $redi  = "assignSubject/".$year."/".$grade."/".$room;
       return redirect($redi);
     }
-    $academic  = Academic_Year::orderBy('academic_year', 'desc')->groupBy('academic_year')->first();
-    $year = $academic->academic_year;
 
+    try{
     $checkAca =  Academic_Year::where('academic_year',$year)
                               ->where('grade_level',$grade)
                               ->where('room',$room)
@@ -920,7 +927,14 @@ class ManageAcademicController extends Controller
                                 ->where('room',$room)
                                 ->update(['curriculum_year' => $curYear]);
     }
-    $redi  = "assignSubject/".$grade."/".$room;
+  }
+  catch(\Exception $e){
+   // do task when error
+   $redi  = "assignSubject/".$year."/".$grade."/".$room;
+   return redirect($redi);
+
+  }
+    $redi  = "assignSubject/".$year."/".$grade."/".$room;
     return redirect($redi);
   }
 }
