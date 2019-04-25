@@ -41,9 +41,11 @@
 </head>
 
 <script>
+var ta;
   $(document).ready(function() {
-    $('#table').DataTable();
+    ta = $('#table').DataTable();
 } );
+//test();
  </script>
 
 
