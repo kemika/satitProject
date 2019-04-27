@@ -42,10 +42,20 @@
 
 <script>
 var ta;
+
   $(document).ready(function() {
     ta = $('#table').DataTable();
+
+
 } );
+function testClick(){
+
+//alert(ta.page.info().start+" "+ta.page.info().end);
+alert(ta.rows( 'display' ).data()[0]);
+
+}
 //test();
+
  </script>
 
 
@@ -62,7 +72,7 @@ var ta;
           <th scope="col">Last Name</th>
           <th scope="col">Status</th>
           <th scope="col">Action</th>
-
+          <th scope="col">Graduated</th>
         </tr>
       </thead>
       <tbody>
@@ -74,9 +84,18 @@ var ta;
           <td>{{ $student->student_id }}</td>
           <td>{{ $student->firstname }}</td>
           <td>{{ $student->lastname }}</td>
-          <td>{{ $student->student_status_text }}</td>
+          <td id="status{{ $student->student_id }}" >{{ $student->student_status_text }}</td>
           <td><button type="button" class="btn btn-primary" data-toggle='modal' data-target='#{{$c}}'>Edit
   </button>
+      </td>
+      <td>
+        @if($student->student_status_text == "Active")
+          <button type="button" class="btn btn-success" onclick="graduated(this.id)" value="0" id="grad{{ $student->student_id }}" >Graduated
+          </button>
+        @else
+          <button type="button" class="btn btn-info" onclick="graduated(this.id)" value="1" id="grad{{ $student->student_id }}" >Active
+          </button>
+        @endif
       </td>
 
         </tr>
@@ -161,3 +180,46 @@ var ta;
 
 <div class="col-md-12" style="height: 30px;">
 </div>
+<meta name="csrf-token" content="{{ csrf_token() }}" />
+<script>
+function graduated(id){
+  var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+  var std_id1 = id.replace('grad','');
+  if (document.getElementById(id).value == '0') {
+    $.ajax({
+       type:'PUT',
+       url:'/manageStudents/graduate',
+       data:{_token: CSRF_TOKEN,studentID:std_id1},
+       success:function(data){
+          
+          if(data.Status === "success"){
+            document.getElementById(id).className = "btn btn-info";
+            document.getElementById(id).innerHTML = "Active";
+            document.getElementById(id).value = 1;
+            document.getElementById("status"+std_id1).innerHTML = "Graduated"
+          }
+       }
+    });
+  }else{
+    //var re = confirm("Are you sure you would like to remove this student from "+grade1+"/"+room1+"?");
+
+      $.ajax({
+         type:'PUT',
+         url:'/manageStudents/active',
+         data:{_token: CSRF_TOKEN,studentID:std_id1},
+         success:function(data){
+
+            if(data.Status === "success"){
+              document.getElementById(id).className = "btn btn-success";
+              document.getElementById(id).innerHTML = "Graduated";
+              document.getElementById(id).value = 0;
+              document.getElementById("status"+std_id1).innerHTML = "Active"
+            }
+         }
+      });
+
+
+  }
+
+}
+</script>
