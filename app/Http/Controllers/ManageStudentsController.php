@@ -41,6 +41,52 @@ class ManageStudentsController extends Controller
       return view('manageStudents.index' , ['students' => $students]);
   }
 
+  public function graduate(Request $request)
+  {
+      //dd($request->input('studentID'));
+      try{
+        $student  = Student::all()->where('student_id', $request->input('studentID'))->first();
+        //dd($student->student_id);
+        $student->student_status=2;
+        $student->save();
+      }
+      catch(\Exception $e){
+         // do task when error
+         return response()->json(['Status' => $e->getMessage()], 200);
+
+      }
+      return response()->json(['Status' => 'success'], 200);
+/*
+      $students  = Student::join('student_status','students.student_status','=','student_status.student_status')
+      ->select('students.student_id','students.firstname','students.lastname','student_status.student_status_text')
+      ->orderBy('students.student_id','asc')
+      ->get();
+      return view('manageStudents.index' , ['students' => $students]);*/
+  }
+
+  public function active(Request $request)
+  {
+      //dd($request->input('studentID'));
+      try{
+        $student  = Student::all()->where('student_id', $request->input('studentID'))->first();
+        //dd($student->student_id);
+        $student->student_status=0;
+        $student->save();
+      }
+      catch(\Exception $e){
+         // do task when error
+         return response()->json(['Status' => $e->getMessage()], 200);
+
+      }
+      return response()->json(['Status' => 'success'], 200);
+/*
+      $students  = Student::join('student_status','students.student_status','=','student_status.student_status')
+      ->select('students.student_id','students.firstname','students.lastname','student_status.student_status_text')
+      ->orderBy('students.student_id','asc')
+      ->get();
+      return view('manageStudents.index' , ['students' => $students]);*/
+  }
+
 
   // public function grade(){
   //   return view('grade.index');
