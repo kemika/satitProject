@@ -775,7 +775,7 @@ class UploadGradeController extends Controller
 
                                 $activity = new Activity_Record;
                                 $activity->student_id = $resultsStudent[$i]->students_id;
-                                $activity->open_course_id = $courseArr[$id . " 1"];
+                                $activity->open_course_id = $courseArr[$id . " 2"];
                                 $activity->grade_status = $grade_status;
                                 $activity->semester = 2;
                                 $activity->academic_year = $year;
