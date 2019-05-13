@@ -129,11 +129,11 @@
 
                 <tr>
                     <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
-                        /<span style="color:white">------</span>/ {{$student->academic_year}}
+                        /<span style="color:white">------</span>/ {{$student->academic_year+1}}
                     </td>
                     <td></td>
                     <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
-                        /<span style="color:white">------</span>/ {{$student->academic_year}}
+                        /<span style="color:white">------</span>/ {{$student->academic_year+1}}
                     </td>
                 </tr>
 
@@ -397,13 +397,18 @@
                             <th>Signature</th>
                             <th style="width:200px; border-bottom: 1.5px solid black;"></th>
                         </tr>
-                        <tr>
-                            <td></td>
-                            <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
-                                <span style="color:white">---------------</span>/
-                                <span style="color:white">------</span>/ {{$academic_year}}
-                            </td>
-                        </tr>
+                <tr>
+                    <td></td>
+                    <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
+                        <span style="color:white">---------------</span>/
+                        @if($i%2 != 0 && $i > 1)
+                        <span style="color:white">------</span>/ {{$academic_year+1}}
+                        @else
+                        <span style="color:white">------</span>/ {{$academic_year}}
+                        @endif
+
+                    </td>
+                </tr>
                     </table>
                 </div>
                 <br>
@@ -424,13 +429,18 @@
                             <th>Signature</th>
                             <th style="width:200px; border-bottom: 1.5px solid black;"></th>
                         </tr>
-                        <tr>
-                            <td></td>
-                            <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
-                                <span style="color:white">---------------</span>/
-                                <span style="color:white">------</span>/ {{$academic_year}}
-                            </td>
-                        </tr>
+                <tr>
+                    <td></td>
+                    <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
+                        <span style="color:white">---------------</span>/
+                        @if($i%2 != 0 && $i > 1)
+                        <span style="color:white">------</span>/ {{$academic_year+1}}
+                        @else
+                        <span style="color:white">------</span>/ {{$academic_year}}
+                        @endif
+                    </td>
+                </tr>
+
                     </table>
                 </div>
             </div>

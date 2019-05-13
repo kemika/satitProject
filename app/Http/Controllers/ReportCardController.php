@@ -746,7 +746,7 @@ class ReportCardController extends Controller
         if ($total_sem1_credit < SystemConstant::MIN_TO_ZERO) {
             $semester_1_gpa = 0;
         } else {
-            $semester_1_gpa = round($semester_1_gpa / $total_sem1_credit, 2);
+            $semester_1_gpa = $semester_1_gpa / $total_sem1_credit;
         }
 
         // Semester 2 computation
@@ -787,7 +787,8 @@ class ReportCardController extends Controller
             if ($total_sem2_credit < SystemConstant::MIN_TO_ZERO) {
                 $semester_2_gpa = 0;
             } else {
-                $semester_2_gpa = round($semester_2_gpa / $total_sem2_credit, 2);
+                //$semester_2_gpa = round($semester_2_gpa / $total_sem2_credit, 2);
+                $semester_2_gpa = $semester_2_gpa / $total_sem2_credit;
             }
             if ($total_credit < SystemConstant::MIN_TO_ZERO) {
                 $gpa = 0;
@@ -795,12 +796,16 @@ class ReportCardController extends Controller
                 $gpa /= $total_credit;
             }
         }
-//        if($grade_level <=6){
-//            // total subject in semester 1 and 2 should be equal
-//            $semester_2_gpa = round($semester_2_gpa / $total_sem2_subject, 2);
-//        }else {
+        if($grade_level <=6){
+            // total subject in semester 1 and 2 should be equal
+            $semester_2_gpa = $semester_2_gpa / $total_sem1_credit;
+        }else {
 
-//        }
+        }
+        // Properly round gpas
+        $semester_1_gpa = floor($semester_1_gpa * 100 ) / 100;
+        $semester_2_gpa = floor($semester_2_gpa * 100 ) / 100;
+        $gpa = floor($gpa * 100 ) / 100;
 
         // Pack data back to view_data
         $view_data['gpa'] = $gpa;
