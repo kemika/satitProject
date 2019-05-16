@@ -51,14 +51,14 @@
             <td class="center-cell">{{$grade['practice']}}</td>
             <td class="center-cell" style="border-right:2px solid black;">{{$grade['credits']}}</td>
 
-            <td class="center-cell">{{$grade['quater1_sem1']}}</td>
-            <td class="center-cell">{{$grade['quater2_sem1']}}</td>
-            <td class="center-cell">{{$grade['quater3_sem1']}}</td>
+            <td class="center-cell">{{$grade['quarter1_sem1']}}</td>
+            <td class="center-cell">{{$grade['quarter2_sem1']}}</td>
+            <td class="center-cell">{{$grade['quarter3_sem1']}}</td>
 
             <td class="center-cell" style="border-right:2px solid black;">{{$grade['semester1_grade']}}</td>
-            <td class="center-cell">{{$grade['quater1_sem2']}}</td>
-            <td class="center-cell">{{$grade['quater2_sem2']}}</td>
-            <td class="center-cell">{{$grade['quater3_sem2']}}</td>
+            <td class="center-cell">{{$grade['quarter1_sem2']}}</td>
+            <td class="center-cell">{{$grade['quarter2_sem2']}}</td>
+            <td class="center-cell">{{$grade['quarter3_sem2']}}</td>
             <td class="center-cell">{{$grade['semester2_grade']}}</td>
             <td class="center-cell" style="border-left:2px solid black;">{{$grade['year_grade']}}</td>
         </tr>

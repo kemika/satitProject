@@ -36,9 +36,9 @@
                 <td style="border-right:2px solid black;">{{$grade['course_name']}}</td>
                 <td>{{$grade['course_id']}}</td>
                 <td class="center-cell" style="border-right:2px solid black;">{{ $grade['credits']}}</td>
-                <td class="center-cell">{{ $grade['quater1']}}</td>
-                <td class="center-cell">{{ $grade['quater2']}}</td>
-                <td class="center-cell">{{ $grade['quater3']}}</td>
+                <td class="center-cell">{{ $grade['quarter1']}}</td>
+                <td class="center-cell">{{ $grade['quarter2']}}</td>
+                <td class="center-cell">{{ $grade['quarter3']}}</td>
 
                 @if($grade['semester_grade'] != "-")
                     <td class="center-cell">{{number_format($grade['semester_grade'],1) }}</td>
@@ -115,9 +115,9 @@
                 <td style="border-right:2px solid black;">{{$grade['course_name']}}</td>
                 <td>{{$grade['course_id']}}</td>
                 <td class="center-cell"  style="border-right:2px solid black;">{{ $grade['credits']}}</td>
-                <td class="center-cell">{{ $grade['quater1']}}</td>
-                <td class="center-cell">{{ $grade['quater2']}}</td>
-                <td class="center-cell">{{ $grade['quater3']}}</td>
+                <td class="center-cell">{{ $grade['quarter1']}}</td>
+                <td class="center-cell">{{ $grade['quarter2']}}</td>
+                <td class="center-cell">{{ $grade['quarter3']}}</td>
 
                 @if($grade['semester_grade'] != "-")
                     <td class="center-cell">{{number_format($grade['semester_grade'],1) }}</td>

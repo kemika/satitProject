@@ -481,10 +481,10 @@ public function exportElectiveCourseForm($classroom_id,$course_id,$curriculum_ye
         $sheet->setCellValue('A3', 'Room');
         $sheet->setCellValue('A4', 'Students ID');
         $sheet->setCellValue('B4', 'Students Name');
-        $sheet->setCellValue('C4', 'Quater 1');
-        $sheet->setCellValue('D4', 'Quater 2');
-        $sheet->setCellValue('E4', 'Quater 3');
-        $sheet->setCellValue('F4', 'Quater 4');
+        $sheet->setCellValue('C4', 'Quarter 1');
+        $sheet->setCellValue('D4', 'Quarter 2');
+        $sheet->setCellValue('E4', 'Quarter 3');
+        $sheet->setCellValue('F4', 'Quarter 4');
 
 
         $sheet->setWidth(array(

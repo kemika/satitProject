@@ -16,7 +16,7 @@ class CreateGrades extends Migration
         Schema::create('Grades', function (Blueprint $table) {
                       $table->string('student_id',50);
                       $table->unsignedInteger('open_course_id');
-                      $table->unsignedTinyInteger('quater');
+                      $table->unsignedTinyInteger('quarter');
                       $table->unsignedTinyInteger('semester');
                       $table->unsignedSmallInteger('academic_year');
                       $table->dateTimeTz('datetime');
@@ -26,7 +26,7 @@ class CreateGrades extends Migration
                       $table->unsignedTinyInteger('data_status');
                        $table->timestamps();
 
-                      $table->primary(['student_id','open_course_id','quater','semester','datetime','academic_year'],'grades_primary');
+                      $table->primary(['student_id','open_course_id','quarter','semester','datetime','academic_year'],'grades_primary');
 
                       $table->foreign('student_id')
                       ->references('student_id')

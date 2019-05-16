@@ -152,7 +152,7 @@
           <th scope="col">Course ID</th>
           <th scope="col">Course Name</th>
           <th scope="col">Grade Level</th>
-          <th scope="col">Quater</th>
+          <th scope="col">Quarter</th>
           <th scope="col">Room</th>
           <th scope="col">Date</th>
           <th scope="col"></th>
@@ -168,7 +168,7 @@
           <td>{{ $course->course_id }}</td>
           <td>{{ $course->course_name }}</td>
           <td>{{ $course->grade_level }}</td>
-          <td>{{ $course->quater }}</td>
+          <td>{{ $course->quarter }}</td>
           <td></td>
           <td>{{ $course->datetime}}</td>
           @if ($course->data_status_text === "Waiting Approval")
@@ -176,7 +176,7 @@
               <form  action="/approveGradeAccept" method="post">
                 @csrf
                   <input hidden type="text" name="open_course_id" value='{{ $course["open_course_id"] }}'>
-                  <input hidden type="text" name="quater" value='{{ $course["quater"] }}'>
+                  <input hidden type="text" name="quarter" value='{{ $course["quarter"] }}'>
                   <input hidden type="text" name="datetime" value='{{ $course["datetime"] }}'>
                   <input hidden type="text" name="year" value='{{ $course["academic_year"] }}'>
                   <input hidden type="text" name="semester" value='{{ $course["semester"] }}'>
@@ -186,7 +186,7 @@
               <form  action="/approveGradeCancel" method="post">
                 @csrf
                   <input hidden type="text" name="open_course_id" value='{{ $course["open_course_id"] }}'>
-                  <input hidden type="text" name="quater" value='{{ $course["quater"] }}'>
+                  <input hidden type="text" name="quarter" value='{{ $course["quarter"] }}'>
                   <input hidden type="text" name="datetime" value='{{ $course["datetime"] }}'>
                   <input hidden type="text" name="year" value='{{ $course["academic_year"] }}'>
                   <input hidden type="text" name="semester" value='{{ $course["semester"] }}'>
@@ -201,7 +201,7 @@
           <td><form  action="/approveGradeDownload" method="post">
             @csrf
               <input hidden type="text" name="open_course_id" value='{{ $course["open_course_id"] }}'>
-              <input hidden type="text" name="quater" value='{{ $course["quater"] }}'>
+              <input hidden type="text" name="quarter" value='{{ $course["quarter"] }}'>
               <input hidden type="text" name="datetime" value='{{ $course["datetime"] }}'>
               <input hidden type="text" name="year" value='{{ $course["academic_year"] }}'>
               <input hidden type="text" name="semester" value='{{ $course["semester"] }}'>

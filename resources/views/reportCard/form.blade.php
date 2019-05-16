@@ -43,9 +43,9 @@
       <td>{{$grade['course_name']}}</td>
       <td>{{strtoupper(substr($grade['course_name'], 0, 3))." ".$grade['course_id']}}</td>
       <td>{{ $grade['credits']}}</td>
-      <td>{{ $grade['quater1']}}</td>
-      <td>{{ $grade['quater2']}}</td>
-      <td>{{ $grade['quater3']}}</td>
+      <td>{{ $grade['quarter1']}}</td>
+      <td>{{ $grade['quarter2']}}</td>
+      <td>{{ $grade['quarter3']}}</td>
       <?php
       $grade_total  = $grade['total_point']/3;
 
@@ -55,7 +55,7 @@
       <td>{{  $grade_total }}</td>
       <?php $total_credit +=  $grade['credits'] ?>
 
-      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
+      <!-- <td>{{ number_format(($grade['quarter1']+$grade['quarter2']+$grade['quarter3'])/3 ,2)}}</td> -->
     </tr>
 
     @endforeach
@@ -143,9 +143,9 @@
       <td>{{$grade['course_name']}}</td>
       <td>{{strtoupper(substr($grade['course_name'], 0, 3))." ".$grade['course_id']}}</td>
       <td>{{ $grade['credits']}}</td>
-      <td>{{ $grade['quater1']}}</td>
-      <td>{{ $grade['quater2']}}</td>
-      <td>{{ $grade['quater3']}}</td>
+      <td>{{ $grade['quarter1']}}</td>
+      <td>{{ $grade['quarter2']}}</td>
+      <td>{{ $grade['quarter3']}}</td>
       <?php
       $grade_total  = $grade['total_point']/3;
       $grade_total = substr($grade_total,0,strpos($grade_total,'.')+3);
@@ -153,7 +153,7 @@
       <td>{{  $grade_total }}</td>
       <?php $total_credit +=  $grade['credits'] ?>
 
-      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
+      <!-- <td>{{ number_format(($grade['quarter1']+$grade['quarter2']+$grade['quarter3'])/3 ,2)}}</td> -->
     </tr>
 
     @endforeach
@@ -241,9 +241,9 @@
       <td>{{$elective_grade['course_name']}}</td>
       <td>{{strtoupper(substr($elective_grade['course_name'], 0, 3))." ".$elective_grade['course_id']}}</td>
       <td>{{ $elective_grade['credits']}}</td>
-      <td>{{ $elective_grade['quater1']}}</td>
-      <td>{{ $elective_grade['quater2']}}</td>
-      <td>{{ $elective_grade['quater3']}}</td>
+      <td>{{ $elective_grade['quarter1']}}</td>
+      <td>{{ $elective_grade['quarter2']}}</td>
+      <td>{{ $elective_grade['quarter3']}}</td>
       <?php
       $grade_total  = $elective_grade['total_point']/3;
 
@@ -253,7 +253,7 @@
       <td>{{  $grade_total }}</td>
       <?php $total_credit +=  $elective_grade['credits'] ?>
 
-      <!-- <td>{{ number_format(($grade['quater1']+$grade['quater2']+$grade['quater3'])/3 ,2)}}</td> -->
+      <!-- <td>{{ number_format(($grade['quarter1']+$grade['quarter2']+$grade['quarter3'])/3 ,2)}}</td> -->
     </tr>
 
     @endforeach

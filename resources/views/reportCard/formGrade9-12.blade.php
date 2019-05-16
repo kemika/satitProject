@@ -42,9 +42,9 @@
                 @endif
 
 
-                <td class="center-cell">{{ $grade['quater1']}}</td>
-                <td class="center-cell">{{ $grade['quater2']}}</td>
-                <td class="center-cell">{{ $grade['quater3']}}</td>
+                <td class="center-cell">{{ $grade['quarter1']}}</td>
+                <td class="center-cell">{{ $grade['quarter2']}}</td>
+                <td class="center-cell">{{ $grade['quarter3']}}</td>
                 <td class="center-cell">{{  $grade['semester_grade'] }}</td>
 
             </tr>
@@ -116,9 +116,9 @@
                 @endif
 
 
-                <td class="center-cell">{{ $grade['quater1']}}</td>
-                <td class="center-cell">{{ $grade['quater2']}}</td>
-                <td class="center-cell">{{ $grade['quater3']}}</td>
+                <td class="center-cell">{{ $grade['quarter1']}}</td>
+                <td class="center-cell">{{ $grade['quarter2']}}</td>
+                <td class="center-cell">{{ $grade['quarter3']}}</td>
                 <td class="center-cell">{{ $grade['semester_grade']}}</td>
             </tr>
 
@@ -140,9 +140,9 @@
                 <td>{{$selected_elective['course_name']}}</td>
                 <td>{{$selected_elective['course_id']}}</td>
                 <td class="center-cell">{{ $selected_elective['credits']}}</td>
-                <td class="center-cell">{{ $selected_elective['quater1']}}</td>
-                <td class="center-cell">{{ $selected_elective['quater2']}}</td>
-                <td class="center-cell">{{ $selected_elective['quater3']}}</td>
+                <td class="center-cell">{{ $selected_elective['quarter1']}}</td>
+                <td class="center-cell">{{ $selected_elective['quarter2']}}</td>
+                <td class="center-cell">{{ $selected_elective['quarter3']}}</td>
                 <td class="center-cell">{{ $selected_elective['semester_grade']}}</td>
             </tr>
         @endif

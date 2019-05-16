@@ -136,12 +136,12 @@ class ReportCardController extends Controller
 
         //SELECT * FROM grades
         //JOIN (
-        //    select MAX(datetime) as datetime, `open_course_id`, `quater`
+        //    select MAX(datetime) as datetime, `open_course_id`, `quarter`
         //    from `grades` where `student_id` = '2540080850' and `academic_year` = 2018
-        //    group by `open_course_id`, `quater`
+        //    group by `open_course_id`, `quarter`
         //) as latest_grade
         // ON grades.open_course_id = latest_grade.open_course_id
-        //    and grades.quater = latest_grade.quater
+        //    and grades.quarter = latest_grade.quarter
         //    and grades.datetime = latest_grade.datetime
         //WHERE `student_id` = '2540080850' and `academic_year` = 2018
         //
@@ -151,15 +151,15 @@ class ReportCardController extends Controller
         $student_latest_grade_keys = Grade::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
             ->where('data_status', 1)
-            ->groupBy('open_course_id', 'quater')
-            ->select(DB::raw('MAX(datetime) as datetime'), 'open_course_id', 'quater');
+            ->groupBy('open_course_id', 'quarter')
+            ->select(DB::raw('MAX(datetime) as datetime'), 'open_course_id', 'quarter');
 
 
         $student_latest_grades = Grade::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
             ->joinSub($student_latest_grade_keys, 'latest_grade', function ($join) {
                 $join->on('grades.open_course_id', 'latest_grade.open_course_id');
-                $join->on('grades.quater', 'latest_grade.quater');
+                $join->on('grades.quarter', 'latest_grade.quarter');
                 $join->on('grades.datetime', 'latest_grade.datetime');
             })
             ->leftJoin('grade_status', 'grades.grade_status', 'grade_status.grade_status')
@@ -181,12 +181,12 @@ class ReportCardController extends Controller
         //JOIN curriculums ON curriculums.course_id = offered_courses.course_id
         //LEFT JOIN (SELECT * FROM grades
         //    JOIN (
-        //           select MAX(datetime) as datetime, `open_course_id`, `quater`
+        //           select MAX(datetime) as datetime, `open_course_id`, `quarter`
         //            from `grades` where `student_id` = '2540080850' and `academic_year` = 2018
-        //           group by `open_course_id`, `quater`
+        //           group by `open_course_id`, `quarter`
         //        ) as latest_grade
         //        ON grades.open_course_id = latest_grade.open_course_id
-        //            and grades.quater = latest_grade.quater
+        //            and grades.quarter = latest_grade.quarter
         //            and grades.datetime = latest_grade.datetime
         //        WHERE `student_id` = '2540080850' and `academic_year` = 2018)
         //        as student_latest_grades ON offered_courses.classroom_id = student_latest_grades.open_course_id
@@ -201,7 +201,7 @@ class ReportCardController extends Controller
                 $join->on('offered_courses.open_course_id', 'student_latest_grades.open_course_id');
             })
             ->where('curriculums.is_activity', '0')
-            ->select('student_latest_grades.quater', 'student_latest_grades.grade',
+            ->select('student_latest_grades.quarter', 'student_latest_grades.grade',
                 'student_latest_grades.grade_status', 'student_latest_grades.grade_status_text',
                 'offered_courses.*', 'curriculums.*')
             ->orderby('curriculums.course_name');
@@ -268,19 +268,19 @@ class ReportCardController extends Controller
         $latest_comment_keys = Teacher_Comment::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
             //TODO           ->where('data_status', 1)  // There is no approval system for teacher comment yet
-            ->groupBy('semester', 'quater')
-            ->select(DB::raw('MAX(datetime) as datetime'), 'semester', 'quater');
+            ->groupBy('semester', 'quarter')
+            ->select(DB::raw('MAX(datetime) as datetime'), 'semester', 'quarter');
 
         $teacher_comments_results = Teacher_Comment::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
             ->joinSub($latest_comment_keys, 'latest_comments', function ($join) {
                 $join->on('teacher_comments.semester', 'latest_comments.semester');
-                $join->on('teacher_comments.quater', 'latest_comments.quater');
+                $join->on('teacher_comments.quarter', 'latest_comments.quarter');
                 $join->on('teacher_comments.datetime', 'latest_comments.datetime');
             })
             ->select('teacher_comments.*')
             ->orderBy('semester')
-            ->orderBy('quater')
+            ->orderBy('quarter')
             ->get();
         // Pack comments to skip empty one (in case there is a skip in comment e.g. no comment for semester 1
         $teacher_comments = array_fill(0,
@@ -288,7 +288,7 @@ class ReportCardController extends Controller
             null);;
         foreach ($teacher_comments_results as $c){
             // Compute index
-            $i = $c->quater - 1 +
+            $i = $c->quarter - 1 +
                 ($c->semester - 1) * SystemConstant::TOTAL_QUARTERS;
             $teacher_comments[$i] = $c;
         }
@@ -313,14 +313,14 @@ class ReportCardController extends Controller
         $latest_behavior_keys = Behavior_Record::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
             //TODO           ->where('data_status', 1)  // There is no approval system for behavior  yet
-            ->groupBy('semester', 'quater')
-            ->select(DB::raw('MAX(datetime) as datetime'), 'semester', 'quater');
+            ->groupBy('semester', 'quarter')
+            ->select(DB::raw('MAX(datetime) as datetime'), 'semester', 'quarter');
 
         $behavior_records = Behavior_Record::where('student_id', $student_id)
             ->where('academic_year', $academic_year)
             ->joinSub($latest_behavior_keys, 'latest_behavior_keys', function ($join) {
                 $join->on('behavior_records.semester', 'latest_behavior_keys.semester');
-                $join->on('behavior_records.quater', 'latest_behavior_keys.quater');
+                $join->on('behavior_records.quarter', 'latest_behavior_keys.quarter');
                 $join->on('behavior_records.datetime', 'latest_behavior_keys.datetime');
             })
             ->join('behavior_types', 'behavior_records.behavior_type', 'behavior_types.behavior_type')
@@ -480,16 +480,16 @@ class ReportCardController extends Controller
         foreach ($behavior_types as $behavior_type) {
             foreach ($behavior_records as $behavior_record) {
                 if ($behavior_type->behavior_type == $behavior_record->behavior_type) {
-                    if ($behavior_record->semester == 1 && $behavior_record->quater == 1) {
+                    if ($behavior_record->semester == 1 && $behavior_record->quarter == 1) {
                         $behavior_type->sem1_q1 = $behavior_record->grade;
                     }
-                    if ($behavior_record->semester == 1 && $behavior_record->quater == 2) {
+                    if ($behavior_record->semester == 1 && $behavior_record->quarter == 2) {
                         $behavior_type->sem1_q2 = $behavior_record->grade;
                     }
-                    if ($behavior_record->semester == 2 && $behavior_record->quater == 1) {
+                    if ($behavior_record->semester == 2 && $behavior_record->quarter == 1) {
                         $behavior_type->sem2_q1 = $behavior_record->grade;
                     }
-                    if ($behavior_record->semester == 2 && $behavior_record->quater == 2) {
+                    if ($behavior_record->semester == 2 && $behavior_record->quarter == 2) {
                         $behavior_type->sem2_q2 = $behavior_record->grade;
                     }
                 }
@@ -514,9 +514,9 @@ class ReportCardController extends Controller
                     'credits' => $x->credits,
                     'inclass' => $x->inclass,
                     'practice' => $x->practice,
-                    'quater1' => "",
-                    'quater2' => "",
-                    'quater3' => "",
+                    'quarter1' => "",
+                    'quarter2' => "",
+                    'quarter3' => "",
                     'semester_grade' => 0,
                     'grade_count' => 0);
 
@@ -527,33 +527,33 @@ class ReportCardController extends Controller
 
             switch ($x->grade_status) {
                 case SystemConstant::NO_GRADE:
-                    $element['quater' . $x->quater] = "";
+                    $element['quarter' . $x->quarter] = "";
                     break;
                 case SystemConstant::HAS_GRADE:
-                    $element['quater' . $x->quater] = $x->grade;
+                    $element['quarter' . $x->quarter] = $x->grade;
                     $element['semester_grade'] += $x->grade;
                     // Only count when this is not final quarter
-                    if ($x->quater < SystemConstant::FINAL_Q) {
+                    if ($x->quarter < SystemConstant::FINAL_Q) {
                         $element['grade_count']++;
                     }
                     break;
                 case SystemConstant::PASS_I_GRADE:
-                    $element['quater' . $x->quater] = "I/" . $x->grade;
+                    $element['quarter' . $x->quarter] = "I/" . $x->grade;
                     $element['semester_grade'] += $x->grade;
                     // Only count when this is not final quarter
-                    if ($x->quater < SystemConstant::FINAL_Q) {
+                    if ($x->quarter < SystemConstant::FINAL_Q) {
                         $element['grade_count']++;
                     }
                     break;
                 case SystemConstant::DROP_GRADE:
                     // Set credit to zero to drop class from student record
                     $element['credits'] = 0;
-                    $element['quater' . $x->quater] = $x->grade_status_text;
+                    $element['quarter' . $x->quarter] = $x->grade_status_text;
                     break;
                 default:
-                    $element['quater' . $x->quater] = $x->grade_status_text;
+                    $element['quarter' . $x->quarter] = $x->grade_status_text;
                     $element['semester_grade'] += $x->grade;
-                    if ($x->quater < SystemConstant::FINAL_Q) {
+                    if ($x->quarter < SystemConstant::FINAL_Q) {
                         $element['grade_count']++;
                     }
             }
@@ -573,7 +573,7 @@ class ReportCardController extends Controller
                     $x['semester_grade'] = "-";
 
                 } else {
-                    if ($x['quater' . SystemConstant::FINAL_Q] === "") {
+                    if ($x['quarter' . SystemConstant::FINAL_Q] === "") {
                         // There is no final just average grade without
                         $grade = $x['semester_grade'] / SystemConstant::TOTAL_QUARTERS;
                     } else {
@@ -614,11 +614,11 @@ class ReportCardController extends Controller
             $grade['inclass'] = $s1['inclass'];
             $grade['practice'] = $s1['practice'];
             for ($i = 1; $i <= SystemConstant::TOTAL_QUARTERS + 1; $i++) {
-                $grade['quater' . $i . '_sem1'] = $s1['quater' . $i];
+                $grade['quarter' . $i . '_sem1'] = $s1['quarter' . $i];
                 if($s2 != null) {
-                    $grade['quater' . $i . '_sem2'] = $s2['quater' . $i];
+                    $grade['quarter' . $i . '_sem2'] = $s2['quarter' . $i];
                 }else{
-                    $grade['quater' . $i . '_sem2'] = "";
+                    $grade['quarter' . $i . '_sem2'] = "";
                 }
             }
             $grade['semester1_grade'] = $s1['semester_grade'];
