@@ -50,7 +50,7 @@ Route::post('/manageCurriculum/createNewSubject', 'ManageCurriculumController@cr
 Route::get('/manageCurriculum/{year}', 'ManageCurriculumController@editWithYear');
 Route::get('/manageTeachers', 'ManageTeachersController@index');
 Route::put('/manageTeachers/update', 'ManageTeachersController@update');
-
+Route::put('/manageTeachers/add', 'ManageTeachersController@add');
 
 Route::get('/manageAcademic', 'ManageAcademicController@index');
 Route::post('/manageAcademic/createNewAcademic', 'ManageAcademicController@createNewAcademic');

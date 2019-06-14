@@ -5,7 +5,7 @@
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <!-- <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script> -->
-<!-- {{ $teachers }} -->
+<!-- {{ $teachers }} {{$query_fail}}-->
 
 <!-- JQuery -->
 <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -58,150 +58,153 @@
 
 <h1> Manage Teachers</h1>
 
-    <div class="table-wrapper" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px" -->
-        <!-- <div class="col-1"></div> -->
-        <!-- <div class="col-8"> -->
-        <table class="display" id="table" style="width: 100%">
-            <!-- table class="table table-hover" id="table" style="width: 120rem; padding-left: 20px" -->
-            <thead>
+<?php if ($query_fail != false): ?>
+<div class="alert alert-danger">
+    <strong>ERROR!</strong> {{$query_fail}}}
+</div>
+<?php endif; ?>
+
+<div class="table-wrapper">
+    <table class="display" id="table" style="width: 100%">
+        <thead>
+        <tr>
+            <th scope="col">No.</th>
+            <th scope="col">ID</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <?php $c = 0; ?>
+        @foreach ($teachers as $teacher)
+            <?php $c += 1 ?>
             <tr>
-                <th scope="col">No.</th>
-                <th scope="col">ID</th>
-                <th scope="col">First Name</th>
-                <th scope="col">Last Name</th>
-                <th scope="col">Status</th>
-                <th scope="col">Action</th>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $teacher->teacher_id }}</td>
+                <td>{{ $teacher->firstname }}</td>
+                <td>{{ $teacher->lastname }}</td>
+                <td>{{ $teacher->teacher_status_text }}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-toggle='modal' data-target='#{{$c}}'>Edit
+                    </button>
+                </td>
 
             </tr>
-            </thead>
-            <tbody>
-            <?php $c = 0; ?>
-            @foreach ($teachers as $teacher)
-                <?php $c += 1 ?>
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $teacher->teacher_id }}</td>
-                    <td>{{ $teacher->firstname }}</td>
-                    <td>{{ $teacher->lastname }}</td>
-                    <td>{{ $teacher->teacher_status_text }}</td>
-                    <td>
-                        <button type="button" class="btn btn-primary" data-toggle='modal' data-target='#{{$c}}'>Edit
-                        </button>
-                    </td>
+            <!-- Modal -->
+            <!-- Dialog for editing -->
+            <div class="modal fade" id={{$c}} role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" style="margin-left:10px;">Edit</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/manageTeachers/update" method="post">
+                                @csrf
+                                @method('PUT')
+                                <input hidden type="text" name="id" value='{{ $teacher->id }}'>
+                                <div class="form-group">
+                                    <label class="col-form-label">ID:</label>
+                                    <input type="text" class="form-control" name="teacher_id"
+                                           value='{{ $teacher->teacher_id }}' readonly>
+                                    <input hidden type="text" name="teacherID"
+                                           value='{{ $teacher->teacher_id }}'>
+                                </div>
 
-                </tr>
-                <!-- Modal -->
-                <!-- Dialog for editing -->
-                <div class="modal fade" id={{$c}} role="dialog">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" style="margin-left:10px;">Edit</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="/manageTeachers/update" method="post">
-                                    @csrf
-                                    @method('PUT')
-                                    <input hidden type="text" name="id" value='{{ $teacher->id }}'>
-                                    <div class="form-group">
-                                        <label class="col-form-label">ID:</label>
-                                            <input type="text" class="form-control" name="teacher_id"
-                                                   value='{{ $teacher->teacher_id }}' readonly>
-                                            <input hidden type="text" name="teacherID"
-                                                   value='{{ $teacher->teacher_id }}'>
-                                    </div>
+                                <div class="form-group">
+                                    <label class="col-form-label">First name: </label>
+                                    <input type="text" class="form-control" name="firstname"
+                                           value='{{ $teacher->firstname }}'>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="col-form-label">First name: </label>
-                                        <input type="text" class="form-control" name="firstname"
-                                                   value='{{ $teacher->firstname }}'>
-                                    </div>
+                                <div class="form-group">
+                                    <label class="col-form-label">Last name: </label>
+                                    <input type="text" class="form-control" name="lastname"
+                                           value='{{ $teacher->lastname }}'>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="col-form-label">Last name: </label>
-                                            <input type="text" class="form-control" name="lastname"
-                                                   value='{{ $teacher->lastname }}'>
-                                    </div>
+                                <div class="form-group">
+                                    <label class="col-form-label">Status:</label>
+                                    <select name="status" class="form-control" style="height: 35px">
+                                        <?php if ("$teacher->teacher_status_text" == "Active"): ?>
+                                        <option value="0" selected>Active</option>
+                                        <option value="1">Inactive</option>
+                                        <?php endif; ?>
 
-                                    <div class="form-group">
-                                        <label class="col-form-label">Status:</label>
-                                            <select name="status" class="form-control" style="height: 35px">
-                                                <?php if ("$teacher->teacher_status_text" == "Active"): ?>
-                                                <option value="0" selected>Active</option>
-                                                <option value="1">Inactive</option>
-                                                <?php endif; ?>
+                                        <?php if ("$teacher->teacher_status_text" == "Inactive"): ?>
+                                        <option value="0">Active</option>
+                                        <option value="1" selected>Inactive</option>
+                                        <?php endif; ?>
 
-                                                <?php if ("$teacher->teacher_status_text" == "Inactive"): ?>
-                                                <option value="0">Active</option>
-                                                <option value="1" selected>Inactive</option>
-                                                <?php endif; ?>
+                                    </select>
 
-                                            </select>
+                                </div>
 
-                                    </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
 
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary">Update</button>
-                                </form>
-
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            </div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-            @endforeach
+        @endforeach
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-        <!-- Modal -->
-        <!-- Dialog for Adding -->
-        <div class="modal fade" id="adding" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Add</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="/manageTeachers/add" method="post">
-                            @csrf
-                            @method('PUT')
-                            <div class="form-group">
-                                <label class="col-form-label">ID:</label>
-                                <input type="text" class="form-control" name="teacher_id">
-                            </div>
-                            <div class="form-group ">
-                                <label class="col-form-label">First name: </label>
-                                <input type="text" class="form-control" name="firstname">
-                            </div>
+    <!-- Modal -->
+    <!-- Dialog for Adding -->
+    <div class="modal fade" id="adding" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form action="/manageTeachers/add" method="post">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-group">
+                            <label class="col-form-label">ID:</label>
+                            <input type="text" class="form-control" name="teacherID">
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-form-label">First name: </label>
+                            <input type="text" class="form-control" name="firstname">
+                        </div>
 
-                            <div class="form-group ">
-                                <label class="col-form-label">Last name: </label>
-                                <input type="text" class="form-control" name="lastname">
-                            </div>
+                        <div class="form-group ">
+                            <label class="col-form-label">Last name: </label>
+                            <input type="text" class="form-control" name="lastname">
+                        </div>
 
-                            <div class="form-group">
-                                <label class="col-form-label">Status:</label>
-                                <select name="status" class="form-control" style="height: 35px">
-                                    <option value="0" selected>Active</option>
-                                    <option value="1">Inactive</option>
-                                </select>
+                        <div class="form-group">
+                            <label class="col-form-label">Status:</label>
+                            <select name="status" class="form-control" style="height: 35px">
+                                <option value="0" selected>Active</option>
+                                <option value="1">Inactive</option>
+                            </select>
 
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Add</button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Add</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <!-- </div> -->
     </div>
+    <!-- </div> -->
+</div>
 
 
 <!-- div class="col-md-12" style="height: 30px;">
@@ -211,7 +214,7 @@
 <script>
     $(document).ready(function () {
         $('#table').DataTable({
-           "dom": '<"toolbar">frtlip'
+            "dom": '<"toolbar">frtlip'
         });
         $("div.toolbar").html('<button type="button" class="float-left btn btn-success" data-toggle=\'modal\' data-target="#adding">Add</button>');
     });
