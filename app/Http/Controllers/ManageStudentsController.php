@@ -18,7 +18,7 @@ class ManageStudentsController extends Controller
     ->orderBy('students.student_id','asc')
     ->get();
 
-    return view('manageStudents.index' , ['students' => $students]);
+    return view('manageStudents.index' , ['students' => $students,'query_fail' => ""]);
   }
 
 
@@ -38,8 +38,34 @@ class ManageStudentsController extends Controller
       ->select('students.student_id','students.firstname','students.lastname','student_status.student_status_text')
       ->orderBy('students.student_id','asc')
       ->get();
-      return view('manageStudents.index' , ['students' => $students]);
+      return view('manageStudents.index' , ['students' => $students,'query_fail' => ""]);
   }
+
+    public function add(Request $request)
+    {
+        $query_fail = "";
+
+        $students  = new Student();
+        $students->student_id=$request->input('studentID');
+        $students->firstname=$request->input('firstname');
+        $students->lastname=$request->input('lastname');
+        $students->student_status=$request->input('status');
+
+        try {
+            // create or update some data
+            $students->saveOrFail();
+
+        }catch(\Illuminate\Database\QueryException $e){
+            $query_fail = "Cannot adding new student information. ID may already exists or there is a problem with the database.";
+        }
+
+
+        $students  = Student::join('student_status','students.student_status','=','student_status.student_status')
+            ->select('students.student_id','students.firstname','students.lastname','student_status.student_status_text')
+            ->orderBy('students.student_id','asc')
+            ->get();
+        return view('manageTeachers.index' , ['teachers' => $teachers,'query_fail' => $query_fail]);
+    }
 
   public function graduate(Request $request)
   {
