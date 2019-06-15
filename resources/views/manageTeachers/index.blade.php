@@ -203,13 +203,8 @@
             </div>
         </div>
     </div>
-    <!-- </div> -->
+
 </div>
-
-
-<!-- div class="col-md-12" style="height: 30px;">
-</div -->
-
 
 <script>
     $(document).ready(function () {

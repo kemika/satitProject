@@ -37,7 +37,7 @@ Route::post('/approveGradeDownload', 'ApproveGradeController@Download');
 
 Route::get('/manageStudents', 'ManageStudentsController@index');
 Route::put('/manageStudents/update', 'ManageStudentsController@update');
-Route::put('/manageStudents/update', 'ManageStudentsController@add');
+Route::put('/manageStudents/add', 'ManageStudentsController@add');
 Route::put('/manageStudents/graduate', 'ManageStudentsController@graduate');
 Route::put('/manageStudents/active', 'ManageStudentsController@active');
 

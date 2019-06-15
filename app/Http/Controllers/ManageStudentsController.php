@@ -56,7 +56,7 @@ class ManageStudentsController extends Controller
             $students->saveOrFail();
 
         }catch(\Illuminate\Database\QueryException $e){
-            $query_fail = "Cannot adding new student information. ID may already exists or there is a problem with the database.";
+            $query_fail = "Cannot add new student information. ID ".$students->student_id." may already exists or there is a problem with the database.";
         }
 
 
@@ -64,7 +64,7 @@ class ManageStudentsController extends Controller
             ->select('students.student_id','students.firstname','students.lastname','student_status.student_status_text')
             ->orderBy('students.student_id','asc')
             ->get();
-        return view('manageTeachers.index' , ['teachers' => $teachers,'query_fail' => $query_fail]);
+        return view('manageStudents.index' , ['students' => $students,'query_fail' => $query_fail]);
     }
 
   public function graduate(Request $request)

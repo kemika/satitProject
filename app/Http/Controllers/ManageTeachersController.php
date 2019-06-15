@@ -50,7 +50,7 @@ class ManageTeachersController extends Controller
             $teacher->saveOrFail();
 
         }catch(\Illuminate\Database\QueryException $e){
-            $query_fail = "Cannot adding new teacher information. ID may already exists or there is a problem with the database.";
+            $query_fail = "Cannot add new teacher information. ID ".$teacher->teacher_id." may already exists or there is a problem with the database.";
         }
 
 

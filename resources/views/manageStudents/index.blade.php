@@ -208,7 +208,7 @@
                         @method('PUT')
                         <div class="form-group">
                             <label class="col-form-label">ID:</label>
-                            <input type="text" class="form-control" name="teacherID">
+                            <input type="text" class="form-control" name="studentID">
                         </div>
                         <div class="form-group ">
                             <label class="col-form-label">First name: </label>
