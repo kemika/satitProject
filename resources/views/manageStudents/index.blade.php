@@ -51,24 +51,6 @@
 
 </head>
 
-<script>
-    // var ta;
-    //
-    //   $(document).ready(function() {
-    //     ta = $('#table').DataTable();
-    //
-    //
-    // } );
-    // function testClick(){
-    //
-    // //alert(ta.page.info().start+" "+ta.page.info().end);
-    // alert(ta.rows( 'display' ).data()[0]);
-    //
-    // }
-    // //test();
-
-</script>
-
 
 <h1> Manage Students</h1>
 <?php if ($query_fail != false): ?>
@@ -289,6 +271,7 @@
         $('#table').DataTable({
             "dom": '<"toolbar">frtlip'
         });
-        $("div.toolbar").html('<button type="button" class="float-left btn btn-success" data-toggle=\'modal\' data-target="#adding">Add</button>');
+        $("div.toolbar").html('<button type="button" class="float-left btn btn-success" data-toggle=\'modal\' data-target="#adding">Add</button>' +
+            '<a href="/manageStudents/upload" class="float-left btn btn-success" style="margin-left: 10px;" role="button" aria-disabled="true">Multiple Add</a>');
     });
 </script>

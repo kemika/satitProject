@@ -40,6 +40,8 @@ Route::put('/manageStudents/update', 'ManageStudentsController@update');
 Route::put('/manageStudents/add', 'ManageStudentsController@add');
 Route::put('/manageStudents/graduate', 'ManageStudentsController@graduate');
 Route::put('/manageStudents/active', 'ManageStudentsController@active');
+Route::get('/manageStudents/upload', 'ManageStudentsController@upload');
+Route::put('/manageStudents/uploadresults', 'ManageStudentsController@uploadresults');
 
 Route::get('/manageCurriculum', 'ManageCurriculumController@index');
 Route::post('/manageCurriculum/editSubject', 'ManageCurriculumController@editSubject');
@@ -53,7 +55,8 @@ Route::get('/manageTeachers', 'ManageTeachersController@index');
 Route::put('/manageTeachers/update', 'ManageTeachersController@update');
 Route::put('/manageTeachers/add', 'ManageTeachersController@add');
 
-Route::get('/manageAcademic', 'ManageAcademicController@index');
+//Route::get('/manageAcademic', 'ManageAcademicController@index');
+Route::get('/manageAcademic', 'ManageAcademicController@editCurAcademicYear');
 Route::post('/manageAcademic/createNewAcademic', 'ManageAcademicController@createNewAcademic');
 Route::post('/manageAcademic/changeSelYear', 'ManageAcademicController@changeEditAcademicYear');
 Route::post('/manageAcademic/addNewAca', 'ManageAcademicController@addNewAcademic');

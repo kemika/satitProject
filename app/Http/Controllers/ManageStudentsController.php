@@ -21,6 +21,14 @@ class ManageStudentsController extends Controller
     return view('manageStudents.index' , ['students' => $students,'query_fail' => ""]);
   }
 
+  public function upload(){
+      return view('manageStudents.upload',[]);
+  }
+
+  public function uploadresults(Request $request){
+      return view('manageStudents.uploadresults',[]);
+  }
+
 
   public function update(Request $request)
   {
