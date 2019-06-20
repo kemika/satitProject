@@ -18,7 +18,7 @@
         @csrf
         @method('PUT')
         <div class="form-group">
-            <textarea class="form-control" id="data" rows="10" oninput="replaceTap()"></textarea>
+            <textarea class="form-control" name="data" id="data" rows="10" oninput="replaceTap()"></textarea>
         </div>
         <a href="/manageStudents/" class="float-left btn btn-success" style="margin-left: 10px;" role="button" aria-disabled="true">Cancel</a>
         <button type="submit" class="btn btn-primary float-right">Submit</button>
