@@ -30,8 +30,8 @@ class ApproveGradeController extends Controller
             ->leftJoin('data_status','grades.data_status','=','data_status.data_status')
             ->where('academic_year.academic_year', $year)
             ->where('offered_courses.semester',$semester)
-            ->groupBy('grades.datetime','grades.open_course_id','grades.quater')
-            ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quater'
+            ->groupBy('grades.datetime','grades.open_course_id','grades.quarter')
+            ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quarter'
                     ,'curriculums.course_name','data_status.data_status_text','grades.datetime','offered_courses.semester','offered_courses.is_elective')
             ->orderBy('course_id','asc')
             ->orderBy('datetime','desc')
@@ -49,8 +49,8 @@ class ApproveGradeController extends Controller
            ->where('academic_year.academic_year', $year)
            ->where('offered_courses.semester',$semester)
            ->where('curriculums.is_activity',false)
-           ->groupBy('grades.datetime','offered_courses.open_course_id','grades.quater')
-           ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quater'
+           ->groupBy('grades.datetime','offered_courses.open_course_id','grades.quarter')
+           ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quarter'
                    ,'curriculums.course_name','data_status.data_status_text','grades.datetime','offered_courses.semester','offered_courses.is_elective')
            ->orderBy('course_id','asc')
            ->orderBy('datetime','desc')
@@ -59,7 +59,7 @@ class ApproveGradeController extends Controller
 
 
     $check = 0;
-    $checkQuater = 0;
+    $checkQuarter = 0;
     $count = 0;
     $saveUnset = array();
     foreach ($courses as $course){
@@ -67,12 +67,12 @@ class ApproveGradeController extends Controller
         $course->grade_level = "";
       }
       if(!isset($course->data_status_text)){
-        $course->quater = "Not submitted";
+        $course->quarter = "Not submitted";
       }
 
-      if($check !== $course->open_course_id || $checkQuater !== $course->quater){
+      if($check !== $course->open_course_id || $checkQuarter !== $course->quarter){
         $check = $course->open_course_id;
-        $checkQuater = $course->quater;
+        $checkQuarter = $course->quarter;
       }
       else{
        //unset($courses[$count]);
@@ -137,8 +137,8 @@ class ApproveGradeController extends Controller
             ->leftJoin('grades','grades.open_course_id','=','offered_courses.open_course_id')
             ->leftJoin('data_status','grades.data_status','=','data_status.data_status')
             ->where('academic_year.academic_year',2559)
-            ->groupBy('grades.datetime','grades.open_course_id','grades.quater')
-            ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quater'
+            ->groupBy('grades.datetime','grades.open_course_id','grades.quarter')
+            ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quarter'
                     ,'curriculums.course_name','data_status.data_status_text','grades.datetime','offered_courses.semester','offered_courses.is_elective')
             ->orderBy('course_id','asc')
             ->orderBy('datetime','desc')
@@ -154,7 +154,7 @@ class ApproveGradeController extends Controller
               $course->grade_level = "";
             }
             if(!isset($course->data_status_text)){
-              $course->quater = "Not submitted";
+              $course->quarter = "Not submitted";
             }
 
             if($check !== $course->open_course_id){
@@ -226,7 +226,7 @@ class ApproveGradeController extends Controller
                       ->where('academic_year.academic_year',$year->curriculum_year)
                       ->where('offered_courses.Semester',3)
                       ->groupBy('grades.datetime','grades.open_course_id')
-                      ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quater'
+                      ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quarter'
                               ,'curriculums.course_name','data_status.data_status_text','grades.datetime','offered_courses.semester','offered_courses.is_elective')
                       ->orderBy('course_id','asc')
                       ->orderBy('datetime','desc')
@@ -240,7 +240,7 @@ class ApproveGradeController extends Controller
               $course->grade_level = "";
             }
             if(!isset($course->data_status_text)){
-              $course->quater = "Not submitted";
+              $course->quarter = "Not submitted";
             }
 
             if($check !== $course->open_course_id){
@@ -306,7 +306,7 @@ class ApproveGradeController extends Controller
             ->where('offered_courses.curriculum_year', $request->input('year'))
             ->where('offered_courses.semester',$request->input('semester'))
             ->groupBy('grades.datetime','grades.open_course_id')
-            ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quater'
+            ->select('offered_courses.open_course_id','academic_year.academic_year','offered_courses.course_id','academic_year.grade_level','grades.quarter'
                     ,'curriculums.course_name','data_status.data_status_text','grades.datetime','offered_courses.semester','offered_courses.is_elective')
             ->orderBy('course_id','asc')
             ->orderBy('datetime','desc')
@@ -322,7 +322,7 @@ class ApproveGradeController extends Controller
         $course->grade_level = "";
       }
       if(!isset($course->data_status_text)){
-        $course->quater = "Not submitted";
+        $course->quarter = "Not submitted";
       }
 
       if($check !== $course->open_course_id){
@@ -376,21 +376,21 @@ $yearInfo  = Academic_Year::select('academic_year')
                   ->where('grades.academic_year',$year)
                   ->where('grades.semester',$semseter)
                   ->where('grades.data_status',0)
-                  ->groupBy('grades.datetime','grades.open_course_id','grades.quater')
+                  ->groupBy('grades.datetime','grades.open_course_id','grades.quarter')
                   ->orderBy('offered_courses.course_id','asc')
                   ->orderBy('grades.datetime','desc')
-                  ->select('grades.datetime','grades.open_course_id','grades.quater')
+                  ->select('grades.datetime','grades.open_course_id','grades.quarter')
                   ->get();
 
     $check = 0;
-    $checkQuater = 0;
+    $checkQuarter = 0;
     $count = 0;
     $saveUnset = array();
     foreach ($grade as $course){
 
-      if($check !== $course->open_course_id || $checkQuater !== $course->quater){
+      if($check !== $course->open_course_id || $checkQuarter !== $course->quarter){
         $check = $course->open_course_id;
-        $checkQuater = $course->quater;
+        $checkQuarter = $course->quarter;
       }
       else{
        //unset($courses[$count]);
@@ -410,7 +410,7 @@ $yearInfo  = Academic_Year::select('academic_year')
 
     foreach($tempCourse as $course){
       $grade  = Grade::where('open_course_id',$course->open_course_id)
-                    ->where('quater',$course->quater)
+                    ->where('quarter',$course->quarter)
                     ->where('datetime',$course->datetime)
                     ->where('data_status',0)
                     ->update(['data_status' => 1]);
@@ -428,12 +428,12 @@ $yearInfo  = Academic_Year::select('academic_year')
 
   public function accept(Request $request){
     $openID = $request->input('open_course_id');
-    $quater = $request->input('quater');
+    $quarter = $request->input('quarter');
     $datetime = $request->input('datetime');
 
 
     $grade  = Grade::where('open_course_id',$openID)
-                  ->where('quater',$quater)
+                  ->where('quarter',$quarter)
                   ->where('datetime',$datetime)
                   ->where('data_status',0)
                   ->update(['data_status' => 1]);
@@ -454,21 +454,21 @@ $yearInfo  = Academic_Year::select('academic_year')
                       ->where('grades.academic_year',$year)
                       ->where('grades.semester',$semseter)
                       ->where('grades.data_status',0)
-                      ->groupBy('grades.datetime','grades.open_course_id','grades.quater')
+                      ->groupBy('grades.datetime','grades.open_course_id','grades.quarter')
                       ->orderBy('offered_courses.course_id','asc')
                       ->orderBy('grades.datetime','desc')
-                      ->select('grades.datetime','grades.open_course_id','grades.quater')
+                      ->select('grades.datetime','grades.open_course_id','grades.quarter')
                       ->get();
 
        $check = 0;
-       $checkQuater = 0;
+       $checkQuarter = 0;
        $count = 0;
        $saveUnset = array();
         foreach ($grade as $course){
 
-          if($check !== $course->open_course_id || $checkQuater !== $course->quater){
+          if($check !== $course->open_course_id || $checkQuarter !== $course->quarter){
             $check = $course->open_course_id;
-            $checkQuater = $course->quater;
+            $checkQuarter = $course->quarter;
           }
           else{
            //unset($courses[$count]);
@@ -488,7 +488,7 @@ $yearInfo  = Academic_Year::select('academic_year')
 
         foreach($tempCourse as $course){
           $grade  = Grade::where('open_course_id',$course->open_course_id)
-                        ->where('quater',$course->quater)
+                        ->where('quarter',$course->quarter)
                         ->where('datetime',$course->datetime)
                         ->where('data_status',0)
                         ->update(['data_status' => 2]);
@@ -506,12 +506,12 @@ $yearInfo  = Academic_Year::select('academic_year')
 
   public function cancel(Request $request){
     $openID = $request->input('open_course_id');
-    $quater = $request->input('quater');
+    $quarter = $request->input('quarter');
     $datetime = $request->input('datetime');
 
 
     $grade  = Grade::where('open_course_id',$openID)
-                  ->where('quater',$quater)
+                  ->where('quarter',$quarter)
                   ->where('datetime',$datetime)
                   ->where('data_status',0)
                   ->update(['data_status' => 2]);
@@ -536,7 +536,7 @@ $yearInfo  = Academic_Year::select('academic_year')
             ->where('academic_year.academic_year', $request->input('year'))
             ->where('offered_courses.semester',$request->input('semester'))
             ->where('grades.datetime',$request->input('datetime'))
-            ->where('grades.quater',$request->input('quater'))
+            ->where('grades.quarter',$request->input('quarter'))
             ->select('grades.student_id','grades.grade','students.firstname','students.lastname')
             ->orderBy('students.firstname','asc')
             ->orderBy('students.lastname','asc')
@@ -615,22 +615,22 @@ $yearInfo  = Academic_Year::select('academic_year')
         });
 
         $colGrade = '';
-        if($request->input('quater') === '1' && $request->input('semester') === '1'){
+        if($request->input('quarter') === '1' && $request->input('semester') === '1'){
           $colGrade = 'C';
         }
-        else if($request->input('quater') === '2' && $request->input('semester') === '1'){
+        else if($request->input('quarter') === '2' && $request->input('semester') === '1'){
           $colGrade = 'D';
         }
-        else if($request->input('quater') === '3' && $request->input('semester') === '1'){
+        else if($request->input('quarter') === '3' && $request->input('semester') === '1'){
           $colGrade = 'E';
         }
-        else if($request->input('quater') === '1' && $request->input('semester') === '2'){
+        else if($request->input('quarter') === '1' && $request->input('semester') === '2'){
           $colGrade = 'G';
         }
-        else if($request->input('quater') === '2' && $request->input('semester') === '2'){
+        else if($request->input('quarter') === '2' && $request->input('semester') === '2'){
           $colGrade = 'H';
         }
-        else if($request->input('quater') === '3' && $request->input('semester') === '2'){
+        else if($request->input('quarter') === '3' && $request->input('semester') === '2'){
           $colGrade = 'I';
         }
 
@@ -666,11 +666,11 @@ $yearInfo  = Academic_Year::select('academic_year')
 
         $sheet->setCellValue('C1', 'Academic Year');
         $sheet->setCellValue('C2', 'Semester');
-        $sheet->setCellValue('C3', 'Quater');
+        $sheet->setCellValue('C3', 'Quarter');
 
         $sheet->setCellValue('D1', $request->year);
         $sheet->setCellValue('D2', $request->semester);
-        $sheet->setCellValue('D3', $request->quater);
+        $sheet->setCellValue('D3', $request->quarter);
 
         // Set table Student
         $sheet->setCellValue('A5', '#');

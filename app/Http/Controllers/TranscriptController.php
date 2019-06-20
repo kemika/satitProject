@@ -342,7 +342,7 @@ class TranscriptController extends Controller
     foreach ($dataConverted as $key => $value) {
       if(count($value['grade']) != 0){
         foreach ($value['grade'] as $v) {
-                    $dataConverted[$v['academic_year']]['grade'][$v['course_id']]['sem_grade'] =self::getSemGrade($v['grade_quater1'],$v['grade_quater2'],$v['grade_quater3']);
+                    $dataConverted[$v['academic_year']]['grade'][$v['course_id']]['sem_grade'] =self::getSemGrade($v['grade_quarter1'],$v['grade_quarter2'],$v['grade_quarter3']);
 
         }
       }
@@ -352,16 +352,16 @@ class TranscriptController extends Controller
     //   foreach ($data as $key => $value) {
     //
     //
-    //     // array_push($ar,array_key_exists('grade_quater1',$value));
+    //     // array_push($ar,array_key_exists('grade_quarter1',$value));
     //     if(count($data['grade']) != 0){
     //
     //
     //       foreach ($value as $v) {
     //
     //
-    //         if(array_key_exists('grade_quater1',$v)){
+    //         if(array_key_exists('grade_quarter1',$v)){
     //
-    //           $dataConverted[$v['academic_year']]['grade'][$v['course_id']]['sem_grade'] =self::getSemGrade($v['grade_quater1'],$v['grade_quater2'],$v['grade_quater3']);
+    //           $dataConverted[$v['academic_year']]['grade'][$v['course_id']]['sem_grade'] =self::getSemGrade($v['grade_quarter1'],$v['grade_quarter2'],$v['grade_quarter3']);
     //
     //         }
     //       }
@@ -407,16 +407,16 @@ class TranscriptController extends Controller
     foreach ($grades as $g) {
 
       if(in_array($g['course_id'],$check)){
-        $result[$g['course_id']]['grade_quater'.$g['quater']] = $g['grade'];
+        $result[$g['course_id']]['grade_quarter'.$g['quarter']] = $g['grade'];
 
       }
       else{
         $a = array(
           'student_id' => $g['student_id'],
           'open_course_id' => $g['open_course_id'],
-          'grade_quater1' => '-',
-          'grade_quater2' => '-',
-          'grade_quater3' => '-',
+          'grade_quarter1' => '-',
+          'grade_quarter2' => '-',
+          'grade_quarter3' => '-',
           'semester' => $g['semester'],
           'academic_year' => $g['academic_year'],
           'grade_status' => $g['grade_status'],
@@ -432,7 +432,7 @@ class TranscriptController extends Controller
 
         $result[$g['course_id']] = $a;
 
-        $result[$g['course_id']]['grade_quater'.$g['quater']] = $g['grade'];
+        $result[$g['course_id']]['grade_quarter'.$g['quarter']] = $g['grade'];
       }
 
 
@@ -515,9 +515,9 @@ class TranscriptController extends Controller
       array_push($b,array(
         'student_id' => '',
         'open_course_id' => '',
-        'grade_quater1' => '',
-        'grade_quater2' => '',
-        'grade_quater3' => '',
+        'grade_quarter1' => '',
+        'grade_quarter2' => '',
+        'grade_quarter3' => '',
         'semester' => '',
         'academic_year' => '',
         'grade_status' => '',

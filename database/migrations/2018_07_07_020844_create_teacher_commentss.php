@@ -15,7 +15,7 @@ class CreateTeacherCommentss extends Migration
     {
         Schema::create('Teacher_Comments', function (Blueprint $table) {
            $table->string('student_id',50);
-           $table->unsignedTinyInteger('quater');
+           $table->unsignedTinyInteger('quarter');
            $table->unsignedTinyInteger('semester');
            $table->unsignedSmallInteger('academic_year');
            $table->dateTimeTz('datetime');
@@ -25,7 +25,7 @@ class CreateTeacherCommentss extends Migration
 
            $table->unsignedTinyInteger('data_status');
 
-           $table->primary(['student_id','quater','semester','academic_year','datetime'],'teacher_comment_primary');
+           $table->primary(['student_id','quarter','semester','academic_year','datetime'],'teacher_comment_primary');
            $table->foreign('data_status')
                       ->references('data_status')
                       ->on('Data_Status');

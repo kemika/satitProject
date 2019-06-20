@@ -16,7 +16,7 @@ class CreateBehaviorRecord extends Migration
         Schema::create('Behavior_Records', function (Blueprint $table) {
                       $table->string('student_id',50);
                       $table->unsignedTinyInteger('behavior_type');
-                      $table->unsignedTinyInteger('quater');
+                      $table->unsignedTinyInteger('quarter');
                       $table->unsignedTinyInteger('semester');
                       $table->unsignedSmallInteger('academic_year');
                       $table->dateTimeTz('datetime');
@@ -24,7 +24,7 @@ class CreateBehaviorRecord extends Migration
                       $table->float('grade');
                       $table->unsignedTinyInteger('data_status');
                        $table->timestamps();
-                      $table->primary(['student_id','behavior_type','quater','semester','academic_year','datetime'],'bahivior_records_primary');
+                      $table->primary(['student_id','behavior_type','quarter','semester','academic_year','datetime'],'bahivior_records_primary');
                       $table->foreign('student_id')
                       ->references('student_id')
                       ->on('Students');

@@ -47,14 +47,14 @@ class ViewGradeController extends Controller
     // $filter= $_GET['filter'];
     // $datas = self::getData($filter);
     $grades = Grade::join('offered_courses','grades.open_course_id','offered_courses.open_course_id')
-    ->select('grades.grade','grades.student_id','offered_courses.course_id','grades.semester','grades.quater')
+    ->select('grades.grade','grades.student_id','offered_courses.course_id','grades.semester','grades.quarter')
     ->join('students','students.student_id','grades.student_id')
-    ->select('grades.grade','grades.student_id','offered_courses.course_id','grades.semester','grades.quater','students.firstname','students.lastname')
+    ->select('grades.grade','grades.student_id','offered_courses.course_id','grades.semester','grades.quarter','students.firstname','students.lastname')
     ->join('curriculums','curriculums.course_id','offered_courses.course_id')
-    ->select('grades.grade','grades.student_id','offered_courses.course_id','grades.semester','grades.quater','students.firstname','students.lastname','curriculums.course_name')
+    ->select('grades.grade','grades.student_id','offered_courses.course_id','grades.semester','grades.quarter','students.firstname','students.lastname','curriculums.course_name')
     ->join('student_grade_levels','student_grade_levels.student_id','grades.student_id')
     ->join('academic_year','academic_year.classroom_id','student_grade_levels.classroom_id')
-    ->select('grades.grade','grades.student_id','offered_courses.course_id','grades.semester','grades.quater','students.firstname','students.lastname','curriculums.course_name','academic_year.room','academic_year.grade_level','academic_year.academic_year')
+    ->select('grades.grade','grades.student_id','offered_courses.course_id','grades.semester','grades.quarter','students.firstname','students.lastname','curriculums.course_name','academic_year.room','academic_year.grade_level','academic_year.academic_year')
     ->get();
 
 
@@ -68,7 +68,7 @@ class ViewGradeController extends Controller
       $grades_array[$key]['student_name'] = $value['firstname'].' '.$value['lastname'];
     }
     $filter= $_GET['filter'];
-    // $filter = ['grade' => '0','course_id' => 'ART','student_id' => '','semester'=>'','firstname'=>'','lastname'=>'','course_name'=>'','quater'=>''];
+    // $filter = ['grade' => '0','course_id' => 'ART','student_id' => '','semester'=>'','firstname'=>'','lastname'=>'','course_name'=>'','quarter'=>''];
     $check = true;
     foreach ($filter as $key => $value) {
       if($value){

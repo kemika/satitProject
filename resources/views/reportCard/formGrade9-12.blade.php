@@ -42,9 +42,9 @@
                 @endif
 
 
-                <td class="center-cell">{{ $grade['quater1']}}</td>
-                <td class="center-cell">{{ $grade['quater2']}}</td>
-                <td class="center-cell">{{ $grade['quater3']}}</td>
+                <td class="center-cell">{{ $grade['quarter1']}}</td>
+                <td class="center-cell">{{ $grade['quarter2']}}</td>
+                <td class="center-cell">{{ $grade['quarter3']}}</td>
                 <td class="center-cell">{{  $grade['semester_grade'] }}</td>
 
             </tr>
@@ -116,9 +116,9 @@
                 @endif
 
 
-                <td class="center-cell">{{ $grade['quater1']}}</td>
-                <td class="center-cell">{{ $grade['quater2']}}</td>
-                <td class="center-cell">{{ $grade['quater3']}}</td>
+                <td class="center-cell">{{ $grade['quarter1']}}</td>
+                <td class="center-cell">{{ $grade['quarter2']}}</td>
+                <td class="center-cell">{{ $grade['quarter3']}}</td>
                 <td class="center-cell">{{ $grade['semester_grade']}}</td>
             </tr>
 
@@ -140,9 +140,9 @@
                 <td>{{$selected_elective['course_name']}}</td>
                 <td>{{$selected_elective['course_id']}}</td>
                 <td class="center-cell">{{ $selected_elective['credits']}}</td>
-                <td class="center-cell">{{ $selected_elective['quater1']}}</td>
-                <td class="center-cell">{{ $selected_elective['quater2']}}</td>
-                <td class="center-cell">{{ $selected_elective['quater3']}}</td>
+                <td class="center-cell">{{ $selected_elective['quarter1']}}</td>
+                <td class="center-cell">{{ $selected_elective['quarter2']}}</td>
+                <td class="center-cell">{{ $selected_elective['quarter3']}}</td>
                 <td class="center-cell">{{ $selected_elective['semester_grade']}}</td>
             </tr>
         @endif
@@ -428,7 +428,12 @@
                     <td></td>
                     <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
                         <span style="color:white">---------------</span>/
+                        @if($i%2 != 0 && $i > 1)
+                        <span style="color:white">------</span>/ {{$academic_year+1}}
+                        @else
                         <span style="color:white">------</span>/ {{$academic_year}}
+                        @endif
+
                     </td>
                 </tr>
             </table>
@@ -455,7 +460,11 @@
                     <td></td>
                     <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
                         <span style="color:white">---------------</span>/
+                        @if($i%2 != 0 && $i > 1)
+                        <span style="color:white">------</span>/ {{$academic_year+1}}
+                        @else
                         <span style="color:white">------</span>/ {{$academic_year}}
+                        @endif
                     </td>
                 </tr>
             </table>
@@ -570,11 +579,11 @@
 
                 <tr>
                     <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
-                        /<span style="color:white">------</span>/ {{$academic_year}}
+                        /<span style="color:white">------</span>/ {{$academic_year+1}}
                     </td>
                     <td></td>
                     <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
-                        /<span style="color:white">------</span>/ {{$academic_year}}
+                        /<span style="color:white">------</span>/ {{$academic_year+1}}
                     </td>
                 </tr>
 
@@ -601,7 +610,7 @@
                     <td></td>
                     <td style="width:200px; height: 30px; border-bottom: 1px dotted black;">
                         <span style="color:white">---------------</span>/
-                        <span style="color:white">------</span>/ {{$academic_year}}
+                        <span style="color:white">------</span>/ {{$academic_year+1}}
                     </td>
                 </tr>
             </table>

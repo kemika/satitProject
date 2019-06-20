@@ -87,7 +87,7 @@ var js_lang = {!! json_encode($grades_all) !!};
          { name: "grade",title:'Grade', type: "text", width: 70 },
          { name: "grade_level",title:'Grade Level', type: "text", width: 70 },
          { name: "room",title:'Room', type: "text", width: 65 },
-         { name: "quater",title:'Quater', type: "text", width: 80 },
+         { name: "quarter",title:'Quarter', type: "text", width: 80 },
          { name: "semester",title:'Semester', type: "text", width: 95 },
          { name: "academic_year",title:'Academic Year', type: "text", width: 150 },
 

@@ -36,9 +36,9 @@
                 <td style="border-right:2px solid black;">{{$grade['course_name']}}</td>
                 <td>{{$grade['course_id']}}</td>
                 <td class="center-cell" style="border-right:2px solid black;">{{ $grade['credits']}}</td>
-                <td class="center-cell">{{ $grade['quater1']}}</td>
-                <td class="center-cell">{{ $grade['quater2']}}</td>
-                <td class="center-cell">{{ $grade['quater3']}}</td>
+                <td class="center-cell">{{ $grade['quarter1']}}</td>
+                <td class="center-cell">{{ $grade['quarter2']}}</td>
+                <td class="center-cell">{{ $grade['quarter3']}}</td>
 
                 @if($grade['semester_grade'] != "-")
                     <td class="center-cell">{{number_format($grade['semester_grade'],1) }}</td>
@@ -115,9 +115,9 @@
                 <td style="border-right:2px solid black;">{{$grade['course_name']}}</td>
                 <td>{{$grade['course_id']}}</td>
                 <td class="center-cell"  style="border-right:2px solid black;">{{ $grade['credits']}}</td>
-                <td class="center-cell">{{ $grade['quater1']}}</td>
-                <td class="center-cell">{{ $grade['quater2']}}</td>
-                <td class="center-cell">{{ $grade['quater3']}}</td>
+                <td class="center-cell">{{ $grade['quarter1']}}</td>
+                <td class="center-cell">{{ $grade['quarter2']}}</td>
+                <td class="center-cell">{{ $grade['quarter3']}}</td>
 
                 @if($grade['semester_grade'] != "-")
                     <td class="center-cell">{{number_format($grade['semester_grade'],1) }}</td>
@@ -417,7 +417,12 @@
                     <td></td>
                     <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black; text-align: left;">
                         <span style="color:white">---------------</span>/
+                        @if($i%2 != 0 && $i > 1)
+                        <span style="color:white">------</span>/ {{$academic_year+1}}
+                        @else
                         <span style="color:white">------</span>/ {{$academic_year}}
+                        @endif
+
                     </td>
                 </tr>
             </table>
@@ -444,7 +449,11 @@
                     <td></td>
                     <td style="width:200px; height: 30px; border-bottom: 1.5px dotted black;">
                         <span style="color:white">---------------</span>/
+                        @if($i%2 != 0 && $i > 1)
+                        <span style="color:white">------</span>/ {{$academic_year+1}}
+                        @else
                         <span style="color:white">------</span>/ {{$academic_year}}
+                        @endif
                     </td>
                 </tr>
             </table>
@@ -556,11 +565,11 @@
 
                             <tr>
                                 <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
-                                    /<span style="color:white">------</span>/ {{$academic_year}}
+                                    /<span style="color:white">------</span>/ {{$academic_year+1}}
                                 </td>
                                 <td></td>
                                 <td style="width:150px; height: 30px; border-bottom: 1px dotted black;text-align: center;">
-                                    /<span style="color:white">------</span>/ {{$academic_year}}
+                                    /<span style="color:white">------</span>/ {{$academic_year+1}}
                                 </td>
                             </tr>
 
@@ -587,7 +596,7 @@
                                 <td></td>
                                 <td style="width:200px; height: 30px; border-bottom: 1px dotted black;">
                                     <span style="color:white">---------------</span>/
-                                    <span style="color:white">------</span>/ {{$academic_year}}
+                                    <span style="color:white">------</span>/ {{$academic_year+1}}
                                 </td>
                             </tr>
                         </table>

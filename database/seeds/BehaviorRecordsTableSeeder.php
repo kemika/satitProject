@@ -17,7 +17,7 @@ class BehaviorRecordsTableSeeder extends Seeder
       $admin->semester = '1';
       $admin->datetime = '2017-01-01';
       $admin->behavior_type = '1';
-      $admin->quater = '1';
+      $admin->quarter = '1';
       $admin->grade = '3';
       $admin->data_status = '1';
       $admin->save();
@@ -29,7 +29,7 @@ class BehaviorRecordsTableSeeder extends Seeder
       $admin->semester = '1';
       $admin->datetime = '2017-01-01';
       $admin->behavior_type = '1';
-      $admin->quater = '2';
+      $admin->quarter = '2';
       $admin->grade = '4';
       $admin->data_status = '1';
       $admin->save();
@@ -42,7 +42,7 @@ class BehaviorRecordsTableSeeder extends Seeder
       $admin->semester = '2';
       $admin->datetime = '2017-01-01';
       $admin->behavior_type = '1';
-      $admin->quater = '1';
+      $admin->quarter = '1';
       $admin->grade = '2';
       $admin->data_status = '1';
       $admin->save();
@@ -54,7 +54,7 @@ class BehaviorRecordsTableSeeder extends Seeder
       $admin->semester = '2';
       $admin->datetime = '2017-01-01';
       $admin->behavior_type = '1';
-      $admin->quater = '2';
+      $admin->quarter = '2';
       $admin->grade = '2';
       $admin->data_status = '1';
       $admin->save();
@@ -70,7 +70,7 @@ class BehaviorRecordsTableSeeder extends Seeder
       $admin->semester = '1';
       $admin->datetime = '2017-01-01';
       $admin->behavior_type = '2';
-      $admin->quater = '1';
+      $admin->quarter = '1';
       $admin->grade = '1';
       $admin->data_status = '1';
       $admin->save();
@@ -82,7 +82,7 @@ class BehaviorRecordsTableSeeder extends Seeder
       $admin->semester = '1';
       $admin->datetime = '2017-01-01';
       $admin->behavior_type = '2';
-      $admin->quater = '2';
+      $admin->quarter = '2';
       $admin->grade = '4';
       $admin->data_status = '1';
       $admin->save();
@@ -95,7 +95,7 @@ class BehaviorRecordsTableSeeder extends Seeder
       $admin->semester = '2';
       $admin->datetime = '2017-01-01';
       $admin->behavior_type = '2';
-      $admin->quater = '1';
+      $admin->quarter = '1';
       $admin->grade = '2';
       $admin->data_status = '1';
       $admin->save();
@@ -107,7 +107,7 @@ class BehaviorRecordsTableSeeder extends Seeder
       $admin->semester = '2';
       $admin->datetime = '2017-01-01';
       $admin->behavior_type = '2';
-      $admin->quater = '2';
+      $admin->quarter = '2';
       $admin->grade = '2';
       $admin->data_status = '1';
       $admin->save();

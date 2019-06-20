@@ -126,13 +126,13 @@ class UploadGradeController extends Controller
                             $q_count = 1;
                             for ($semester = 1; $semester <= SystemConstant::TOTAL_SEMESTERS; $semester++) {
                                 for ($quarter = 1; $quarter <= SystemConstant::TOTAL_QUARTERS; $quarter++) {
-                                    $qComment = "quater_" . $q_count;
+                                    $qComment = "quarter_" . $q_count;
                                     $q_count++;
                                     // Only add when the comment is not empty
                                     if (trim($r[$qComment]) != "") {
                                         $comment = new Teacher_Comment;
                                         $comment->student_id = $r->students_id;
-                                        $comment->quater = $quarter;
+                                        $comment->quarter = $quarter;
                                         $comment->comment = $r->$qComment;
                                         $comment->semester = $semester;
                                         $comment->academic_year = $year;
@@ -385,7 +385,7 @@ class UploadGradeController extends Controller
                                             $v < 4+SystemConstant::MIN_TO_ZERO){
                                             $behavior = new Behavior_Record;
                                             $behavior->student_id = $data['students_id'];
-                                            $behavior->quater = $quarter;
+                                            $behavior->quarter = $quarter;
                                             $behavior->behavior_type = $behavior_type;
                                             $behavior->grade = $data['q' . $i];
                                             $behavior->semester = $semester;
@@ -775,7 +775,7 @@ class UploadGradeController extends Controller
 
                                 $activity = new Activity_Record;
                                 $activity->student_id = $resultsStudent[$i]->students_id;
-                                $activity->open_course_id = $courseArr[$id . " 1"];
+                                $activity->open_course_id = $courseArr[$id . " 2"];
                                 $activity->grade_status = $grade_status;
                                 $activity->semester = 2;
                                 $activity->academic_year = $year;
@@ -1073,7 +1073,7 @@ class UploadGradeController extends Controller
      * @param $grade_value Grade read from excel
      */
     private function set_grade($grade_value, $student_id, $open_course_id,
-                               $quater, $semester, $academic_year, $datetime)
+                               $quarter, $semester, $academic_year, $datetime)
     {
         if ($open_course_id === null) {
             // Don't do anything if the course does not open
@@ -1082,7 +1082,7 @@ class UploadGradeController extends Controller
         $grade = new Grade;
         $grade->student_id = $student_id;
         $grade->open_course_id = $open_course_id;
-        $grade->quater = $quater;
+        $grade->quarter = $quarter;
         $grade->semester = $semester;
         $grade->academic_year = $academic_year;
         $grade->datetime = $datetime;

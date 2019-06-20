@@ -16,7 +16,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '1';
-      $admin->quater = '1';
+      $admin->quarter = '1';
       $admin->semester = '1';
       $admin->academic_year = '18';
       $admin->grade = '1.11';
@@ -30,7 +30,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '1';
-      $admin->quater = '2';
+      $admin->quarter = '2';
       $admin->semester = '1';
       $admin->academic_year = '18';
       $admin->grade = '2.22';
@@ -43,7 +43,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '1';
-      $admin->quater = '3';
+      $admin->quarter = '3';
       $admin->semester = '1';
       $admin->academic_year = '18';
       $admin->grade = '3.33';
@@ -58,7 +58,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '2';
-      $admin->quater = '1';
+      $admin->quarter = '1';
       $admin->semester = '1';
       $admin->academic_year = '18';
       $admin->grade = '1.11';
@@ -72,7 +72,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '2';
-      $admin->quater = '2';
+      $admin->quarter = '2';
       $admin->semester = '1';
       $admin->academic_year = '18';
       $admin->grade = '2.22';
@@ -85,7 +85,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '2';
-      $admin->quater = '3';
+      $admin->quarter = '3';
       $admin->semester = '1';
       $admin->academic_year = '18';
       $admin->grade = '3.33';
@@ -106,7 +106,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '3';
-      $admin->quater = '1';
+      $admin->quarter = '1';
       $admin->semester = '1';
       $admin->academic_year = '118';
       $admin->grade = '1';
@@ -120,7 +120,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '3';
-      $admin->quater = '2';
+      $admin->quarter = '2';
       $admin->semester = '1';
       $admin->academic_year = '18';
       $admin->grade = '3';
@@ -133,7 +133,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '3';
-      $admin->quater = '3';
+      $admin->quarter = '3';
       $admin->semester = '1';
       $admin->academic_year = '18';
       $admin->grade = '6.21';
@@ -154,7 +154,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '4';
-      $admin->quater = '1';
+      $admin->quarter = '1';
       $admin->semester = '2';
       $admin->academic_year = '18';
       $admin->grade = '1.11';
@@ -168,7 +168,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '4';
-      $admin->quater = '2';
+      $admin->quarter = '2';
       $admin->semester = '1';
       $admin->academic_year = '18';
       $admin->grade = '2.22';
@@ -181,7 +181,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '4';
-      $admin->quater = '3';
+      $admin->quarter = '3';
       $admin->semester = '2';
       $admin->academic_year = '18';
       $admin->grade = '3.33';
@@ -202,7 +202,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '5';
-      $admin->quater = '1';
+      $admin->quarter = '1';
       $admin->semester = '1';
       $admin->academic_year = '18';
       $admin->grade = '1.11';
@@ -216,7 +216,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '5';
-      $admin->quater = '2';
+      $admin->quarter = '2';
       $admin->semester = '1';
       $admin->academic_year = '18';
       $admin->grade = '2.22';
@@ -229,7 +229,7 @@ class GradeTableSeeder extends Seeder
       $admin = new App\Grade;
       $admin->student_id ='2600081170';
       $admin->open_course_id = '5';
-      $admin->quater = '3';
+      $admin->quarter = '3';
       $admin->semester = '1';
       $admin->academic_year = '18';
       $admin->grade = '3.33';
