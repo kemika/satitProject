@@ -1,20 +1,3 @@
-<!-- link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" -->
-
-
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<!-- <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script> -->
-<!-- {{ $curricula }} -->
-<!-- script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script!-->
-<!-- add later -->
-<!--script src="//code.jquery.com/jquery-1.12.3.js"></script>
-<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css"-->
-
 <!-- JQuery -->
 <script src="/css/jquery/jquery-3.4.1.min.js"></script>
 <!-- Data Table -->
@@ -24,8 +7,8 @@
 <script src="/css/bootstrap/3.3.7/bootstrap.min.js"></script>
 <link rel="stylesheet" href="/css/bootstrap/3.3.7/bootstrap.min.css">
 
+<link href="{{ asset('css/studentCSS.css?v='.time()) }}" rel="stylesheet">
 <link rel="stylesheet" href="/css/nav.css">
-<link href="{{ asset('bootstrap/css/studentCSS.css?v='.time()) }}" rel="stylesheet">
 
 
 <head>
@@ -56,50 +39,43 @@
 
 </head>
 <h1> Manage Curriculum</h1>
-<center>
-    <div class="row" style="width: 120rem;">
-        <!-- <div class="col-1"></div> -->
-        <!-- <div class="col-8"> -->
-        <table class="table table-hover" id="table" style="width: 120rem;">
-            <thead>
+
+<div class="table-wrapper">
+
+    <table class="display" id="table" style="width: 100%">
+        <thead>
+        <tr>
+            <th scope="col">No.</th>
+            <th scope="col">Year</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php $c = 0; ?>
+        @foreach ($curricula as $curriculum)
+            <?php $c += 1 ?>
             <tr>
-                <th scope="col">No.</th>
-                <th scope="col">Year</th>
-                <th scope="col">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php $c = 0; ?>
-            @foreach ($curricula as $curriculum)
-                <?php $c += 1 ?>
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>
-                        {{ $curriculum->curriculum_year }}</td>
-                    <?php
-                    $url = url("manageCurriculum/$curriculum->curriculum_year");?>
+                <td>{{ $loop->iteration }}</td>
+                <td>
+                    {{ $curriculum->curriculum_year }}</td>
+                <?php
+                $url = url("manageCurriculum/$curriculum->curriculum_year");?>
 
-                    <td>
-                        <button type="button" class="btn btn-primary" onclick='location.href="{{ $url }}"'>Edit
-                        </button>
-                    </td>
-            @endforeach
+                <td>
+                    <button type="button" class="btn btn-primary" onclick='location.href="{{ $url }}"'>Edit
+                    </button>
+                </td>
+        @endforeach
 
 
-            </tbody>
-        </table>
-        <!-- </div> -->
-    </div>
+        </tbody>
+    </table>
+</div>
 
-</center>
-
-<center>
-    <div class="row" style="margin-top: 30px; margin-bottom: 30px; ">
-        <button class="btn btn-primary" data-toggle='modal' data-target='#NewCur'>New curriculum</button>
-        <button class="btn btn-danger" onclick="window.location.href='/main'">Back to main</button>
-    </div>
-</center>
-
+<footer class="page-footer text-center">
+    <button class="btn btn-primary" data-toggle='modal' data-target='#NewCur'>New curriculum</button>
+    <button class="btn btn-danger" onclick="window.location.href='/main'">Back to main</button>
+</footer>
 
 <center>
     <div class="modal fade" id="NewCur" role="dialog">
@@ -107,7 +83,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title"">Create New Curriculum</h4>
+                    <h4 class="modal-title">Create New Curriculum</h4>
                 </div>
 
                 <div class="modal-body">
