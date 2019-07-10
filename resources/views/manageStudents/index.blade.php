@@ -1,5 +1,3 @@
-<link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-
 <!-- JQuery -->
 <script src="/css/jquery/jquery-3.4.1.min.js"></script>
 <!-- Data Table -->
@@ -11,16 +9,6 @@
 
 <link href="{{ asset('css/studentCSS.css?v='.time()) }}" rel="stylesheet">
 <link rel="stylesheet" href="/css/nav.css">
-
-<!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.12.3.js"></script>
-<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
-<link href="{{ asset('css/studentCSS.css') }}" rel="stylesheet">
-<link rel="stylesheet" href="/css/nav.css"-->
 
 
 <head>
