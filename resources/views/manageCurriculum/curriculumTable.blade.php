@@ -156,22 +156,22 @@
 
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-success">Edit</button>
-                                </form>
 
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
-</div>
-@endif
 
-@endforeach
+            @endif
 
-
-</tbody>
-</table>
-<!-- </div> -->
+        @endforeach
+        </tbody>
+    </table>
 </div>
 
 </center>
@@ -191,14 +191,9 @@
 <div class="modal fade" id="AddSub" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Subject</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="formAddSub">
+            <form id="formAddSub">
+                <div class="modal-body">
+
                     @csrf
                     <div class="form-group">
                         <label class="col-form-label ">Year :</label>
@@ -215,11 +210,13 @@
                     </div>
                     <div class="form-group">
                         <label class="col-form-label">Min grade level :</label>
-                        <input type="number" min="1" max="13" class="form-control" name="min" placeholder="Enter Min grade level" required>
+                        <input type="number" min="1" max="13" class="form-control" name="min"
+                               placeholder="Enter Min grade level" required>
                     </div>
                     <div class="form-group">
                         <label class="col-form-label">Max grade level :</label>
-                        <input type="number" min="1" max="13" class="form-control" name="max" placeholder="Enter Max grade level" required>
+                        <input type="number" min="1" max="13" class="form-control" name="max"
+                               placeholder="Enter Max grade level" required>
                     </div>
                     <div class="form-group">
                         <label class="col-form-label">Activity :</label>
@@ -228,17 +225,19 @@
                             <option value="0">No</option>
                         </select>
                     </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Add</button>
-                </form>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Add</button>
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="ImportYearSelect" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="ImportYearSelect" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -250,26 +249,25 @@
                     It also will not import if the selected curriculum has less than 2 subjects in it.
                 </h3>
             </div>
-            <div class="modal-body">
-                <form action="/manageCurriculum/importFromPrevious" method="post">
+            <form action="/manageCurriculum/importFromPrevious" method="post">
+                <div class="modal-body">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
                         <input type="hidden" id="cur_year" name="cur_year" value="{{$cur_year}}">
                         <label class="col-form-label ">Year :</label>
-                        <select name="from_year" class="form-control"">
-
-                        @foreach ($available_curriculum_years as $year)
-                            <option value="{{$year->curriculum_year}}">{{$year->curriculum_year}}</option>
+                        <select name="from_year" class="form-control">
+                            @foreach ($available_curriculum_years as $year)
+                                <option value="{{$year->curriculum_year}}">{{$year->curriculum_year}}</option>
                             @endforeach
                         </select>
                     </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-danger">Import</button>
-                </form>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Import</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -292,10 +290,12 @@
     <div class="modal fade" id="alertAddSub" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="textAddSub" style="text-align:center;font-size: 60px;">Please Wait
-                        Untill Finish</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="modal-body">
+                    <h3 id="textAddSub" >Please Wait
+                        Untill Finish</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="btn btn-success" class="close" data-dismiss="modal">OK</button>
                 </div>
             </div>
         </div>
@@ -306,10 +306,14 @@
 <meta name="curri_year" content="{{ $cur_year }}"/>
 
 <script>
+    const AJAX_OK_RESPONSE = "success"; // Signify success of adding
+    const AJAX_EXISTS_RESPONSE = "exists"; // Signify data already exists
+    // Signify that place holder has been used and must be remove use
+    const AJAX_PLACE_HOLDER_USED_RESPONSE = "placeholder";
+
     var checkAdd = false;
     $(document).ready(function () {
         $('#table').DataTable();
-        jQuery.noConflict();
         $('#AddSub').on('hide.bs.modal', function (e) {
             if (checkAdd) {
                 location.reload();
@@ -327,84 +331,26 @@
                 url: '/manageCurriculum/createNewSubject',
                 data: data,
                 success: function (data) {
-                    if (data.Status === "success") {
-                        //alert("SUCCESS!!");
-                        document.getElementById("textAddSub").innerHTML = "SUCCESS!";
-                        $("#alertAddSub").modal("toggle");
-                        checkAdd = true;
-                    } else if (data.Status === "exist") {
-                        //alert("This Course already existed in this curriculu year!");
-                        document.getElementById("textAddSub").innerHTML = "This Course already existed in this curriculu year!!";
-                        $("#alertAddSub").modal("toggle");
-                    } else {
-                        //alert(data.Status);
-                        document.getElementById("textAddSub").innerHTML = data.Status;
+                    switch(data.Status){
+                        case AJAX_OK_RESPONSE:
+                            location.reload();
+                            break;
+                        case AJAX_EXISTS_RESPONSE:
+                            document.getElementById("textAddSub").innerHTML = "This Course already existed.";
+                            $("#alertAddSub").modal("toggle");
+                            break;
+                        case AJAX_PLACE_HOLDER_USED_RESPONSE:
+                            document.getElementById("textAddSub").innerHTML = "This Course already existed in this curriculu year!!";
+                            $("#alertAddSub").modal("toggle");
+                            break;
+                        default:
+                            document.getElementById("textAddSub").innerHTML = data.Status;
                     }
-
                 }
             });
             return false;
         });
 
     });
-
-
-
-
-    /*
-    function getMessage() {
-        var re = confirm("Are you sure you would like to import curriculum from previous?");
-        if (re == true) {
-            $("#Waiting").modal({backdrop: 'static', keyboard: false});
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var curr_year = $('meta[name="curri_year"]').attr('content');
-
-            $.ajax({
-                type: 'POST',
-                url: '/manageCurriculum/importFromPrevious',
-                data: {_token: CSRF_TOKEN, year: curr_year},
-                success: function (data) {
-                    $("#Waiting").modal('hide');
-                    if (data.Status === 'success') {
-                        location.reload();
-                    } else {
-                        alert('No previous curriculum year!');
-                    }
-                }
-            });
-
-        }
-    }
-    */
-
-    function addSubject() {
-
-        var myForm = $("#formAddSub");
-        var data = myForm.serializeArray().reduce(function (obj, item) {
-            obj[item.name] = item.value;
-            return obj;
-        }, {});
-
-        $.ajax({
-            type: 'POST',
-            url: '/manageCurriculum/createNewSubject',
-            data: data,
-            success: function (data) {
-                if (data.Status === "success") {
-                    //alert("SUCCESS!!");
-                    document.getElementById("textAddSub").innerHTML = "SUCCESS!";
-                    $("#alertAddSub").modal("toggle");
-                } else if (data.Status === "exist") {
-                    //alert("This Course already existed in this curriculu year!");
-                    document.getElementById("textAddSub").innerHTML = "This Course already existed in this curriculu year!!";
-                    $("#alertAddSub").modal("toggle");
-                } else {
-                    //alert(data.Status);
-                    document.getElementById("textAddSub").innerHTML = data.Status;
-                }
-
-            }
-        });
-    }
 
 </script>

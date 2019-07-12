@@ -54,6 +54,16 @@ class SystemConstant
     // any class in there yet
     const CLASS_NAME_PLACE_HOLDER = 'AEFED133DFAEBDE';
 
+    /*
+    This constant is the message sent back to Ajax call of curriculumTable.blade.php.
+    Any change here must be checked and reflected in javaScript constant section
+    (search for RESPONSE_CONSTANTS) of curriculumTable.blade.php file
+    */
+    const AJAX_OK_RESPONSE = "success"; // Signify success of adding
+    const AJAX_EXISTS_RESPONSE = "exists"; // Signify data already exists
+    // Signify that place holder has been used and must be remove use
+    const AJAX_PLACE_HOLDER_USED_RESPONSE = "placeholder";
+
     // Helper functions
     public static function clean_blank_spaces($str){
         return trim(preg_replace('/\s\s+/', ' ', str_replace("\n", " ", $str)));
