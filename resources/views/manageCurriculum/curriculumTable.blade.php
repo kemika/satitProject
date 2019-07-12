@@ -41,7 +41,7 @@
 <h1> Manage Curriculum {{$cur_year}}</h1>
 <?php if ($query_fail != false): ?>
 <div class="alert alert-danger">
-    <strong>ERROR!</strong> {{$query_fail}}}
+    {{$query_fail}}
 </div>
 <?php endif; ?>
 <div class="table-wrapper">

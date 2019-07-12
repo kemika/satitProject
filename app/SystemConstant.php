@@ -50,6 +50,10 @@ class SystemConstant
 
     const FILE_STORE_DIR = "files";
 
+    // Place holder name in Class Name to signify that the curriculum does not have
+    // any class in there yet
+    const CLASS_NAME_PLACE_HOLDER = 'AEFED133DFAEBDE';
+
     // Helper functions
     public static function clean_blank_spaces($str){
         return trim(preg_replace('/\s\s+/', ' ', str_replace("\n", " ", $str)));

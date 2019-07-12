@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Curriculum;
+use App\SystemConstant;
 
 class ManageCurriculumController extends Controller
 {
+
+
     public function index()
     {
         //  $curricula  = Curriculum::all();
@@ -110,16 +113,20 @@ class ManageCurriculumController extends Controller
 
     public function createNewYear(Request $request)
     {
-        //
+        // Check if the year exists or not.  If it is does nothing.
+        $year = $request->input('year');
 
-        $curriculum = new Curriculum;
-        $curriculum->curriculum_year = $request->input('year');
-        $curriculum->course_id = "Create " . $request->input('year');
-        $curriculum->course_name = "Create First Course";
-        $curriculum->min_grade_level = "0";
-        $curriculum->max_grade_level = "0";
-        $curriculum->is_activity = "0";
-        $curriculum->save();
+        if(!Curriculum::where('curriculum_year', $year)->first()) {
+            // Create a fake course with a place holder value to be removed later.
+            $curriculum = new Curriculum;
+            $curriculum->curriculum_year = $year;
+            $curriculum->course_id = "Create " . $request->input('year');
+            $curriculum->course_name = SystemConstant::CLASS_NAME_PLACE_HOLDER;
+            $curriculum->min_grade_level = "0";
+            $curriculum->max_grade_level = "0";
+            $curriculum->is_activity = "0";
+            $curriculum->save();
+        }
 
         $redi = "manageCurriculum/" . $request->input('year');
         return redirect($redi);
@@ -264,21 +271,17 @@ class ManageCurriculumController extends Controller
         if ($curriculum === null) {
             return redirect('manageCurriculum');
         }
+        // Select all except place holder class which is not real class
         $curricula = Curriculum::where('curriculums.curriculum_year', $year)
-            ->where('course_name', '!=', 'Create First Course')
+            ->where('course_name', '!=', SystemConstant::CLASS_NAME_PLACE_HOLDER)
             ->get();
-//        if (isset($curricula[0]) === false) {
-//            /*
-//            $curricula  = Curriculum::where('curriculum_year', $year)->get();
-//            $curricula[0]->curriculum_year = $year;*/
-//            return view('manageCurriculum.curriculumTable', ['curricula' => $curricula, 'cur_year' => $year]);
-//        }
 
-        // Check if there is any conflict
+        // Check if we cannot overwrite old information due to curriculum is being used.
         $query_fail = "";
         if($request->query->get('conflict') == 'true'){
-            $query_fail = "Cannot overwrite this curriculum because it is 
-            being used by at least one academic year.";
+            $query_fail = "Cannot perform import for this curriculum because it is 
+            being used by at least one academic year.  You can add more class manually 
+            or remove all usage for this curriculum from all Academic Year.";
         }
 
         return view('manageCurriculum.curriculumTable',
