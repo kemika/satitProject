@@ -7,3 +7,19 @@ h1 {
     padding-right: 10px;
     padding-bottom: 10px;
 }
+
+.green_group{
+    background: #def9bf;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+}
+
+.orange_group{
+    background: #F3DDB3;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+}
