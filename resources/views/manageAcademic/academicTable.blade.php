@@ -48,7 +48,7 @@
                 @endif
             @endforeach
         </select>
-        <button id="newAcademicYearButton" type="button" onclick="addNewAca();" class="btn btn-success">Add new academic
+        <button id="newAcademicYearButton" type="button"  class="btn btn-success">Add new academic
             year
         </button>
     </h1>
@@ -60,7 +60,6 @@
         <tr>
             <th scope="col">Grade</th>
             <th scope="col">Room</th>
-            <th scope="col">Grade/Room</th>
             <th scope="col">Teachers</th>
             <th scope="col">Students</th>
             <th scope="col">Courses</th>
@@ -71,13 +70,7 @@
         @foreach ($academicDetail as $detail)
             <tr>
                 <td>{{ $detail->grade_level }}</td>
-                @if ($detail->room === 0 )
-                    <td>All Room</td>
-                    <td>{{ $detail->grade_level }} - All Room</td>
-                @else
-                    <td>{{ $detail->room }}</td>
-                    <td>{{ $detail->grade_level }}/{{ $detail->room }}</td>
-                @endif
+                <td>{{ $detail->room }}</td>
                 <td>
                     <button type="button"
                             onclick="window.location.href='/assignTeacher/{{$detail->academic_year}}/{{$detail->grade_level}}/{{$detail->room}}'"
@@ -103,8 +96,6 @@
         </tbody>
     </table>
 </div>
-<?php $maxGrade = 12; ?>
-
 
 <footer class="page-footer text-center">
     <form class="form-inline">
@@ -112,25 +103,23 @@
             <label for="selGrade">Adjust rooms for grade :</label>
             <select id="selGrade" class="browser-default custom-select" name="selCur">
                 <option selected>1</option>
-                @for ($c = 2;$c<=$maxGrade;$c++)
+                @for ($c = 2;$c<=12;$c++)
                     <option>{{$c}}</option>
                 @endfor
             </select>
-            <button type="button" onclick="addRoom()" class="btn btn-primary">Add</button>
-            <button type="button" onclick="removeRoom()" class="btn btn-danger">Remove</button>
+            <button type="button" id="addRoomButton" class="btn btn-primary">Add</button>
+            <button type="button" id="removeRoomButton"  class="btn btn-danger">Remove</button>
         </div>
 
         <div class="form-group orange_group">
             <label>From previous year import all:</label>
-            <button onclick="importTeacher()" class="btn btn-info">Teacher</button>
-            <button type="button" onclick="importStd()" class="btn btn-danger">Students</button>
-                <button type="button" onclick="importSubject()" class="btn btn-danger">Courses</button>
+            <button type="button" id="importTeachersButton" class="btn btn-info">Teachers</button>
+            <button type="button" id="importStudentsButton" class="btn btn-danger">Students</button>
+            <button type="button" id="importCoursesButton" class="btn btn-danger">Courses</button>
         </div>
         <div class="form-group">
-            <button type="button" onclick="activeAcademicYear();" class="btn btn-danger">Activate this year
-            </button>
             @if($active_year != $cur_year)
-                <button type="button" onclick="activeAcademicYear();" class="btn btn-danger">Activate this year
+                <button id="setCurrentAcademicYearButton" class="btn btn-danger">Set as current academic year
                 </button>
             @endif
         </div>
@@ -151,12 +140,17 @@
 
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
 <script>
+
+    function changeYear() {
+        var e = document.getElementById("selYear");
+        var strYear = e.options[e.selectedIndex].text;
+        window.location.href = "/editAcademic/" + strYear;
+    }
+
     var checkAdd = false;
     $(document).ready(function () {
 
-
-        function addRoom() {
-
+        $("#addRoomButton").click(function () {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var grade = document.getElementById("selGrade").value;
 
@@ -169,19 +163,9 @@
                     location.reload();
                 }
             });
-            /*
-            if (document.getElementById(id).value == '0') {
-              document.getElementById(id).className = "btn btn-success";
-              document.getElementById(id).innerHTML = "Add";
-              document.getElementById(id).value = 1;
-            }else{
-              document.getElementById(id).className = "btn btn-danger";
-              document.getElementById(id).innerHTML = "Not Add";
-              document.getElementById(id).value = 0;
-            }*/
-        }
+        });
 
-        function removeRoom() {
+        $("#removeRoomButton").click(function () {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var grade = document.getElementById("selGrade").value;
 
@@ -194,20 +178,12 @@
                     location.reload();
                 }
             });
-            /*
-            if (document.getElementById(id).value == '0') {
-              document.getElementById(id).className = "btn btn-success";
-              document.getElementById(id).innerHTML = "Add";
-              document.getElementById(id).value = 1;
-            }else{
-              document.getElementById(id).className = "btn btn-danger";
-              document.getElementById(id).innerHTML = "Not Add";
-              document.getElementById(id).value = 0;
-            }*/
-        }
+        });
 
-        function importTeacher() {
-            var re = confirm("Are you sure you would like to import teacher from previous year?\nAll this year teacher data will be deleted before import!!!");
+        $("#importTeachersButton").click(function () {
+            console.log("Reach here");
+            var re = confirm("Are you sure you would like to import teacher from previous year?\n" +
+                "All this year teacher data will be deleted before import!!!");
             if (re == true) {
                 $("#Waiting").modal({backdrop: 'static', keyboard: false});
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -227,9 +203,9 @@
                     }
                 });
             }
-        }
+        });
 
-        function importStd() {
+        $("#importStudentsButton").click(function () {
             var re = confirm("Are you sure you would like to import student from previous year?\nAll this year student data will be deleted before import!!!");
             if (re == true) {
                 $("#Waiting").modal({backdrop: 'static', keyboard: false});
@@ -251,9 +227,9 @@
                     }
                 });
             }
-        }
+        });
 
-        function importSubject() {
+        $("#importCoursesButton").click(function () {
             var re = confirm("Are you sure you would like to import course from previous year?\nAll this year course data will be deleted before import!!!");
             if (re == true) {
                 $("#Waiting").modal({backdrop: 'static', keyboard: false});
@@ -275,18 +251,9 @@
                 });
 
             }
+        });
 
-
-        }
-
-        function changeYear() {
-            var e = document.getElementById("selYear");
-            var strYear = e.options[e.selectedIndex].text;
-            window.location.href = "/editAcademic/" + strYear;
-
-        }
-
-        function activeAcademicYear() {
+        $("#setCurrentAcademicYearButton").click(function () {
             var re = confirm("Are you sure you would like to active this academic year?\nYou could not change previous academic year!!!!!");
             if (re == true) {
 
@@ -306,8 +273,7 @@
                     }
                 });
             }
-
-        }
+        });
 
         $("#newAcademicYearButton").click(function () {
             $.ajax({
