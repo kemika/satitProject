@@ -45,10 +45,12 @@ class ReportCardController extends Controller
 
     public function index2()
     {
-        $academic_years = Academic_Year::groupBy('academic_year')->distinct('academic_year')->orderBy('academic_year')->get();
-        $rooms = Academic_Year::orderBy('grade_level')->get();
-        return view('reportCard.index2', ['academic_years' => $academic_years, 'rooms' => $rooms]);
+        $academicYear = Academic_Year::select('academic_year','grade_level','room','classroom_id')
+            ->orderBy('academic_year','desc')
+            ->orderBy('grade_level','asc')
+            ->orderBy('room','asc')->get();
 
+        return view('reportCard.index2',['academicYear' => $academicYear]);
     }
 
     public function exportPDFAll($classroom_id, $academic_year)
