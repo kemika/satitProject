@@ -125,7 +125,7 @@ Route::get('/transcript/pdf_all/{classroom_id}/{academic_year}','TranscriptContr
 
 Route::get('porbar','ReportCardController@index2');
 
-
+// Grade sheet route
 
 Route::get('/export','ExportController@index');
 Route::get('/export/room/{academic_year}/{semester}/{grade_level}/{room}','ExportController@show');
@@ -134,9 +134,10 @@ Route::get('/exportComments/{classroom_id}/{curriculum_year}','ExportController@
 Route::get('/exportBehavior/{classroom_id}/{curriculum_year}','ExportController@exportBehavior');
 Route::get('/exportAttandance/{classroom_id}/{curriculum_year}','ExportController@exportAttandance');
 Route::get('/exportActivities/{classroom_id}/{curriculum_year}','ExportController@exportActivities');
-// Route::get('/export2/{academic_year}/{semester}//','ExportController@show');
 Route::get('/export_menu','ExportController@index2');
 
+
+// Report card route
 
 Route::get('/reportCard', 'ReportCardController@index2');
 Route::get('/report_card/room/{classroom_id}','ReportCardController@Room');

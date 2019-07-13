@@ -25,11 +25,12 @@ class ExportController extends Controller
 
 
   public function index(){
-    $academicYear = Academic_Year::groupBy('academic_year')->distinct('academic_year')->orderBy('academic_year')->get();
-    $gradeLevel = Academic_Year::groupBy('grade_level')->distinct('grade_level')->orderBy('grade_level')->get();
-    // dd(count($academicYear),count($gradeLevel));
-    return view('export.index',['academicYear' => $academicYear,'gradeLevel' => $gradeLevel]);
+    $academicYear = Academic_Year::select('academic_year','grade_level','room')
+        ->orderBy('academic_year','desc')
+        ->orderBy('grade_level','asc')
+        ->orderBy('room','asc')->get();
 
+    return view('export.index',['academicYear' => $academicYear]);
 
   }
 
