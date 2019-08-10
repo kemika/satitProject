@@ -50,8 +50,8 @@ class ManageStudentsController extends Controller
           $info = explode(",",$line_tok);
           if(count($info) == 3){
 
-              // Trim data
-              $id = trim($info[self::ID_POS],"\"\0\t\x0B ");
+              // Trim data and remove all white space from id
+              $id = preg_replace("/[\"\t\x0B ]/", "", $info[self::ID_POS]);
               $name = trim($info[self::NAME_POS],"\"\0\t\x0B ");
               $lastName = trim($info[self::LAST_NAME_POS],"\"\0\t\x0B ");
 
