@@ -365,6 +365,7 @@ class ReportCardController extends Controller
         }
 
         $student = Student::where('students.student_id', $student_id)
+            ->where('academic_year', $academic_year)
             ->join('student_grade_levels', 'student_grade_levels.student_id', 'students.student_id')
             ->select('students.*', 'student_grade_levels.*')
             ->join('academic_year', 'academic_year.classroom_id', 'student_grade_levels.classroom_id')
