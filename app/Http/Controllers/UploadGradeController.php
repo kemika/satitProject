@@ -396,7 +396,7 @@ class UploadGradeController extends Controller
                                         }elseif(trim($v) != ""){
                                             // If this is not empty then something is wrong
                                             $isOK = false;
-                                            $errorArray[] = $file_name . " score is not a number in Row " . ($i + $STUDENT_ROW_START) . "'";
+                                            $errorArray[] = $file_name . " score ".$v." is not correct for student " . ($i + $STUDENT_ROW_START+1) . " " . $data->students_id. "'";
                                         }
                                         $i++;
                                     }
