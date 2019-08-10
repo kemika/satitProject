@@ -544,7 +544,7 @@
                 position: relative;
                 width: 100%;
                 height: 25px;
-                margin-top: -40px;
+                margin-top: -20px;
             }
 
             div.boxHeader2 {
